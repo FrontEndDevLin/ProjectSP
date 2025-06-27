@@ -14,29 +14,36 @@
  */
 
 import { _decorator, Component, instantiate, Node, Prefab, UI } from 'cc';
-import OBT_EventBusManager from './Manager/OBT_EventBusManager';
+import OBT_EventCenterManager from './Manager/OBT_EventCenterManager';
 import OBT_ResourceManager from './Manager/OBT_ResourceManager';
 import OBT_ModuleManager, { MODULE_TYPE } from './Manager/OBT_ModuleManager';
 const { ccclass, property } = _decorator;
 
-@ccclass('Obital')
-export default class Obital extends Component {
-    static instance: Obital;
+@ccclass('OBT')
+export default class OBT extends Component {
+    static instance: OBT;
 
-    public eventBus: OBT_EventBusManager;
+    public eventCenter: OBT_EventCenterManager;
     public resourceManager: OBT_ResourceManager;
     public moduleManager: OBT_ModuleManager;
 
     protected onLoad(): void {
-        Obital.instance = this
+        OBT.instance = this
         this.resourceManager = new OBT_ResourceManager();
-        this.eventBus = new OBT_EventBusManager();
-        this.moduleManager = new OBT_ModuleManager(this.eventBus, this.resourceManager);
+
+        // 这里可以加一个加载通用资源的过程，比如在开始界面需要展示角色列表，那么可以把角色列表数据放在通用的bundle里，在这里统一完成加载
+
+        this.eventCenter = new OBT_EventCenterManager();
+        this.moduleManager = new OBT_ModuleManager();
 
         this.moduleManager.enterModule(MODULE_TYPE.START_MENU);
     }
 }
 
 export function getResourceManager(): OBT_ResourceManager {
-    return Obital.instance ? Obital.instance.resourceManager : null
+    return OBT.instance ? OBT.instance.resourceManager : null
+}
+
+export function getEventCenter(): OBT_EventCenterManager {
+    return OBT.instance ? OBT.instance.eventCenter : null
 }

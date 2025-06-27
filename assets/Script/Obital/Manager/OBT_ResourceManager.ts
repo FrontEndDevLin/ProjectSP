@@ -14,7 +14,7 @@ export default class OBT_ResourceManager {
 
     private _rootPath: string = "AssetsPackages/";
 
-    private loadBundle(abName: string, callback: Callback) {
+    private loadBundle1(abName: string, callback: Callback) {
         console.log(assetManager.getBundle(abName));
 
         assetManager.loadBundle(`${this._rootPath + abName}`, (err, bundle: AssetManager.Bundle) => {
@@ -29,6 +29,32 @@ export default class OBT_ResourceManager {
             }
         })
     }
+
+    // 新版start
+    // 加载bundle包
+    public async loadBundle(bundleName: string): Promise<AssetManager.Bundle> {
+        return new Promise(resolve => {
+            assetManager.loadBundle(`${this._rootPath}/${bundleName}`, (err, bundle: AssetManager.Bundle) => {
+                if (err) {
+                    console.log("[OBT_ResourceManager]:loadBundle error");
+                    console.log(err);
+                    return
+                }
+                resolve(bundle)
+            })
+        })
+    }
+    // 获取资源
+    public getAssets(abName: string, resUrl: string) {
+        let bundle = assetManager.getBundle(abName);
+        if (!bundle) {
+            console.log("[ReourcesManager]:getAssets:" + abName + " bundle not loaded");
+            return;
+        }
+        return bundle.get(resUrl);
+    }
+
+    // 新版end
 
     // 预加载ab包
     public proloadBundles(abNameList: string[], progressCallback: AbProgressCallback, callback?: Callback) {
@@ -106,16 +132,6 @@ export default class OBT_ResourceManager {
     public unloadResPkg(abName: string) {
         const bundle: AssetManager.Bundle = assetManager.getBundle(abName);
         bundle.releaseAll();
-    }
-
-    // 获取资源
-    public getAssets(abName: string, resUrl: string) {
-        let bundle = assetManager.getBundle(abName);
-        if (!bundle) {
-            console.log("[ReourcesManager]:getAssets:" + abName + " bundle not loaded");
-            return;
-        }
-        return bundle.get(resUrl);
     }
 }
 

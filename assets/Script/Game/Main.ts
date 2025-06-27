@@ -6,7 +6,7 @@ import { _decorator, Component, Node, Prefab, SpriteFrame, PhysicsSystem2D, EPhy
 import { Callback } from '../OO/Interface';
 import OO_UIManager from '../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../OO/Manager/OO_ResourceManager';
-import { EventBus } from '../OO/Manager/OO_MsgManager';
+import { EventCenter } from '../OO/Manager/OO_MsgManager';
 import { OO_AddManager } from '../OO/OO_Manager';
 
 export default class Main extends Component {
@@ -20,7 +20,7 @@ export default class Main extends Component {
             return;
         }
 
-        EventBus.on("startGame", () => {
+        EventCenter.on("startGame", () => {
             this.startGame();
         });
 

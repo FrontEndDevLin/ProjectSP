@@ -27,12 +27,12 @@ export default class OO_MsgManager extends OO_Manager {
     }
 }
 
-let EventBusInstance: OO_EventBus = null;
-class OO_EventBus extends EventTarget {
+let EventCenterInstance: OO_EventCenter = null;
+class OO_EventCenter extends EventTarget {
     constructor() {
         super();
-        EventBusInstance = this;
+        EventCenterInstance = this;
     }
 }
 
-export const EventBus = EventBusInstance ? EventBusInstance : new OO_EventBus();
+export const EventCenter = EventCenterInstance ? EventCenterInstance : new OO_EventCenter();

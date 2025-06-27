@@ -5,12 +5,12 @@
 import { _decorator, Node, EventTarget, Component } from 'cc';
 const { ccclass, property } = _decorator;
 
-// export default class OBT_EventBusManager extends Component {
-//     static instance: OBT_EventBusManager = null;
+// export default class OBT_EventCenterManager extends Component {
+//     static instance: OBT_EventCenterManager = null;
 
 //     protected onLoad(): void {
-//         if (!OBT_EventBusManager.instance) {
-//             OBT_EventBusManager.instance = this;
+//         if (!OBT_EventCenterManager.instance) {
+//             OBT_EventCenterManager.instance = this;
 //         } else {
 //             this.destroy();
 //             return;
@@ -30,7 +30,7 @@ const { ccclass, property } = _decorator;
 //     }
 // }
 
-export default class OBT_EventBusManager extends EventTarget {
+export default class OBT_EventCenterManager extends EventTarget {
     constructor() {
         super();
     }
