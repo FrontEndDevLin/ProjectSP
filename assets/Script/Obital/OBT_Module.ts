@@ -1,6 +1,10 @@
 /**
  * 模块
  * 模块可控制子级模块
+ * 
+ *        大模块(空预制体)
+ *      /       |       \
+ *    子模块
  */
 
 import { AssetManager, Component } from "cc";
