@@ -2,8 +2,8 @@
  * 项目入口总线
  * 
  *                              总线
- *                /              |              \
- *            模块管理         资源管理        事件总线
+ *                /              |              \       \
+ *            模块管理         资源管理        事件总线     UI管理
  *      /       |
  *    登录     GamePlay
  *         /      |      \
@@ -17,6 +17,7 @@ import { _decorator, Component, instantiate, Node, Prefab, UI } from 'cc';
 import OBT_EventCenterManager from './Manager/OBT_EventCenterManager';
 import OBT_ResourceManager from './Manager/OBT_ResourceManager';
 import OBT_ModuleManager, { MODULE_TYPE } from './Manager/OBT_ModuleManager';
+import OBT_UIManager from './Manager/OBT_UIManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('OBT')
@@ -25,6 +26,7 @@ export default class OBT extends Component {
 
     public eventCenter: OBT_EventCenterManager;
     public resourceManager: OBT_ResourceManager;
+    public uiManager: OBT_UIManager;
     public moduleManager: OBT_ModuleManager;
 
     protected onLoad(): void {
@@ -34,6 +36,7 @@ export default class OBT extends Component {
         // 这里可以加一个加载通用资源的过程，比如在开始界面需要展示角色列表，那么可以把角色列表数据放在通用的bundle里，在这里统一完成加载
 
         this.eventCenter = new OBT_EventCenterManager();
+        this.uiManager = new OBT_UIManager();
         this.moduleManager = new OBT_ModuleManager();
 
         this.moduleManager.enterModule(MODULE_TYPE.START_MENU);

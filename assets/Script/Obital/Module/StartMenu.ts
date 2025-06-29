@@ -8,6 +8,8 @@ export class StartMenu extends OBT_Module {
         // this.resourceManager
         console.log('这里做预制体的显示')
         console.log(this)
+
+        // OBT.instance.uiManager.showUI()
     }
 
     public async exit(): Promise<void> {
