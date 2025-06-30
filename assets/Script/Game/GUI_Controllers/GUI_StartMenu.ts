@@ -1,19 +1,18 @@
-import { _decorator, EventTouch, Node } from 'cc';
-import { OO_Component } from '../../OO/OO';
-import OO_UIManager from '../../OO/Manager/OO_UIManager';
-import { EventCenter } from '../../OO/Manager/OO_MsgManager';
+import { _decorator, Component, EventTouch, Node } from 'cc';
+import OBT from '../../Obital/OBT';
+import { MODULE_TYPE } from '../../Obital/Manager/OBT_ModuleManager';
 const { ccclass, property } = _decorator;
 
-@ccclass('StartMenuCtrl')
-export class StartMenuCtrl extends OO_Component {
-    protected onLoad(): void {
-        super.onLoad();
-    }
+@ccclass('GUI_StartMenu')
+export class GUI_StartMenu extends Component {
+    // protected onLoad(): void {
+    //     super.onLoad();
+    // }
 
     private _touchFn(event: EventTouch) {
-        // 移除当前UI界面
-        // 目前直接进入game play
-        EventCenter.emit("startGame")
+        // 切换场景进入游戏界面
+        // EventCenter.emit("startGame")
+        OBT.instance.moduleManager.enterModule(MODULE_TYPE.GAME_PLAY);
     }
 
     start() {

@@ -2,13 +2,16 @@
  * 资源管理器
  */
 
-import { _decorator, Component, Node, assetManager, AssetManager, Asset, resources } from 'cc';
+import { _decorator, Component, Node, assetManager, AssetManager, Asset, resources, Prefab } from 'cc';
 
 import { AbDict, ProgressCallback, AbProgressCallback, Callback, ResPkg } from '../Interface';
 // import OO_Manager from '../OO_Manager';
 
 export default class OBT_ResourceManager {
     static instance: OBT_ResourceManager = null;
+
+    private _bundleName: string = "";
+    // private _commonBundleName: string = "";
 
     // private _abList: AbDict = {};
 
@@ -40,18 +43,42 @@ export default class OBT_ResourceManager {
                     console.log(err);
                     return
                 }
-                resolve(bundle)
+                this._bundleName = bundleName;
+
+                // 加载bundle包里的资源
+                bundle.loadDir("/", (err: Error | null, data: Asset[]) => {
+                    if (err) {
+                        console.log("[OBT_ResourceManager]:bundle.loadDir error");
+                        console.log(err)
+                        return
+                    } else {
+                        console.log(data)
+                    }
+                    resolve(bundle)
+                })
+
+                // bundle.loadDir("/", (err: Error | null, data: AssetManager.RequestItem[]) => {
+                    
+                // })
             })
         })
     }
     // 获取资源
-    public getAssets(abName: string, resUrl: string) {
-        let bundle = assetManager.getBundle(abName);
+    public getAssets(prefabName: string): Asset {
+        let bundle = assetManager.getBundle(this._bundleName);
         if (!bundle) {
-            console.log("[ReourcesManager]:getAssets:" + abName + " bundle not loaded");
+            console.log("[OBT_ReourcesManager]:getAssets:" + this._bundleName + " bundle not loaded");
             return;
         }
-        return bundle.get(resUrl);
+        return bundle.get(`Prefabs/${prefabName}`);
+    }
+    // 释放资源
+    public releaseBundle(): void {
+        if (!this._bundleName) {
+            return;
+        }
+        let bundle = assetManager.getBundle(this._bundleName);
+        bundle.releaseAll()
     }
 
     // 新版end

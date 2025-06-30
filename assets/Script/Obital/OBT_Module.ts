@@ -7,17 +7,19 @@
  *    子模块
  */
 
-import { AssetManager, Component } from "cc";
+import { AssetManager, Component, Node } from "cc";
 import OBT from "./OBT";
 
-export default abstract class OBT_Module extends Component {
+export default abstract class OBT_Module {
     public abstract bundleName: string;
+    public rootNode: Node;
 
-    constructor() {
-        super();
+    public async init(): Promise<void> {
+        this._createRootNode();
+        await this._loadBundle();
     }
 
-    public async loadBundle(): Promise<AssetManager.Bundle> {
+    private async _loadBundle(): Promise<AssetManager.Bundle> {
         if (!this.bundleName) {
             console.log("[OBT_Module]:loadBundle error, 无法加载资源, bundleName为空");
             return;
@@ -25,9 +27,19 @@ export default abstract class OBT_Module extends Component {
         return await OBT.instance.resourceManager.loadBundle(this.bundleName);
     }
 
-    public abstract enter(): Promise<void>;
-    public abstract exit(): Promise<void>;
+    private _createRootNode() {
+        let moduleRootNode: Node = new Node(this.bundleName);
+        OBT.instance.uiManager.rootNode.addChild(moduleRootNode);
+        this.rootNode = moduleRootNode;
+    }
 
+    public abstract enter(): Promise<void>;
+    // public abstract exit(): Promise<void>;
+    public async exit() {
+        // 释放资源
+        OBT.instance.uiManager.removeNode(this.rootNode);
+        OBT.instance.resourceManager.releaseBundle();
+    }
     
     protected onLoad(): void {
         
