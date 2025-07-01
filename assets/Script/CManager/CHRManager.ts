@@ -2,7 +2,6 @@ import { find } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 export default class CHRManager extends OBT_UIManager {
     static instance: CHRManager;
-    public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
     protected onLoad(): void {
         if (!CHRManager.instance) {
@@ -12,13 +11,14 @@ export default class CHRManager extends OBT_UIManager {
             return;
         }
 
+        this.rootNode = find("Canvas/GamePlay/GamePlay");
+
         console.log('CHRManager Loaded')
     }
 
     public showCHR() {
         console.log('角色管理:显示角色')
-        this.showPrefab({ prefabPath: "CHR/CHR01", scriptName: "NONE" });
-
+        this.showPrefab({ prefabPath: "CHR/CHR01", scriptName: "CHR" });
         this.showPrefab({ prefabPath: "Compass" });
     }
 
