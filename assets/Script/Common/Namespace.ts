@@ -28,5 +28,12 @@ export namespace CHRProp {
     // }
 }
 
+export namespace GameCollider {
+    export enum TAG {
+        CHR_RANGE_ALERT = 10,
+        CHR_RANGE_ATTACK = 11
+    }
+}
+
 export const SCREEN_WIDTH = 720;
 export const SCREEN_HEIGHT = 1280;
