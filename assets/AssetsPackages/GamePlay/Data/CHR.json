@@ -1,0 +1,45 @@
+{
+  "basic_prop": {
+    "desc1": "一些需要有数值支撑的基础属性, 面板显示为0, 但本身还有值。",
+    "desc2": "例如面板速度为0时, 自身有基础移速5, 所以角色还能移动",
+    "desc3": "这个对象中的数据不对外开放",
+    "desc4": "角色卡片本质是一个道具(唯一), 在角色选择完成后, 放入道具栏并设置buff",
+    "range": 3,
+    "dmg": 1,
+    "spd": 5,
+    "exp_eff": 1,
+    "pick_range": 4
+  },
+  "prop": {
+    "desc": "面板属性",
+    "hp": 8,
+    "range": 0,
+    "atk_spd": 0,
+    "dmg": 0,
+    "range_dmg": 0,
+    "melee_dmg": 0,
+    "def": 0,
+    "spd": 0,
+    "avd": 0,
+    "exp_eff": 0,
+    "pick_range": 0
+  },
+  "buff": [
+    "buff属性目前无效",
+    {
+      "type": "prop",
+      "prop": "hp",
+      "value": 5
+    },
+    {
+      "type": "prop",
+      "prop": "atk_spd",
+      "value": 10
+    },
+    {
+      "type": "prop",
+      "prop": "dmg",
+      "value": 8
+    }
+  ]
+}

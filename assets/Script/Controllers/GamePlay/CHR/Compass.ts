@@ -1,7 +1,7 @@
 import { _decorator, Node, UIOpacity, EventTouch, Vec2, UITransform, v3, Vec3, find } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import OBT from '../../../OBT';
-import { CEVENT } from '../../../Common/Enum';
+import { GamePlayEvent } from '../../../Common/Namespace';
 const { ccclass, property } = _decorator;
 
 /**
@@ -52,7 +52,7 @@ export class Compass extends OBT_Component {
         this._dishNode.setPosition(new Vec3(pos.x, pos.y));
         this._touching = true;
 
-        OBT.instance.eventCenter.emit(CEVENT.CEVENT_COMPASS.TOUCH_START);
+        OBT.instance.eventCenter.emit(GamePlayEvent.COMPASS.TOUCH_START);
     }
     private _touchEnd = event => {
         this._dishNode.getComponent(UIOpacity).opacity = 0;
@@ -63,7 +63,7 @@ export class Compass extends OBT_Component {
         this._touching = false;
         this.vector = v3(0, 0, 0);
 
-        OBT.instance.eventCenter.emit(CEVENT.CEVENT_COMPASS.TOUCH_END);
+        OBT.instance.eventCenter.emit(GamePlayEvent.COMPASS.TOUCH_END);
     }
     private _touchMove = event => {
         // 相对坐标
@@ -86,7 +86,7 @@ export class Compass extends OBT_Component {
         this._poleNode.setPosition(vec);
         this.vector = v3(this._poleNode.position).normalize();
 
-        OBT.instance.eventCenter.emit(CEVENT.CEVENT_COMPASS.TOUCH_MOVE, this.vector);
+        OBT.instance.eventCenter.emit(GamePlayEvent.COMPASS.TOUCH_MOVE, this.vector);
     }
 
     public onTouchMove(vector: Vec3) {
@@ -94,7 +94,7 @@ export class Compass extends OBT_Component {
     }
 
     protected onDestroy(): void {
-        OBT.instance.eventCenter.emit(CEVENT.CEVENT_COMPASS.TOUCH_END);
+        OBT.instance.eventCenter.emit(GamePlayEvent.COMPASS.TOUCH_END);
     }
 
     update(deltaTime: number) {

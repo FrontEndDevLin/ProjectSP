@@ -43,14 +43,26 @@ export default class OBT_ResourceManager {
         })
     }
     // 获取资源
-    public getAssets(prefabName: string): Asset {
+    public getAssets(assetPath: string, assetFolder?: string): Asset {
         let bundle = assetManager.getBundle(this._bundleName);
         if (!bundle) {
             console.log("[OBT_ReourcesManager]:getAssets:" + this._bundleName + " bundle not loaded");
             return;
         }
-        return bundle.get(`Prefabs/${prefabName}`);
+        if (!assetFolder) {
+            assetFolder = 'Prefabs'
+        }
+        return bundle.get(`${assetFolder}/${assetPath}`);
     }
+    // 获取预设体
+    public getPrefabAssets(prefabPath: string) {
+        return this.getAssets(prefabPath);
+    }
+    // 获取JSON Assets
+    public getJSONAssets(assetPath: string) {
+        return this.getAssets(assetPath, "Data");
+    }
+
     // 释放bundle
     public releaseBundle(): void {
         if (!this._bundleName) {

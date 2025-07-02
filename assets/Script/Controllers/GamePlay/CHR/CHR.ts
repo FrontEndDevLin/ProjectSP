@@ -1,7 +1,8 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, CircleCollider2D, Component, Node, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import OBT from '../../../OBT';
-import { CEVENT } from '../../../Common/Enum';
+import { GamePlayEvent } from '../../../Common/Namespace';
+import CHRManager from '../../../CManager/CHRManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -9,12 +10,22 @@ export class CHR extends OBT_Component {
     private _moving: boolean = false;
     private _vector: Vec3 = null;
 
+    private _baseSpd: number = 0;
+
+    // 警戒碰撞盒
+    private _alertRangeCollider: CircleCollider2D = null;
+    // 攻击碰撞盒
+    private _attackRangeCollider: CircleCollider2D = null;
+
     start() {
         console.log("角色控制脚本加载")
 
-        OBT.instance.eventCenter.on(CEVENT.CEVENT_COMPASS.TOUCH_START, this._compassTouchStart, this);
-        OBT.instance.eventCenter.on(CEVENT.CEVENT_COMPASS.TOUCH_END, this._compassTouchEnd, this);
-        OBT.instance.eventCenter.on(CEVENT.CEVENT_COMPASS.TOUCH_MOVE, this._compassTouchMove, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.COMPASS.TOUCH_START, this._compassTouchStart, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.COMPASS.TOUCH_END, this._compassTouchEnd, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.COMPASS.TOUCH_MOVE, this._compassTouchMove, this);
+
+
+        this._baseSpd = CHRManager.instance.basicProps.spd;
     }
 
     private _compassTouchStart() {
@@ -40,9 +51,9 @@ export class CHR extends OBT_Component {
         // }
         
         // let spd = this._baseSpd + getCharacterPropValue("spd") * this._baseSpd;
-        let spd = 10;
+        let gamePlaySpd = this._baseSpd;
         // let speed = dt * spd * GP_UNIT;
-        let speed = dt * spd * 20;
+        let speed = dt * gamePlaySpd * 20;
         let newPosition = this.node.position.add(new Vec3(this._vector.x * speed, this._vector.y * speed));
 
         // let thresholdX = SCREEN_WIDTH / 2;
@@ -66,9 +77,9 @@ export class CHR extends OBT_Component {
     }
 
     protected onDestroy(): void {
-        OBT.instance.eventCenter.off(CEVENT.CEVENT_COMPASS.TOUCH_START, this._compassTouchStart, this);
-        OBT.instance.eventCenter.off(CEVENT.CEVENT_COMPASS.TOUCH_END, this._compassTouchEnd, this);
-        OBT.instance.eventCenter.off(CEVENT.CEVENT_COMPASS.TOUCH_MOVE, this._compassTouchMove, this);
+        OBT.instance.eventCenter.off(GamePlayEvent.COMPASS.TOUCH_START, this._compassTouchStart, this);
+        OBT.instance.eventCenter.off(GamePlayEvent.COMPASS.TOUCH_END, this._compassTouchEnd, this);
+        OBT.instance.eventCenter.off(GamePlayEvent.COMPASS.TOUCH_MOVE, this._compassTouchMove, this);
 
         // this._pickRangeCollider.off(Contact2DType.BEGIN_CONTACT, this._onPickDomainBeginContact, this);
     }

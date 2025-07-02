@@ -49,13 +49,13 @@ export default class OBT_UIManager extends Component {
     }
     public loadPrefab(loadPrefabOptions: LoadPrefabOptions): Node {
         let { prefabPath, scriptName } = loadPrefabOptions;
-        let uiPrefab: Prefab = OBT_ResourceManager.instance.getAssets(prefabPath) as Prefab;
+        let uiPrefab: Prefab = OBT_ResourceManager.instance.getPrefabAssets(prefabPath) as Prefab;
         if (!uiPrefab) {
             return null;
         }
         const uiNode: Node = instantiate(uiPrefab);
         if (scriptName !== 'NONE') {
-            scriptName = scriptName || prefabPath;
+            scriptName = scriptName || uiNode.name;
             try {
                 uiNode.addComponent(scriptName);
             } catch (error) {
