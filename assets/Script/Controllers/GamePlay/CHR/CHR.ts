@@ -1,7 +1,7 @@
 import { _decorator, CircleCollider2D, Component, Node, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import OBT from '../../../OBT';
-import { GamePlayEvent } from '../../../Common/Namespace';
+import { GamePlayEvent, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 const { ccclass, property } = _decorator;
 
@@ -56,10 +56,8 @@ export class CHR extends OBT_Component {
         let speed = dt * gamePlaySpd * 20;
         let newPosition = this.node.position.add(new Vec3(this._vector.x * speed, this._vector.y * speed));
 
-        // let thresholdX = SCREEN_WIDTH / 2;
-        let thresholdX = 720 / 2;
-        // let thresholdY = SCREEN_HEIGHT / 2;
-        let thresholdY = 1280 / 2;
+        let thresholdX = SCREEN_WIDTH / 2;
+        let thresholdY = SCREEN_HEIGHT / 2;
         // 判断边界值
         if (newPosition.x > thresholdX) {
             newPosition.x = thresholdX;
