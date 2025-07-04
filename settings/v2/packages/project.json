@@ -11,8 +11,27 @@
     "collisionGroups": [
       {
         "index": 1,
-        "name": "RANGE_DOMAIN"
+        "name": "CHR"
+      },
+      {
+        "index": 2,
+        "name": "CHR_DOMAIN"
+      },
+      {
+        "index": 3,
+        "name": "ENEMY"
+      },
+      {
+        "index": 4,
+        "name": "CHR_BULLET"
       }
-    ]
+    ],
+    "collisionMatrix": {
+      "0": 1,
+      "1": 0,
+      "2": 8,
+      "3": 20,
+      "4": 8
+    }
   }
 }

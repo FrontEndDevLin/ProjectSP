@@ -207,7 +207,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "RangeCLD",
+    "_name": "DomainCLD",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -299,7 +299,7 @@
       "__id__": 12
     },
     "tag": 10,
-    "_group": 2,
+    "_group": 4,
     "_density": 1,
     "_sensor": false,
     "_friction": 0.2,
@@ -329,7 +329,7 @@
       "__id__": 14
     },
     "tag": 11,
-    "_group": 2,
+    "_group": 4,
     "_density": 1,
     "_sensor": false,
     "_friction": 0.2,

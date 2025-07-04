@@ -33,7 +33,19 @@ export namespace GameCollider {
         CHR_RANGE_ALERT = 10,
         CHR_RANGE_ATTACK = 11
     }
+
+    export enum GROUP {
+        DEFAULT = 1<<0,
+        CHR = 1<<1,
+        WEAPON_DOMAIN = 1<<2,
+        ENEMY = 1<<3,
+        CHR_BULLET = 1<<4,
+        // CTR_RIM = 1<<5,
+        // DROP_ITEM = 1<<6
+    }
 }
 
 export const SCREEN_WIDTH = 720;
 export const SCREEN_HEIGHT = 1280;
+// 速度1，实际等于 1*PIXEL_UNIT = 20px/s
+export const PIXEL_UNIT = 20;

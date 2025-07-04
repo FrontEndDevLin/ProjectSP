@@ -13,7 +13,7 @@
  * 初始化优先级: 资源管理 -> 事件中心 -> 模块管理
  */
 
-import { _decorator, Component, find, instantiate, Node, Prefab, UI } from 'cc';
+import { _decorator, Component, EPhysics2DDrawFlags, find, instantiate, Node, PhysicsSystem2D, Prefab, UI } from 'cc';
 import OBT_EventCenterManager from './Manager/OBT_EventCenterManager';
 import OBT_ResourceManager from './Manager/OBT_ResourceManager';
 import OBT_ModuleManager, { MODULE_TYPE } from './Manager/OBT_ModuleManager';
@@ -30,6 +30,8 @@ export default class OBT extends Component {
     public uiManager: OBT_UIManager;
 
     protected onLoad(): void {
+        PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape;
+
         OBT.instance = this
         this.resourceManager = new OBT_ResourceManager();
 
