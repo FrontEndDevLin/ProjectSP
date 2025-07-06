@@ -1,3 +1,5 @@
+import { Vec3 } from "cc"
+
 export namespace GamePlayEvent {
     export enum COMPASS {
         TOUCH_START = 10,
@@ -28,6 +30,19 @@ export namespace CHRProp {
     // }
 }
 
+export namespace EMYInfo {
+    export interface RealTimeInfo {
+        x?: number,
+        y?: number,
+        dis?: number,
+        alive: number
+    }
+    
+    export interface ChooseTargetCallback {
+        (isCanBeAttacked?: any, realTimeEnemyInfo?: RealTimeInfo): void
+    }
+}
+
 export namespace GameCollider {
     export enum TAG {
         CHR_RANGE_ALERT = 10,
@@ -42,6 +57,23 @@ export namespace GameCollider {
         CHR_BULLET = 1<<4,
         // CTR_RIM = 1<<5,
         // DROP_ITEM = 1<<6
+    }
+}
+
+export namespace BulletInfo {
+    export interface BulletAttr {
+        id: string,
+        prefab: string,
+        // 飞行速度，伤害、穿透数由武器决定？
+        speed: number,
+        // 最大飞行距离
+        max_dis: number
+    }
+
+    // 子弹初始化参数
+    export interface BulletInitParams {
+        attr: BulletAttr,
+        vector: Vec3
     }
 }
 

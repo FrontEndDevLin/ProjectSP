@@ -1,8 +1,9 @@
-import { _decorator, BoxCollider2D, CircleCollider2D, Component, Contact2DType, find, Game, Node, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Component, Contact2DType, find, Game, Node, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import OBT from '../../../OBT';
-import { GameCollider, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
+import { EMYInfo, GameCollider, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
+import EMYManager from '../../../CManager/EMYManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -123,21 +124,49 @@ export class CHR extends OBT_Component {
             }
         }
     }
+    // 旋转武器(改变贴图朝向)
+    private _rotateWeapon() {
+        // if (this._animateAttacking) {
+        //     return;
+        // }
+        this._chooseTarget((isCanBeAttacked: boolean, target: EMYInfo.RealTimeInfo) => {
+            if (!target) {
+                return;
+            }
+
+            // 武器指向离得最近的目标
+            let chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
+            // 将武器坐标转为地图坐标
+            // let currentVec: Vec3 = v3(chrLoc.x + this.node.position.x, chrLoc.y + this.node.position.y);
+            let currentVec: Vec3 = v3(chrLoc.x, chrLoc.y);
+            let vecX = target.x - currentVec.x;
+            let vecY = target.y - currentVec.y;
+
+            let angle = Number((Math.atan(vecY / vecX) * 57.32).toFixed(2));
+            let scaleX = 1;
+            if (vecX < 0) {
+                scaleX = -1;
+            }
+
+            this.view("Pic/Hole").angle = angle;
+            this.view("Pic/Hole").setScale(v3(scaleX, 1));
+        }); 
+    }
     // 每帧检查队列中对应节点距离角色的距离
-    // private _chooseTarget(callback: Callback) {
-    //     // 优先判断攻击范围内的敌人
-    //     if (Object.keys(this._dangerEnemyList).length) {
-    //         let target: EnemyInfo = EnemyManager.instance.getNearestEnemy(this._dangerEnemyList);
-    //         callback(true, target);
-    //         return;
-    //     }
-    //     // 攻击范围内无敌人，再判断警戒范围内的敌人
-    //     if (Object.keys(this._highEnemyList).length) {
-    //         let target: EnemyInfo = EnemyManager.instance.getNearestEnemy(this._highEnemyList);
-    //         callback(false, target);
-    //         return;
-    //     }
-    // }
+    private _chooseTarget(callback: EMYInfo.ChooseTargetCallback) {
+        // 优先判断攻击范围内的敌人
+        if (Object.keys(this._dangerEnemyList).length) {
+            let target: EMYInfo.RealTimeInfo = EMYManager.instance.getNearestEnemy(this._dangerEnemyList);
+            callback(true, target);
+            return;
+        }
+        // 攻击范围内无敌人，再判断警戒范围内的敌人
+        if (Object.keys(this._highEnemyList).length) {
+            let target: EMYInfo.RealTimeInfo = EMYManager.instance.getNearestEnemy(this._highEnemyList);
+            callback(false, target);
+            return;
+        }
+    }
 
     protected onDestroy(): void {
         OBT.instance.eventCenter.off(GamePlayEvent.COMPASS.TOUCH_START, this._compassTouchStart, this);
@@ -151,6 +180,7 @@ export class CHR extends OBT_Component {
         // if (!ChapterManager.instance.onPlaying) {
         //     return;
         // }
+        this._rotateWeapon();
         if (this._moving) {
             this._move(deltaTime);
         }

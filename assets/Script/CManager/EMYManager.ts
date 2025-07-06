@@ -38,13 +38,13 @@ export default class EMYManager extends OBT_UIManager {
 
         // EnemyDB = DBManager.instance.getDbData("Enemy");
 
-        // TODO: 这里的enemyBox暂时在该方法里生成
-        this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: this.rootNode });
-
         // OO_AddManager(DropItemManager);
     }
 
     public createTempEnemy() {
+        if (!this.enemyRootNode) {
+            this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: this.rootNode });
+        }
         this._loadEnemy(false, 1);
         OBT.instance.printStructure();
     }
