@@ -51,7 +51,7 @@ export class CharacterPropManager extends OBT_UIManager {
             return;
         }
 
-        this.baseProp = DBManager.instance.getDbData("Character").base_prop;
+        this.baseProp = DBManager.instance.getDBData("Character").base_prop;
     }
 
     start() {
@@ -161,7 +161,7 @@ export class CharacterPropManager extends OBT_UIManager {
     // }
 
     private _initCommonProp() {
-        let commonProp: CHTCommonProp = DBManager.instance.getDbData("Character").common_prop;
+        let commonProp: CHTCommonProp = DBManager.instance.getDBData("Character").common_prop;
         for (let key in commonProp) {
             if (key.indexOf("desc") != -1) {
                 continue;

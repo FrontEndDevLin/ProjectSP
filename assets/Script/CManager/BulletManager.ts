@@ -1,10 +1,8 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
-// import { BulletAttr } from '../Interface';
-// import { BulletCtrl } from '../GameControllers/bullet/BulletCtrl';
-// import { DamageManager } from './DamageManager';
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import { BulletInfo } from '../Common/Namespace';
 import OBT from '../OBT';
+import DBManager from './DBManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -22,22 +20,6 @@ const { ccclass, property } = _decorator;
  *      pic
  */
 
-const bulletDataList: BulletInfo.BulletAttr[] = [
-    { id: "BT001", prefab: "BT001", speed: 40, max_dis: 10 }
-];
-
-let bulletDb: any = {
-    "BT001": {
-        "id": "BT001",
-        "prefab": "BT001",
-        "type": "bullet",
-        "script": "BulletCtrl",
-        "speed": 10,
-        "max_dis": 10,
-        "cld": 500
-    }
-};
-
 const bulletScriptMap = {
 }
 
@@ -48,6 +30,8 @@ export default class BulletManager extends OBT_UIManager {
     static instance: BulletManager = null;
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
     public bulletRootNode: Node = null;
+
+    public bulletData: BulletInfo.BulletDBData = {}
 
     // 存储当前装备的武器的弹头数据
     private _bulletCldMap = {};
@@ -64,7 +48,8 @@ export default class BulletManager extends OBT_UIManager {
             return;
         }
 
-        // bulletDb = DBManager.instance.getDbData("Bullet");
+        this.bulletData = DBManager.instance.getDBData("Bullet");
+        // bulletDb = DBManager.instance.getDBData("Bullet");
     }
 
     // public updateBulletList() {
@@ -91,15 +76,15 @@ export default class BulletManager extends OBT_UIManager {
         }
 
         // console.log(`创建子弹${bulletId}`)
-        const bulletAttr = bulletDb[bulletId];
+        const bulletAttr = this.bulletData[bulletId];
         // let scriptName = bulletScriptMap[bulletId] || "BulletCtrl";
-        const bulletNode: Node = this.loadPrefab({ prefabPath: "Bullet/CHR_Bullet001", scriptName: "Bullet" });
+        const bulletNode: Node = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
         bulletNode.setPosition(position);
 
         // 旋转子弹
         let vX: number = vector.x;
         let vY: number = vector.y;
-        let angle = Number((Math.atan(vY / vX) * 57.32).toFixed(2));
+        let angle = Number((Math.atan(vY / vX) * (180 / Math.PI)).toFixed(2));
         let scaleX = 1;
         if (vX < 0) {
             scaleX = -1;
@@ -113,6 +98,10 @@ export default class BulletManager extends OBT_UIManager {
         // scriptComp.initAttr();
         bulletNode.OBT_param1 = { attr: bulletAttr, vector };
         this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
+    }
+
+    public getBulletDamage(cld: BulletInfo.TAG): number {
+        return 5
     }
 
     update(deltaTime: number) {

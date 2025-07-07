@@ -64,10 +64,17 @@ export namespace BulletInfo {
     export interface BulletAttr {
         id: string,
         prefab: string,
+        type: string,
+        script: string,
         // 飞行速度，伤害、穿透数由武器决定？
         speed: number,
         // 最大飞行距离
         max_dis: number
+        cld: number
+    }
+
+    export interface BulletDBData {
+        [bulletId: string]: BulletAttr
     }
 
     // 子弹初始化参数

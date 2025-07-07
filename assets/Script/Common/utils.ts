@@ -45,6 +45,10 @@ export const shuffleArray = function (ary: any[]): any[] {
   return ary;
 }
 
+export const copyObject = function (object: any): any {
+  return JSON.parse(JSON.stringify(object));
+}
+
 export const COLOR = {
   NORMAL: "#F5F5F5",
   SUCCESS: "#67C23A",

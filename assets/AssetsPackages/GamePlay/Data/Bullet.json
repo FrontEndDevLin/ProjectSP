@@ -1,8 +1,17 @@
 {
     "desc": {
-        "intro": "子弹配置, 在这个文件中定义子弹的伤害, 飞行速度, 最大飞行距离等"
+        "intro": "子弹配置, 在这个文件中定义子弹的伤害, 飞行速度, 最大飞行距离等",
+        "max_dis": "最大飞行距离",
+        "cld": "碰撞体id"
     },
     "CHR_Bullet001": {
-        
+        "id": "CHR_Bullet001",
+        "prefab": "CHR_Bullet001",
+        "type": "bullet",
+        "script": "Bullet",
+        "speed": 10,
+        "max_dis": 10,
+        "damage": 5,
+        "cld": 500
     }
 }

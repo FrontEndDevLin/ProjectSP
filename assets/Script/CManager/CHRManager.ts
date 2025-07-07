@@ -27,7 +27,7 @@ export default class CHRManager extends OBT_UIManager {
     }
 
     private _initBasicProps() {
-        const dataBasicProps: CHRProp.CHRBasicProps = DBManager.instance.getDbData("CHR").basic_prop;
+        const dataBasicProps: CHRProp.CHRBasicProps = DBManager.instance.getDBData("CHR").basic_prop;
         this.basicProps = dataBasicProps;
     }
 

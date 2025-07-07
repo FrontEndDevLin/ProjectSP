@@ -1,6 +1,7 @@
 import { _decorator, JsonAsset, Node } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import OBT from '../OBT';
+import { copyObject } from '../Common/utils';
 
 export default class DBManager extends OBT_UIManager {
     static instance: DBManager = null;
@@ -20,10 +21,10 @@ export default class DBManager extends OBT_UIManager {
 
     }
 
-    public getDbData(dbPath: string): any {
+    public getDBData(dbPath: string): any {
         const assets = OBT.instance.resourceManager.getJSONAssets(dbPath) as JsonAsset;
         if (assets) {
-            return assets.json;
+            return copyObject(assets.json);
         }
     }
 
