@@ -14,6 +14,10 @@ export const getDistance = function (start: Vec2 | Vec3, end: Vec2 | Vec3): numb
 // 2：用刚才的弧度  x = cos(弧度)  y = sin(弧度)
 export const getVectorByAngle = function (angle: number) {
   let arc: number = angle * Math.PI / 180;
+  return getVectorByArc(arc);
+}
+
+export const getVectorByArc = function (arc: number) {
   return v3(Math.cos(arc), Math.sin(arc));
 }
 

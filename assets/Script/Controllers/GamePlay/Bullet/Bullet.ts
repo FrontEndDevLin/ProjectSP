@@ -32,7 +32,7 @@ export class Bullet extends OBT_Component {
     private _startRlt: Vec3 = null;
 
     protected onLoad(): void {
-        super.onLoad();
+        // super.onLoad();
 
         let collider: BoxCollider2D = this.node.getComponent(BoxCollider2D);
         collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);

@@ -75,6 +75,11 @@ export namespace BulletInfo {
         attr: BulletAttr,
         vector: Vec3
     }
+
+    // 子弹碰撞id
+    export enum TAG {
+        BASE_BULLET = 500
+    }
 }
 
 export const SCREEN_WIDTH = 720;

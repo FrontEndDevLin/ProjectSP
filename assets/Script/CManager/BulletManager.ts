@@ -4,6 +4,7 @@ import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 // import { DamageManager } from './DamageManager';
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import { BulletInfo } from '../Common/Namespace';
+import OBT from '../OBT';
 const { ccclass, property } = _decorator;
 
 /**
@@ -25,7 +26,17 @@ const bulletDataList: BulletInfo.BulletAttr[] = [
     { id: "BT001", prefab: "BT001", speed: 40, max_dis: 10 }
 ];
 
-let bulletDb: any = null;
+let bulletDb: any = {
+    "BT001": {
+        "id": "BT001",
+        "prefab": "BT001",
+        "type": "bullet",
+        "script": "BulletCtrl",
+        "speed": 10,
+        "max_dis": 10,
+        "cld": 500
+    }
+};
 
 const bulletScriptMap = {
 }
@@ -33,8 +44,7 @@ const bulletScriptMap = {
 /**
  * 这个类要初始化一个弹头列表（来自弹头db），存储角色身上武器所携带的弹头数据，角色面板发生变化时，更新该列表的数据
  */
-@ccclass('BulletManager')
-export class BulletManager extends OBT_UIManager {
+export default class BulletManager extends OBT_UIManager {
     static instance: BulletManager = null;
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
     public bulletRootNode: Node = null;

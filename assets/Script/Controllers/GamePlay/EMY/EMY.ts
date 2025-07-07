@@ -1,6 +1,6 @@
 import { _decorator, BoxCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { PIXEL_UNIT } from '../../../Common/Namespace';
+import { GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 const { ccclass, property } = _decorator;
@@ -24,25 +24,26 @@ export class EMY extends OBT_Component {
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
     }
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
-        // switch (otherCollider.group) {
-        //     case GP_GROUP.BULLET: {
-        //         // 显示伤害由一个类单独管理
-        //         // 通过tag获取弹头数据（tag也存在弹头db里），获取的弹头数据要经过角色面板的补正
-        //         // console.log('被击中，扣血' + )
-        //         let bulletDamage: number = BulletManager.instance.getBulletDamage(otherCollider.tag);
-        //         // attr是自己的属性
-        //         let attr = null;
-        //         let realDamage: number = DamageManager.instance.calcDamage(bulletDamage, attr);
-        //         this._hp -= realDamage;
-        //         DamageManager.instance.showDamageTxt(realDamage, this.node.position);
-        //         if (this._hp <= 0) {
-        //             this.die();
-        //         }
-        //     } break;
-        //     case GP_GROUP.CHARACTER: {
-        //         console.log('击中角色')
-        //     } break;
-        // }
+        switch (otherCollider.group) {
+            case GameCollider.GROUP.CHR_BULLET: {
+                // 显示伤害由一个类单独管理
+                // 通过tag获取弹头数据（tag也存在弹头db里），获取的弹头数据要经过角色面板的补正
+                console.log('敌人被击中，扣血');
+                // let bulletDamage: number = BulletManager.instance.getBulletDamage(otherCollider.tag);
+                // attr是自己的属性
+                // let attr = null;
+                // let realDamage: number = DamageManager.instance.calcDamage(bulletDamage, attr);
+                let realDamage: number = 5;
+                this._hp -= realDamage;
+                // DamageManager.instance.showDamageTxt(realDamage, this.node.position);
+                if (this._hp <= 0) {
+                    this.die();
+                }
+            } break;
+            // case GP_GROUP.CHARACTER: {
+            //     console.log('击中角色')
+            // } break;
+        }
     }
     
     /**

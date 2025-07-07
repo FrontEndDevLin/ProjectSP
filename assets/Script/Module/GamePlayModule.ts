@@ -6,6 +6,7 @@ import CHRManager from "../CManager/CHRManager";
 import DBManager from "../CManager/DBManager";
 import EMYManager from "../CManager/EMYManager";
 import GUI_GamePlayManager from "../CManager/GUI_GamePlayManager";
+import BulletManager from "../CManager/BulletManager";
 
 export class GamePlayModule extends OBT_Module {
     public bundleName: string = "GamePlay";
@@ -22,6 +23,7 @@ export class GamePlayModule extends OBT_Module {
         this.addCustomManager(MapManager);
         this.addCustomManager(EMYManager);
         this.addCustomManager(CHRManager);
+        this.addCustomManager(BulletManager);
         this.addCustomManager(GUI_GamePlayManager);
     }
 }
