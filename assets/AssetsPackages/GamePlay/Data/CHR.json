@@ -22,6 +22,9 @@
     "exp_eff": 0,
     "pick_range": 0
   },
+  "info": {
+    "atk_core": "BaseAtkWarCore"
+  },
   "buff": [
     "buff属性目前无效",
     {

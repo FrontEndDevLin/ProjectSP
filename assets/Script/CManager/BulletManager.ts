@@ -34,7 +34,7 @@ export default class BulletManager extends OBT_UIManager {
     public bulletData: BulletInfo.BulletDBData = {}
 
     // 存储当前装备的武器的弹头数据
-    private _bulletCldMap = {};
+    private _bulletCldMap: BulletInfo.BulletCldData = {};
 
     start() {
         
@@ -49,26 +49,34 @@ export default class BulletManager extends OBT_UIManager {
         }
 
         this.bulletData = DBManager.instance.getDBData("Bullet");
-        // bulletDb = DBManager.instance.getDBData("Bullet");
+        
+        this._initBulletCldMap();
     }
 
-    // public updateBulletList() {
-    //     let weaponList: any[] = WeaponManager.instance.weaponList;
-    //     // 根据该列表，生成新的列表格式为 { 弹头Tag: { 弹头数据 } }，弹头数据需要结合角色面板进行计算
-    //     for (let data of weaponList) {
-    //         let weaponKey: string = data.key;
-    //         let bulletId = data.bullet;
-    //         let bData = bulletDb[bulletId];
-    //         bData.damage = WeaponManager.instance.getWeaponDamage(weaponKey);
-    //         this._bulletCldMap[bData.cld] = bData;
-    //     }
-    // }
-    // public getBulletDamage(cldTag: number) {
-    //     return this._bulletCldMap[cldTag].damage;
-    // }
-    // public getBulletTag(bulletId: string) {
-    //     return bulletDb[bulletId].cld;
-    // }
+    private _initBulletCldMap(): void {
+        for (let bulletId in this.bulletData) {
+            const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
+            this._bulletCldMap[bulletAttr.cld] = bulletAttr;
+        }
+    }
+
+    public updateBulletList() {
+        // let weaponList: any[] = WeaponManager.instance.weaponList;
+        // // 根据该列表，生成新的列表格式为 { 弹头Tag: { 弹头数据 } }，弹头数据需要结合角色面板进行计算
+        // for (let data of weaponList) {
+        //     let weaponKey: string = data.key;
+        //     let bulletId = data.bullet;
+        //     let bData = bulletDb[bulletId];
+        //     bData.damage = WeaponManager.instance.getWeaponDamage(weaponKey);
+        //     this._bulletCldMap[bData.cld] = bData;
+        // }
+    }
+    public getBulletDamage(cld: BulletInfo.TAG): number {
+        return this._bulletCldMap[cld].damage;
+    }
+    public getBulletTag(bulletId: string) {
+        // return bulletDb[bulletId].cld;
+    }
 
     public createBullet(bulletId: string, position: Vec3, vector: Vec3) {
         if (!this.bulletRootNode) {
@@ -98,10 +106,6 @@ export default class BulletManager extends OBT_UIManager {
         // scriptComp.initAttr();
         bulletNode.OBT_param1 = { attr: bulletAttr, vector };
         this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
-    }
-
-    public getBulletDamage(cld: BulletInfo.TAG): number {
-        return 5
     }
 
     update(deltaTime: number) {

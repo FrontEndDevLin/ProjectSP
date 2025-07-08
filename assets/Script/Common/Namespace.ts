@@ -8,6 +8,21 @@ export namespace GamePlayEvent {
     }
 }
 
+export namespace WarCoreInfo {
+    export interface AtkWarCoreAttr {
+        intro: string,
+        atk_intro: string,
+        icon_ui: string,
+        icon_gaming: string,
+        bullet: string,
+        cd: number
+    }
+
+    export interface AtkWarCoreDBData {
+        [atkWarCoreId: string]: AtkWarCoreAttr
+    }
+}
+
 export namespace CHRProp {
     // 角色基础数值支撑属性
     export interface CHRBasicProps {
@@ -52,7 +67,7 @@ export namespace GameCollider {
     export enum GROUP {
         DEFAULT = 1<<0,
         CHR = 1<<1,
-        WEAPON_DOMAIN = 1<<2,
+        CORE_DOMAIN = 1<<2,
         ENEMY = 1<<3,
         CHR_BULLET = 1<<4,
         // CTR_RIM = 1<<5,
@@ -66,7 +81,7 @@ export namespace BulletInfo {
         prefab: string,
         type: string,
         script: string,
-        // 飞行速度，伤害、穿透数由武器决定？
+        damage: number,
         speed: number,
         // 最大飞行距离
         max_dis: number
@@ -75,6 +90,9 @@ export namespace BulletInfo {
 
     export interface BulletDBData {
         [bulletId: string]: BulletAttr
+    }
+    export interface BulletCldData {
+        [cld: string]: BulletAttr
     }
 
     // 子弹初始化参数

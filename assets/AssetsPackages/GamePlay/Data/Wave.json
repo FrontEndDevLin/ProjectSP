@@ -1,0 +1,27 @@
+{
+    "desc": {
+        "wave": {
+            "spawn_role": {
+                "spawn_pattern": "刷新模式, random->随机 pixed->固定位置, corners->屏幕四个角落",
+                "start_delay": "波次开始后延迟(秒)",
+                "spawn_time": "该组生成持续时间(秒)"
+            }
+        }
+    },
+    "waves": [
+        {
+            "wave": 1,
+            "duration": 15,
+            "spawn_roles": [
+                {
+                    "enemy_type": "melee_small",
+                    "spawn_count": 2,
+                    "spawn_interval": 3,
+                    "spawn_pattern": "random",
+                    "start_delay": 2,
+                    "spawn_time": 15
+                }
+            ]
+        }
+    ]
+}

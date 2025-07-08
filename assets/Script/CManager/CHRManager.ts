@@ -11,6 +11,8 @@ export default class CHRManager extends OBT_UIManager {
     public basicProps: CHRProp.CHRBasicProps;
     // 面板属性
     public props: any = {};
+    // 角色信息
+    public chrInfo: any = {};
 
     protected onLoad(): void {
         if (!CHRManager.instance) {
@@ -27,8 +29,11 @@ export default class CHRManager extends OBT_UIManager {
     }
 
     private _initBasicProps() {
-        const dataBasicProps: CHRProp.CHRBasicProps = DBManager.instance.getDBData("CHR").basic_prop;
+        const chrDBData: any = DBManager.instance.getDBData("CHR");
+        const dataBasicProps: CHRProp.CHRBasicProps = chrDBData.basic_prop;
         this.basicProps = dataBasicProps;
+
+        this.chrInfo = chrDBData.info;
     }
 
     public showCHR() {
@@ -49,7 +54,6 @@ export default class CHRManager extends OBT_UIManager {
 
     protected onDestroy(): void {
         console.log('销毁角色管理ing')
-
         CHRManager.instance = null;
     }
 }

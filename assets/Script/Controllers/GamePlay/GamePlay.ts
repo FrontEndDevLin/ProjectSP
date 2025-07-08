@@ -15,7 +15,6 @@ export class GamePlay extends OBT_Component {
         EMYManager.instance.createTempEnemy();
         CHRManager.instance.showCompass();
         GUI_GamePlayManager.instance.showGamePlayGUI();
-        // TODO: 挂入UI节点，角色控制
 
         // console.log(find("Canvas"))
         // OBT.instance.printStructure();
