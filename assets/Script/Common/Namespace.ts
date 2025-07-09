@@ -28,10 +28,15 @@ export namespace GameConfigInfo {
     export interface EMYSpawnRole {
         enemy_type: string,
         spawn_count: number,
+        enemy_count: number,
         spawn_interval: number,
         spawn_pattern: string,
         start_delay: number,
-        spawn_time: number
+        spawn_duration: number,
+        // 当前生成次数
+        spawned_count: number,
+        // 下次生成时间
+        next_spawn_time: number
     }
 
     export interface WaveRole {

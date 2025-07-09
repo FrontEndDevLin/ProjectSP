@@ -49,7 +49,7 @@ export default class EMYManager extends OBT_UIManager {
         if (!this.enemyRootNode) {
             this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: this.rootNode });
         }
-        this._loadEnemy(false, 1);
+        this._loadEnemy(1);
         OBT.instance.printStructure();
     }
 
@@ -83,55 +83,65 @@ export default class EMYManager extends OBT_UIManager {
         // ]
     }
     public setRoles(oRole: any): boolean {
+        // TODO: 初始化spawned_count和next_spawn_time
+
         // console.log(oRole)
-        let totalSeconds = oRole.seconds;
-        let roles = oRole.roles;
-        for (let role of roles) {
-            // 刷新间隔
-            let rfhTime = role.rfh_time;
-            // 首次刷出延迟时间
-            let fstRfhTime = role.fst_rfh_time || 0;
-            // 首次刷出时间点
-            let startTime = (role.time_node_start || totalSeconds) - fstRfhTime;
-            // 结束刷出时间点
-            let endTime = role.time_node_end || 0;
-            // 刷出波次
-            let rfhCnt = Math.floor((startTime - endTime) / rfhTime);
-            let rfhSecondsList = [startTime];
-            for (let i = 1; i <= rfhCnt; i++) {
-                rfhSecondsList.push( Number((startTime - rfhTime * i).toFixed(1)) )
-            }
-            rfhSecondsList.forEach(seconds => {
-                if (!this._roleMap[seconds]) {
-                    this._roleMap[seconds] = [role];
-                } else {
-                    this._roleMap[seconds].push(role);
-                }
-            })
-        }
+        // let totalSeconds = oRole.seconds;
+        // let roles = oRole.roles;
+        // for (let role of roles) {
+        //     // 刷新间隔
+        //     let rfhTime = role.rfh_time;
+        //     // 首次刷出延迟时间
+        //     let fstRfhTime = role.fst_rfh_time || 0;
+        //     // 首次刷出时间点
+        //     let startTime = (role.time_node_start || totalSeconds) - fstRfhTime;
+        //     // 结束刷出时间点
+        //     let endTime = role.time_node_end || 0;
+        //     // 刷出波次
+        //     let rfhCnt = Math.floor((startTime - endTime) / rfhTime);
+        //     let rfhSecondsList = [startTime];
+        //     for (let i = 1; i <= rfhCnt; i++) {
+        //         rfhSecondsList.push( Number((startTime - rfhTime * i).toFixed(1)) )
+        //     }
+        //     rfhSecondsList.forEach(seconds => {
+        //         if (!this._roleMap[seconds]) {
+        //             this._roleMap[seconds] = [role];
+        //         } else {
+        //             this._roleMap[seconds].push(role);
+        //         }
+        //     })
+        // }
         return true;
     }
-    private _loadEnemy(err, seconds: number) {
+
+    /**
+     * 
+     * @param duration 剩余时间
+     * @returns 
+     */
+    private _loadEnemy(duration: number) {
         this.createEnemy();
         return;
-        if (this._roleMap.hasOwnProperty(seconds)) {
-            let timeRoles = this._roleMap[seconds];
+        // TODO: 利用spawned_count, next_spawn_time和duration来计算
 
-            timeRoles.forEach(enemyItem => {
-                let max = enemyItem.emy_max;
-                let min = enemyItem.emy_min || max;
-                let enemyCount = 0;
-                if (max === min) {
-                    enemyCount = max;
-                } else {
-                    enemyCount = Math.floor(Math.random() * (max - min + 1) + min);
-                }
-                // console.log(`生成${enemyCount}个敌人`)
-                for (let i = 0; i < enemyCount; i++) {
-                    this.createEnemy()
-                }
-            })
-        }
+        // if (this._roleMap.hasOwnProperty(seconds)) {
+        //     let timeRoles = this._roleMap[seconds];
+
+        //     timeRoles.forEach(enemyItem => {
+        //         let max = enemyItem.emy_max;
+        //         let min = enemyItem.emy_min || max;
+        //         let enemyCount = 0;
+        //         if (max === min) {
+        //             enemyCount = max;
+        //         } else {
+        //             enemyCount = Math.floor(Math.random() * (max - min + 1) + min);
+        //         }
+        //         // console.log(`生成${enemyCount}个敌人`)
+        //         for (let i = 0; i < enemyCount; i++) {
+        //             this.createEnemy()
+        //         }
+        //     })
+        // }
     }
 
     /**
