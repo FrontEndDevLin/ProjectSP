@@ -4,6 +4,7 @@ import OBT from '../../../OBT';
 import { GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
+import SaveManager from '../../../CManager/SaveManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -23,7 +24,7 @@ export class CHR extends OBT_Component {
         this._baseSpd = CHRManager.instance.basicProps.spd;
 
         WarCoreManager.instance.setWarCoreRootNode(this.view("Pic"));
-        WarCoreManager.instance.mountAtkWarCore(CHRManager.instance.chrInfo.atk_core);
+        WarCoreManager.instance.mountAtkWarCore(SaveManager.instance.save.chr_slot.atk_core);
     }
 
     private _compassTouchStart() {

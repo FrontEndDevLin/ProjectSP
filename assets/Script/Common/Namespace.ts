@@ -6,6 +6,43 @@ export namespace GamePlayEvent {
         TOUCH_END,
         TOUCH_MOVE
     }
+
+    export enum GAME_PALY {
+        FIGHT_START = 15,
+        TIME_INIT,
+        TIME_REDUCE_TINY,
+        TIME_REDUCE,
+        FIGHT_PASS
+    }
+}
+
+export interface SaveDoc {
+    wave: number,
+    status: number,
+    // 和CHRProp.Prop一样
+    chr_prop: any,
+    chr_slot: CHRInfo.CHRSlot
+}
+
+export namespace GameConfigInfo {
+    export interface EMYSpawnRole {
+        enemy_type: string,
+        spawn_count: number,
+        spawn_interval: number,
+        spawn_pattern: string,
+        start_delay: number,
+        spawn_time: number
+    }
+
+    export interface WaveRole {
+        wave: number,
+        duration: number,
+        spawn_roles: EMYSpawnRole[]
+    }
+
+    export interface GameConfig {
+        waves: WaveRole[]
+    }
 }
 
 export namespace WarCoreInfo {
@@ -23,7 +60,7 @@ export namespace WarCoreInfo {
     }
 }
 
-export namespace CHRProp {
+export namespace CHRInfo {
     // 角色基础数值支撑属性
     export interface CHRBasicProps {
         range: number,
@@ -31,6 +68,10 @@ export namespace CHRProp {
         spd: number,
         exp_eff: 1,
         pick_range: number
+    }
+
+    export interface CHRSlot {
+        atk_core: string
     }
 
     // export interface BasicProps {

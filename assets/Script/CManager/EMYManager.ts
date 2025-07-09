@@ -1,7 +1,7 @@
 import { _decorator, Component, find, Node, Prefab, v3, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
+import { GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
 import { getRandomNumber } from '../Common/utils';
 import OBT from '../OBT';
 
@@ -41,6 +41,10 @@ export default class EMYManager extends OBT_UIManager {
         // OO_AddManager(DropItemManager);
     }
 
+    start() {
+
+    }
+
     public createTempEnemy() {
         if (!this.enemyRootNode) {
             this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: this.rootNode });
@@ -50,7 +54,7 @@ export default class EMYManager extends OBT_UIManager {
     }
 
     public startListen() {
-        // CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_REDUCE_TINY, this._loadEnemy, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._loadEnemy, this);
     }
 
     // public getDBEnemyList(attrList: string[] = ['id']): any[] {
@@ -203,8 +207,8 @@ export default class EMYManager extends OBT_UIManager {
         return this.enemyMap[target];
     }
 
-    start() {
-
+    protected onDestroy(): void {
+        OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._loadEnemy, this);
     }
 
     update(deltaTime: number) {

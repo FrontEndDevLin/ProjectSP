@@ -1,18 +1,14 @@
 import { find, Vec3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import DBManager from "./DBManager";
-import { CHRProp } from "../Common/Namespace";
+import { CHRInfo } from "../Common/Namespace";
 export default class CHRManager extends OBT_UIManager {
     static instance: CHRManager;
 
     private _CHRLoc: Vec3 = null;
 
     // 基准属性，不可修改
-    public basicProps: CHRProp.CHRBasicProps;
-    // 面板属性
-    public props: any = {};
-    // 角色信息
-    public chrInfo: any = {};
+    public basicProps: CHRInfo.CHRBasicProps;
 
     protected onLoad(): void {
         if (!CHRManager.instance) {
@@ -30,10 +26,8 @@ export default class CHRManager extends OBT_UIManager {
 
     private _initBasicProps() {
         const chrDBData: any = DBManager.instance.getDBData("CHR");
-        const dataBasicProps: CHRProp.CHRBasicProps = chrDBData.basic_prop;
+        const dataBasicProps: CHRInfo.CHRBasicProps = chrDBData.basic_prop;
         this.basicProps = dataBasicProps;
-
-        this.chrInfo = chrDBData.info;
     }
 
     public showCHR() {
