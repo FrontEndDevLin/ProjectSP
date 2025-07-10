@@ -1,9 +1,11 @@
-import { _decorator, Component, find, Node, Prefab, v3, Vec3 } from 'cc';
+import { _decorator, Component, find, Node, Prefab, sp, v3, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
-import { getRandomNumber } from '../Common/utils';
+import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
+import { getFloatNumber, getRandomNumber } from '../Common/utils';
 import OBT from '../OBT';
+import ProcessManager from './ProcessManager';
+import DBManager from './DBManager';
 
 export interface EnemyInfo {
     x?: number,
@@ -22,6 +24,11 @@ export default class EMYManager extends OBT_UIManager {
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
     public enemyRootNode: Node = null;
 
+    private _waveRole: GameConfigInfo.WaveRole;
+
+    public enemyData: EMYInfo.EMYDBData;
+
+    // private _spawnRoles: any[] = [];
     /**
      * 维护一个敌人map表，每一帧更新坐标和是否存活，当敌人被消灭后，播放完阵亡动画后从表中移除
      */
@@ -36,38 +43,29 @@ export default class EMYManager extends OBT_UIManager {
         }
         console.log("Enemy Manager loaded");
 
-        // EnemyDB = DBManager.instance.getDBData("Enemy");
-
+        this.enemyData = DBManager.instance.getDBData("EMY");
         // OO_AddManager(DropItemManager);
     }
 
     start() {
-
-    }
-
-    public createTempEnemy() {
-        if (!this.enemyRootNode) {
-            this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: this.rootNode });
-        }
-        this._loadEnemy(1);
-        OBT.instance.printStructure();
-    }
-
-    public startListen() {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._loadEnemy, this);
     }
 
+    public startListen() {
+        
+    }
+
     // public getDBEnemyList(attrList: string[] = ['id']): any[] {
-    //     if (!EnemyDB) {
-    //         console.error("EnemyDB not loaded");
+    //     if (!this.enemyData) {
+    //         console.error("this.enemyData not loaded");
     //         return;
     //     }
     //     let list: any[] = [];
-    //     for (let emyId in EnemyDB) {
+    //     for (let emyId in this.enemyData) {
     //         if (!emyId.includes("EMY")) {
     //             continue;
     //         }
-    //         let emyItem = EnemyDB[emyId];
+    //         let emyItem = this.enemyData[emyId];
     //         let item = {};
     //         for (let key of attrList) {
     //             item[key] = emyItem[key];
@@ -82,35 +80,15 @@ export default class EMYManager extends OBT_UIManager {
         //     { role: "normal", emy: 1, emyMax: 2 }
         // ]
     }
-    public setRoles(oRole: any): boolean {
-        // TODO: 初始化spawned_count和next_spawn_time
-
-        // console.log(oRole)
-        // let totalSeconds = oRole.seconds;
-        // let roles = oRole.roles;
-        // for (let role of roles) {
-        //     // 刷新间隔
-        //     let rfhTime = role.rfh_time;
-        //     // 首次刷出延迟时间
-        //     let fstRfhTime = role.fst_rfh_time || 0;
-        //     // 首次刷出时间点
-        //     let startTime = (role.time_node_start || totalSeconds) - fstRfhTime;
-        //     // 结束刷出时间点
-        //     let endTime = role.time_node_end || 0;
-        //     // 刷出波次
-        //     let rfhCnt = Math.floor((startTime - endTime) / rfhTime);
-        //     let rfhSecondsList = [startTime];
-        //     for (let i = 1; i <= rfhCnt; i++) {
-        //         rfhSecondsList.push( Number((startTime - rfhTime * i).toFixed(1)) )
-        //     }
-        //     rfhSecondsList.forEach(seconds => {
-        //         if (!this._roleMap[seconds]) {
-        //             this._roleMap[seconds] = [role];
-        //         } else {
-        //             this._roleMap[seconds].push(role);
-        //         }
-        //     })
-        // }
+    public setSpawnRole(): boolean {
+        this._waveRole = { ...ProcessManager.instance.waveRole };
+        
+        // 初始化spawned_count和next_spawn_time
+        this._waveRole.spawn_roles.forEach((spawnRole: GameConfigInfo.EMYSpawnRole, i: number) => {
+            spawnRole.spawn_count = Math.ceil(spawnRole.spawn_total / spawnRole.spawn_once_time);
+            spawnRole.spawned_count = 0;
+            spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - spawnRole.start_delay);
+        })
         return true;
     }
 
@@ -120,48 +98,72 @@ export default class EMYManager extends OBT_UIManager {
      * @returns 
      */
     private _loadEnemy(duration: number) {
-        this.createEnemy();
-        return;
-        // TODO: 利用spawned_count, next_spawn_time和duration来计算
-
-        // if (this._roleMap.hasOwnProperty(seconds)) {
-        //     let timeRoles = this._roleMap[seconds];
-
-        //     timeRoles.forEach(enemyItem => {
-        //         let max = enemyItem.emy_max;
-        //         let min = enemyItem.emy_min || max;
-        //         let enemyCount = 0;
-        //         if (max === min) {
-        //             enemyCount = max;
-        //         } else {
-        //             enemyCount = Math.floor(Math.random() * (max - min + 1) + min);
-        //         }
-        //         // console.log(`生成${enemyCount}个敌人`)
-        //         for (let i = 0; i < enemyCount; i++) {
-        //             this.createEnemy()
-        //         }
-        //     })
-        // }
+        // 利用spawned_count, next_spawn_time和duration来计算
+        for (let spawnRole of this._waveRole.spawn_roles) {
+            if (spawnRole.spwaned) {
+                continue;
+            }
+            if (spawnRole.spawned_count >= spawnRole.spawn_count) {
+                spawnRole.spwaned = true;
+                continue;
+            }
+            // 波次总时间 - 刷出延迟 - 剩余时间 > 该组生成持续时间时，表示持续时间已过
+            if (this._waveRole.duration - spawnRole.start_delay - duration > spawnRole.spawn_duration) {
+                spawnRole.spwaned = true;
+                continue;
+            }
+            if (spawnRole.next_spawn_time < duration) {
+                continue;
+            }
+            this.createEnemy({
+                enemyType: spawnRole.enemy_type,
+                enemyCount: spawnRole.spawn_once_time,
+                pattern: spawnRole.spawn_pattern,
+                batchMode: spawnRole.batch_mode
+            });
+            if (spawnRole.spawned_count + 1 <= spawnRole.spawn_count) {
+                spawnRole.spawned_count++;
+                const { start_delay, spawned_count, spawn_interval } = spawnRole;
+                spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - start_delay - spawned_count * spawn_interval, 1);
+            } else {
+                spawnRole.spwaned = false;
+            }
+        }
     }
 
     /**
-     * 临时方法，现用于给玩家角色测试使用
+     * 
+     * @param type 敌人类型
+     * @param count 生成的数量
+     * @param pattern 生成位置模式
+     * @param batchMode 批量生成模式
      */
-    public initEnemy() {
-        this.createEnemy();
-    }
+    public createEnemy({ enemyType, enemyCount, pattern, batchMode }: EMYInfo.CreateEMYParams) {
+        if (!this.enemyRootNode) {
+            this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: this.rootNode });
+        }
+        console.log(`生成${enemyCount}个${enemyType}类型的敌人, 生成位置模式为${pattern}, 批量生成模式为${batchMode}`);
 
-    public createEnemy() {
-        let loc: Vec3 = this._createEnemyLoc();
-        // "enemy/EMY001", "EnemyCtrl"
-        let enemyNode = this.loadPrefab({ prefabPath: "EMY/EMY01", scriptName: "EMY" });
-        let { x, y } = loc;
-        enemyNode.setPosition(v3(x, y));
-        this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
+        switch (batchMode) {
+            case "normal": {
+                for (let i = 0; i < enemyCount; i++) {
+                    let loc: Vec3 = this._createEnemyLoc(pattern);
+                    let enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName: "EMY" });
+                    enemyNode.OBT_param1 = this.enemyData[enemyType];
+                    let { x, y } = loc;
+                    enemyNode.setPosition(v3(x, y));
+                    this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
 
-        this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
+                    setTimeout(() => {
+                        if (ProcessManager.instance.isOnPlaying()) {
+                            this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
+                        }
+                    }, (i + 1) * 60)
+                }
+            } break;
+        }
     }
-    private _createEnemyLoc(): Vec3 {
+    private _createEnemyLoc(pattern: string): Vec3 {
         let x = SCREEN_WIDTH / 2;
         let y = SCREEN_HEIGHT / 2;
 
@@ -172,10 +174,11 @@ export default class EMYManager extends OBT_UIManager {
         let dis = Math.sqrt(Math.pow(locX - characterLoc.x, 2) + Math.pow(locY - characterLoc.y, 2));
         // 生成一个随机坐标，判断是否与角色距离过近（小于8个单位），如果过近重新生成
         if (dis < 8 * PIXEL_UNIT) {
-            return this._createEnemyLoc();
+            return this._createEnemyLoc(pattern);
         }
         return v3(locX, locY);
     }
+
     public updateEnemy(uuid: string, enemyInfo: EnemyInfo) {
         for (let k in enemyInfo) {
             if (!this.enemyMap[uuid]) {

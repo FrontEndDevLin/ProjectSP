@@ -27,16 +27,25 @@ export interface SaveDoc {
 export namespace GameConfigInfo {
     export interface EMYSpawnRole {
         enemy_type: string,
-        spawn_count: number,
-        enemy_count: number,
+        // 总生成数量
+        spawn_total: number,
+        // 一次生成的数量
+        spawn_once_time: number,
         spawn_interval: number,
+        // 生成位置模式 random随机, pixed->固定位置, corners->屏幕四个角落",
         spawn_pattern: string,
+        // 批量生成模式
+        batch_mode: string,
         start_delay: number,
         spawn_duration: number,
+        // 总生成次数
+        spawn_count: number,
         // 当前生成次数
         spawned_count: number,
         // 下次生成时间
-        next_spawn_time: number
+        next_spawn_time: number,
+        // 是否生成完毕
+        spwaned: boolean
     }
 
     export interface WaveRole {
@@ -92,6 +101,27 @@ export namespace CHRInfo {
 }
 
 export namespace EMYInfo {
+    export interface EMYDropInfo {
+        id: string,
+        exp_drop_rate: number,
+        trophy_drop_rate: number,
+        exp_cnt: number
+    }
+    export interface EMYDropData {
+        [EMYId: string]: EMYDropInfo
+    }
+    export interface EMYProps extends EMYDropInfo {
+        type: string,
+        move: string,
+        pic: string,
+        spd: number,
+        hp: number,
+        dmg: number
+    }
+    export interface EMYDBData {
+        [EMYId: string]: EMYProps
+    }
+
     export interface RealTimeInfo {
         x?: number,
         y?: number,
@@ -101,6 +131,15 @@ export namespace EMYInfo {
     
     export interface ChooseTargetCallback {
         (isCanBeAttacked?: any, realTimeEnemyInfo?: RealTimeInfo): void
+    }
+
+    export interface CreateEMYParams {
+        enemyType: string,
+        enemyCount: number,
+        // 生成位置模式
+        pattern: string,
+        // 批量生成模式
+        batchMode: string
     }
 }
 

@@ -2,8 +2,11 @@
     "desc": {
         "wave": {
             "spawn_role": {
-                "spawn_pattern": "刷新模式, random->随机 pixed->固定位置, corners->屏幕四个角落",
-                "spawn_count": "生成次数",
+                "spawn_pattern": "生成位置模式: random->随机 pixed->固定位置, corners->屏幕四个角落",
+                "batch_mode": "批量生成模式: normal->无(在随机位置生成); 还需实现组合生成; 扎堆生成等",
+                "spawn_total": "总生成数量",
+                "spawn_once_time": "一次生成的数量",
+                "spawn_interval": "生成间隔",
                 "start_delay": "波次开始后延迟(秒)",
                 "spawn_duration": "该组生成持续时间(秒)"
             }
@@ -15,11 +18,12 @@
             "duration": 15,
             "spawn_roles": [
                 {
-                    "enemy_type": "melee_small",
-                    "enemy_count": 2,
-                    "spawn_count": 5,
-                    "spawn_interval": 3,
+                    "enemy_type": "EMY01",
+                    "spawn_total": 12,
+                    "spawn_once_time": 5,
+                    "spawn_interval": 1.6,
                     "spawn_pattern": "random",
+                    "batch_mode": "normal",
                     "start_delay": 0,
                     "spawn_duration": 15
                 }

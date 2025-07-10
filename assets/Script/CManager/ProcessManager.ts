@@ -9,6 +9,7 @@ import SaveManager from './SaveManager';
 import OBT from '../OBT';
 import { GameConfigInfo, GamePlayEvent } from '../Common/Namespace';
 import DBManager from './DBManager';
+import DropItemManager from './DropItemManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -19,6 +20,7 @@ export default class ProcessManager extends OBT_UIManager {
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
     public gameConfig: GameConfigInfo.GameConfig;
+    public waveRole: GameConfigInfo.WaveRole;
 
     // 持续时间
     private _duration: number = 0;
@@ -48,7 +50,8 @@ export default class ProcessManager extends OBT_UIManager {
             // 展示第1波UI，倒计时
             MapManager.instance.showMap();
             CHRManager.instance.showCHR();
-            EMYManager.instance.createTempEnemy();
+            EMYManager.instance.setSpawnRole();
+            DropItemManager.instance.initRateMap();
             CHRManager.instance.showCompass();
             GUI_GamePlayManager.instance.showGamePlayGUI();
             
@@ -63,11 +66,12 @@ export default class ProcessManager extends OBT_UIManager {
     public isOnPlaying() {
         return this._playing;
     }
-    private preplay(duration) {
+    private preplay() {
         if (this._playing) {
             console.log("战斗中不可设置波次时间");
             return;
         }
+        let duration: number = this.waveRole.duration;
         this._duration = Math.floor(duration);
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_INIT, this._duration);
     }
@@ -83,8 +87,8 @@ export default class ProcessManager extends OBT_UIManager {
     }
     private _loadWave() {
         const currentWave: number = SaveManager.instance.save.wave;
-        const waveRole: GameConfigInfo.WaveRole = this.gameConfig.waves[currentWave - 1];
-        this.preplay(waveRole.duration);
+        this.waveRole = this.gameConfig.waves[currentWave - 1];
+        this.preplay();
     }
 
     update(deltaTime: number) {

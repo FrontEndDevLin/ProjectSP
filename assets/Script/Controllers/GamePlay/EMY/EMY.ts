@@ -1,19 +1,21 @@
 import { _decorator, BoxCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
+import { EMYInfo, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import BulletManager from '../../../CManager/BulletManager';
+import ProcessManager from '../../../CManager/ProcessManager';
+import { copyObject } from '../../../Common/utils';
+import DropItemManager from '../../../CManager/DropItemManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EMY')
 export class EMY extends OBT_Component {
     private _alive: boolean = true;
 
-    private _collider: BoxCollider2D = null; 
-    // temp
-    private _hp: number = 8;
-    private _spd: number = 3;
+    private _collider: BoxCollider2D = null;
+
+    public props: EMYInfo.EMYProps;
 
     start() {
 
@@ -23,6 +25,8 @@ export class EMY extends OBT_Component {
         this._collider = this.node.getComponent(BoxCollider2D);
 
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+
+        this.props = copyObject(this.node.OBT_param1);
     }
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         switch (otherCollider.group) {
@@ -35,9 +39,9 @@ export class EMY extends OBT_Component {
                 // let attr = null;
                 // let realDamage: number = DamageManager.instance.calcDamage(bulletDamage, attr);
                 let realDamage: number = bulletDamage;
-                this._hp -= realDamage;
+                this.props.hp -= realDamage;
                 // DamageManager.instance.showDamageTxt(realDamage, this.node.position);
-                if (this._hp <= 0) {
+                if (this.props.hp <= 0) {
                     this.die();
                 }
             } break;
@@ -55,7 +59,7 @@ export class EMY extends OBT_Component {
         if (this._alive && true) {
             let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
 
-            let speed = dt * this._spd * PIXEL_UNIT;
+            let speed = dt * this.props.spd * PIXEL_UNIT;
             let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
             let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
             this.node.setPosition(newPos);
@@ -73,7 +77,7 @@ export class EMY extends OBT_Component {
 
     public die() {
         EMYManager.instance.updateEnemy(this.node.uuid, { alive: 0 });
-        // DropItemManager.instance.dropItem('EMY001', this.node.position);
+        DropItemManager.instance.dropItem(this.props.id, this.node.position);
         // TODO: 播放死亡动画，播放完后再销毁节点
         this._die();
     }
@@ -89,6 +93,9 @@ export class EMY extends OBT_Component {
     }
 
     update(deltaTime: number) {
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
         this._move(deltaTime);
     }
 }

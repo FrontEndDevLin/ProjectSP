@@ -5,6 +5,7 @@ import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import BulletManager from '../../../CManager/BulletManager';
 import { getVectorByAngle } from '../../../Common/utils';
+import ProcessManager from '../../../CManager/ProcessManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('BaseWarCore')
@@ -155,6 +156,9 @@ export class BaseWarCore extends OBT_Component {
     }
 
     update(deltaTime: number) {
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
         this._tryAttack(deltaTime);
     }
 }

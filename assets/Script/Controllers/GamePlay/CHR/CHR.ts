@@ -5,6 +5,7 @@ import { GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../..
 import CHRManager from '../../../CManager/CHRManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import SaveManager from '../../../CManager/SaveManager';
+import ProcessManager from '../../../CManager/ProcessManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -81,9 +82,9 @@ export class CHR extends OBT_Component {
     }
 
     update(deltaTime: number) {
-        // if (!ChapterManager.instance.onPlaying) {
-        //     return;
-        // }
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
         if (this._moving) {
             this._move(deltaTime);
         }

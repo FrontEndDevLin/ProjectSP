@@ -2,7 +2,7 @@
  * 资源管理器
  */
 
-import { _decorator, Component, Node, assetManager, AssetManager, Asset, resources, Prefab } from 'cc';
+import { _decorator, Component, Node, assetManager, AssetManager, Asset, resources, Prefab, SpriteFrame } from 'cc';
 
 export default class OBT_ResourceManager {
     static instance: OBT_ResourceManager = null;
@@ -61,6 +61,10 @@ export default class OBT_ResourceManager {
     // 获取JSON Assets
     public getJSONAssets(assetPath: string) {
         return this.getAssets(assetPath, "Data");
+    }
+    // 获取图片资源
+    public getSpriteFrameAssets(assetsPath: string): SpriteFrame {
+        return this.getAssets(`${assetsPath}/spriteFrame`, "Materials") as SpriteFrame
     }
 
     // 释放bundle
