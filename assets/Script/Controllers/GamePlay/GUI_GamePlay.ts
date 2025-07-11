@@ -24,6 +24,10 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_START, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._updateCountdownView, this);
+
+        this._updateLevel();
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.EXP_CHANGE, this._updateExpBar, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP, this._updateLevel, this);
     }
 
     start() {
@@ -43,6 +47,17 @@ export class GUI_GamePlay extends OBT_Component {
 
         let hpBarWidth: number = Math.floor(this._hpBarWidth * hp_cur / hp);
         this.view("CHRStatus/HPWrap/HPProg").getComponent(UITransform).width = hpBarWidth;
+    }
+    private _updateExpBar(data: any) {
+        let expCurrent: number = Math.floor(data.expCurrent);
+        let expTotal: number = data.expTotal;
+        
+        let expBarWidth: number = Math.floor(this._hpBarWidth * expCurrent / expTotal);
+
+        this.view("CHRStatus/EXPWrap/EXPProg").getComponent(UITransform).width = expBarWidth;
+    }
+    private _updateLevel() {
+        this.view("CHRStatus/Level/Val").getComponent(Label).string = `${CHRManager.instance.getLevel()}`;
     }
 
     protected onDestroy(): void {

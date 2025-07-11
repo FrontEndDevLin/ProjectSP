@@ -11,6 +11,6 @@
         "icon_ui": "...",
         "icon_gaming": "...",
         "bullet": "CHR_Bullet001",
-        "cd": 1
+        "cd": 0.6
     }
 }

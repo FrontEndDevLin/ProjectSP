@@ -6,6 +6,8 @@ const { ccclass, property } = _decorator;
 
 /**
  * 存档管理
+ * 
+ * TODO: 该类不涉及UI，可用普通的类实现
  */
 export default class SaveManager extends OBT_UIManager {
     static instance: SaveManager = null;

@@ -45,6 +45,7 @@ export default class ProcessManager extends OBT_UIManager {
     // 最开始
     public startGame(isNewGame: boolean): void {
         if (isNewGame) {
+            // SaveManager可用普通类实现
             SaveManager.instance.initSave();
             this._loadWave();
             // 展示第1波UI，倒计时

@@ -12,7 +12,9 @@ export namespace GamePlayEvent {
         TIME_INIT,
         TIME_REDUCE_TINY,
         TIME_REDUCE,
-        FIGHT_PASS
+        FIGHT_PASS,
+        LEVEL_UP,
+        EXP_CHANGE
     }
 }
 
@@ -145,8 +147,14 @@ export namespace EMYInfo {
 
 export namespace GameCollider {
     export enum TAG {
+        DROP_ITEM_PICKER = 9,
         CHR_RANGE_ALERT = 10,
-        CHR_RANGE_ATTACK = 11
+        CHR_RANGE_ATTACK = 11,
+
+        DROP_ITEM_EXP = 20,
+
+        // 子弹碰撞id
+        BULLET_BASE = 500
     }
 
     export enum GROUP {
@@ -155,8 +163,9 @@ export namespace GameCollider {
         CORE_DOMAIN = 1<<2,
         ENEMY = 1<<3,
         CHR_BULLET = 1<<4,
+        PICK_DOMAIN = 1<<5,
+        DROP_ITEM = 1<<6
         // CTR_RIM = 1<<5,
-        // DROP_ITEM = 1<<6
     }
 }
 
@@ -184,11 +193,6 @@ export namespace BulletInfo {
     export interface BulletInitParams {
         attr: BulletAttr,
         vector: Vec3
-    }
-
-    // 子弹碰撞id
-    export enum TAG {
-        BASE_BULLET = 500
     }
 }
 

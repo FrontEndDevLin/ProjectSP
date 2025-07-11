@@ -6,6 +6,7 @@ import CHRManager from '../../../CManager/CHRManager';
 import BulletManager from '../../../CManager/BulletManager';
 import { getVectorByAngle } from '../../../Common/utils';
 import ProcessManager from '../../../CManager/ProcessManager';
+import WarCoreManager from '../../../CManager/WarCoreManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('BaseWarCore')
@@ -151,7 +152,7 @@ export class BaseWarCore extends OBT_Component {
             BulletManager.instance.createBullet("CHR_Bullet001", chrLoc, vector);
             // this._attacking = true;
             // this._cd = this.weaponPanel.atk_spd;
-            this._cd = 1;
+            this._cd = WarCoreManager.instance.atkWarCore.cd;
         });
     }
 

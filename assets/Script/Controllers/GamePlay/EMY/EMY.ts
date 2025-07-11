@@ -33,7 +33,6 @@ export class EMY extends OBT_Component {
             case GameCollider.GROUP.CHR_BULLET: {
                 // 显示伤害由一个类单独管理
                 // 通过tag获取弹头数据（tag也存在弹头db里），获取的弹头数据要经过角色面板的补正
-                console.log('敌人被击中，扣血');
                 let bulletDamage: number = BulletManager.instance.getBulletDamage(otherCollider.tag);
                 // attr是自己的属性
                 // let attr = null;

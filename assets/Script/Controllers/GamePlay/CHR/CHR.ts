@@ -1,7 +1,7 @@
-import { _decorator, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Contact2DType, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import OBT from '../../../OBT';
-import { GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
+import { GameCollider, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import SaveManager from '../../../CManager/SaveManager';
@@ -12,6 +12,7 @@ const { ccclass, property } = _decorator;
 export class CHR extends OBT_Component {
     private _moving: boolean = false;
     private _vector: Vec3 = null;
+    private _pickRangeCollider: CircleCollider2D = null;
 
     private _baseSpd: number = 0;
 
@@ -21,6 +22,9 @@ export class CHR extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.COMPASS.TOUCH_START, this._compassTouchStart, this);
         OBT.instance.eventCenter.on(GamePlayEvent.COMPASS.TOUCH_END, this._compassTouchEnd, this);
         OBT.instance.eventCenter.on(GamePlayEvent.COMPASS.TOUCH_MOVE, this._compassTouchMove, this);
+
+        this._pickRangeCollider = this.node.getComponent(CircleCollider2D);
+        this._initPickRangeCollider();
 
         this._baseSpd = CHRManager.instance.basicProps.spd;
 
@@ -38,6 +42,36 @@ export class CHR extends OBT_Component {
     private _compassTouchMove(vector: Vec3) {
         this._vector = vector;
     }
+    private _initPickRangeCollider() {
+        let pickRange: number = CHRManager.instance.basicProps.pick_range;
+        // let increasePickRange: number = getCharacterPropValue("pick_range");
+        let increasePickRange: number = 0;
+        this._pickRangeCollider.radius = (pickRange + (pickRange * increasePickRange)) * PIXEL_UNIT;
+        this._pickRangeCollider.on(Contact2DType.BEGIN_CONTACT, this._onPickDomainBeginContact, this);
+    }
+    private _onPickDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
+        if (selfCollider.tag === GameCollider.TAG.DROP_ITEM_PICKER) {
+            switch (otherCollider.tag) {
+                case GameCollider.TAG.DROP_ITEM_EXP: {
+                    otherCollider.node.OBT_param2 = true;
+                } break;
+                
+                default:
+                    break;
+            }
+        }
+    }
+
+    // private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+    //     switch (otherCollider.tag) {
+    //         case DROP_ITEM.TROPHY: {
+    //             otherCollider.node.OO_param2 = true;
+    //         } break;
+    //     }
+    // }
 
     private _move(dt: number) {
         if (!this._vector) {
