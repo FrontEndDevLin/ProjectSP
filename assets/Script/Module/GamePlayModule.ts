@@ -9,7 +9,6 @@ import GUI_GamePlayManager from "../CManager/GUI_GamePlayManager";
 import BulletManager from "../CManager/BulletManager";
 import WarCoreManager from "../CManager/WarCoreManager";
 import ProcessManager from "../CManager/ProcessManager";
-import SaveManager from "../CManager/SaveManager";
 import DropItemManager from "../CManager/DropItemManager";
 
 export class GamePlayModule extends OBT_Module {
@@ -24,7 +23,6 @@ export class GamePlayModule extends OBT_Module {
     
     public mountManagers() {
         this.addCustomManager(DBManager);
-        this.addCustomManager(SaveManager);
         this.addCustomManager(MapManager);
         this.addCustomManager(EMYManager);
         this.addCustomManager(DropItemManager);

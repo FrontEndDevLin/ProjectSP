@@ -58,6 +58,21 @@ export class GUI_GamePlay extends OBT_Component {
     }
     private _updateLevel() {
         this.view("CHRStatus/Level/Val").getComponent(Label).string = `${CHRManager.instance.getLevel()}`;
+
+        const levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
+        this._updateLevelIcon(levelUpCnt);
+    }
+    private _updateLevelIcon(levelUpCnt: number) {
+        const levelUpWrapNode: Node = this.view("LevelUpWrap");
+        levelUpWrapNode.removeAllChildren();
+        // this._levelUpIconUINode.removeAllChildren();
+        for (let i = 0; i < levelUpCnt; i++) {
+            OBT.instance.uiManager.showPrefab({
+                prefabPath: "Common/LevelUpIcon",
+                scriptName: "NONE",
+                parentNode: levelUpWrapNode
+            })
+        }
     }
 
     protected onDestroy(): void {

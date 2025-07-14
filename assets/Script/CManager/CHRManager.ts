@@ -38,15 +38,6 @@ export default class CHRManager extends OBT_UIManager {
     private _initLevelCtrl() {
         this._levelCtrl = new LevelCtrl();
         this._levelCtrl.initLevel();
-
-        this._levelCtrl.on("expChange", (data: any) => {
-            // console.log("经验改变", data);
-            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.EXP_CHANGE, data);
-        }, this);
-        this._levelCtrl.on("levelUp", (level: any) => {
-            // console.log("升级了");
-            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP, level);
-        }, this);
     }
 
     private _initBasicProps() {
@@ -66,6 +57,9 @@ export default class CHRManager extends OBT_UIManager {
     }
     public getLevel() {
         return this._levelCtrl.level;
+    }
+    public getLevelUpCnt(): number {
+        return this._levelCtrl.getLevelUpCnt();
     }
 
     // 更新角色位置

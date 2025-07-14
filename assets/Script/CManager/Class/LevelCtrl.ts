@@ -1,3 +1,5 @@
+import { GamePlayEvent } from "../../Common/Namespace";
+import OBT from "../../OBT";
 import { BaseCtrl } from "./BaseCtrl";
 
 export default class LevelCtrl extends BaseCtrl {
@@ -29,12 +31,11 @@ export default class LevelCtrl extends BaseCtrl {
     private _levelUp() {
         this.level++;
         this._levelUpCnt++;
-        // this._loadLevelUpIcon();
         let overflowExp: number = this.expCurrent - this.expTotal;
         this.expCurrent = 0;
         this.expTotal = this._calcExpTotal();
         this.addExp(overflowExp);
-        this.runEventFn("levelUp", this.level);
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP, this.level);
     }
 
     public initLevel(lev?: number, expCur?: number) {
@@ -51,7 +52,7 @@ export default class LevelCtrl extends BaseCtrl {
             this._levelUp();
         }
 
-        this.runEventFn("expChange", { expCurrent: this.expCurrent, expTotal: this.expTotal })
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.EXP_CHANGE, { expCurrent: this.expCurrent, expTotal: this.expTotal });
     }
 
     public getLevelUpCnt() {
@@ -60,26 +61,12 @@ export default class LevelCtrl extends BaseCtrl {
     // 完成一次升级
     public finishOnceTimeLevelUp() {
         this._levelUpCnt--;
-        this._loadLevelUpIcon();
+        // TODO: 通知UI更新
     }
 
     // TODO: 以下所有都迁移到GUI_GamePlayManager里
-    // 右上角升级次数计数
-    public showLevelUpIconUI() {
-        // this._levelUpIconUINode = OO_UIManager.instance.loadUINode("common/LevelUpIconWrap", "NONE");
-        // OO_UIManager.instance.appendUINode(this._levelUpIconUINode);
-        // this._levelUpIconUINode.getComponent(Widget).target = find("Canvas");
-
-        // this._loadLevelUpIcon();
-    }
     public removeLevelUpIconUI() {
         // OO_UIManager.instance.removeUI("LevelUpIconWrap");
         // this._levelUpIconUINode = null;
-    }
-    private _loadLevelUpIcon() {
-        // this._levelUpIconUINode.removeAllChildren();
-        // for (let i = 0; i < this._levelUpCnt; i++) {
-        //     this.showUI("common/LevelUpIcon", this._levelUpIconUINode, "NONE");
-        // }
     }
 }

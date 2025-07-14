@@ -5,11 +5,11 @@ import CHRManager from '../CManager/CHRManager';
 // import OBT from '../../OBT';
 import EMYManager from '../CManager/EMYManager';
 import GUI_GamePlayManager from '../CManager/GUI_GamePlayManager';
-import SaveManager from './SaveManager';
 import OBT from '../OBT';
 import { GameConfigInfo, GamePlayEvent } from '../Common/Namespace';
 import DBManager from './DBManager';
 import DropItemManager from './DropItemManager';
+import SaveCtrl from './Class/SaveCtrl';
 const { ccclass, property } = _decorator;
 
 /**
@@ -21,6 +21,8 @@ export default class ProcessManager extends OBT_UIManager {
 
     public gameConfig: GameConfigInfo.GameConfig;
     public waveRole: GameConfigInfo.WaveRole;
+
+    public saveCtrl: SaveCtrl;
 
     // 持续时间
     private _duration: number = 0;
@@ -45,8 +47,9 @@ export default class ProcessManager extends OBT_UIManager {
     // 最开始
     public startGame(isNewGame: boolean): void {
         if (isNewGame) {
-            // SaveManager可用普通类实现
-            SaveManager.instance.initSave();
+            // saveCtrl用普通类实现
+            this.saveCtrl = new SaveCtrl();
+            this.saveCtrl.initSave();
             this._loadWave();
             // 展示第1波UI，倒计时
             MapManager.instance.showMap();
@@ -87,7 +90,7 @@ export default class ProcessManager extends OBT_UIManager {
         // TODO: 移除所有进行中的项目
     }
     private _loadWave() {
-        const currentWave: number = SaveManager.instance.save.wave;
+        const currentWave: number = this.saveCtrl.save.wave;
         this.waveRole = this.gameConfig.waves[currentWave - 1];
         this.preplay();
     }

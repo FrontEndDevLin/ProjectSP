@@ -44,7 +44,6 @@ export default class EMYManager extends OBT_UIManager {
         console.log("Enemy Manager loaded");
 
         this.enemyData = DBManager.instance.getDBData("EMY");
-        // OO_AddManager(DropItemManager);
     }
 
     start() {
