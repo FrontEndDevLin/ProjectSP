@@ -68,6 +68,7 @@ export namespace WarCoreInfo {
         icon_ui: string,
         icon_gaming: string,
         bullet: string,
+        range: number,
         cd: number
     }
 
@@ -79,15 +80,38 @@ export namespace WarCoreInfo {
 export namespace CHRInfo {
     // 角色基础数值支撑属性
     export interface CHRBasicProps {
-        range: number,
-        dmg: number,
-        spd: number,
-        exp_eff: 1,
-        pick_range: number
+        basic_dmg: number,
+        basic_spd: number,
+        basic_exp_eff: number,
+        basic_pick_range: number
     }
 
     export interface CHRSlot {
         atk_core: string
+    }
+
+    export interface CHRProps {
+        hp: number,
+        range: number,
+        atk_spd: number,
+        dmg: number,
+        // range_dmg: 0,
+        // melee_dmg: 0,
+        def: number,
+        spd: number,
+        avd: number,
+        exp_eff: number,
+        pick_range: number
+    }
+    export interface CHRPropsAttr {
+        prop: string,
+        propTxt?: string,
+        group?: string,
+        value?: number,
+        // 是否使用百分比计算
+        percent?: boolean,
+        // true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
+        buffPos?: boolean
     }
 
     // export interface BasicProps {

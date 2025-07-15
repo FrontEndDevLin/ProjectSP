@@ -40,7 +40,7 @@ export default class OBT extends Component {
         this.eventCenter = new OBT_EventCenterManager();
         this.moduleManager = new OBT_ModuleManager();
 
-        // this.moduleManager.enterModule(MODULE_TYPE.START_MENU);
+        this.moduleManager.enterModule(MODULE_TYPE.START_MENU);
     }
 
     public printStructure(): void {

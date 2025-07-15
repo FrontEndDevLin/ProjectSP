@@ -4,6 +4,7 @@ import DBManager from "./DBManager";
 import { CHRInfo, GamePlayEvent } from "../Common/Namespace";
 import LevelCtrl from "./Class/LevelCtrl";
 import OBT from "../OBT";
+import PropCtrl from "./Class/PropCtrl";
 export default class CHRManager extends OBT_UIManager {
     static instance: CHRManager;
 
@@ -11,8 +12,8 @@ export default class CHRManager extends OBT_UIManager {
 
     private _levelCtrl: LevelCtrl;
 
-    // 基准属性，不可修改
-    public basicProps: CHRInfo.CHRBasicProps;
+    public CHRDBData: any;
+    public propCtx: PropCtrl;
 
     protected onLoad(): void {
         if (!CHRManager.instance) {
@@ -24,8 +25,9 @@ export default class CHRManager extends OBT_UIManager {
 
         this.rootNode = find("Canvas/GamePlay/GamePlay");
 
+        this.CHRDBData = DBManager.instance.getDBData("CHR");
         // console.log('CHRManager Loaded')
-        this._initBasicProps();
+        this._initProps();
 
         this._initLevelCtrl();
 
@@ -40,10 +42,9 @@ export default class CHRManager extends OBT_UIManager {
         this._levelCtrl.initLevel();
     }
 
-    private _initBasicProps() {
-        const chrDBData: any = DBManager.instance.getDBData("CHR");
-        const dataBasicProps: CHRInfo.CHRBasicProps = chrDBData.basic_prop;
-        this.basicProps = dataBasicProps;
+    private _initProps() {
+        this.propCtx = new PropCtrl();
+        this.propCtx.initProps(this.CHRDBData.basic_props, this.CHRDBData.props);
     }
 
     public showCHR() {

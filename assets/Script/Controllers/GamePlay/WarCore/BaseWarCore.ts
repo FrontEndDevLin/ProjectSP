@@ -45,7 +45,7 @@ export class BaseWarCore extends OBT_Component {
             collider.on(Contact2DType.END_CONTACT, this._onCHRDomainEndContact, this);
         }
         // let { range, alert } = this.weaponPanel;
-        let range: number = CHRManager.instance.basicProps.range;
+        let range: number = CHRManager.instance.propCtx.getPropValue("range") + WarCoreManager.instance.atkWarCore.range;
         this._attackDomainCollider.radius = range * PIXEL_UNIT;
         this._alertDomainCollider.radius = (range + 2) * PIXEL_UNIT;
     }

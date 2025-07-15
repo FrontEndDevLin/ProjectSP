@@ -5,6 +5,7 @@ import { GameCollider, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } 
 import CHRManager from '../../../CManager/CHRManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import ProcessManager from '../../../CManager/ProcessManager';
+import { getSaveCtrl } from '../../../CManager/Class/SaveCtrl';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -25,10 +26,10 @@ export class CHR extends OBT_Component {
         this._pickRangeCollider = this.node.getComponent(CircleCollider2D);
         this._initPickRangeCollider();
 
-        this._baseSpd = CHRManager.instance.basicProps.spd;
+        this._baseSpd = CHRManager.instance.propCtx.getPropValue("spd");
 
         WarCoreManager.instance.setWarCoreRootNode(this.view("Pic"));
-        WarCoreManager.instance.mountAtkWarCore(ProcessManager.instance.saveCtrl.save.chr_slot.atk_core);
+        WarCoreManager.instance.mountAtkWarCore(getSaveCtrl().save.chr_slot.atk_core);
     }
 
     private _compassTouchStart() {
@@ -42,7 +43,7 @@ export class CHR extends OBT_Component {
         this._vector = vector;
     }
     private _initPickRangeCollider() {
-        let pickRange: number = CHRManager.instance.basicProps.pick_range;
+        let pickRange: number = CHRManager.instance.propCtx.getPropValue("pick_range");
         // let increasePickRange: number = getCharacterPropValue("pick_range");
         let increasePickRange: number = 0;
         this._pickRangeCollider.radius = (pickRange + (pickRange * increasePickRange)) * PIXEL_UNIT;
