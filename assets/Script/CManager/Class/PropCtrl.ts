@@ -35,6 +35,17 @@ export default class PropCtrl extends BaseCtrl {
         super();
     }
 
+    private _getPropInfo(propKey: string): CHRInfo.CHRPropsAttr {
+        let targetProp: CHRInfo.CHRPropsAttr;
+        for (let props of this.propList) {
+            if (props.prop === propKey) {
+                targetProp = props;
+                break;
+            }
+        }
+        return targetProp;
+    }
+
     private _getPropsList(group?: string): CHRInfo.CHRPropsAttr[] {
         const propsList: CHRInfo.CHRPropsAttr[] = [];
         this.propList.forEach(propItem => {
@@ -91,9 +102,12 @@ export default class PropCtrl extends BaseCtrl {
         let props: string[] = this._getPreUpdateProps();
 
         const list: any[] = [];
+        // TODO: 每一个主要属性设计一个图标，在这里可以返回，UI界面可以显示
         props.forEach(propKey => {
+            let propInfo: CHRInfo.CHRPropsAttr = this._getPropInfo(propKey);
             list.push({
                 prop: propKey,
+                propTxt: propInfo.propTxt,
                 // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
                 value: this._updateList[propKey][0]
             })
