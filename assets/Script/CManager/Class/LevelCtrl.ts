@@ -1,6 +1,7 @@
 import { GamePlayEvent } from "../../Common/Namespace";
 import OBT from "../../OBT";
 import { BaseCtrl } from "./BaseCtrl";
+import { getSaveCtrl } from "./SaveCtrl";
 
 export default class LevelCtrl extends BaseCtrl {
     static instance: LevelCtrl = null;
@@ -39,7 +40,7 @@ export default class LevelCtrl extends BaseCtrl {
     }
 
     public initLevel(lev?: number, expCur?: number) {
-        this.level = lev || 0;
+        this.level = lev || getSaveCtrl().save.chr_slot.level;
         this.expTotal = this._calcExpTotal();
         this.expCurrent = expCur || 0;
     }

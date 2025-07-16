@@ -49,10 +49,12 @@ export default class ProcessManager extends OBT_UIManager {
         if (isNewGame) {
             // saveCtrl用普通类实现
             this.saveCtrl = new SaveCtrl();
+            // 先加载存档，后续管理类再从存档中拿取数据
             this.saveCtrl.initSave();
             this._loadWave();
             // 展示第1波UI，倒计时
             MapManager.instance.showMap();
+            CHRManager.instance.init(this.saveCtrl.save);
             CHRManager.instance.showCHR();
             EMYManager.instance.setSpawnRole();
             DropItemManager.instance.initRateMap();

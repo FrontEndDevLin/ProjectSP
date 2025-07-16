@@ -22,7 +22,7 @@ export interface SaveDoc {
     wave: number,
     status: number,
     // 和CHRProp.Prop一样
-    chr_prop: any,
+    chr_prop: CHRInfo.CHRProps,
     chr_slot: CHRInfo.CHRSlot
 }
 
@@ -87,7 +87,8 @@ export namespace CHRInfo {
     }
 
     export interface CHRSlot {
-        atk_core: string
+        atk_core: string,
+        level: number
     }
 
     export interface CHRProps {

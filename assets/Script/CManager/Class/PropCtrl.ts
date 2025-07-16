@@ -1,4 +1,5 @@
 import { CHRInfo } from "../../Common/Namespace";
+import { getRandomNumbers } from "../../Common/utils";
 import { BaseCtrl } from "./BaseCtrl";
 
 export default class PropCtrl extends BaseCtrl {
@@ -17,6 +18,18 @@ export default class PropCtrl extends BaseCtrl {
         { prop: "exp_eff", propTxt: "%经验加成", group: "sub", value: 0, percent: true, buffPos: true },
         { prop: "pick_range", propTxt: "拾取范围", group: "sub", value: 0, percent: false, buffPos: true }
     ];
+
+    // able to update props list
+    private _ableUpdatePropsList: string[] = ["hp", "range", "atk_spd", "def", "spd", "avd"];
+
+    private _updateList = {
+        hp: [3, 6, 9],
+        range: [20, 40, 60],
+        atk_spd: [3, 6, 9],
+        def: [1, 2, 3],
+        spd: [2, 4, 6],
+        avd: [2, 4, 6]
+    }
 
     constructor() {
         super();
@@ -45,6 +58,7 @@ export default class PropCtrl extends BaseCtrl {
 
     public initProps(basicProps: CHRInfo.CHRBasicProps, props: CHRInfo.CHRProps) {
         this._basicProps = basicProps;
+        // 保存对存档数据的引用，修改这里即可同步修改到存档
         this._props = props;
         this._syncPropList();
     }
@@ -60,5 +74,40 @@ export default class PropCtrl extends BaseCtrl {
 
     public getSubPropsList() {
         return this._getPropsList("sub");
+    }
+
+    private _getPreUpdateProps(): string[] {
+        let randomIdxList: number[] = getRandomNumbers(0, this._ableUpdatePropsList.length, 3);
+        let props: string[] = [];
+        for (let i = 0; i < randomIdxList.length; i++) {
+            let idx: number = randomIdxList[i];
+            props.push(this._ableUpdatePropsList[idx]);
+        }
+        return props;
+    }
+
+    // 获取升级列表
+    public getPreUpdateList() {
+        let props: string[] = this._getPreUpdateProps();
+
+        const list: any[] = [];
+        props.forEach(propKey => {
+            list.push({
+                prop: propKey,
+                // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
+                value: this._updateList[propKey][0]
+            })
+        })
+
+        console.log(props);
+        return props;
+    }
+
+    public updateProp(propKey: string, value: number) {
+        if (this._ableUpdatePropsList.indexOf(propKey) === -1) {
+            return;
+        }
+        this._props[propKey] += value;
+        // TODO: 通知属性改变
     }
 }

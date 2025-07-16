@@ -3,9 +3,19 @@
     "wave": 1,
     "status": 1,
     "chr_prop": {
-        "desc": "这里存角色的面板数据"
+        "desc": "这里存角色的面板数据",
+        "hp": 8,
+        "range": 0,
+        "atk_spd": 0,
+        "dmg": 0,
+        "def": 0,
+        "spd": 0,
+        "avd": 0,
+        "exp_eff": 0,
+        "pick_range": 0
     },
     "chr_slot": {
+        "level": 1,
         "atk_core": "BaseAtkWarCore"
     }
 }

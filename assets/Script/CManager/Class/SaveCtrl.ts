@@ -4,6 +4,9 @@ import DBManager from "../DBManager";
 
 /**
  * 存档管理
+ * 
+ * 一切以加载存档为先
+ * 存档加载完毕后，所有需要数据的类都引用该存档，修改时即可同步修改存档
  */
 export default class SaveCtrl extends BaseCtrl {
     static instance: SaveCtrl = null;
@@ -22,6 +25,10 @@ export default class SaveCtrl extends BaseCtrl {
 
     public initSave() {
         this.save = DBManager.instance.getDBData("InitSave");
+    }
+
+    public initCHRSave() {
+
     }
 }
 

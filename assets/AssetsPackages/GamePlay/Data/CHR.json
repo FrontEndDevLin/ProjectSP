@@ -8,17 +8,5 @@
     "basic_spd": 5,
     "basic_exp_eff": 1,
     "basic_pick_range": 4
-  },
-  "props": {
-    "desc": "面板属性",
-    "hp": 8,
-    "range": 0,
-    "atk_spd": 0,
-    "dmg": 0,
-    "def": 0,
-    "spd": 0,
-    "avd": 0,
-    "exp_eff": 0,
-    "pick_range": 0
   }
 }

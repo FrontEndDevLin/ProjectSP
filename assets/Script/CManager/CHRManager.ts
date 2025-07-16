@@ -1,7 +1,7 @@
 import { find, Vec3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import DBManager from "./DBManager";
-import { CHRInfo, GamePlayEvent } from "../Common/Namespace";
+import { CHRInfo, GamePlayEvent, SaveDoc } from "../Common/Namespace";
 import LevelCtrl from "./Class/LevelCtrl";
 import OBT from "../OBT";
 import PropCtrl from "./Class/PropCtrl";
@@ -27,9 +27,6 @@ export default class CHRManager extends OBT_UIManager {
 
         this.CHRDBData = DBManager.instance.getDBData("CHR");
         // console.log('CHRManager Loaded')
-        this._initProps();
-
-        this._initLevelCtrl();
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, () => {
             let levelUpCnt: number = this._levelCtrl.getLevelUpCnt();
@@ -37,14 +34,19 @@ export default class CHRManager extends OBT_UIManager {
         })
     }
 
-    private _initLevelCtrl() {
-        this._levelCtrl = new LevelCtrl();
-        this._levelCtrl.initLevel();
+    public init(saveDoc: SaveDoc) {
+        this._initLevel(saveDoc.chr_slot.level);
+        this._initProps(saveDoc.chr_prop);
     }
 
-    private _initProps() {
+    private _initLevel(level: number) {
+        this._levelCtrl = new LevelCtrl();
+        this._levelCtrl.initLevel(level);
+    }
+
+    private _initProps(props: CHRInfo.CHRProps) {
         this.propCtx = new PropCtrl();
-        this.propCtx.initProps(this.CHRDBData.basic_props, this.CHRDBData.props);
+        this.propCtx.initProps(this.CHRDBData.basic_props, props);
     }
 
     public showCHR() {

@@ -25,6 +25,25 @@ export const getRandomNumber = function(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+export const getRandomNumbers = function(min: number, max: number, numbers: number): number[] {
+  let numArr: number[] = [];
+
+  function getUnRepeatNumber(arr: number[]) {
+    let randomNum: number = getRandomNumber(min, max);
+    if (arr.indexOf(randomNum) !== -1) {
+      return randomNum;
+    } else {
+      return getUnRepeatNumber(arr);
+    }
+  }
+
+  for (let i = 0; i < numbers; i++) {
+    numArr.push(getUnRepeatNumber(numArr));
+  }
+
+  return numArr;
+}
+
 export const getFloatNumber = function (number: number, n: number = 2): number {
   return parseFloat(number.toFixed(n));
 }

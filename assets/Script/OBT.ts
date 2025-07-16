@@ -60,6 +60,13 @@ export default class OBT extends Component {
             obj[node.name] = 1;
         }
     }
+    
+    /**
+     * 角色属性逻辑
+     * 进入游戏，判断是否新游戏
+     *  —— 是
+     *      加载初始角色属性InitSave.json，保存到SaveCtrl里。PropCtrl引用SaveCtrl的数据
+     */
 }
 
 export function getResourceManager(): OBT_ResourceManager {
