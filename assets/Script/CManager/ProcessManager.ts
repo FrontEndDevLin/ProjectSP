@@ -91,6 +91,10 @@ export default class ProcessManager extends OBT_UIManager {
 
         // TODO: 移除所有进行中的项目
         // TODO: 判断有无升级, 有则进入升级界面
+        let levelUpCnt: number = CHRManager.instance.getLevelUpCnt()
+        if (levelUpCnt) {
+            
+        }
     }
     private _loadWave() {
         const currentWave: number = this.saveCtrl.save.wave;
