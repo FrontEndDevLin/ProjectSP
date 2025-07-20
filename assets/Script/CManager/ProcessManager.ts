@@ -93,7 +93,9 @@ export default class ProcessManager extends OBT_UIManager {
         // TODO: 判断有无升级, 有则进入升级界面
         let levelUpCnt: number = CHRManager.instance.getLevelUpCnt()
         if (levelUpCnt) {
-            
+            let props = CHRManager.instance.propCtx.getPreUpdateList();
+            console.log("以下是升级选项");
+            console.log(props)
         }
     }
     private _loadWave() {

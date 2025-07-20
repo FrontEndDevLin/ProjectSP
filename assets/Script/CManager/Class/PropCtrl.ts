@@ -88,7 +88,7 @@ export default class PropCtrl extends BaseCtrl {
     }
 
     private _getPreUpdateProps(): string[] {
-        let randomIdxList: number[] = getRandomNumbers(0, this._ableUpdatePropsList.length, 3);
+        let randomIdxList: number[] = getRandomNumbers(0, this._ableUpdatePropsList.length - 1, 3);
         let props: string[] = [];
         for (let i = 0; i < randomIdxList.length; i++) {
             let idx: number = randomIdxList[i];
@@ -100,7 +100,6 @@ export default class PropCtrl extends BaseCtrl {
     // 获取升级列表
     public getPreUpdateList() {
         let props: string[] = this._getPreUpdateProps();
-
         const list: any[] = [];
         // TODO: 每一个主要属性设计一个图标，在这里可以返回，UI界面可以显示
         props.forEach(propKey => {
@@ -113,8 +112,7 @@ export default class PropCtrl extends BaseCtrl {
             })
         })
 
-        console.log(props);
-        return props;
+        return list;
     }
 
     public updateProp(propKey: string, value: number) {

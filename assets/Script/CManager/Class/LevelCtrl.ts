@@ -26,7 +26,8 @@ export default class LevelCtrl extends BaseCtrl {
 
     private _calcExpTotal() {
         // 等级计算公式(暂定)
-        return this.level * 8 + Math.pow((this.level + 1), 2) + 8;
+        // return this.level * 8 + Math.pow((this.level + 1), 2) + 8;
+        return this.level + Math.pow((this.level + 1), 2);
     }
 
     private _levelUp() {
@@ -47,6 +48,7 @@ export default class LevelCtrl extends BaseCtrl {
 
     public addExp(n: number) {
         // TODO: n要经过经验获取效率的修正
+        n += 2;
         this.expCurrent += n;
         let c: number = this.expCurrent - this.expTotal;
         if (c >= 0) {

@@ -30,7 +30,7 @@ export const getRandomNumbers = function(min: number, max: number, numbers: numb
 
   function getUnRepeatNumber(arr: number[]) {
     let randomNum: number = getRandomNumber(min, max);
-    if (arr.indexOf(randomNum) !== -1) {
+    if (arr.indexOf(randomNum) === -1) {
       return randomNum;
     } else {
       return getUnRepeatNumber(arr);

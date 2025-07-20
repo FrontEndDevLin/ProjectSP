@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BulletInfo } from '../Common/Namespace';
+import { BulletInfo, GameCollider } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 const { ccclass, property } = _decorator;
@@ -71,7 +71,7 @@ export default class BulletManager extends OBT_UIManager {
         //     this._bulletCldMap[bData.cld] = bData;
         // }
     }
-    public getBulletDamage(cld: BulletInfo.TAG): number {
+    public getBulletDamage(cld: GameCollider.TAG): number {
         return this._bulletCldMap[cld].damage;
     }
     public getBulletTag(bulletId: string) {
