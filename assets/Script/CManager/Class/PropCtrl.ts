@@ -107,6 +107,7 @@ export default class PropCtrl extends BaseCtrl {
             list.push({
                 prop: propKey,
                 propTxt: propInfo.propTxt,
+                icon: "",
                 // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
                 value: this._updateList[propKey][0]
             })
