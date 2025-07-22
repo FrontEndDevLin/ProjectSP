@@ -125,6 +125,15 @@ export namespace CHRInfo {
     //     // true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
     //     buffPos?: boolean
     // }
+
+    export interface UpdateProp {
+        prop: string,
+        propTxt: string,
+        icon: string,
+        level: number,   // 品质
+        // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
+        value: number
+    }
 }
 
 export namespace EMYInfo {

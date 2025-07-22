@@ -65,6 +65,10 @@ export default class CHRManager extends OBT_UIManager {
         return this._levelCtrl.getLevelUpCnt();
     }
 
+    public showLevelUpGUI() {
+        this.showPrefab({ prefabPath: "GUI_LevelUp" });
+    }
+
     // 更新角色位置
     public setCHRLoc(loc: Vec3): void {
         this._CHRLoc = loc;

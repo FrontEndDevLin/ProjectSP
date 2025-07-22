@@ -89,14 +89,15 @@ export default class ProcessManager extends OBT_UIManager {
         this._playing = false;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_PASS);
 
-        // TODO: 移除所有进行中的项目
-        // TODO: 判断有无升级, 有则进入升级界面
-        let levelUpCnt: number = CHRManager.instance.getLevelUpCnt()
-        if (levelUpCnt) {
-            let props = CHRManager.instance.propCtx.getPreUpdateList();
-            console.log("以下是升级选项");
-            console.log(props)
-        }
+        this.scheduleOnce(() => {
+            // TODO: 移除所有进行中的项目
+            // TODO: 判断有无升级, 有则进入升级界面
+            let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
+            if (levelUpCnt) {
+                CHRManager.instance.propCtx.refreshPreUpdateList();
+                CHRManager.instance.showLevelUpGUI();
+            }
+        }, 2)
     }
     private _loadWave() {
         const currentWave: number = this.saveCtrl.save.wave;

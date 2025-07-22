@@ -22,6 +22,9 @@ export default class PropCtrl extends BaseCtrl {
     // able to update props list
     private _ableUpdatePropsList: string[] = ["hp", "range", "atk_spd", "def", "spd", "avd"];
 
+    // 可升级的属性(随机)
+    public preUpdateList: CHRInfo.UpdateProp[] = [];
+
     private _updateList = {
         hp: [3, 6, 9],
         range: [20, 40, 60],
@@ -98,9 +101,9 @@ export default class PropCtrl extends BaseCtrl {
     }
 
     // 获取升级列表
-    public getPreUpdateList() {
+    public refreshPreUpdateList() {
         let props: string[] = this._getPreUpdateProps();
-        const list: any[] = [];
+        const list: CHRInfo.UpdateProp[] = [];
         // TODO: 每一个主要属性设计一个图标，在这里可以返回，UI界面可以显示
         props.forEach(propKey => {
             let propInfo: CHRInfo.CHRPropsAttr = this._getPropInfo(propKey);
@@ -108,12 +111,16 @@ export default class PropCtrl extends BaseCtrl {
                 prop: propKey,
                 propTxt: propInfo.propTxt,
                 icon: "",
+                level: 1,   // 品质
                 // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
-                value: this._updateList[propKey][0]
+                value: this._updateList[propKey][0],
+                // pos: true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
+                // percent: true -> 
             })
         })
 
-        return list;
+        this.preUpdateList = list;
+        return true;
     }
 
     public updateProp(propKey: string, value: number) {
