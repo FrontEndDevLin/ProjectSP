@@ -68,6 +68,9 @@ export default class CHRManager extends OBT_UIManager {
     public showLevelUpGUI() {
         this.showPrefab({ prefabPath: "GUI_LevelUp" });
     }
+    public levelUpProp(propKey: string) {
+        this.propCtx.levelUpProp(propKey);
+    }
 
     // 更新角色位置
     public setCHRLoc(loc: Vec3): void {

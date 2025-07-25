@@ -123,11 +123,20 @@ export default class PropCtrl extends BaseCtrl {
         return true;
     }
 
-    public updateProp(propKey: string, value: number) {
+    public levelUpProp(propKey: string) {
         if (this._ableUpdatePropsList.indexOf(propKey) === -1) {
             return;
         }
-        this._props[propKey] += value;
+        // let prop: CHRInfo.UpdateProp;
+        for (let item of this.preUpdateList) {
+            if (item.prop === propKey) {
+                this._props[propKey] += item.value;
+                break;
+            }
+        }
+
+        console.log(this._props)
+        // this._props[propKey] += value;
         // TODO: 通知属性改变
     }
 }
