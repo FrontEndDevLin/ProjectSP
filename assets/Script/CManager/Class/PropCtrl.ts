@@ -136,7 +136,5 @@ export default class PropCtrl extends BaseCtrl {
         }
 
         console.log(this._props)
-        // this._props[propKey] += value;
-        // TODO: 通知属性改变
     }
 }

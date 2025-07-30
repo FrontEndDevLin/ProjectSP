@@ -70,6 +70,7 @@ export default class CHRManager extends OBT_UIManager {
     }
     public levelUpProp(propKey: string) {
         this.propCtx.levelUpProp(propKey);
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_UPDATE);
     }
 
     // 更新角色位置

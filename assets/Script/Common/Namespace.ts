@@ -14,7 +14,8 @@ export namespace GamePlayEvent {
         TIME_REDUCE,
         FIGHT_PASS,
         LEVEL_UP,
-        EXP_CHANGE
+        EXP_CHANGE,
+        PROP_UPDATE
     }
 }
 

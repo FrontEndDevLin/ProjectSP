@@ -2,7 +2,7 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, Color, Component, EventTouch, Label, Node, Sprite, UITransform, Widget } from 'cc';
+import { _decorator, Color, Component, EventTouch, Game, Label, Node, Sprite, UITransform, Widget } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
@@ -18,7 +18,11 @@ export class GUI_LevelUp extends OBT_Component {
         let tabNodeList: Node[] = this.view("Container/InfoWrap/LeftWrap/Tabs").children;
         tabNodeList.forEach((tabNode: Node, i: number) => {
             tabNode.on(Node.EventType.TOUCH_END, (e: EventTouch) => { this._touchAttrTab(i) });
-        })
+        });
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, () => {
+            // todo 更新属性界面
+        });
 
         this._loadLevelUpCard();
         this._initCHRAttrCard();
