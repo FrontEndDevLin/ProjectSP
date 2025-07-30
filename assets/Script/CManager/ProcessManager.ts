@@ -96,6 +96,8 @@ export default class ProcessManager extends OBT_UIManager {
             if (levelUpCnt) {
                 CHRManager.instance.propCtx.refreshPreUpdateList();
                 CHRManager.instance.showLevelUpGUI();
+            } else {
+                CHRManager.instance.showLevelUpGUI();
             }
         }, 2)
     }

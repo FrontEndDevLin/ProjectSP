@@ -23,6 +23,7 @@ export class LevelUpCard extends OBT_Component {
 
     private _touchCard() {
         CHRManager.instance.levelUpProp(this._props.prop);
+        // 通知更新属性UI, UI更新后2秒, 移除升级UI
     }
 
     protected onDestroy(): void {
