@@ -67,7 +67,6 @@ export default class PropCtrl extends BaseCtrl {
         this.propList.forEach(propAttr => {
             propAttr.value = this._props[propAttr.prop];
         });
-        console.log(this.propList);
     }
 
     public initProps(basicProps: CHRInfo.CHRBasicProps, props: CHRInfo.CHRProps) {
@@ -123,9 +122,12 @@ export default class PropCtrl extends BaseCtrl {
         return true;
     }
 
-    public levelUpProp(propKey: string) {
+    public levelUpProp(propKey: string): boolean {
         if (this._ableUpdatePropsList.indexOf(propKey) === -1) {
-            return;
+            return false;
+        }
+        if (!this.preUpdateList.length) {
+            return false;
         }
         // let prop: CHRInfo.UpdateProp;
         for (let item of this.preUpdateList) {
@@ -135,6 +137,11 @@ export default class PropCtrl extends BaseCtrl {
             }
         }
 
-        console.log(this._props)
+        // 选择一个升级属性后不可再继续升级，所以清空
+        this.preUpdateList = [];
+
+        this._syncPropList();
+
+        return true;
     }
 }

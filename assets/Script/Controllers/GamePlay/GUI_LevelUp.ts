@@ -20,10 +20,6 @@ export class GUI_LevelUp extends OBT_Component {
             tabNode.on(Node.EventType.TOUCH_END, (e: EventTouch) => { this._touchAttrTab(i) });
         });
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, () => {
-            // todo 更新属性界面
-        });
-
         this._loadLevelUpCard();
         this._initCHRAttrCard();
     }
@@ -63,13 +59,13 @@ export class GUI_LevelUp extends OBT_Component {
 
         const groupPropsList: CHRInfo.CHRPropsAttr[][] = [CHRManager.instance.propCtx.getMainPropsList(), CHRManager.instance.propCtx.getSubPropsList()];
         groupPropsList.forEach((propsList: CHRInfo.CHRPropsAttr[], groupIdx: number) => {
+            let parentNodePath: string = "Container/InfoWrap/LeftWrap/Board/MainBoardWrap";
+            if (groupIdx === 1) {
+                parentNodePath = "Container/InfoWrap/LeftWrap/Board/SubBoardWrap";
+            }
             propsList.forEach((prop, i: number) => {
                 const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/CHRAttrItem" });
                 propNode.OBT_param1 = prop;
-                let parentNodePath: string = "Container/InfoWrap/LeftWrap/Board/MainBoardWrap";
-                if (groupIdx === 1) {
-                    parentNodePath = "Container/InfoWrap/LeftWrap/Board/SubBoardWrap";
-                }
                 OBT.instance.uiManager.mountNode({ node: propNode, parentNode: this.view(parentNodePath) });
             })
         })

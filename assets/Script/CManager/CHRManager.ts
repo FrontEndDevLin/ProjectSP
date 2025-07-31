@@ -69,8 +69,11 @@ export default class CHRManager extends OBT_UIManager {
         this.showPrefab({ prefabPath: "GUI_LevelUp" });
     }
     public levelUpProp(propKey: string) {
-        this.propCtx.levelUpProp(propKey);
-        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_UPDATE);
+        let updatePropRes: boolean = this.propCtx.levelUpProp(propKey);
+        if (updatePropRes) {
+            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_UPDATE);
+        }
+        return updatePropRes;
     }
 
     // 更新角色位置
