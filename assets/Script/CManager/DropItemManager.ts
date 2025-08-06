@@ -156,14 +156,13 @@ export default class DropItemManager extends OBT_UIManager {
      * 资源回收，用于关卡结束后
      */
     public resRecovery() {
-        for (let dropNode of this.rootNode.children) {
-            // if (dropNode.name === "ExpBlock") {
-            //     let expBlockCtx: ExpBlockCtrl = dropNode.getComponent("ExpBlockCtrl") as ExpBlockCtrl;
-            //     expBlockCtx.recovery();
-            // } else if (dropNode.name === "TrophyBlock" || dropNode.name === "ChestBlock") {
-            //     let trophyBlockCtx: TrophyBlockCtrl = dropNode.getComponent("TrophyBlockCtrl") as TrophyBlockCtrl;
-            //     trophyBlockCtx.recovery();
-            // }
+        for (let dropNode of this.dropItemRootNode.children) {
+            if (dropNode.name === "ExpBlock") {
+                dropNode.OBT_param2.recovery();
+            } else if (dropNode.name === "TrophyBlock" || dropNode.name === "ChestBlock") {
+                // let trophyBlockCtx: TrophyBlockCtrl = dropNode.getComponent("TrophyBlockCtrl") as TrophyBlockCtrl;
+                // trophyBlockCtx.recovery();
+            }
         }
     }
 

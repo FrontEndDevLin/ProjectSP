@@ -27,6 +27,10 @@ export class EMY extends OBT_Component {
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
         this.props = copyObject(this.node.OBT_param1);
+
+        this.node.OBT_param2 = {
+            fadeOut: this._fadeout.bind(this)
+        }
     }
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         switch (otherCollider.group) {
@@ -81,7 +85,7 @@ export class EMY extends OBT_Component {
         this._die();
     }
     // 干脆的死
-    public dieImmediate() {
+    private _fadeout() {
         // TODO: 播放死亡动画，播放完后再销毁节点
         this.node.destroy();
     }

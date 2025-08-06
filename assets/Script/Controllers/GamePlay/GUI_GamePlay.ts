@@ -8,6 +8,8 @@ import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
 import { GamePlayEvent } from '../../Common/Namespace';
+import DropItemManager from '../../CManager/DropItemManager';
+import { transportWorldPosition } from '../../Common/utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_GamePlay')
@@ -28,6 +30,10 @@ export class GUI_GamePlay extends OBT_Component {
         this._updateLevel();
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.EXP_CHANGE, this._updateExpBar, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP, this._updateLevel, this);
+
+        setTimeout(() => {
+            DropItemManager.instance.expIconWorldPos = transportWorldPosition(this.view("CHRStatus/Collect/Storage/Ico").worldPosition);
+        });
     }
 
     start() {

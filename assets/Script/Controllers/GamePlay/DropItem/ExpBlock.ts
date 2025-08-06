@@ -3,6 +3,7 @@ import OBT_Component from '../../../OBT_Component';
 import { getDistance } from '../../../Common/utils';
 import CHRManager from '../../../CManager/CHRManager';
 import { PIXEL_UNIT } from '../../../Common/Namespace';
+import DropItemManager from '../../../CManager/DropItemManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -18,6 +19,10 @@ export class ExpBlock extends OBT_Component {
     private _recovering: boolean = false;
 
     protected onLoad(): void {
+        this.node.OBT_param2 = {
+            absorbing: false,
+            recovery: this._beenRecovery.bind(this)
+        }
         // super.onLoad();
     }
 
@@ -45,7 +50,7 @@ export class ExpBlock extends OBT_Component {
             return;
         }
         // 吸走动画，每一帧检测角色位置朝角色位移，直到与角色位置小于5px，销毁
-        let absorbing: boolean = this.node.OBT_param2;
+        let absorbing: boolean = this.node.OBT_param2.absorbing;
         if (!absorbing) {
             return;
         }
@@ -73,9 +78,9 @@ export class ExpBlock extends OBT_Component {
     /**
      * 被回收
      */
-    public recovery() {
+    private _beenRecovery() {
         this._droping = false;
-        this.node.OBT_param2 = false;
+        this.node.OBT_param2.absorbing = false;
         this._recovering = true;
     }
 
@@ -84,29 +89,29 @@ export class ExpBlock extends OBT_Component {
      */
     private _recovery(dt: number) {
         // 朝血条下方回收图标位置位移，直到小于2px，销毁
-        // if (!this._recovering) {
-        //     return;
-        // }
+        if (!this._recovering) {
+            return;
+        }
 
-        // let iconLoc: Vec3 = DropItemManager.instance.expIconWorldPos;
-        // let nodeLoc: Vec3 = this.node.position;
-        // let dis: number = getDistance(nodeLoc, iconLoc);
-        // if (dis <= 5) {
-        //     // console.log('TODO: 经验被回收!');
-        //     CurrencyManager.instance.addStorage(this.node.OBT_param1.expCnt);
-        //     this.node.destroy();
-        //     return;
-        // }
+        let iconLoc: Vec3 = DropItemManager.instance.expIconWorldPos;
+        let nodeLoc: Vec3 = this.node.position;
+        let dis: number = getDistance(nodeLoc, iconLoc);
+        if (dis <= 5) {
+            // console.log('TODO: 经验被回收!');
+            // CurrencyManager.instance.addStorage(this.node.OBT_param1.expCnt);
+            this.node.destroy();
+            return;
+        }
 
-        // let speed = dt * 16 * GP_UNIT;
-        // let vector: Vec3 = v3(iconLoc.x - nodeLoc.x, iconLoc.y - nodeLoc.y).normalize();
-        // let newPos: Vec3 = nodeLoc.add(new Vec3(vector.x * speed, vector.y * speed));
-        // this.node.setPosition(newPos);
+        let speed = dt * 16 * PIXEL_UNIT;
+        let vector: Vec3 = v3(iconLoc.x - nodeLoc.x, iconLoc.y - nodeLoc.y).normalize();
+        let newPos: Vec3 = nodeLoc.add(new Vec3(vector.x * speed, vector.y * speed));
+        this.node.setPosition(newPos);
     }
 
     update(dt: number) {
         this._absorb(dt);
-        // this._recovery(dt);
+        this._recovery(dt);
     }
 }
 

@@ -1,4 +1,4 @@
-import { _decorator, Component, find, Node, Prefab, sp, v3, Vec3 } from 'cc';
+import { _decorator, Component, find, Game, Node, Prefab, sp, v3, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
@@ -189,15 +189,14 @@ export default class EMYManager extends OBT_UIManager {
     public removeEnemy(uuid: string) {
         delete this.enemyMap[uuid];
     }
-    // TODO:
-    // public removeAllEnemy() {
-    //     const nodeList: Node[] = this.rootNode.children;
-    //     nodeList.forEach(node => {
-    //         let ctx: EnemyCtrl = node.getComponent(EnemyCtrl);
-    //         ctx.dieImmediate();
-    //     });
-    //     this.enemyMap = {};
-    // }
+    // 移除enemyRootNode下所有节点
+    public removeAllEnemy() {
+        const nodeList: Node[] = this.enemyRootNode.children;
+        nodeList.forEach(node => {
+            node.OBT_param2.fadeOut();
+        });
+        this.enemyMap = {};
+    }
     public getNearestEnemy(uuidList: string[]): EnemyInfo {
         let min: number = 0;
         let target: string = null;
