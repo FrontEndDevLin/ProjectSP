@@ -574,7 +574,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 109.375,
+      "width": 9.32421875,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -610,11 +610,11 @@
       "b": 240,
       "a": 255
     },
-    "_string": "+3 生命",
+    "_string": "-",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 32,
-    "_fontSize": 32,
+    "_actualFontSize": 28,
+    "_fontSize": 28,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
@@ -830,6 +830,7 @@
       "__id__": 0
     },
     "fileId": "1awiCwq1FM44FNUe23pq1m",
+    "instance": null,
     "targetOverrides": null
   }
 ]

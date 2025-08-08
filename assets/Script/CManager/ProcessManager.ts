@@ -92,6 +92,7 @@ export default class ProcessManager extends OBT_UIManager {
         EMYManager.instance.removeAllEnemy();
         DropItemManager.instance.resRecovery();
 
+        // TODO: 每一帧检测还有没有回收中的块，直到没有，1秒后进入下一环节
         this.scheduleOnce(() => {
             // TODO: 移除所有进行中的项目
             // TODO: 判断有无升级, 有则进入升级界面

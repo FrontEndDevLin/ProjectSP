@@ -56,7 +56,7 @@ export class CHR extends OBT_Component {
         if (selfCollider.tag === GameCollider.TAG.DROP_ITEM_PICKER) {
             switch (otherCollider.tag) {
                 case GameCollider.TAG.DROP_ITEM_EXP: {
-                    otherCollider.node.OBT_param2 = true;
+                    otherCollider.node.OBT_param2.absorbing = true;
                 } break;
                 
                 default:
