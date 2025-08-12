@@ -6,7 +6,7 @@ import CHRManager from '../CManager/CHRManager';
 import EMYManager from '../CManager/EMYManager';
 import GUI_GamePlayManager from '../CManager/GUI_GamePlayManager';
 import OBT from '../OBT';
-import { GameConfigInfo, GamePlayEvent } from '../Common/Namespace';
+import { GAME_NODE, GameConfigInfo, GamePlayEvent } from '../Common/Namespace';
 import DBManager from './DBManager';
 import DropItemManager from './DropItemManager';
 import SaveCtrl from './Class/SaveCtrl';
@@ -19,6 +19,9 @@ export default class ProcessManager extends OBT_UIManager {
     static instance: ProcessManager = null;
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
+    // 当前节点 战斗中-升级中-备战中
+    public gameNode: GAME_NODE;
+
     public gameConfig: GameConfigInfo.GameConfig;
     public waveRole: GameConfigInfo.WaveRole;
 
@@ -27,8 +30,11 @@ export default class ProcessManager extends OBT_UIManager {
     // 持续时间
     private _duration: number = 0;
     private _tinyCd: number = 0;
-    // 是否战斗中
-    private _playing: boolean = false;
+
+    // 升级持续时间
+    private _levelUpDuration: number = 20;
+    // 备战持续时间
+    private _prepareDuration: number = 30;
 
     start() {
         
@@ -68,12 +74,14 @@ export default class ProcessManager extends OBT_UIManager {
         }
     }
 
+
+
     // 是否处于战斗中
     public isOnPlaying() {
-        return this._playing;
+        return this.gameNode === GAME_NODE.FIGHTING;
     }
     private preplay() {
-        if (this._playing) {
+        if (this.isOnPlaying()) {
             console.log("战斗中不可设置波次时间");
             return;
         }
@@ -82,11 +90,11 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_INIT, this._duration);
     }
     private _startWave() {
-        this._playing = true;
+        this.gameNode = GAME_NODE.FIGHTING;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_START, this._duration);
     }
     private _passWave() {
-        this._playing = false;
+        // TODO: this._playing = false;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_PASS);
 
         EMYManager.instance.removeAllEnemy();
@@ -98,12 +106,23 @@ export default class ProcessManager extends OBT_UIManager {
             // TODO: 判断有无升级, 有则进入升级界面
             let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
             if (levelUpCnt) {
+                this.gameNode = GAME_NODE.LEVEL_UP;
+            } else {
+                this.gameNode = GAME_NODE.PREPARE;
+            }
+            this._nextStep();
+        }, 2)
+    }
+    private _nextStep() {
+        switch (this.gameNode) {
+            case GAME_NODE.LEVEL_UP: {
                 CHRManager.instance.propCtx.refreshPreUpdateList();
                 CHRManager.instance.showLevelUpGUI();
-            } else {
-                CHRManager.instance.showLevelUpGUI();
-            }
-        }, 2)
+            } break;
+            case GAME_NODE.PREPARE: {
+                console.log('进入备战')
+            } break;
+        }
     }
     private _loadWave() {
         const currentWave: number = this.saveCtrl.save.wave;
@@ -112,20 +131,21 @@ export default class ProcessManager extends OBT_UIManager {
     }
 
     update(deltaTime: number) {
-        if (!this._playing) {
-            return;
-        }
-        this._tinyCd += deltaTime;
-        if (this._tinyCd >= 0.1) {
-            this._tinyCd -= 0.1;
-            this._duration = Number((this._duration - 0.1).toFixed(1));
-            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._duration);
-            if (this._duration % 1 === 0) {
-                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._duration);
-                if (this._duration <= 0) {
-                    this._passWave();
+        switch (this.gameNode) {
+            case GAME_NODE.FIGHTING: {
+                this._tinyCd += deltaTime;
+                if (this._tinyCd >= 0.1) {
+                    this._tinyCd -= 0.1;
+                    this._duration = Number((this._duration - 0.1).toFixed(1));
+                    OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._duration);
+                    if (this._duration % 1 === 0) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._duration);
+                        if (this._duration <= 0) {
+                            this._passWave();
+                        }
+                    }
                 }
-            }
+            } break;
         }
     }
 }

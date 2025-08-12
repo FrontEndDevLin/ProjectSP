@@ -22,6 +22,8 @@ export class GUI_LevelUp extends OBT_Component {
 
         this._loadLevelUpCard();
         this._initCHRAttrCard();
+
+        this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
     }
 
     start() {

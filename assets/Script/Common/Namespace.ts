@@ -1,5 +1,11 @@
 import { Vec3 } from "cc"
 
+export enum GAME_NODE {
+    FIGHTING,
+    LEVEL_UP,
+    PREPARE
+}
+
 export namespace GamePlayEvent {
     export enum COMPASS {
         TOUCH_START = 10,
