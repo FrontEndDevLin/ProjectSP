@@ -7,7 +7,8 @@ import OBT_Component from '../../OBT_Component';
 import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
-import { CHRInfo, GamePlayEvent } from '../../Common/Namespace';
+import { CHRInfo, GAME_NODE, GamePlayEvent } from '../../Common/Namespace';
+import ProcessManager from '../../CManager/ProcessManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_LevelUp')
@@ -24,6 +25,9 @@ export class GUI_LevelUp extends OBT_Component {
         this._initCHRAttrCard();
 
         this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._updateCountdownView, this);
     }
 
     start() {
@@ -82,6 +86,10 @@ export class GUI_LevelUp extends OBT_Component {
             levelUpCard.OBT_param1 = updateProp;
             OBT.instance.uiManager.mountNode({ node: levelUpCard, parentNode: cardSlotList[i] });
         })
+    }
+
+    private _updateCountdownView(duration) {
+        this.view("Container/TopBar/Countdown").getComponent(Label).string = duration;
     }
 
     protected onDestroy(): void {

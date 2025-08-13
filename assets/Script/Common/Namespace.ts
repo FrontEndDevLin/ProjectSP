@@ -1,9 +1,11 @@
 import { Vec3 } from "cc"
 
 export enum GAME_NODE {
-    FIGHTING,
-    LEVEL_UP,
-    PREPARE
+    FIGHTING, // 进行中
+    PASS_FIGHT, // 通过
+    LEVEL_UP, // 升级中
+    PASS_LEVEL_UP, // 升级结束
+    PREPARE // 备战中
 }
 
 export namespace GamePlayEvent {
@@ -20,6 +22,9 @@ export namespace GamePlayEvent {
         TIME_REDUCE,
         FIGHT_PASS,
         LEVEL_UP,
+        LEVEL_UP_TIME_INIT,
+        LEVEL_UP_TIME_REDUCE,
+        LEVEL_UP_PASS,
         EXP_CHANGE,
         PROP_UPDATE
     }

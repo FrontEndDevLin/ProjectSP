@@ -33,6 +33,7 @@ export default class ProcessManager extends OBT_UIManager {
 
     // 升级持续时间
     private _levelUpDuration: number = 20;
+    private _levelUpSecond: number = 0;
     // 备战持续时间
     private _prepareDuration: number = 30;
 
@@ -94,7 +95,7 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_START, this._duration);
     }
     private _passWave() {
-        // TODO: this._playing = false;
+        this.gameNode = GAME_NODE.PASS_FIGHT;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_PASS);
 
         EMYManager.instance.removeAllEnemy();
@@ -103,7 +104,6 @@ export default class ProcessManager extends OBT_UIManager {
         // TODO: 每一帧检测还有没有回收中的块，直到没有，1秒后进入下一环节
         this.scheduleOnce(() => {
             // TODO: 移除所有进行中的项目
-            // TODO: 判断有无升级, 有则进入升级界面
             let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
             if (levelUpCnt) {
                 this.gameNode = GAME_NODE.LEVEL_UP;
@@ -113,11 +113,21 @@ export default class ProcessManager extends OBT_UIManager {
             this._nextStep();
         }, 2)
     }
+    private _passLevelUp() {
+        this.gameNode = GAME_NODE.PASS_LEVEL_UP;
+
+        // TODO: 升级界面隐出效果
+        this.scheduleOnce(() => {
+            this.gameNode = GAME_NODE.PREPARE;
+            this._nextStep();
+        }, 1)
+    }
     private _nextStep() {
         switch (this.gameNode) {
             case GAME_NODE.LEVEL_UP: {
                 CHRManager.instance.propCtx.refreshPreUpdateList();
                 CHRManager.instance.showLevelUpGUI();
+                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._levelUpDuration);
             } break;
             case GAME_NODE.PREPARE: {
                 console.log('进入备战')
@@ -130,10 +140,10 @@ export default class ProcessManager extends OBT_UIManager {
         this.preplay();
     }
 
-    update(deltaTime: number) {
+    update(dt: number) {
         switch (this.gameNode) {
             case GAME_NODE.FIGHTING: {
-                this._tinyCd += deltaTime;
+                this._tinyCd += dt;
                 if (this._tinyCd >= 0.1) {
                     this._tinyCd -= 0.1;
                     this._duration = Number((this._duration - 0.1).toFixed(1));
@@ -146,6 +156,18 @@ export default class ProcessManager extends OBT_UIManager {
                     }
                 }
             } break;
+            case GAME_NODE.LEVEL_UP: {
+                this._levelUpSecond += dt;
+                if (this._levelUpSecond >= 1) {
+                    this._levelUpSecond -= 1;
+                    this._levelUpDuration -= 1;
+                    OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._levelUpDuration);
+                    if (this._levelUpDuration <= 0) {
+                        this._passLevelUp();
+                    }
+                }
+            } break;
+
         }
     }
 }
