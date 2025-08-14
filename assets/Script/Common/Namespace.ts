@@ -28,6 +28,11 @@ export namespace GamePlayEvent {
         EXP_CHANGE,
         PROP_UPDATE
     }
+
+    export enum GUI {
+        SHOW_GAME_PLAY = 100,
+        HIDE_GAME_PLAY,
+    }
 }
 
 export interface SaveDoc {

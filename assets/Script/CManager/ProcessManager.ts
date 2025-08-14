@@ -51,6 +51,13 @@ export default class ProcessManager extends OBT_UIManager {
         this.gameConfig = DBManager.instance.getDBData("GameConfig");
     }
 
+    public initGUI() {
+        MapManager.instance.showMap();
+        CHRManager.instance.showCompass();
+        CHRManager.instance.showCHR();
+        GUI_GamePlayManager.instance.initGamePlayGUI();
+    }
+
     // 最开始
     public startGame(isNewGame: boolean): void {
         if (isNewGame) {
@@ -59,23 +66,22 @@ export default class ProcessManager extends OBT_UIManager {
             // 先加载存档，后续管理类再从存档中拿取数据
             this.saveCtrl.initSave();
             this._loadWave();
-            // 展示第1波UI，倒计时
-            MapManager.instance.showMap();
-            CHRManager.instance.init(this.saveCtrl.save);
-            CHRManager.instance.showCHR();
-            EMYManager.instance.setSpawnRole();
-            DropItemManager.instance.initRateMap();
-            CHRManager.instance.showCompass();
-            GUI_GamePlayManager.instance.showGamePlayGUI();
-            
-            this._startWave();
         } else {
             // 需要做读取存档时，判断storage里有没有存档，有则读取存档；没有则读取InitSave.json
             let hasSaveDoc: boolean = false;
         }
+
+        // start 展示第1波UI，倒计时。 这一段用另外的方法包装
+        CHRManager.instance.init(this.saveCtrl.save);
+        EMYManager.instance.setSpawnRole();
+        DropItemManager.instance.initRateMap();
+        // end
+        this._startWave();
     }
 
-
+    public toWave() {
+        
+    }
 
     // 是否处于战斗中
     public isOnPlaying() {
@@ -91,6 +97,7 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_INIT, this._duration);
     }
     private _startWave() {
+        GUI_GamePlayManager.instance.showGamePlayGUI();
         this.gameNode = GAME_NODE.FIGHTING;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_START, this._duration);
     }
@@ -118,6 +125,7 @@ export default class ProcessManager extends OBT_UIManager {
 
         // TODO: 升级界面隐出效果
         this.scheduleOnce(() => {
+            GUI_GamePlayManager.instance.hideLevelUpGUI();
             this.gameNode = GAME_NODE.PREPARE;
             this._nextStep();
         }, 1)
@@ -126,7 +134,7 @@ export default class ProcessManager extends OBT_UIManager {
         switch (this.gameNode) {
             case GAME_NODE.LEVEL_UP: {
                 CHRManager.instance.propCtx.refreshPreUpdateList();
-                CHRManager.instance.showLevelUpGUI();
+                GUI_GamePlayManager.instance.showLevelUpGUI();
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._levelUpDuration);
             } break;
             case GAME_NODE.PREPARE: {

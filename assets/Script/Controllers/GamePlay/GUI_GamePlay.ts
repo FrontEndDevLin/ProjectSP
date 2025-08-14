@@ -21,6 +21,9 @@ export class GUI_GamePlay extends OBT_Component {
 
         this._hpBarWidth = this.view("CHRStatus/HPWrap/BG").getComponent(UITransform).width;
 
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_GAME_PLAY, this._showGUI, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_GAME_PLAY, this._hideGUI, this);
+
         // temp
         this._updateHP();
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_START, this._updateCountdownView, this);
@@ -39,6 +42,13 @@ export class GUI_GamePlay extends OBT_Component {
     }
 
     start() {
+    }
+
+    private _showGUI() {
+        this.showNode();
+    }
+    private _hideGUI() {
+        this.hideNode();
     }
 
     private _updateCountdownView(duration) {
@@ -69,6 +79,9 @@ export class GUI_GamePlay extends OBT_Component {
     }
 
     protected onDestroy(): void {
+        OBT.instance.eventCenter.off(GamePlayEvent.GUI.SHOW_GAME_PLAY, this._showGUI, this);
+        OBT.instance.eventCenter.off(GamePlayEvent.GUI.HIDE_GAME_PLAY, this._hideGUI, this);
+
         OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.FIGHT_START, this._updateCountdownView, this);
         OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._updateCountdownView, this);

@@ -65,12 +65,6 @@ export default class CHRManager extends OBT_UIManager {
         return this._levelCtrl.getLevelUpCnt();
     }
 
-    public showLevelUpGUI() {
-        this.showPrefab({ prefabPath: "GUI_LevelUp" });
-    }
-    public hideLevelUpGUI() {
-        // this.
-    }
     public levelUpProp(propKey: string) {
         let updatePropRes: boolean = this.propCtx.levelUpProp(propKey);
         if (updatePropRes) {

@@ -7,8 +7,11 @@ const { ccclass, property } = _decorator;
 export class GamePlay extends OBT_Component {
     start() {
         // console.log(find("Canvas"))
+        ProcessManager.instance.initGUI();
         // OBT.instance.printStructure();
-        ProcessManager.instance.startGame(true);
+        setTimeout(() => {
+            ProcessManager.instance.startGame(true);
+        })
     }
 
     update(deltaTime: number) {
