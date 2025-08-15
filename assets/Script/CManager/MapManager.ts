@@ -4,6 +4,8 @@ export default class MapManager extends OBT_UIManager {
     static instance: MapManager;
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
+    private _mapNode: Node;
+
     protected onLoad(): void {
         if (!MapManager.instance) {
             MapManager.instance = this
@@ -13,10 +15,15 @@ export default class MapManager extends OBT_UIManager {
         }
     }
 
+    public initMap() {
+        this._mapNode = this.showPrefab({ prefabPath: "Map", scriptName: "NONE" });
+    }
+
     public showMap() {
-        // console.log(find("Canvas"));
-        this.showPrefab({ prefabPath: "Map", scriptName: "NONE" });
-        console.log('地图管理:显示地图')
+        this.showNode(this._mapNode);
+    }
+    public hideMap() {
+        this.hideNode(this._mapNode);
     }
 
     protected onDestroy(): void {

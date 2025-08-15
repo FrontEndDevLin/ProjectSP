@@ -1,4 +1,4 @@
-import { find, Vec3 } from "cc";
+import { find, Vec3, Node } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import DBManager from "./DBManager";
 import { CHRInfo, GamePlayEvent, SaveDoc } from "../Common/Namespace";
@@ -11,6 +11,7 @@ export default class CHRManager extends OBT_UIManager {
     private _CHRLoc: Vec3 = null;
 
     private _levelCtrl: LevelCtrl;
+    private _compassNode: Node;
 
     public CHRDBData: any;
     public propCtx: PropCtrl;
@@ -52,8 +53,14 @@ export default class CHRManager extends OBT_UIManager {
     public showCHR() {
         this.showPrefab({ prefabPath: "CHR/CHR01", scriptName: "CHR" });
     }
+    public initCompass() {
+        this._compassNode = this.showPrefab({ prefabPath: "Compass" });
+    }
     public showCompass() {
-        this.showPrefab({ prefabPath: "Compass" });
+        this.showNode(this._compassNode);
+    }
+    public hideCompass() {
+        this.hideNode(this._compassNode);
     }
     public addExp(exp: number) {
         return this._levelCtrl.addExp(exp);

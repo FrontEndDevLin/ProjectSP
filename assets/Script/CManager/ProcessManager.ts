@@ -52,8 +52,8 @@ export default class ProcessManager extends OBT_UIManager {
     }
 
     public initGUI() {
-        MapManager.instance.showMap();
-        CHRManager.instance.showCompass();
+        MapManager.instance.initMap();
+        CHRManager.instance.initCompass();
         CHRManager.instance.showCHR();
         GUI_GamePlayManager.instance.initGamePlayGUI();
     }
@@ -73,6 +73,7 @@ export default class ProcessManager extends OBT_UIManager {
 
         // start 展示第1波UI，倒计时。 这一段用另外的方法包装
         CHRManager.instance.init(this.saveCtrl.save);
+
         EMYManager.instance.setSpawnRole();
         DropItemManager.instance.initRateMap();
         // end
@@ -80,7 +81,7 @@ export default class ProcessManager extends OBT_UIManager {
     }
 
     public toWave() {
-        
+
     }
 
     // 是否处于战斗中
@@ -97,7 +98,9 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_INIT, this._duration);
     }
     private _startWave() {
+        MapManager.instance.showMap();
         GUI_GamePlayManager.instance.showGamePlayGUI();
+        CHRManager.instance.showCompass();
         this.gameNode = GAME_NODE.FIGHTING;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_START, this._duration);
     }

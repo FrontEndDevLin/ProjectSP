@@ -9,14 +9,21 @@ export default class OBT_Component extends Component {
         return path ? this.node.getChildByPath(path) : this.node;
     }
 
-    public hideNode(path: string = "") {
+    public hideNodeByPath(path: string = "") {
         let node: Node = this.view(path);
+        this.hideNode(node);
+    }
+    public showNodeByPath(path: string = "") {
+        let node: Node = this.view(path);
+        this.showNode(node);
+    }
+
+    public showNode(node: Node) {
+        node.setPosition(node.OBT_originalPosition || v3(0, 0, 0));
+    }
+    public hideNode(node: Node) {
         let oldPosition: Vec3 = node.position;
         node.OBT_originalPosition = v3(oldPosition.x, oldPosition.y);
         node.setPosition(v3(3000, 0, 0));
-    }
-    public showNode(path: string = "") {
-        let node: Node = this.view(path);
-        node.setPosition(node.OBT_originalPosition || v3(0, 0, 0));
     }
 }

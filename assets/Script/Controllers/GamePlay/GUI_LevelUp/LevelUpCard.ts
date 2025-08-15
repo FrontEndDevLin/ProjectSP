@@ -27,7 +27,7 @@ export class LevelUpCard extends OBT_Component {
             let res = CHRManager.instance.levelUpProp(this._props.prop);
             if (res) {
                 // 通知更新属性UI, TODO:(UI更新后2秒, 移除升级UI)
-                this.hideNode();
+                this.hideNodeByPath();
             }
         }
     }

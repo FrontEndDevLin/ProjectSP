@@ -4,6 +4,7 @@
 
 import { _decorator, Node, find, instantiate, Prefab, Component, UITransform } from 'cc';
 import OBT_ResourceManager from './OBT_ResourceManager';
+import OBT_Component from '../OBT_Component';
 // import OBT from '../OBT';
 
 interface LoadPrefabOptions {
@@ -26,7 +27,7 @@ interface MountEmptyNodeOptions {
     parentNode?: Node
 }
 
-export default class OBT_UIManager extends Component {
+export default class OBT_UIManager extends OBT_Component {
     static instance: OBT_UIManager = null;
     public rootNode: Node = find("Canvas");
 

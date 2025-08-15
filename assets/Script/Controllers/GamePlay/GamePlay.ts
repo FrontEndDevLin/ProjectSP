@@ -9,9 +9,7 @@ export class GamePlay extends OBT_Component {
         // console.log(find("Canvas"))
         ProcessManager.instance.initGUI();
         // OBT.instance.printStructure();
-        setTimeout(() => {
-            ProcessManager.instance.startGame(true);
-        })
+        ProcessManager.instance.startGame(true);
     }
 
     update(deltaTime: number) {

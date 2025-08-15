@@ -56,12 +56,12 @@ export class GUI_LevelUp extends OBT_Component {
             hidePath = `${rootPath}/MainBoardWrap`;
             showPath = `${rootPath}SubBoardWrap`;
         }
-        this.hideNode(hidePath);
-        this.showNode(showPath);
+        this.hideNodeByPath(hidePath);
+        this.showNodeByPath(showPath);
     }
 
     private _initCHRAttrCard() {
-        this.hideNode("Container/InfoWrap/LeftWrap/Board/SubBoardWrap");
+        this.hideNodeByPath("Container/InfoWrap/LeftWrap/Board/SubBoardWrap");
 
         const groupPropsList: CHRInfo.CHRPropsAttr[][] = [CHRManager.instance.propCtx.getMainPropsList(), CHRManager.instance.propCtx.getSubPropsList()];
         groupPropsList.forEach((propsList: CHRInfo.CHRPropsAttr[], groupIdx: number) => {
