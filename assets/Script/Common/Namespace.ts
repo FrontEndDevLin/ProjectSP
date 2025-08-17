@@ -26,12 +26,17 @@ export namespace GamePlayEvent {
         LEVEL_UP_TIME_REDUCE,
         LEVEL_UP_PASS,
         EXP_CHANGE,
+        PROP_INIT,
         PROP_UPDATE
     }
 
     export enum GUI {
         SHOW_GAME_PLAY = 100,
-        HIDE_GAME_PLAY,
+        HIDE_GAME_PLAY
+    }
+
+    export enum STORE {
+        LEVEL_UP_LIST_UPDATE = 130,
     }
 }
 

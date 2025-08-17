@@ -1,5 +1,6 @@
-import { CHRInfo } from "../../Common/Namespace";
+import { CHRInfo, GamePlayEvent } from "../../Common/Namespace";
 import { getRandomNumbers } from "../../Common/utils";
+import OBT from "../../OBT";
 import { BaseCtrl } from "./BaseCtrl";
 
 export default class PropCtrl extends BaseCtrl {
@@ -119,6 +120,7 @@ export default class PropCtrl extends BaseCtrl {
         })
 
         this.preUpdateList = list;
+        OBT.instance.eventCenter.emit(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE);
         return true;
     }
 

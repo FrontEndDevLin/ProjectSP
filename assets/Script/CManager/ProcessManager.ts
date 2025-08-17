@@ -56,6 +56,7 @@ export default class ProcessManager extends OBT_UIManager {
         CHRManager.instance.initCompass();
         CHRManager.instance.showCHR();
         GUI_GamePlayManager.instance.initGamePlayGUI();
+        GUI_GamePlayManager.instance.initLevelUpGUI();
     }
 
     // 最开始
@@ -113,7 +114,7 @@ export default class ProcessManager extends OBT_UIManager {
 
         // TODO: 每一帧检测还有没有回收中的块，直到没有，1秒后进入下一环节
         this.scheduleOnce(() => {
-            // TODO: 移除所有进行中的项目
+            // TODO: 移除所有进行中的项目：GUI
             let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
             if (levelUpCnt) {
                 this.gameNode = GAME_NODE.LEVEL_UP;

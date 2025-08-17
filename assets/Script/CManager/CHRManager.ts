@@ -38,6 +38,7 @@ export default class CHRManager extends OBT_UIManager {
     public init(saveDoc: SaveDoc) {
         this._initLevel(saveDoc.chr_slot.level);
         this._initProps(saveDoc.chr_prop);
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_INIT);
     }
 
     private _initLevel(level: number) {

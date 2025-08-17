@@ -21,13 +21,15 @@ export class GUI_LevelUp extends OBT_Component {
             tabNode.on(Node.EventType.TOUCH_END, (e: EventTouch) => { this._touchAttrTab(i) });
         });
 
-        this._loadLevelUpCard();
-        this._initCHRAttrCard();
+        // this._initCHRAttrCard();
 
         this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._updateCountdownView, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_INIT, this._initCHRAttrCard, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE, this._updateLevelUpCard, this);
     }
 
     start() {
@@ -77,7 +79,7 @@ export class GUI_LevelUp extends OBT_Component {
         })
     }
 
-    private _loadLevelUpCard() {
+    private _updateLevelUpCard() {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
         const preLevelUpList: CHRInfo.UpdateProp[] = CHRManager.instance.propCtx.preUpdateList;
         preLevelUpList.forEach((updateProp, i) => {
