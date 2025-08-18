@@ -99,6 +99,35 @@ export namespace WarCoreInfo {
     }
 }
 
+export namespace ItemInfo {
+    export interface buff {
+        type: string,
+        prop: string,
+        value?: number | string
+    }
+
+    export interface Item {
+        id: string,
+        item_type: string,
+        level: number,
+        label: string,
+        group: string,
+        group_label: string,
+        buff_list: buff[]
+    }
+
+    export interface ItemDBData {
+        [itemId: string]: Item
+    }
+
+    export enum TROPHY_TYPE {
+        NONE = 0,
+        NORMAL = 1,
+        CHEST,
+        GREAT_CHEST
+    }
+}
+
 export namespace CHRInfo {
     // 角色基础数值支撑属性
     export interface CHRBasicProps {

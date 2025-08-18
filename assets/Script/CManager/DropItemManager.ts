@@ -10,19 +10,14 @@ import OBT from '../OBT';
 import { getFloatNumber, getRandomNumber } from '../Common/utils';
 const { ccclass, property } = _decorator;
 
+import { ItemInfo } from '../Common/Namespace';
+
 /**
  * 物品掉落管理
  *  经验掉落
  *  战利品掉落/战利品有几率变成宝箱
  *  物品掉落概率 = 该敌人自身掉宝率 * 全局掉宝率修正
  */
-
-export enum TROPHY_TYPE {
-    NONE = 0,
-    NORMAL = 1,
-    CHEST,
-    GREAT_CHEST
-}
 
 export default class DropItemManager extends OBT_UIManager {
     static instance: DropItemManager = null;
@@ -238,9 +233,9 @@ export default class DropItemManager extends OBT_UIManager {
         // TODO: 战利品掉落有几率变成箱子，和角色幸运值挂钩。目前临时处理
         let num = getRandomNumber(1, 100);
         if (num < 10) {
-            return TROPHY_TYPE.CHEST;
+            return ItemInfo.TROPHY_TYPE.CHEST;
         } else {
-            return TROPHY_TYPE.NORMAL;
+            return ItemInfo.TROPHY_TYPE.NORMAL;
         }
     }
 
