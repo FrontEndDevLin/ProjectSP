@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "GUI_LevelUp",
+    "_name": "GUI_Prepare",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "GUI_LevelUp",
+    "_name": "GUI_Prepare",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -441,7 +441,7 @@
       "b": 224,
       "a": 255
     },
-    "_string": "升级",
+    "_string": "备战",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 40,
@@ -952,7 +952,7 @@
   },
   {
     "__type__": "cc.PrefabInstance",
-    "fileId": "2foc2Y4GtPB6Qj2IT8RRAS",
+    "fileId": "1ck+4fFghPBZAZDYZVBl+J",
     "prefabRootNode": {
       "__id__": 1
     },

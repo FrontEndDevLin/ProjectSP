@@ -57,6 +57,7 @@ export default class ProcessManager extends OBT_UIManager {
         CHRManager.instance.showCHR();
         GUI_GamePlayManager.instance.initGamePlayGUI();
         GUI_GamePlayManager.instance.initLevelUpGUI();
+        GUI_GamePlayManager.instance.initPrepareGUI();
     }
 
     // 最开始
@@ -143,6 +144,7 @@ export default class ProcessManager extends OBT_UIManager {
             } break;
             case GAME_NODE.PREPARE: {
                 console.log('进入备战')
+                GUI_GamePlayManager.instance.showPrepareGUI();
             } break;
         }
     }

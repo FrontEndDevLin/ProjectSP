@@ -13,70 +13,20 @@ const { ccclass, property } = _decorator;
 
 @ccclass('GUI_LevelUp')
 export class GUI_LevelUp extends OBT_Component {
-    private _activeAttrTab: number = 0;
-
     protected onLoad(): void {
-        let tabNodeList: Node[] = this.view("Container/InfoWrap/LeftWrap/Tabs").children;
-        tabNodeList.forEach((tabNode: Node, i: number) => {
-            tabNode.on(Node.EventType.TOUCH_END, (e: EventTouch) => { this._touchAttrTab(i) });
-        });
-
         // this._initCHRAttrCard();
 
         this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
 
+        this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
+
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._updateCountdownView, this);
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_INIT, this._initCHRAttrCard, this);
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE, this._updateLevelUpCard, this);
     }
 
     start() {
-    }
-
-    private _touchAttrTab(i: number) {
-        if (this._activeAttrTab === i) {
-            return;
-        }
-        let tabNodeList: Node[] = this.view("Container/InfoWrap/LeftWrap/Tabs").children;
-        
-        tabNodeList[this._activeAttrTab].children[0].getComponent(Sprite).color = new Color(245, 245, 245, 0);
-        tabNodeList[this._activeAttrTab].children[1].getComponent(Label).color = new Color(245, 245, 245);
-        tabNodeList[i].children[0].getComponent(Sprite).color = new Color(245, 245, 245);
-        tabNodeList[i].children[1].getComponent(Label).color = new Color(51, 51, 51);
-
-        this._activeAttrTab = i;
-
-        let rootPath: string = "Container/InfoWrap/LeftWrap/Board/"
-        let hidePath: string = "";
-        let showPath: string = "";
-        if (this._activeAttrTab === 0) {
-            hidePath = `${rootPath}SubBoardWrap`;
-            showPath = `${rootPath}MainBoardWrap`;
-        } else {
-            hidePath = `${rootPath}/MainBoardWrap`;
-            showPath = `${rootPath}SubBoardWrap`;
-        }
-        this.hideNodeByPath(hidePath);
-        this.showNodeByPath(showPath);
-    }
-
-    private _initCHRAttrCard() {
-        this.hideNodeByPath("Container/InfoWrap/LeftWrap/Board/SubBoardWrap");
-
-        const groupPropsList: CHRInfo.CHRPropsAttr[][] = [CHRManager.instance.propCtx.getMainPropsList(), CHRManager.instance.propCtx.getSubPropsList()];
-        groupPropsList.forEach((propsList: CHRInfo.CHRPropsAttr[], groupIdx: number) => {
-            let parentNodePath: string = "Container/InfoWrap/LeftWrap/Board/MainBoardWrap";
-            if (groupIdx === 1) {
-                parentNodePath = "Container/InfoWrap/LeftWrap/Board/SubBoardWrap";
-            }
-            propsList.forEach((prop, i: number) => {
-                const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/CHRAttrItem" });
-                propNode.OBT_param1 = prop;
-                OBT.instance.uiManager.mountNode({ node: propNode, parentNode: this.view(parentNodePath) });
-            })
-        })
     }
 
     private _updateLevelUpCard() {

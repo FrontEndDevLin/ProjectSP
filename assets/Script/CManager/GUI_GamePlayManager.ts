@@ -7,7 +7,10 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
     private _GUIGamePlayNode: Node;
+    // 升级界面
     private _GUILevelUpNode: Node;
+    // 备战界面
+    private _GUIPrepareNode: Node;
 
     protected onLoad(): void {
         if (!GUI_GamePlayManager.instance) {
@@ -24,6 +27,9 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     public initLevelUpGUI() {
         this._GUILevelUpNode = this.showPrefab({ prefabPath: "GUI_LevelUp" });
     }
+    public initPrepareGUI() {
+        this._GUIPrepareNode = this.showPrefab({ prefabPath: "GUI_Prepare" });
+    }
 
     public showGamePlayGUI() {
         this.showNode(this._GUIGamePlayNode);
@@ -37,6 +43,13 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
     public hideLevelUpGUI() {
         this.hideNode(this._GUILevelUpNode);
+    }
+
+    public showPrepareGUI() {
+        this.showNode(this._GUIPrepareNode);
+    }
+    public hidePrepareGUI() {
+        this.hideNode(this._GUIPrepareNode);
     }
 
     protected onDestroy(): void {
