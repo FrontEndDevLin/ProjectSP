@@ -9,6 +9,7 @@ import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
 import { CHRInfo, GAME_NODE, GamePlayEvent } from '../../Common/Namespace';
 import ProcessManager from '../../CManager/ProcessManager';
+import { getRandomNumber } from '../../Common/utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_LevelUp')
@@ -22,6 +23,7 @@ export class GUI_LevelUp extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIMEOUT, this._levelUpTimeout, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE, this._updateLevelUpCard, this);
     }
@@ -42,6 +44,12 @@ export class GUI_LevelUp extends OBT_Component {
 
     private _updateCountdownView(duration) {
         this.view("Container/TopBar/Countdown").getComponent(Label).string = duration;
+    }
+
+    private _levelUpTimeout() {
+        const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
+        let node: Node = cardSlotList[getRandomNumber(0, cardSlotList.length - 1)].children[0];
+        node.OBT_param2.autoTouch();
     }
 
     protected onDestroy(): void {

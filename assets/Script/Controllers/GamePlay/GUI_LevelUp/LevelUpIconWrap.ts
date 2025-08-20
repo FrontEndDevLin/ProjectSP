@@ -12,6 +12,7 @@ export class LevelUpIconWrap extends OBT_Component {
     protected onLoad(): void {
         // this.node.once(Node.EventType.TOUCH_END, this._touchCard, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP, this._updateLevelIcon, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_FINISH, this._updateLevelIcon, this);
     }
 
     start() {

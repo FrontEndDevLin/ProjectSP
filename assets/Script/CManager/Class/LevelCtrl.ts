@@ -64,7 +64,7 @@ export default class LevelCtrl extends BaseCtrl {
     // 完成一次升级
     public finishOnceTimeLevelUp() {
         this._levelUpCnt--;
-        // TODO: 通知UI更新
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_FINISH);
     }
 
     // TODO: 以下所有都迁移到GUI_GamePlayManager里

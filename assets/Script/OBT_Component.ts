@@ -22,6 +22,10 @@ export default class OBT_Component extends Component {
         node.setPosition(node.OBT_originalPosition || v3(0, 0, 0));
     }
     public hideNode(node: Node) {
+        if (node.position.x === 3000 && node.position.y === 0) {
+            return;
+        }
+
         let oldPosition: Vec3 = node.position;
         node.OBT_originalPosition = v3(oldPosition.x, oldPosition.y);
         node.setPosition(v3(3000, 0, 0));

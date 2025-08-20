@@ -24,7 +24,8 @@ export namespace GamePlayEvent {
         LEVEL_UP,
         LEVEL_UP_TIME_INIT,
         LEVEL_UP_TIME_REDUCE,
-        LEVEL_UP_PASS,
+        LEVEL_UP_TIMEOUT,
+        LEVEL_UP_FINISH,
         EXP_CHANGE,
         PROP_INIT,
         PROP_UPDATE

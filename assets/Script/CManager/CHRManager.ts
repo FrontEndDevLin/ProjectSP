@@ -78,6 +78,7 @@ export default class CHRManager extends OBT_UIManager {
         if (updatePropRes) {
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_UPDATE);
         }
+        this._levelCtrl.finishOnceTimeLevelUp();
         return updatePropRes;
     }
 

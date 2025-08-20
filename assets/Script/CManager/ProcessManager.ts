@@ -49,6 +49,8 @@ export default class ProcessManager extends OBT_UIManager {
             return;
         }
         this.gameConfig = DBManager.instance.getDBData("GameConfig");
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_FINISH, this._finishLevelUp, this);
     }
 
     public initGUI() {
@@ -116,30 +118,40 @@ export default class ProcessManager extends OBT_UIManager {
         // TODO: 每一帧检测还有没有回收中的块，直到没有，1秒后进入下一环节
         this.scheduleOnce(() => {
             // TODO: 移除所有进行中的项目：GUI
-            let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
-            if (levelUpCnt) {
-                this.gameNode = GAME_NODE.LEVEL_UP;
-            } else {
-                this.gameNode = GAME_NODE.PREPARE;
-            }
             this._nextStep();
         }, 2)
     }
-    private _passLevelUp() {
+    private _finishLevelUp() {
         this.gameNode = GAME_NODE.PASS_LEVEL_UP;
-
-        // TODO: 升级界面隐出效果
         this.scheduleOnce(() => {
             GUI_GamePlayManager.instance.hideLevelUpGUI();
-            this.gameNode = GAME_NODE.PREPARE;
             this._nextStep();
         }, 1)
     }
+    // private _passLevelUp() {
+    //     this.gameNode = GAME_NODE.PASS_LEVEL_UP;
+
+    //     // TODO: 升级界面隐出效果
+    //     this.scheduleOnce(() => {
+    //         GUI_GamePlayManager.instance.hideLevelUpGUI();
+    //         this.gameNode = GAME_NODE.PREPARE;
+    //         this._nextStep();
+    //     }, 1)
+    // }
     private _nextStep() {
+        let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
+        if (levelUpCnt) {
+            this.gameNode = GAME_NODE.LEVEL_UP;
+        } else {
+            this.gameNode = GAME_NODE.PREPARE;
+        }
+
         switch (this.gameNode) {
             case GAME_NODE.LEVEL_UP: {
+                GUI_GamePlayManager.instance.hideGamePlayGUI();
                 CHRManager.instance.propCtx.refreshPreUpdateList();
                 GUI_GamePlayManager.instance.showLevelUpGUI();
+                this._levelUpDuration = 20;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._levelUpDuration);
             } break;
             case GAME_NODE.PREPARE: {
@@ -171,14 +183,22 @@ export default class ProcessManager extends OBT_UIManager {
                 }
             } break;
             case GAME_NODE.LEVEL_UP: {
+                if (this._levelUpDuration <= 0) {
+                    return;
+                }
+
                 this._levelUpSecond += dt;
                 if (this._levelUpSecond >= 1) {
                     this._levelUpSecond -= 1;
                     this._levelUpDuration -= 1;
                     OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._levelUpDuration);
+
                     if (this._levelUpDuration <= 0) {
-                        this._passLevelUp();
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIMEOUT);
                     }
+                    // if (this._levelUpDuration <= 0) {
+                    //     this._passLevelUp();
+                    // }
                 }
             } break;
 
