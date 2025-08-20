@@ -12,6 +12,9 @@ import DropItemManager from './DropItemManager';
 import SaveCtrl from './Class/SaveCtrl';
 const { ccclass, property } = _decorator;
 
+const LEVEL_UP_TIME: number = 10;
+const PREPARE_TIME: number = 5;
+
 /**
  * Game流程管理控制
  */
@@ -32,10 +35,11 @@ export default class ProcessManager extends OBT_UIManager {
     private _tinyCd: number = 0;
 
     // 升级持续时间
-    private _levelUpDuration: number = 20;
+    private _levelUpDuration: number = LEVEL_UP_TIME;
     private _levelUpSecond: number = 0;
     // 备战持续时间
-    private _prepareDuration: number = 30;
+    private _prepareDuration: number = PREPARE_TIME;
+    private _prepareSecond: number = 0;
 
     start() {
         
@@ -118,6 +122,7 @@ export default class ProcessManager extends OBT_UIManager {
         // TODO: 每一帧检测还有没有回收中的块，直到没有，1秒后进入下一环节
         this.scheduleOnce(() => {
             // TODO: 移除所有进行中的项目：GUI
+            this._setGameNode();
             this._nextStep();
         }, 2)
     }
@@ -125,8 +130,35 @@ export default class ProcessManager extends OBT_UIManager {
         this.gameNode = GAME_NODE.PASS_LEVEL_UP;
         this.scheduleOnce(() => {
             GUI_GamePlayManager.instance.hideLevelUpGUI();
+            this._setGameNode();
             this._nextStep();
         }, 1)
+    }
+    private _finishPrepare() {
+        this.gameNode = GAME_NODE.PASS_PREPARE;
+        this.scheduleOnce(() => {
+            GUI_GamePlayManager.instance.hidePrepareGUI();
+            this._setGameNode();
+            this._nextStep();
+        }, 1)
+    }
+    // 根据当前过渡节点，设置下一节点
+    private _setGameNode() {
+        let currentGameNode: GAME_NODE = this.gameNode;
+        switch (currentGameNode) {
+            case GAME_NODE.PASS_FIGHT:
+            case GAME_NODE.PASS_LEVEL_UP: {
+                let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
+                if (levelUpCnt) {
+                    this.gameNode = GAME_NODE.LEVEL_UP;
+                } else {
+                    this.gameNode = GAME_NODE.PREPARE;
+                }
+            } break;
+            case GAME_NODE.PASS_PREPARE: {
+                this.gameNode = GAME_NODE.FIGHTING;
+            } break;
+        }
     }
     // private _passLevelUp() {
     //     this.gameNode = GAME_NODE.PASS_LEVEL_UP;
@@ -139,24 +171,25 @@ export default class ProcessManager extends OBT_UIManager {
     //     }, 1)
     // }
     private _nextStep() {
-        let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
-        if (levelUpCnt) {
-            this.gameNode = GAME_NODE.LEVEL_UP;
-        } else {
-            this.gameNode = GAME_NODE.PREPARE;
-        }
-
         switch (this.gameNode) {
             case GAME_NODE.LEVEL_UP: {
                 GUI_GamePlayManager.instance.hideGamePlayGUI();
                 CHRManager.instance.propCtx.refreshPreUpdateList();
                 GUI_GamePlayManager.instance.showLevelUpGUI();
-                this._levelUpDuration = 20;
+                this._levelUpDuration = LEVEL_UP_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._levelUpDuration);
             } break;
             case GAME_NODE.PREPARE: {
-                console.log('进入备战')
+                GUI_GamePlayManager.instance.hideGamePlayGUI();
+                CHRManager.instance.propCtx.refreshPreUpdateList();
                 GUI_GamePlayManager.instance.showPrepareGUI();
+                this._prepareDuration = PREPARE_TIME;
+                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._prepareDuration);
+            } break;
+            case GAME_NODE.FIGHTING: {
+                // temp
+                this.gameNode = GAME_NODE.PASS_LEVEL_UP
+                console.log('进入下一波，第一阶段结束')
             } break;
         }
     }
@@ -164,6 +197,9 @@ export default class ProcessManager extends OBT_UIManager {
         const currentWave: number = this.saveCtrl.save.wave;
         this.waveRole = this.gameConfig.waves[currentWave - 1];
         this.preplay();
+    }
+    private _prepareTimeout() {
+        this._finishPrepare();
     }
 
     update(dt: number) {
@@ -201,7 +237,23 @@ export default class ProcessManager extends OBT_UIManager {
                     // }
                 }
             } break;
+            case GAME_NODE.PREPARE: {
+                if (this._prepareDuration <= 0) {
+                    return;
+                }
 
+                this._prepareSecond += dt;
+                if (this._prepareSecond >= 1) {
+                    this._prepareSecond -= 1;
+                    this._prepareDuration -= 1;
+                    OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_TIME_REDUCE, this._prepareDuration);
+
+                    if (this._prepareDuration <= 0) {
+                        // OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_TIMEOUT);
+                        this._prepareTimeout();
+                    }
+                }
+            } break;
         }
     }
 }

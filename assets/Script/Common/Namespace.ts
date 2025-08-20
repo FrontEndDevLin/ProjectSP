@@ -5,7 +5,8 @@ export enum GAME_NODE {
     PASS_FIGHT, // 通过
     LEVEL_UP, // 升级中
     PASS_LEVEL_UP, // 升级结束
-    PREPARE // 备战中
+    PREPARE, // 备战中
+    PASS_PREPARE // 备战结束
 }
 
 export namespace GamePlayEvent {
@@ -26,6 +27,10 @@ export namespace GamePlayEvent {
         LEVEL_UP_TIME_REDUCE,
         LEVEL_UP_TIMEOUT,
         LEVEL_UP_FINISH,
+        PREPARE_TIME_INIT,
+        PREPARE_TIME_REDUCE,
+        PREPARE_TIMEOUT,
+        PREPARE_FINISH,
         EXP_CHANGE,
         PROP_INIT,
         PROP_UPDATE
