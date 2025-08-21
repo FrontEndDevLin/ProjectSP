@@ -10,6 +10,7 @@ import { GAME_NODE, GameConfigInfo, GamePlayEvent } from '../Common/Namespace';
 import DBManager from './DBManager';
 import DropItemManager from './DropItemManager';
 import SaveCtrl from './Class/SaveCtrl';
+import ItemsManager from './ItemsManager';
 const { ccclass, property } = _decorator;
 
 const LEVEL_UP_TIME: number = 10;
@@ -181,13 +182,14 @@ export default class ProcessManager extends OBT_UIManager {
             } break;
             case GAME_NODE.PREPARE: {
                 GUI_GamePlayManager.instance.hideGamePlayGUI();
-                CHRManager.instance.propCtx.refreshPreUpdateList();
+                // CHRManager.instance.propCtx.refreshPreUpdateList();
+                ItemsManager.instance.refreshStoreList();
                 GUI_GamePlayManager.instance.showPrepareGUI();
                 this._prepareDuration = PREPARE_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._prepareDuration);
             } break;
             case GAME_NODE.FIGHTING: {
-                // temp
+                // temp 临时置为 GAME_NODE.PASS_LEVEL_UP，可以使流程暂停
                 this.gameNode = GAME_NODE.PASS_LEVEL_UP
                 console.log('进入下一波，第一阶段结束')
             } break;

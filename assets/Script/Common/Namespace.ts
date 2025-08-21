@@ -43,6 +43,7 @@ export namespace GamePlayEvent {
 
     export enum STORE {
         LEVEL_UP_LIST_UPDATE = 130,
+        STORE_ITEM_LIST_UPDATE
     }
 }
 
@@ -120,10 +121,6 @@ export namespace ItemInfo {
         group: string,
         group_label: string,
         buff_list: buff[]
-    }
-
-    export interface ItemDBData {
-        [itemId: string]: Item
     }
 
     export enum TROPHY_TYPE {

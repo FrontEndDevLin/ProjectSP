@@ -1,99 +1,99 @@
 {
-  "desc": {
-
-  },
-  "item1": {
-    "id": "item1",
-    "item_type": "item",
-    "level": 1,
-    "label": "道具1",
-    "groupLabel": "道具",
-    "groupKey": "normal",
-    "buff": [
-      {
-        "type": "prop",
-        "prop": "hp",
-        "value": 3
-      },
-      {
-        "type": "prop",
-        "prop": "spd",
-        "value": -1
-      }
+    "desc": {},
+    "unuse": {
+        "id": "item5",
+        "item_type": "item",
+        "level": 1,
+        "label": "脚本道具5",
+        "group_label": "道具",
+        "group": "normal",
+        "buff_list": [
+            {
+                "type": "event",
+                "script": "item5"
+            },
+            {
+                "type": "prop",
+                "prop": "melee_dmg",
+                "value": -1
+            }
+        ]
+    },
+    "items": [
+        {
+            "id": "item1",
+            "item_type": "item",
+            "level": 1,
+            "label": "道具1",
+            "group_label": "道具",
+            "group": "normal",
+            "buff_list": [
+                {
+                    "type": "prop",
+                    "prop": "hp",
+                    "value": 3
+                },
+                {
+                    "type": "prop",
+                    "prop": "spd",
+                    "value": -1
+                }
+            ]
+        },
+        {
+            "id": "item2",
+            "item_type": "item",
+            "level": 1,
+            "label": "道具2",
+            "group_label": "道具",
+            "group": "normal",
+            "buff_list": [
+                {
+                    "type": "prop",
+                    "prop": "range",
+                    "value": 10
+                }
+            ]
+        },
+        {
+            "id": "item3",
+            "item_type": "item",
+            "level": 1,
+            "label": "道具3",
+            "group_label": "道具",
+            "group": "normal",
+            "buff_list": [
+                {
+                    "type": "prop",
+                    "prop": "atk_spd",
+                    "value": 8
+                },
+                {
+                    "type": "prop",
+                    "prop": "dmg",
+                    "value": -2
+                }
+            ]
+        },
+        {
+            "id": "item4",
+            "item_type": "item",
+            "level": 1,
+            "label": "道具4",
+            "group_label": "道具",
+            "group": "normal",
+            "buff_list": [
+                {
+                    "type": "prop",
+                    "prop": "exp_eff",
+                    "value": 15
+                },
+                {
+                    "type": "prop",
+                    "prop": "melee_dmg",
+                    "value": -4
+                }
+            ]
+        }
     ]
-  },
-  "item2": {
-    "id": "item2",
-    "item_type": "item",
-    "level": 1,
-    "label": "道具2",
-    "groupLabel": "道具",
-    "groupKey": "normal",
-    "buff": [
-      {
-        "type": "prop",
-        "prop": "range",
-        "value": 10
-      }
-    ]
-  },
-  "item3": {
-    "id": "item3",
-    "item_type": "item",
-    "level": 1,
-    "label": "道具3",
-    "groupLabel": "道具",
-    "groupKey": "normal",
-    "buff": [
-      {
-        "type": "prop",
-        "prop": "atk_spd",
-        "value": 8
-      },
-      {
-        "type": "prop",
-        "prop": "dmg",
-        "value": -2
-      }
-    ]
-  },
-  "item4": {
-    "id": "item4",
-    "item_type": "item",
-    "level": 1,
-    "label": "道具4",
-    "groupLabel": "道具",
-    "groupKey": "normal",
-    "buff": [
-      {
-        "type": "prop",
-        "prop": "exp_eff",
-        "value": 15
-      },
-      {
-        "type": "prop",
-        "prop": "melee_dmg",
-        "value": -4
-      }
-    ]
-  },
-  "item5": {
-    "id": "item5",
-    "item_type": "item",
-    "level": 1,
-    "label": "脚本道具5",
-    "groupLabel": "道具",
-    "groupKey": "normal",
-    "buff": [
-      {
-        "type": "event",
-        "script": "item5"
-      },
-      {
-        "type": "prop",
-        "prop": "melee_dmg",
-        "value": -1
-      }
-    ]
-  }
 }
