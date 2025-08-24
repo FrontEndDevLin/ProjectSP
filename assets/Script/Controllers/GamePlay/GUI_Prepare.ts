@@ -33,16 +33,14 @@ export class GUI_Prepare extends OBT_Component {
     }
 
     private _updateStoreItemCard() {
-        let storeItemList: ItemInfo.Item[] = ItemsManager.instance.storeItemList;
-        console.log("更新商店列表", storeItemList);
-        // const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
-        // const preLevelUpList: CHRInfo.UpdateProp[] = CHRManager.instance.propCtx.preUpdateList;
-        // preLevelUpList.forEach((updateProp, i) => {
-        //     // preLevelUpList
-        //     const levelUpCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/LevelUpCard" });
-        //     levelUpCard.OBT_param1 = updateProp;
-        //     OBT.instance.uiManager.mountNode({ node: levelUpCard, parentNode: cardSlotList[i] });
-        // })
+        const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
+        const storeItemList: ItemInfo.Item[] = ItemsManager.instance.storeItemList;
+        storeItemList.forEach((item, i) => {
+            // preLevelUpList
+            const itemCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/ItemCard" });
+            itemCard.OBT_param1 = item;
+            OBT.instance.uiManager.mountNode({ node: itemCard, parentNode: cardSlotList[i] });
+        });
     }
 
     private _updateCountdownView(duration) {
