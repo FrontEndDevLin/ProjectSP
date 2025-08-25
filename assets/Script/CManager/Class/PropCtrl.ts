@@ -146,4 +146,51 @@ export default class PropCtrl extends BaseCtrl {
 
         return true;
     }
+
+    // 获取buff文本，如+5生命
+    public getBuffTxt(buff: CHRInfo.Buff) {
+        let txt: string = "";
+        let buffType: string = buff.type || "prop";
+        if (buffType === "prop") {
+            let prop: CHRInfo.CHRPropsAttr = this._getPropInfo(buff.prop);
+            let oValue: number = buff.value;
+            let value: string = `${oValue}`;
+            if (oValue > 0) {
+                value = `+${oValue}`;
+            }
+    
+            if (prop.percent) {
+                value = `${value}%`;
+            }
+            
+            let color: string = this.getBuffTxtColor(buff);
+            txt = `<color=${color}>${value}</color>${prop.propTxt}`;
+        } else if (buffType === "event") {
+            // let scriptName: string = buff.script;
+            // txt = getScriptTypeItems(scriptName).getBuffTxt();
+        }
+        return txt;
+    }
+    public getBuffTxtColor(buff: CHRInfo.Buff): string {
+        let prop: CHRInfo.CHRPropsAttr = this._getPropInfo(buff.prop);
+        let value = buff.value;
+        let buffPos: boolean = prop.buffPos;
+        let color: string = "";
+        // if (value === 0) {
+        //     color = COLOR.NORMAL;
+        // } else if (value > 0) {
+        //     if (buffPos) {
+        //         color = COLOR.SUCCESS;
+        //     } else {
+        //         color = COLOR.DANGER;
+        //     }
+        // } else {
+        //     if (buffPos) {
+        //         color = COLOR.DANGER;
+        //     } else {
+        //         color = COLOR.SUCCESS;
+        //     }
+        // }
+        return color;
+    }
 }

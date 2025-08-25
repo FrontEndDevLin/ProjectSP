@@ -106,32 +106,12 @@ export namespace WarCoreInfo {
     }
 }
 
-export namespace ItemInfo {
-    export interface buff {
+export namespace CHRInfo {
+    export interface Buff {
         type: string,
         prop: string,
-        value?: number | string
+        value?: number
     }
-
-    export interface Item {
-        id: string,
-        item_type: string,
-        level: number,
-        label: string,
-        group: string,
-        group_label: string,
-        buff_list: buff[]
-    }
-
-    export enum TROPHY_TYPE {
-        NONE = 0,
-        NORMAL = 1,
-        CHEST,
-        GREAT_CHEST
-    }
-}
-
-export namespace CHRInfo {
     // 角色基础数值支撑属性
     export interface CHRBasicProps {
         basic_dmg: number,
@@ -187,6 +167,25 @@ export namespace CHRInfo {
         level: number,   // 品质
         // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
         value: number
+    }
+}
+
+export namespace ItemInfo {
+    export interface Item {
+        id: string,
+        item_type: string,
+        level: number,
+        label: string,
+        group: string,
+        group_label: string,
+        buff_list: CHRInfo.Buff[]
+    }
+
+    export enum TROPHY_TYPE {
+        NONE = 0,
+        NORMAL = 1,
+        CHEST,
+        GREAT_CHEST
     }
 }
 
