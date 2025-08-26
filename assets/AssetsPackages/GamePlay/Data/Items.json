@@ -87,11 +87,6 @@
                     "type": "prop",
                     "prop": "exp_eff",
                     "value": 15
-                },
-                {
-                    "type": "prop",
-                    "prop": "melee_dmg",
-                    "value": -4
                 }
             ]
         }

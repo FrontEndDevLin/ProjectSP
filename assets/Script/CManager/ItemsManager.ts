@@ -1,10 +1,11 @@
 import { find, Node } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
-import { GamePlayEvent, ItemInfo } from "../Common/Namespace";
+import { CHRInfo, GamePlayEvent, ItemInfo } from "../Common/Namespace";
 import DBManager from "./DBManager";
 import { getRandomNumber } from "../Common/utils";
 import ProcessManager from "./ProcessManager";
 import OBT from "../OBT";
+import CHRManager from "./CHRManager";
 
 interface GetRandomItemConfig {
     quality?: number,
@@ -84,6 +85,10 @@ export default class ItemsManager extends OBT_UIManager {
         return pool;
     }
 
+    public getItemById(id) {
+        return this.itemsData.find(item => item.id === id);
+    }
+
     // private _getRandomItem(quality: number = ItemInfo.TROPHY_TYPE.CHEST): ItemInfo.Item {
     //     let item: ItemInfo.Item = null;
     //     switch (quality) {
@@ -113,6 +118,26 @@ export default class ItemsManager extends OBT_UIManager {
         // }
         // return props;
     // }
+
+    // 获取指定道具的富文本属性标签词条
+    public getItemsPanelRichTxt(key: string): string {
+        if (!key) {
+            return "";
+        }
+        let item: ItemInfo.Item = this.getItemById(key);
+        if (!item) {
+            return "";
+        }
+        let buffList: CHRInfo.Buff[] = item.buff_list;
+        let buffTxt = "";
+        buffList.forEach((buff, i) => {
+            buffTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
+            if (i !== buffList.length - 1) {
+                buffTxt += "<br/>";
+            }
+        });
+        return buffTxt;
+    }
     
     // 刷新商店
     public refreshStoreList() {

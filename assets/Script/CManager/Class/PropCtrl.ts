@@ -1,4 +1,4 @@
-import { CHRInfo, GamePlayEvent } from "../../Common/Namespace";
+import { CHRInfo, COLOR, GamePlayEvent } from "../../Common/Namespace";
 import { getRandomNumbers } from "../../Common/utils";
 import OBT from "../../OBT";
 import { BaseCtrl } from "./BaseCtrl";
@@ -10,14 +10,15 @@ export default class PropCtrl extends BaseCtrl {
     private _props: CHRInfo.CHRProps;
 
     public propList: CHRInfo.CHRPropsAttr[] = [
-        { prop: "hp", propTxt: "生命", group: "main", value: 0, percent: false, buffPos: true },
-        { prop: "range", propTxt: "范围", group: "main", value: 0, percent: false, buffPos: true },
-        { prop: "atk_spd", propTxt: "%攻击速度", group: "main", value: 0, percent: true, buffPos: true },
-        { prop: "def", propTxt: "防御力", group: "main", value: 0, percent: false, buffPos: true },
-        { prop: "spd", propTxt: "速度", group: "main", value: 0, percent: false, buffPos: true },
-        { prop: "avd", propTxt: "%闪避", group: "main", value: 0, percent: false, buffPos: true },
-        { prop: "exp_eff", propTxt: "%经验加成", group: "sub", value: 0, percent: true, buffPos: true },
-        { prop: "pick_range", propTxt: "拾取范围", group: "sub", value: 0, percent: false, buffPos: true }
+        { prop: "hp", propTxt: "生命", group: "main", value: 0, percent: false, buff_pos: true },
+        { prop: "range", propTxt: "范围", group: "main", value: 0, percent: false, buff_pos: true },
+        { prop: "dmg", propTxt: "伤害", group: "main", value: 0, percent: true, buff_pos: true },
+        { prop: "atk_spd", propTxt: "%攻击速度", group: "main", value: 0, percent: true, buff_pos: true },
+        { prop: "def", propTxt: "防御力", group: "main", value: 0, percent: false, buff_pos: true },
+        { prop: "spd", propTxt: "速度", group: "main", value: 0, percent: false, buff_pos: true },
+        { prop: "avd", propTxt: "%闪避", group: "main", value: 0, percent: false, buff_pos: true },
+        { prop: "exp_eff", propTxt: "%经验加成", group: "sub", value: 0, percent: true, buff_pos: true },
+        { prop: "pick_range", propTxt: "拾取范围", group: "sub", value: 0, percent: false, buff_pos: true }
     ];
 
     // able to update props list
@@ -174,23 +175,23 @@ export default class PropCtrl extends BaseCtrl {
     public getBuffTxtColor(buff: CHRInfo.Buff): string {
         let prop: CHRInfo.CHRPropsAttr = this._getPropInfo(buff.prop);
         let value = buff.value;
-        let buffPos: boolean = prop.buffPos;
+        let buff_pos: boolean = prop.buff_pos;
         let color: string = "";
-        // if (value === 0) {
-        //     color = COLOR.NORMAL;
-        // } else if (value > 0) {
-        //     if (buffPos) {
-        //         color = COLOR.SUCCESS;
-        //     } else {
-        //         color = COLOR.DANGER;
-        //     }
-        // } else {
-        //     if (buffPos) {
-        //         color = COLOR.DANGER;
-        //     } else {
-        //         color = COLOR.SUCCESS;
-        //     }
-        // }
+        if (value === 0) {
+            color = COLOR.NORMAL;
+        } else if (value > 0) {
+            if (buff_pos) {
+                color = COLOR.SUCCESS;
+            } else {
+                color = COLOR.DANGER;
+            }
+        } else {
+            if (buff_pos) {
+                color = COLOR.DANGER;
+            } else {
+                color = COLOR.SUCCESS;
+            }
+        }
         return color;
     }
 }

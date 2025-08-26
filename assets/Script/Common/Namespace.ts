@@ -146,7 +146,7 @@ export namespace CHRInfo {
         // 是否使用百分比计算
         percent?: boolean,
         // true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
-        buffPos?: boolean
+        buff_pos?: boolean
     }
 
     // export interface BasicProps {
@@ -157,7 +157,7 @@ export namespace CHRInfo {
     //     // 是否使用百分比计算
     //     percent?: boolean,
     //     // true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
-    //     buffPos?: boolean
+    //     buff_pos?: boolean
     // }
 
     export interface UpdateProp {
@@ -287,3 +287,9 @@ export const SCREEN_WIDTH = 720;
 export const SCREEN_HEIGHT = 1280;
 // 速度1，实际等于 1*PIXEL_UNIT = 20px/s
 export const PIXEL_UNIT = 20;
+
+export const COLOR = {
+  NORMAL: "#F5F5F5",
+  SUCCESS: "#67C23A",
+  DANGER: "#F56C6C"
+}

@@ -128,18 +128,18 @@ export class CharacterPropManager extends OBT_UIManager {
     // public getBuffTxtColor(buff: Buff): string {
     //     let prop: BProp = this[buff.prop];
     //     let value = buff.value;
-    //     let buffPos: boolean = prop.buffPos;
+    //     let buff_pos: boolean = prop.buff_pos;
     //     let color: string = "";
     //     if (value === 0) {
     //         color = COLOR.NORMAL;
     //     } else if (value > 0) {
-    //         if (buffPos) {
+    //         if (buff_pos) {
     //             color = COLOR.SUCCESS;
     //         } else {
     //             color = COLOR.DANGER;
     //         }
     //     } else {
-    //         if (buffPos) {
+    //         if (buff_pos) {
     //             color = COLOR.DANGER;
     //         } else {
     //             color = COLOR.SUCCESS;
@@ -184,6 +184,6 @@ export const getCharacterPropValue = function(key: string, percent: boolean = tr
     return percent ? prop.value / 100 : prop.value;
 }
 
-export const createBProp = function ({ key, label, value, group, buffPos = true, percent = false }: BProp): BProp {
-    return { key, label, group, value, buffPos, percent }
+export const createBProp = function ({ key, label, value, group, buff_pos = true, percent = false }: BProp): BProp {
+    return { key, label, group, value, buff_pos, percent }
 }

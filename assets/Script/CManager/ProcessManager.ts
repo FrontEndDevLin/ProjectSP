@@ -14,7 +14,7 @@ import ItemsManager from './ItemsManager';
 const { ccclass, property } = _decorator;
 
 const LEVEL_UP_TIME: number = 10;
-const PREPARE_TIME: number = 5;
+const PREPARE_TIME: number = 5555;
 
 /**
  * Game流程管理控制

@@ -1,24 +1,26 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, Label, Node, RichText } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { CHRInfo, GAME_NODE, GamePlayEvent, ItemInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
+import ItemsManager from '../../../CManager/ItemsManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('ItemCard')
 export class ItemCard extends OBT_Component {
-    private _props: ItemInfo.Item;
+    private _item: ItemInfo.Item;
 
     protected onLoad(): void {
         this.node.OBT_param2 = {
             autoTouch: this._touchCard.bind(this)
         }
 
-        const props: ItemInfo.Item = this.node.OBT_param1;
-        this._props = props;
+        const item: ItemInfo.Item = this.node.OBT_param1;
+        this._item = item;
 
-        // this.view("Content/Txt").getComponent(Label).string = `+${props.value} ${props.propTxt}`;
+        let buffTxt: string = ItemsManager.instance.getItemsPanelRichTxt(item.id);
+        this.view("Content/RichTxt").getComponent(RichText).string = buffTxt;
 
         this.node.once(Node.EventType.TOUCH_END, this._touchCard, this);
     }
