@@ -5,6 +5,7 @@ import { CHRInfo, GamePlayEvent, SaveDoc } from "../Common/Namespace";
 import LevelCtrl from "./Class/LevelCtrl";
 import OBT from "../OBT";
 import PropCtrl from "./Class/PropCtrl";
+import { CurrencyCtrl } from "./Class/CurrencyCtrl";
 export default class CHRManager extends OBT_UIManager {
     static instance: CHRManager;
 
@@ -15,6 +16,7 @@ export default class CHRManager extends OBT_UIManager {
 
     public CHRDBData: any;
     public propCtx: PropCtrl;
+    public currencyCtrl: CurrencyCtrl;
 
     protected onLoad(): void {
         if (!CHRManager.instance) {
@@ -38,6 +40,7 @@ export default class CHRManager extends OBT_UIManager {
     public init(saveDoc: SaveDoc) {
         this._initLevel(saveDoc.chr_slot.level);
         this._initProps(saveDoc.chr_prop);
+        this._initCurrency();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_INIT);
     }
 
@@ -49,6 +52,10 @@ export default class CHRManager extends OBT_UIManager {
     private _initProps(props: CHRInfo.CHRProps) {
         this.propCtx = new PropCtrl();
         this.propCtx.initProps(this.CHRDBData.basic_props, props);
+    }
+
+    private _initCurrency() {
+        this.currencyCtrl = new CurrencyCtrl();
     }
 
     public showCHR() {

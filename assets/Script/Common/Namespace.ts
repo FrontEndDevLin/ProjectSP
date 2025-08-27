@@ -45,6 +45,11 @@ export namespace GamePlayEvent {
         LEVEL_UP_LIST_UPDATE = 130,
         STORE_ITEM_LIST_UPDATE
     }
+
+    export enum CURRENCY {
+        CURRENCY_CHANGE = 140,
+        STORAGE_CHANGE
+    }
 }
 
 export interface SaveDoc {

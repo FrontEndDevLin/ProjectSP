@@ -33,6 +33,9 @@ export class GUI_GamePlay extends OBT_Component {
         });
 
         this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
+
+        OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.STORAGE_CHANGE, this._updateStorage, this);
     }
 
     start() {
@@ -42,6 +45,8 @@ export class GUI_GamePlay extends OBT_Component {
         this._updateCountdownView(duration);
         this._updateHP();
         this._updateLevel();
+        this._updateCurrency();
+        this._updateStorage();
     }
 
     private _updateCountdownView(duration) {
@@ -71,7 +76,12 @@ export class GUI_GamePlay extends OBT_Component {
         this.view("CHRStatus/Level/Val").getComponent(Label).string = `${CHRManager.instance.getLevel()}`;
     }
 
-    
+    private _updateCurrency() {
+        this.view("CHRStatus/Collect/Currency/Val").getComponent(Label).string = `${CHRManager.instance.currencyCtrl.getCurrency()}`;
+    }
+    private _updateStorage() {
+        this.view("CHRStatus/Collect/Storage/Val").getComponent(Label).string = `${CHRManager.instance.currencyCtrl.getStorage()}`;
+    }
 
     protected onDestroy(): void {
         OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.FIGHT_START, this._updateCountdownView, this);
