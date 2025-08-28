@@ -11,9 +11,9 @@ export class CurrencyCtrl extends BaseCtrl {
     static instance: CurrencyCtrl = null;
 
     // 金币量
-    private _currency: number = 10;
+    private _currency: number = 0;
     // 库存量
-    private _storage: number = 5;
+    private _storage: number = 0;
 
     constructor() {
         super();
@@ -43,7 +43,7 @@ export class CurrencyCtrl extends BaseCtrl {
     public addStorage(n: number) {
         n = Math.floor(n);
         if (this._storage + n < 0) {
-            return false;
+            n = -this._storage
         }
         this._storage += n;
         OBT.instance.eventCenter.emit(GamePlayEvent.CURRENCY.STORAGE_CHANGE);

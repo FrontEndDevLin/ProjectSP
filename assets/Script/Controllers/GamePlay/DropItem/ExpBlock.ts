@@ -64,7 +64,7 @@ export class ExpBlock extends OBT_Component {
             // temp 可以做爆裂开的粒子效果
             let expCnt: number = this.node.OBT_param1.expCnt;
             CHRManager.instance.addExp(expCnt);
-            // CurrencyManager.instance.addCurrency(expCnt);
+            CHRManager.instance.currencyCtrl.addCurrency(expCnt);
             this.node.destroy();
             return;
         }

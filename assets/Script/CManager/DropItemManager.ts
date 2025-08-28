@@ -11,6 +11,7 @@ import { getFloatNumber, getRandomNumber } from '../Common/utils';
 const { ccclass, property } = _decorator;
 
 import { ItemInfo } from '../Common/Namespace';
+import CHRManager from './CHRManager';
 
 /**
  * 物品掉落管理
@@ -81,17 +82,16 @@ export default class DropItemManager extends OBT_UIManager {
         let dropExpCnt: number = this._dropExp(emyRateData);
         if (dropExpCnt) {
             let vecAry: Vec3[] = this._getRandomVec3Group(dropExpCnt, position);
-            let expandExpCnt: number = dropExpCnt;
             // TODO: 请求CurrencyManager接口查询库存，有则+1，库存-1
-            // let expandExpCnt: number = 0;
-            // let storage: number = CurrencyManager.instance.getStorage();
-            // if (storage >= 1) {
-            //     if (storage >= dropExpCnt) {
-            //         expandExpCnt = dropExpCnt;
-            //     } else {
-            //         expandExpCnt = storage;
-            //     }
-            // }
+            let expandExpCnt: number = 0;
+            let storage: number = CHRManager.instance.currencyCtrl.getStorage();
+            if (storage >= 1) {
+                if (storage >= dropExpCnt) {
+                    expandExpCnt = dropExpCnt;
+                } else {
+                    expandExpCnt = storage;
+                }
+            }
             for (let i = 0; i < dropExpCnt; i++) {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
                 let expNode: Node = this.loadPrefab({ prefabPath: "DropItem/ExpBlock", scriptName: "ExpBlock" });
@@ -105,19 +105,19 @@ export default class DropItemManager extends OBT_UIManager {
 
                 let expCnt = 1;
                 // 经验块大小缩放
-                // if (i < expandExpCnt) {
-                //     expNode.setScale(v3(1.4, 1.4, 0));
-                //     expCnt++;
-                // }
+                if (i < expandExpCnt) {
+                    expNode.setScale(v3(1.4, 1.4, 0));
+                    expCnt++;
+                }
                 expNode.angle = getRandomNumber(0, 360);
                 expNode.OBT_param1 = { targetVec: vecAry[i], expCnt };
                 expNode.setPosition(position);
                 this.mountNode({ node: expNode, parentNode: this.dropItemRootNode });
             }
 
-            // if (expandExpCnt) {
-            //     CurrencyManager.instance.addStorage(-expandExpCnt);
-            // }
+            if (expandExpCnt) {
+                CHRManager.instance.currencyCtrl.addStorage(-expandExpCnt);
+            }
         }
 
         // let dropTrophy: number = this._dropTrophy(emyRateData);
