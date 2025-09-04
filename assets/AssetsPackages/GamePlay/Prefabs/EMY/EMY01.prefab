@@ -25,14 +25,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 8
+        "__id__": 10
       },
       {
-        "__id__": 10
+        "__id__": 12
       }
     ],
     "_prefab": {
-      "__id__": 12
+      "__id__": 14
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -79,10 +79,13 @@
       },
       {
         "__id__": 5
+      },
+      {
+        "__id__": 7
       }
     ],
     "_prefab": {
-      "__id__": 7
+      "__id__": 9
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -127,8 +130,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 28,
-      "height": 28
+      "width": 20,
+      "height": 20
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -164,7 +167,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "0588fa00-5ac4-4466-a5e5-aae4b3944fd6@f9941",
+      "__uuid__": "c4b5ed37-94d8-42e5-ac73-0ee124e69725@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -185,6 +188,35 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "79YkK4pcpAPYJei/JGE5ji"
+  },
+  {
+    "__type__": "cc.Animation",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 8
+    },
+    "playOnLoad": true,
+    "_clips": [
+      {
+        "__uuid__": "9a475dd4-e713-4969-a857-2ea5bb61ca2c",
+        "__expectedType__": "cc.AnimationClip"
+      }
+    ],
+    "_defaultClip": {
+      "__uuid__": "9a475dd4-e713-4969-a857-2ea5bb61ca2c",
+      "__expectedType__": "cc.AnimationClip"
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "5bRd0aPz5Df41i0WiSFSUB"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -209,7 +241,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 9
+      "__id__": 11
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -237,7 +269,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 11
+      "__id__": 13
     },
     "tag": 100,
     "_group": 8,
@@ -252,8 +284,8 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 24,
-      "height": 24
+      "width": 20,
+      "height": 20
     },
     "_id": ""
   },
