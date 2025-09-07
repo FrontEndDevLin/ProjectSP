@@ -7,6 +7,7 @@ import BulletManager from '../../../CManager/BulletManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import { copyObject } from '../../../Common/utils';
 import DropItemManager from '../../../CManager/DropItemManager';
+import EMYParticleManager from '../../../CManager/EMYParticleManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EMY')
@@ -58,8 +59,7 @@ export class EMY extends OBT_Component {
      * 不同类型的兵行动逻辑不一样，普通杂兵只会向主角移动
      */
     private _move(dt) {
-        // if (this._alive && ChapterManager.instance.onPlaying) {
-        if (this._alive && true) {
+        if (this._alive && ProcessManager.instance.isOnPlaying()) {
             let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
 
             let speed = dt * this.props.spd * PIXEL_UNIT;
@@ -92,6 +92,7 @@ export class EMY extends OBT_Component {
 
     private _die() {
         EMYManager.instance.removeEnemy(this.node.uuid);
+        EMYParticleManager.instance.creqteDieParticle(this.node.position, 4);
         this.node.destroy();
     }
 

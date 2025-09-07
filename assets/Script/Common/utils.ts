@@ -68,6 +68,16 @@ export const copyObject = function (object: any): any {
   return JSON.parse(JSON.stringify(object));
 }
 
+// 获取随机一个向量
+export const getRandomVector = function(): Vec3 {
+  let ary = [1, -1];
+  let vec = [0, 0];
+  for (let i = 0; i < vec.length; i++) {
+    vec[i] = getFloatNumber(Math.random()) * ary[getRandomNumber(0, 1)];
+  }
+  return v3(vec[0], vec[1], 0);
+}
+
 export const COLOR = {
   NORMAL: "#F5F5F5",
   SUCCESS: "#67C23A",

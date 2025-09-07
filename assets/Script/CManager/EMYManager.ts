@@ -1,4 +1,4 @@
-import { _decorator, Component, find, Game, Node, Prefab, sp, v3, Vec3 } from 'cc';
+import { _decorator, Component, find, Game, Node, Prefab, sp, v3, Vec3, Animation, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
@@ -23,6 +23,7 @@ export default class EMYManager extends OBT_UIManager {
     public abName: string = "GP";
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
     public enemyRootNode: Node = null;
+    public alertRootNode: Node = null;
 
     private _waveRole: GameConfigInfo.WaveRole;
 
@@ -138,6 +139,9 @@ export default class EMYManager extends OBT_UIManager {
      * @param batchMode 批量生成模式
      */
     public createEnemy({ enemyType, enemyCount, pattern, batchMode }: EMYInfo.CreateEMYParams) {
+        if (!this.alertRootNode) {
+            this.alertRootNode = this.mountEmptyNode({ nodeName: "AlertBox", parentNode: this.rootNode });
+        }
         if (!this.enemyRootNode) {
             this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: this.rootNode });
         }
@@ -145,22 +149,34 @@ export default class EMYManager extends OBT_UIManager {
 
         switch (batchMode) {
             case "normal": {
+                if (!ProcessManager.instance.isOnPlaying()) {
+                    return
+                }
                 for (let i = 0; i < enemyCount; i++) {
-                    let loc: Vec3 = this._createEnemyLoc(pattern);
-                    let enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName: "EMY" });
-                    enemyNode.OBT_param1 = this.enemyData[enemyType];
-                    let { x, y } = loc;
-                    enemyNode.setPosition(v3(x, y));
-                    this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
-
-                    setTimeout(() => {
-                        if (ProcessManager.instance.isOnPlaying()) {
-                            this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
-                        }
-                    }, (i + 1) * 60)
+                    this._createAnEnemy({ enemyType, pattern }, (i + 1) * 60);
                 }
             } break;
         }
+    }
+    private _createAnEnemy({ enemyType, pattern }: EMYInfo.CreateAnEnemyParams, delay: number = 0) {
+        let loc: Vec3 = this._createEnemyLoc(pattern);
+        // 生成警告标志
+        let alertNode = this.loadPrefab({ prefabPath: `EMY/EmyAlert`, scriptName: "NONE" });
+        alertNode.angle = getRandomNumber(0, 360);
+        let { x, y } = loc;
+        alertNode.setPosition(v3(x, y));
+        setTimeout(() => {
+            this.mountNode({ node: alertNode, parentNode: this.alertRootNode });
+        }, delay);
+        let enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName: "EMY" });
+        enemyNode.OBT_param1 = this.enemyData[enemyType];
+        enemyNode.setPosition(v3(x, y));
+
+        alertNode.getComponent(Animation).on(Animation.EventType.FINISHED, () => {
+            this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
+            alertNode.destroy();
+            this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
+        })
     }
     private _createEnemyLoc(pattern: string): Vec3 {
         let x = SCREEN_WIDTH / 2;

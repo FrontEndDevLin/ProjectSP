@@ -227,11 +227,14 @@ export namespace EMYInfo {
         (isCanBeAttacked?: any, realTimeEnemyInfo?: RealTimeInfo): void
     }
 
-    export interface CreateEMYParams {
+    export interface CreateAnEnemyParams {
         enemyType: string,
-        enemyCount: number,
         // 生成位置模式
-        pattern: string,
+        pattern: string
+    }
+
+    export interface CreateEMYParams extends CreateAnEnemyParams {
+        enemyCount: number,
         // 批量生成模式
         batchMode: string
     }
@@ -270,7 +273,8 @@ export namespace BulletInfo {
         damage: number,
         speed: number,
         // 最大飞行距离
-        max_dis: number
+        max_dis: number,
+        piercing: number,
         cld: number
     }
 

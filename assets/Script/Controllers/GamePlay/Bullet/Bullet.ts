@@ -1,7 +1,7 @@
 import { _decorator, BoxCollider2D, Component, Contact2DType, Node, Sprite, v3, Vec3 } from 'cc';
 // import { BulletAttr, BulletInitParams } from '../../Interface';
 import OBT_Component from '../../../OBT_Component';
-import { BulletInfo, PIXEL_UNIT } from '../../../Common/Namespace';
+import { BulletInfo, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
 import { getDistance } from '../../../Common/utils';
 const { ccclass, property } = _decorator;
 
@@ -28,6 +28,8 @@ export class Bullet extends OBT_Component {
     // private _curDisPx: number = 0;
     private _vector: Vec3 = null;
 
+    private _piercing: number = 0;
+
     // 起点位置（相对）
     private _startRlt: Vec3 = null;
 
@@ -48,6 +50,7 @@ export class Bullet extends OBT_Component {
         this._attr = attr;
         this._vector = vector;
         this._maxDisPx = attr.max_dis * PIXEL_UNIT;
+        this._piercing = attr.piercing;
         // 子弹运动
         this._init = true;
         // 初始位置
@@ -58,17 +61,16 @@ export class Bullet extends OBT_Component {
     private _die() {
         this._isDie = true;
         this.view("SF").active = false;
-        setTimeout(() => {
-            this.node.destroy();
-        }, 1000)
+        this.node.destroy();
     }
 
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
-        // console.log(otherCollider.group)
-        // console.log(selfCollider.group)
-        // if (otherCollider.group === GP_GROUP.BULLET) {
-        //     console.log('被击中')
-        // }
+        if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+            this._piercing--;
+            if (this._piercing <= 0) {
+                this._die();
+            }
+        }
     }
 
     update(dt: number) {
