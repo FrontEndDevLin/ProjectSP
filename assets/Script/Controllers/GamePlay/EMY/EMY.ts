@@ -1,6 +1,6 @@
-import { _decorator, BoxCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, Color, Component, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { EMYInfo, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
+import { EMYInfo, FLASH_TIME, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import BulletManager from '../../../CManager/BulletManager';
@@ -16,6 +16,12 @@ export class EMY extends OBT_Component {
 
     private _collider: BoxCollider2D = null;
 
+    private _flashing: boolean = false;
+    private _flashTime: number = FLASH_TIME;
+    private _FLASH_COLOR: Color = new Color(0, 255, 255);
+    private _NORMAL_COLOR: Color = new Color(255, 255, 255);
+    private _spComp: SpriteComponent;
+
     public props: EMYInfo.EMYProps;
 
     start() {
@@ -24,6 +30,7 @@ export class EMY extends OBT_Component {
 
     protected onLoad(): void {
         this._collider = this.node.getComponent(BoxCollider2D);
+        this._spComp = this.view("PIC").getComponent(Sprite);
 
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
@@ -40,18 +47,42 @@ export class EMY extends OBT_Component {
                 // 通过tag获取弹头数据（tag也存在弹头db里），获取的弹头数据要经过角色面板的补正
                 let bulletDamage: number = BulletManager.instance.getBulletDamage(otherCollider.tag);
                 // attr是自己的属性
-                // let attr = null;
                 // let realDamage: number = DamageManager.instance.calcDamage(bulletDamage, attr);
                 let realDamage: number = bulletDamage;
                 this.props.hp -= realDamage;
                 // DamageManager.instance.showDamageTxt(realDamage, this.node.position);
                 if (this.props.hp <= 0) {
                     this.die();
+                } else {
+                    // 受击效果
+                    this._flash();
                 }
             } break;
             // case GP_GROUP.CHARACTER: {
             //     console.log('击中角色')
             // } break;
+        }
+    }
+
+    private _flash() {
+        if (this._flashing) {
+            // 重置闪烁时间
+            this._flashTime = FLASH_TIME;
+        } else {
+            this._flashing = true;
+            this._spComp.color = this._FLASH_COLOR;
+        }
+    }
+    private _cancelFlash() {
+        this._flashing = false;
+        this._spComp.color = this._NORMAL_COLOR;
+    }
+    private _checkFlash(dt) {
+        if (this._flashing) {
+            this._flashTime -= dt;
+            if (this._flashTime <= 0) {
+                this._cancelFlash();
+            }
         }
     }
     
@@ -101,6 +132,7 @@ export class EMY extends OBT_Component {
             return;
         }
         this._move(deltaTime);
+        this._checkFlash(deltaTime);
     }
 }
 
