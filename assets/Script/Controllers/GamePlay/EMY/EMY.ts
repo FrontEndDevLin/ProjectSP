@@ -7,7 +7,6 @@ import BulletManager from '../../../CManager/BulletManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import { copyObject } from '../../../Common/utils';
 import DropItemManager from '../../../CManager/DropItemManager';
-import EMYParticleManager from '../../../CManager/EMYParticleManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EMY')
@@ -42,7 +41,9 @@ export class EMY extends OBT_Component {
             fadeOut: this._fadeout.bind(this)
         }
 
-        this._aniComp.on(Animation.EventType.FINISHED, () => this._remove, this);
+        this._aniComp.on(Animation.EventType.FINISHED, () => {
+            this._remove();
+        });
     }
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         if (!this._alive || !ProcessManager.instance.isOnPlaying()) {
@@ -118,7 +119,7 @@ export class EMY extends OBT_Component {
 
     public die() {
         this._alive = false;
-        this._spComp.color = this._FLASH_COLOR;
+        this.node.getComponent(BoxCollider2D).destroy();
         // 播放死亡动画并爆出粒子效果，
         EMYManager.instance.updateEnemy(this.node.uuid, { alive: 0 });
         DropItemManager.instance.dropItem(this.props.id, this.node.position);
@@ -137,7 +138,7 @@ export class EMY extends OBT_Component {
     private _die() {
         this._fadeout();
         EMYManager.instance.removeEnemy(this.node.uuid);
-        EMYParticleManager.instance.creqteDieParticle(this.node.position, 4);
+        EMYManager.instance.particleCtrl.createDieParticle(this.node.position, 4);
         // this.node.destroy();
     }
 

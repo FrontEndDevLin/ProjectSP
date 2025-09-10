@@ -6,6 +6,7 @@ import { getFloatNumber, getRandomNumber } from '../Common/utils';
 import OBT from '../OBT';
 import ProcessManager from './ProcessManager';
 import DBManager from './DBManager';
+import { EmyParticleCtrl } from './Class/EmyParticleCtrl';
 
 export interface EnemyInfo {
     x?: number,
@@ -29,6 +30,8 @@ export default class EMYManager extends OBT_UIManager {
 
     public enemyData: EMYInfo.EMYDBData;
 
+    public particleCtrl: EmyParticleCtrl;
+
     // private _spawnRoles: any[] = [];
     /**
      * 维护一个敌人map表，每一帧更新坐标和是否存活，当敌人被消灭后，播放完阵亡动画后从表中移除
@@ -45,6 +48,8 @@ export default class EMYManager extends OBT_UIManager {
         console.log("Enemy Manager loaded");
 
         this.enemyData = DBManager.instance.getDBData("EMY");
+
+        this.particleCtrl = new EmyParticleCtrl();
     }
 
     start() {

@@ -3,6 +3,7 @@ import { _decorator, BoxCollider2D, Component, Contact2DType, Node, Sprite, v3, 
 import OBT_Component from '../../../OBT_Component';
 import { BulletInfo, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
 import { getDistance } from '../../../Common/utils';
+import BulletManager from '../../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
 
 interface BulletAttr {
@@ -60,6 +61,9 @@ export class Bullet extends OBT_Component {
 
     private _die() {
         this._isDie = true;
+
+        BulletManager.instance.particleCtrl.createDieParticle(this.node.position, 2);
+
         this.view("SF").active = false;
         this.node.destroy();
     }

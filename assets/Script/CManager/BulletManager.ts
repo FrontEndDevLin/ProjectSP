@@ -3,6 +3,7 @@ import OBT_UIManager from '../Manager/OBT_UIManager';
 import { BulletInfo, GameCollider } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
+import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
 const { ccclass, property } = _decorator;
 
 /**
@@ -36,6 +37,9 @@ export default class BulletManager extends OBT_UIManager {
     // 存储当前装备的武器的弹头数据
     private _bulletCldMap: BulletInfo.BulletCldData = {};
 
+    // 子弹粒子特效管理
+    public particleCtrl: BulletParticleCtrl;
+
     start() {
         
     }
@@ -47,6 +51,8 @@ export default class BulletManager extends OBT_UIManager {
             this.destroy();
             return;
         }
+
+        this.particleCtrl = new BulletParticleCtrl();
 
         this.bulletData = DBManager.instance.getDBData("Bullet");
         
