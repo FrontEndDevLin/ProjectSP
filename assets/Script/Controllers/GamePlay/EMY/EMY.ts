@@ -1,4 +1,4 @@
-import { _decorator, BoxCollider2D, Color, Component, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, Color, Component, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation, AnimationComponent } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { EMYInfo, FLASH_TIME, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
@@ -21,6 +21,7 @@ export class EMY extends OBT_Component {
     private _FLASH_COLOR: Color = new Color(0, 255, 255);
     private _NORMAL_COLOR: Color = new Color(255, 255, 255);
     private _spComp: SpriteComponent;
+    private _aniComp: AnimationComponent;
 
     public props: EMYInfo.EMYProps;
 
@@ -31,6 +32,7 @@ export class EMY extends OBT_Component {
     protected onLoad(): void {
         this._collider = this.node.getComponent(BoxCollider2D);
         this._spComp = this.view("PIC").getComponent(Sprite);
+        this._aniComp = this.view("PIC").getComponent(Animation);
 
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
@@ -39,8 +41,13 @@ export class EMY extends OBT_Component {
         this.node.OBT_param2 = {
             fadeOut: this._fadeout.bind(this)
         }
+
+        this._aniComp.on(Animation.EventType.FINISHED, () => this._remove, this);
     }
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        if (!this._alive || !ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
         switch (otherCollider.group) {
             case GameCollider.GROUP.CHR_BULLET: {
                 // 显示伤害由一个类单独管理
@@ -92,7 +99,7 @@ export class EMY extends OBT_Component {
     private _move(dt) {
         if (this._alive && ProcessManager.instance.isOnPlaying()) {
             let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
-
+            
             let speed = dt * this.props.spd * PIXEL_UNIT;
             let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
             let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
@@ -110,6 +117,9 @@ export class EMY extends OBT_Component {
     }
 
     public die() {
+        this._alive = false;
+        this._spComp.color = this._FLASH_COLOR;
+        // 播放死亡动画并爆出粒子效果，
         EMYManager.instance.updateEnemy(this.node.uuid, { alive: 0 });
         DropItemManager.instance.dropItem(this.props.id, this.node.position);
         // TODO: 播放死亡动画，播放完后再销毁节点
@@ -117,14 +127,18 @@ export class EMY extends OBT_Component {
     }
     // 干脆的死
     private _fadeout() {
-        // TODO: 播放死亡动画，播放完后再销毁节点
+        // 播放死亡动画，播放完后再销毁节点
+        this._aniComp.play("EMY01_die");
+    }
+    private _remove() {
         this.node.destroy();
     }
 
     private _die() {
+        this._fadeout();
         EMYManager.instance.removeEnemy(this.node.uuid);
         EMYParticleManager.instance.creqteDieParticle(this.node.position, 4);
-        this.node.destroy();
+        // this.node.destroy();
     }
 
     update(deltaTime: number) {

@@ -1,17 +1,17 @@
 [
   {
     "__type__": "cc.AnimationClip",
-    "_name": "EMY01",
+    "_name": "EMY01_die",
     "_objFlags": 0,
     "__editorExtras__": {
       "embeddedPlayerGroups": []
     },
     "_native": "",
-    "sample": 1,
-    "speed": 0.2,
-    "wrapMode": 2,
+    "sample": 4,
+    "speed": 1,
+    "wrapMode": 1,
     "enableTrsBlending": false,
-    "_duration": 1,
+    "_duration": 0.25,
     "_hash": 500763545,
     "_tracks": [
       {
@@ -54,7 +54,7 @@
   {
     "__type__": "cc.animation.TrackPath",
     "_paths": [
-      "eulerAngles"
+      "scale"
     ]
   },
   {
@@ -67,14 +67,14 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      1
+      0.25
     ],
     "_values": [
       {
         "__type__": "cc.RealKeyframeValue",
         "interpolationMode": 0,
         "tangentWeightMode": 0,
-        "value": 0,
+        "value": 1,
         "rightTangent": 0,
         "rightTangentWeight": 1,
         "leftTangent": 0,
@@ -112,14 +112,14 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      1
+      0.25
     ],
     "_values": [
       {
         "__type__": "cc.RealKeyframeValue",
         "interpolationMode": 0,
         "tangentWeightMode": 0,
-        "value": 0,
+        "value": 1,
         "rightTangent": 0,
         "rightTangentWeight": 1,
         "leftTangent": 0,
@@ -157,14 +157,14 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      1
+      0.25
     ],
     "_values": [
       {
         "__type__": "cc.RealKeyframeValue",
         "interpolationMode": 0,
         "tangentWeightMode": 0,
-        "value": 0,
+        "value": 1,
         "rightTangent": 0,
         "rightTangentWeight": 1,
         "leftTangent": 0,
@@ -178,7 +178,7 @@
         "__type__": "cc.RealKeyframeValue",
         "interpolationMode": 0,
         "tangentWeightMode": 0,
-        "value": -360,
+        "value": 1,
         "rightTangent": 0,
         "rightTangentWeight": 1,
         "leftTangent": 0,

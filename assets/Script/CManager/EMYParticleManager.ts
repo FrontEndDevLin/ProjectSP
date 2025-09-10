@@ -30,6 +30,8 @@ export default class EMYParticleManager extends OBT_UIManager {
         }
         for (let i = 0; i < count; i++) {
             let particleNode = this.loadPrefab({ prefabPath: "EMY/EmyDieParticle" });
+            let scale = getRandomNumber(0, 40) / 100 + 1;
+            particleNode.setScale(v3(scale, scale, 0));
             particleNode.setPosition(loc);
             this.mountNode({ node: particleNode, parentNode: this.dieParticleRootNode });
         }
