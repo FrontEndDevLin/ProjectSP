@@ -1,26 +1,37 @@
-import { _decorator, UIOpacity, Vec3 } from 'cc';
+import { _decorator, UIOpacity, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { getRandomNumber, getRandomVector } from '../../../Common/utils';
 import { PIXEL_UNIT } from '../../../Common/Namespace';
+import BulletManager from '../../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletParticle')
 export class BulletParticle extends OBT_Component {
+    private _active: boolean = false;
     private _opacity: number = 0;
     // 移动的向量，随机生成
     private _vector: Vec3;
     private _speed: number;
 
     protected onLoad(): void {
-        // 随机一个透明度，匀速递减。在有透明度时，做直线运动，透明度归零时销毁
-        this._opacity = getRandomNumber(160, 240);
-        this.node.getComponent(UIOpacity).opacity = this._opacity;
-
-        this._vector = this.node.OBT_param1.vector;
-        this._speed = this.node.OBT_param1.speed;
     }
 
     start() {
+        console.log('start')
+    }
+
+    public init({ vector, speed }: { vector: Vec3, speed: number }) {
+        this._active = true;
+        // 随机一个透明度，匀速递减。在有透明度时，做直线运动，透明度归零时销毁
+        this._opacity = getRandomNumber(160, 240);
+        this.node.getComponent(UIOpacity).opacity = getRandomNumber(160, 240);
+
+        this._vector = vector;
+        this._speed = speed;
+    }
+    public reuse() {
+    }
+    public unuse() {
     }
 
     /**
@@ -39,14 +50,23 @@ export class BulletParticle extends OBT_Component {
     private _fade(dt: number) {
         // 朝血条下方回收图标位置位移，直到小于2px，销毁
         if (this._opacity <= 0) {
-            this.node.destroy();
+            this._active = false;
+            this._removeNode();
             return;
         }
+        
+        this._opacity -= dt * 800;
+        this.node.getComponent(UIOpacity).opacity = this._opacity;
+    }
 
-        this.node.getComponent(UIOpacity).opacity -= dt * 800;
+    private _removeNode() {
+        BulletManager.instance.particleCtrl.recoverParticle(this.node);
     }
 
     update(dt: number) {
+        if (!this._active) {
+            return;
+        }
         this._move(dt);
         this._fade(dt);
     }
