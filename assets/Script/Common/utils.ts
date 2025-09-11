@@ -11,7 +11,7 @@ export const getDistance = function (start: Vec2 | Vec3, end: Vec2 | Vec3): numb
 
 // 我们知道一个角度，求这个角度的向量
 // 1：先把角度转成弧度，原因同上。弧度 = 角度*PI/180.0f
-// 2：用刚才的弧度  x = cos(弧度)  y = sin(弧度)
+// 2：弧度  x = cos(弧度)  y = sin(弧度)
 export const getVectorByAngle = function (angle: number) {
   let arc: number = angle * Math.PI / 180;
   return getVectorByArc(arc);
@@ -19,6 +19,13 @@ export const getVectorByAngle = function (angle: number) {
 
 export const getVectorByArc = function (arc: number) {
   return v3(Math.cos(arc), Math.sin(arc));
+}
+
+export const getAngleByVector = function (vec: Vec3) {
+  // 弧度 = 角度 * pi / 180
+  // 角度 = 弧度 * 180 
+  let arc: number = Math.atan2(vec.y, vec.x);
+  return getFloatNumber(arc * 180 / Math.PI, 2);
 }
 
 export const getRandomNumber = function(min: number, max: number): number {

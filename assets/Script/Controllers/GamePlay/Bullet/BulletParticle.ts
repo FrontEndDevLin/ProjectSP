@@ -9,13 +9,15 @@ export class BulletParticle extends OBT_Component {
     private _opacity: number = 0;
     // 移动的向量，随机生成
     private _vector: Vec3;
+    private _speed: number;
 
     protected onLoad(): void {
         // 随机一个透明度，匀速递减。在有透明度时，做直线运动，透明度归零时销毁
         this._opacity = getRandomNumber(160, 240);
         this.node.getComponent(UIOpacity).opacity = this._opacity;
 
-        this._vector = getRandomVector();
+        this._vector = this.node.OBT_param1.vector;
+        this._speed = this.node.OBT_param1.speed;
     }
 
     start() {
@@ -25,7 +27,7 @@ export class BulletParticle extends OBT_Component {
      * 移动动画
      */
     private _move(dt: number) {
-        let speed = dt * 10 * PIXEL_UNIT;
+        let speed = dt * this._speed * PIXEL_UNIT;
         let nodeLoc = this.node.position;
         let newPos: Vec3 = nodeLoc.add(new Vec3(this._vector.x * speed, this._vector.y * speed));
         this.node.setPosition(newPos);
@@ -41,7 +43,7 @@ export class BulletParticle extends OBT_Component {
             return;
         }
 
-        this.node.getComponent(UIOpacity).opacity -= dt * 400;
+        this.node.getComponent(UIOpacity).opacity -= dt * 800;
     }
 
     update(dt: number) {

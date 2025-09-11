@@ -73,13 +73,12 @@ export class EMY extends OBT_Component {
     }
 
     private _flash() {
-        if (this._flashing) {
-            // 重置闪烁时间
-            this._flashTime = FLASH_TIME;
-        } else {
+        if (!this._flashing) {
             this._flashing = true;
             this._spComp.color = this._FLASH_COLOR;
         }
+        // 重置闪烁时间
+        this._flashTime = FLASH_TIME;
     }
     private _cancelFlash() {
         this._flashing = false;

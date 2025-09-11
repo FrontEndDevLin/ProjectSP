@@ -62,7 +62,7 @@ export class Bullet extends OBT_Component {
     private _die() {
         this._isDie = true;
 
-        BulletManager.instance.particleCtrl.createDieParticle(this.node.position, 2);
+        BulletManager.instance.particleCtrl.createDieParticle(this.node.position, this._vector, this._attr.speed, 2);
 
         this.view("SF").active = false;
         this.node.destroy();
