@@ -21,7 +21,9 @@ interface BulletAttr {
 @ccclass('Bullet')
 export class Bullet extends OBT_Component {
     private _init: boolean = false;
-    private _isDie: boolean = false;
+    private _alive: boolean = false;
+
+    private _collider: BoxCollider2D;
 
     private _attr: BulletAttr = null;
     // 最大距离
@@ -37,35 +39,41 @@ export class Bullet extends OBT_Component {
     protected onLoad(): void {
         // super.onLoad();
 
-        let collider: BoxCollider2D = this.node.getComponent(BoxCollider2D);
-        collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+        // let collider: BoxCollider2D = this.node.getComponent(BoxCollider2D);
+        // collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
-        const initParams: BulletInfo.BulletInitParams = this.node.OBT_param1;
-        this._initAttr(initParams);
+        // const initParams: BulletInfo.BulletInitParams = this.node.OBT_param1;
+        // this._initAttr(initParams);
     }
 
     start() {
     }
 
-    private _initAttr({ attr, vector }: BulletInfo.BulletInitParams) {
+    public init({ attr, vector }: BulletInfo.BulletInitParams) {
+        this._collider = this.node.getComponent(BoxCollider2D);
+        this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+
         this._attr = attr;
         this._vector = vector;
         this._maxDisPx = attr.max_dis * PIXEL_UNIT;
         this._piercing = attr.piercing;
         // 子弹运动
         this._init = true;
+        this._alive = true;
         // 初始位置
         let { x, y } = this.node.position;
         this._startRlt = new Vec3(x, y);
     }
 
     private _die() {
-        this._isDie = true;
+        this._alive = false;
+
+        this._collider.off(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+        this._collider = null;
 
         BulletManager.instance.particleCtrl.createDieParticle(this.node.position, this._vector, this._attr.speed, 2);
 
-        this.view("SF").active = false;
-        this.node.destroy();
+        BulletManager.instance.recoverBullet(this._attr.id, this.node);
     }
 
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
@@ -78,7 +86,7 @@ export class Bullet extends OBT_Component {
     }
 
     update(dt: number) {
-        if (!this._init || this._isDie) {
+        if (!this._init || !this._alive) {
             return;
         }
         let ax = dt * this._attr.speed * this._vector.x * PIXEL_UNIT;

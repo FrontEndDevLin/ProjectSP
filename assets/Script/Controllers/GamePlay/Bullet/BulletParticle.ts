@@ -17,7 +17,6 @@ export class BulletParticle extends OBT_Component {
     }
 
     start() {
-        console.log('start')
     }
 
     public init({ vector, speed }: { vector: Vec3, speed: number }) {

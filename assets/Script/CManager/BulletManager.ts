@@ -1,10 +1,19 @@
-import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
+import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import { BulletInfo, GameCollider } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
+import { Bullet } from '../Controllers/GamePlay/Bullet/Bullet';
 const { ccclass, property } = _decorator;
+
+interface BulletPoolMap {
+    [bulletId: string]: NodePool
+}
+interface BulletPreloadConfig {
+    bulletId: string,
+    count: number
+}
 
 /**
  * 弹头管理类
@@ -29,10 +38,12 @@ export default class BulletManager extends OBT_UIManager {
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
     public bulletRootNode: Node = null;
 
-    public bulletData: BulletInfo.BulletDBData = {}
+    public bulletData: BulletInfo.BulletDBData = {};
 
     // 存储当前装备的武器的弹头数据
     private _bulletCldMap: BulletInfo.BulletCldData = {};
+
+    private _nodePoolMap: BulletPoolMap = {};
 
     // 子弹粒子特效管理
     public particleCtrl: BulletParticleCtrl;
@@ -54,6 +65,8 @@ export default class BulletManager extends OBT_UIManager {
         this.bulletData = DBManager.instance.getDBData("Bullet");
         
         this._initBulletCldMap();
+
+        this.preloadBullet([{ bulletId: "CHR_Bullet001", count: 2 }]);
     }
 
     private _initBulletCldMap(): void {
@@ -61,6 +74,25 @@ export default class BulletManager extends OBT_UIManager {
             const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
             this._bulletCldMap[bulletAttr.cld] = bulletAttr;
         }
+    }
+
+    public preloadBullet(configList: BulletPreloadConfig[]) {
+        configList.forEach(({ bulletId, count }) => {
+            const nodePool = new NodePool();
+            const bulletAttr = this.bulletData[bulletId];
+            for (let i = 0; i < count; i++) {
+                const bulletNode: Node = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
+                nodePool.put(bulletNode);
+            }
+            this._nodePoolMap[bulletId] = nodePool;
+        });
+    }
+    public recoverBullet(bulletId: string, node: Node) {
+        this.bulletRootNode.removeChild(node);
+        if (!this._nodePoolMap[bulletId]) {
+            this._nodePoolMap[bulletId] = new NodePool();
+        }
+        this._nodePoolMap[bulletId].put(node);
     }
 
     public updateBulletList() {
@@ -88,8 +120,11 @@ export default class BulletManager extends OBT_UIManager {
 
         // console.log(`创建子弹${bulletId}`)
         const bulletAttr = this.bulletData[bulletId];
-        // let scriptName = bulletScriptMap[bulletId] || "BulletCtrl";
-        const bulletNode: Node = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
+        const nodePool = this._nodePoolMap[bulletId];
+        let bulletNode: Node = nodePool ? nodePool.get() : null;
+        if (!bulletNode) {
+            bulletNode = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
+        }
         bulletNode.setPosition(position);
 
         // 旋转子弹
@@ -105,14 +140,13 @@ export default class BulletManager extends OBT_UIManager {
         sfNode.setScale(v3(scaleX, 1));
         
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
-        // const scriptComp: BulletCtrl = this.appendUINode(bulletNode).getComponent(scriptName);
-        // scriptComp.initAttr();
-        bulletNode.OBT_param1 = { attr: bulletAttr, vector };
+        const scriptComp: Bullet = <Bullet>bulletNode.getComponent(bulletAttr.script);
+        scriptComp.init({ attr: bulletAttr, vector });
         this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
     }
 
     update(deltaTime: number) {
-        
+
     }
 }
 
