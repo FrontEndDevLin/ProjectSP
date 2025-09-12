@@ -96,8 +96,7 @@ export default class DropItemManager extends OBT_UIManager {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
                 let expNode: Node = this.loadPrefab({ prefabPath: "DropItem/ExpBlock", scriptName: "ExpBlock" });
 
-                let randomNum: number = getRandomNumber(1, 5);
-                let pic: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`DropItem/exp-${randomNum}`);
+                let pic: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`DropItem/exp`);
                 const { width, height } = pic.rect;
                 let picSize: Size = new Size(width, height);
                 expNode.getComponent(UITransform).setContentSize(picSize);
