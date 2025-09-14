@@ -63,6 +63,7 @@ export class CHR extends OBT_Component {
                     break;
             }
         }
+        // if (selfCollider.tag === GameCollider.TAG.)
     }
 
     // private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {

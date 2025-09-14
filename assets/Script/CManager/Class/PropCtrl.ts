@@ -9,6 +9,8 @@ export default class PropCtrl extends BaseCtrl {
     // 可修改
     private _props: CHRInfo.CHRProps;
 
+    private _curHP: number = 0;
+
     public propList: CHRInfo.CHRPropsAttr[] = [
         { prop: "hp", propTxt: "生命", group: "main", value: 0, percent: false, buff_pos: true },
         { prop: "range", propTxt: "范围", group: "main", value: 0, percent: false, buff_pos: true },
@@ -38,6 +40,13 @@ export default class PropCtrl extends BaseCtrl {
 
     constructor() {
         super();
+    }
+
+    public setCurrentHP(hp: number = this._props.hp) {
+        this._curHP = hp;
+    }
+    public getCurrentHP(): number {
+        return this._curHP;
     }
 
     private _getPropInfo(propKey: string): CHRInfo.CHRPropsAttr {

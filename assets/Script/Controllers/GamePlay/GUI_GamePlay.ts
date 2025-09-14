@@ -43,6 +43,7 @@ export class GUI_GamePlay extends OBT_Component {
 
     private _fightStart(duration) {
         this._updateCountdownView(duration);
+        CHRManager.instance.propCtx.setCurrentHP();
         this._updateHP();
         this._updateLevel();
         this._updateCurrency();
@@ -54,10 +55,8 @@ export class GUI_GamePlay extends OBT_Component {
     }
 
     private _updateHP() {
-        // let hp: number = CHRManager.instance.hp.value;
-        let hp: number = 8;
-        // let hp_cur: number = CharacterPropManager.instance.hp_cur.value;
-        let hp_cur: number = 8;
+        let hp: number = CHRManager.instance.propCtx.getPropValue("hp");
+        let hp_cur: number = CHRManager.instance.propCtx.getCurrentHP();
         let hpNumStr: string = `${hp_cur}/${hp}`;
         this.view("CHRStatus/HPWrap/HPNum").getComponent(Label).string = hpNumStr;
 
