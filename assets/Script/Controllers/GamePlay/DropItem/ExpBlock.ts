@@ -2,8 +2,9 @@ import { _decorator, Component, Node, tween, UITransform, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { getDistance } from '../../../Common/utils';
 import CHRManager from '../../../CManager/CHRManager';
-import { PIXEL_UNIT } from '../../../Common/Namespace';
+import { GamePlayEvent, PIXEL_UNIT } from '../../../Common/Namespace';
 import DropItemManager from '../../../CManager/DropItemManager';
+import OBT from '../../../OBT';
 const { ccclass, property } = _decorator;
 
 /**
@@ -63,8 +64,7 @@ export class ExpBlock extends OBT_Component {
         if (dis <= 5) {
             // temp 可以做爆裂开的粒子效果
             let expCnt: number = this.node.OBT_param1.expCnt;
-            CHRManager.instance.addExp(expCnt);
-            CHRManager.instance.currencyCtrl.addCurrency(expCnt);
+            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_EXP, expCnt);
             this.node.destroy();
             return;
         }

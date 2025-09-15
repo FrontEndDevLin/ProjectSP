@@ -78,6 +78,16 @@ export class CHR extends OBT_Component {
             let damage = DamageManager.instance.calcEnemyDamage(enemyId);
             CHRManager.instance.propCtx.addHP(-damage);
         }
+        if (otherCollider.group === GameCollider.GROUP.DROP_ITEM) {
+            switch (otherCollider.tag) {
+                case GameCollider.TAG.DROP_ITEM_TROPHY: {
+                    otherCollider.node.OBT_param2.absorbing = true;
+                } break;
+            
+                default:
+                    break;
+            }
+        }
     }
 
     private _move(dt: number) {

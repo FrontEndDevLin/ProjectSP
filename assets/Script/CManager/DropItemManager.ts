@@ -127,12 +127,11 @@ export default class DropItemManager extends OBT_UIManager {
             }
             if (trophyNode) {
                 // 战利品掉落不需要旋转角度
-                trophyNode.setPosition(vecAry[0]);
-                // trophyNode.OO_param1 = {
-                //     targetVec: vecAry[0],
-                //     quality: dropTrophy
-                // };
-                // trophyNode.setPosition(position);
+                trophyNode.OBT_param1 = {
+                    targetVec: vecAry[0],
+                    quality: dropTrophy
+                };
+                trophyNode.setPosition(position);
                 this.mountNode({ node: trophyNode, parentNode: this.dropItemRootNode });
             }
         }
@@ -229,6 +228,13 @@ export default class DropItemManager extends OBT_UIManager {
         // } else {
             return ItemInfo.TROPHY_TYPE.NORMAL;
         // }
+    }
+
+    public pickUpExpBlock(expCnt: number) {
+
+    }
+    public pickUpTrophyBlock() {
+
     }
 
     update(deltaTime: number) {

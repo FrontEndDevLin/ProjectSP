@@ -1,8 +1,10 @@
 import { _decorator, Component, Node, tween, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { ItemInfo, PIXEL_UNIT } from '../../../Common/Namespace';
+import { GamePlayEvent, ItemInfo, PIXEL_UNIT } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import { getDistance } from '../../../Common/utils';
+import DropItemManager from '../../../CManager/DropItemManager';
+import OBT from '../../../OBT';
 const { ccclass, property } = _decorator;
 
 /**
@@ -15,9 +17,13 @@ export class TrophyBlock extends OBT_Component {
     // 掉落中，动画过程不可被拾取
     private _droping: boolean = true;
     private _quality: number;
+    private _recovering: boolean = false;
 
     protected onLoad(): void {
-        super.onLoad();
+        this.node.OBT_param2 = {
+            absorbing: false,
+            recovery: this._beenRecovery.bind(this)
+        }
     }
 
     start() {
@@ -50,10 +56,13 @@ export class TrophyBlock extends OBT_Component {
     }
 
     private _pickUp(dt: number) {
+        if (this._recovering) {
+            return;
+        }
         if (this._droping) {
             return;
         }
-        let absorbing: boolean = this.node.OBT_param2;
+        let absorbing: boolean = this.node.OBT_param2.absorbing;
         if (!absorbing) {
             return;
         }
@@ -72,7 +81,8 @@ export class TrophyBlock extends OBT_Component {
                 default:
                     break;
             }
-            
+
+            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY);
             this.node.destroy();
             return;
         }
@@ -83,9 +93,13 @@ export class TrophyBlock extends OBT_Component {
         this.node.setPosition(newPos);
     }
 
-    public recovery() {
+    /**
+     * 被回收
+     */
+    private _beenRecovery() {
         this._droping = false;
-        this.node.OBT_param2 = true;
+        this.node.OBT_param2.absorbing = true;
+        this._recovering = false;
     }
 
     update(dt: number) {

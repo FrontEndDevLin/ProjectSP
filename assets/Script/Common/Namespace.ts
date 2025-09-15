@@ -32,6 +32,8 @@ export namespace GamePlayEvent {
         PREPARE_TIME_REDUCE,
         PREPARE_TIMEOUT,
         PREPARE_FINISH,
+        PICK_UP_EXP,
+        PICK_UP_TROPHY,
         EXP_CHANGE,
         HP_CHANGE,
         PROP_INIT,
@@ -252,6 +254,7 @@ export namespace GameCollider {
         CHR_RANGE_ATTACK = 11,
 
         DROP_ITEM_EXP = 20,
+        DROP_ITEM_TROPHY = 21,
 
         EMY_01 = 100,
 

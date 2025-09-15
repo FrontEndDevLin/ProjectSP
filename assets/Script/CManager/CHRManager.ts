@@ -35,6 +35,9 @@ export default class CHRManager extends OBT_UIManager {
             let levelUpCnt: number = this._levelCtrl.getLevelUpCnt();
             console.log(`波次通过, 获得${levelUpCnt}次升级次数`);
         })
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._pickUpExp, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this._pickUpTrophy, this);
     }
 
     public init(saveDoc: SaveDoc) {
@@ -56,6 +59,16 @@ export default class CHRManager extends OBT_UIManager {
 
     private _initCurrency() {
         this.currencyCtrl = new CurrencyCtrl();
+    }
+
+    private _pickUpExp(expCnt: number) {
+        this.addExp(expCnt);
+        this.currencyCtrl.addCurrency(expCnt);
+    }
+    private _pickUpTrophy() {
+        // 临时，需要通过计算角色属性(战利品回血量)来得到
+        let health: number = 3;
+        this.propCtx.addHP(health);
     }
 
     public showCHR() {
@@ -100,6 +113,7 @@ export default class CHRManager extends OBT_UIManager {
 
     protected onDestroy(): void {
         console.log('销毁角色管理ing')
+        OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._pickUpExp, this);
         CHRManager.instance = null;
     }
 }
