@@ -41,7 +41,7 @@ export default class BulletManager extends OBT_UIManager {
     public bulletData: BulletInfo.BulletDBData = {};
 
     // 存储当前装备的武器的弹头数据
-    private _bulletCldMap: BulletInfo.BulletCldData = {};
+    // private _bulletCldMap: BulletInfo.BulletCldData = {};
 
     private _nodePoolMap: BulletPoolMap = {};
 
@@ -64,17 +64,17 @@ export default class BulletManager extends OBT_UIManager {
 
         this.bulletData = DBManager.instance.getDBData("Bullet");
         
-        this._initBulletCldMap();
+        // this._initBulletCldMap();
 
         this.preloadBullet([{ bulletId: "CHR_Bullet001", count: 2 }]);
     }
 
-    private _initBulletCldMap(): void {
-        for (let bulletId in this.bulletData) {
-            const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
-            this._bulletCldMap[bulletAttr.cld] = bulletAttr;
-        }
-    }
+    // private _initBulletCldMap(): void {
+    //     for (let bulletId in this.bulletData) {
+    //         const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
+    //         this._bulletCldMap[bulletAttr.cld] = bulletAttr;
+    //     }
+    // }
 
     public preloadBullet(configList: BulletPreloadConfig[]) {
         configList.forEach(({ bulletId, count }) => {
@@ -106,8 +106,9 @@ export default class BulletManager extends OBT_UIManager {
         //     this._bulletCldMap[bData.cld] = bData;
         // }
     }
-    public getBulletDamage(cld: GameCollider.TAG): number {
-        return this._bulletCldMap[cld].damage;
+    public getBulletDamage(bulletId): number {
+        return this.bulletData[bulletId].damage;
+        // return this._bulletCldMap[cld].damage;
     }
     public getBulletTag(bulletId: string) {
         // return bulletDb[bulletId].cld;

@@ -12,7 +12,7 @@
         "speed": 16,
         "max_dis": 10,
         "piercing": 1,
-        "damage": 5,
+        "damage": 3,
         "cld": 500
     }
 }

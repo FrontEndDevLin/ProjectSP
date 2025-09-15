@@ -7,6 +7,7 @@ import BulletManager from '../../../CManager/BulletManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import { copyObject } from '../../../Common/utils';
 import DropItemManager from '../../../CManager/DropItemManager';
+import DamageManager from '../../../CManager/DamageManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EMY')
@@ -52,12 +53,9 @@ export class EMY extends OBT_Component {
         switch (otherCollider.group) {
             case GameCollider.GROUP.CHR_BULLET: {
                 // 显示伤害由一个类单独管理
-                // 通过tag获取弹头数据（tag也存在弹头db里），获取的弹头数据要经过角色面板的补正
-                let bulletDamage: number = BulletManager.instance.getBulletDamage(otherCollider.tag);
-                // attr是自己的属性
-                // let realDamage: number = DamageManager.instance.calcDamage(bulletDamage, attr);
-                let realDamage: number = bulletDamage;
-                this.props.hp -= realDamage;
+                let bulletId: string = otherCollider.node.name;
+                let damage: number = DamageManager.instance.calcAttackDamage(bulletId);
+                this.props.hp -= damage;
                 // DamageManager.instance.showDamageTxt(realDamage, this.node.position);
                 if (this.props.hp <= 0) {
                     this.die();

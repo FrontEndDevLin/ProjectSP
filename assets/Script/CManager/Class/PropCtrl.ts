@@ -42,8 +42,25 @@ export default class PropCtrl extends BaseCtrl {
         super();
     }
 
-    public setCurrentHP(hp: number = this._props.hp) {
-        this._curHP = hp;
+    public initHP() {
+        let maxHP: number = this._props.hp;
+        this._curHP = maxHP;
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.HP_CHANGE, this._curHP);
+    }
+    public addHP(n: number) {
+        if (n === 0) {
+            return;
+        }
+        if (n > 0) {
+            let maxHP: number = this._props.hp;
+            if (this._curHP === maxHP) {
+                return;
+            }
+            this._curHP = this._curHP + n > maxHP ? maxHP : this._curHP + n;
+        } else {
+            this._curHP = this._curHP + n < 0 ? 0 : this._curHP + n;
+        }
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.HP_CHANGE, this._curHP);
     }
     public getCurrentHP(): number {
         return this._curHP;

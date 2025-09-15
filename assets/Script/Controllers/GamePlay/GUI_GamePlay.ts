@@ -26,6 +26,7 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._updateCountdownView, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.EXP_CHANGE, this._updateExpBar, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._updateHPBar, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP, this._updateLevel, this);
 
         setTimeout(() => {
@@ -43,8 +44,7 @@ export class GUI_GamePlay extends OBT_Component {
 
     private _fightStart(duration) {
         this._updateCountdownView(duration);
-        CHRManager.instance.propCtx.setCurrentHP();
-        this._updateHP();
+        CHRManager.instance.propCtx.initHP();
         this._updateLevel();
         this._updateCurrency();
         this._updateStorage();
@@ -54,7 +54,7 @@ export class GUI_GamePlay extends OBT_Component {
         this.view("Countdown").getComponent(Label).string = duration;
     }
 
-    private _updateHP() {
+    private _updateHPBar() {
         let hp: number = CHRManager.instance.propCtx.getPropValue("hp");
         let hp_cur: number = CHRManager.instance.propCtx.getCurrentHP();
         let hpNumStr: string = `${hp_cur}/${hp}`;

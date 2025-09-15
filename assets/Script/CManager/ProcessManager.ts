@@ -56,6 +56,7 @@ export default class ProcessManager extends OBT_UIManager {
         this.gameConfig = DBManager.instance.getDBData("GameConfig");
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_FINISH, this._finishLevelUp, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._checkGameOver, this);
     }
 
     public initGUI() {
@@ -202,6 +203,15 @@ export default class ProcessManager extends OBT_UIManager {
     }
     private _prepareTimeout() {
         this._finishPrepare();
+    }
+    private _checkGameOver(hp: number) {
+        if (hp > 0) {
+            return;
+        }
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.GAME_OVER);
+        // temp
+        this.gameNode = GAME_NODE.PASS_LEVEL_UP
+        console.log('游戏结束');
     }
 
     update(dt: number) {

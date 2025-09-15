@@ -22,6 +22,7 @@ export namespace GamePlayEvent {
         TIME_REDUCE_TINY,
         TIME_REDUCE,
         FIGHT_PASS,
+        GAME_OVER,
         LEVEL_UP,
         LEVEL_UP_TIME_INIT,
         LEVEL_UP_TIME_REDUCE,
@@ -32,6 +33,7 @@ export namespace GamePlayEvent {
         PREPARE_TIMEOUT,
         PREPARE_FINISH,
         EXP_CHANGE,
+        HP_CHANGE,
         PROP_INIT,
         PROP_UPDATE
     }
@@ -81,7 +83,9 @@ export namespace GameConfigInfo {
         // 下次生成时间
         next_spawn_time: number,
         // 是否生成完毕
-        spwaned: boolean
+        spwaned: boolean,
+        hp: number,
+        dmg: number
     }
 
     export interface WaveRole {
@@ -205,6 +209,7 @@ export namespace EMYInfo {
         [EMYId: string]: EMYDropInfo
     }
     export interface EMYProps extends EMYDropInfo {
+        cld: number,
         type: string,
         move: string,
         pic: string,
@@ -247,6 +252,8 @@ export namespace GameCollider {
         CHR_RANGE_ATTACK = 11,
 
         DROP_ITEM_EXP = 20,
+
+        EMY_01 = 100,
 
         // 子弹碰撞id
         BULLET_BASE = 500

@@ -3,19 +3,17 @@
     "id": "敌人id 预设体名",
     "type": "敌人类型 normal->小怪",
     "move": "移动逻辑 normal->走脸",
-    "dmg": "伤害",
     "exp_drop_rate": "经验掉率",
     "trophy_drop_rate": "战利品掉率",
     "exp_cnt": "掉落经验个数"
   },
   "EMY01": {
     "id": "EMY01",
+    "cld": 100,
     "type": "normal",
     "move": "normal",
     "pic": "",
     "spd": 2,
-    "hp": 8,
-    "dmg": 3,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 0.1,
     "exp_cnt": 1
