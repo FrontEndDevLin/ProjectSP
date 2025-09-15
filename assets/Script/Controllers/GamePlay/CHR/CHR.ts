@@ -6,6 +6,7 @@ import CHRManager from '../../../CManager/CHRManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import { getSaveCtrl } from '../../../CManager/Class/SaveCtrl';
+import DamageManager from '../../../CManager/DamageManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -13,6 +14,7 @@ export class CHR extends OBT_Component {
     private _moving: boolean = false;
     private _vector: Vec3 = null;
     private _pickRangeCollider: CircleCollider2D = null;
+    private _collider: BoxCollider2D = null;
 
     private _baseSpd: number = 0;
 
@@ -25,6 +27,9 @@ export class CHR extends OBT_Component {
 
         this._pickRangeCollider = this.node.getComponent(CircleCollider2D);
         this._initPickRangeCollider();
+
+        this._collider = this.node.getComponent(BoxCollider2D);
+        this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
         this._baseSpd = CHRManager.instance.propCtx.getPropValue("spd");
 
@@ -66,13 +71,14 @@ export class CHR extends OBT_Component {
         // if (selfCollider.tag === GameCollider.TAG.)
     }
 
-    // private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
-    //     switch (otherCollider.tag) {
-    //         case DROP_ITEM.TROPHY: {
-    //             otherCollider.node.OO_param2 = true;
-    //         } break;
-    //     }
-    // }
+    // 角色受击处理/吸收战利品
+    private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+            let enemyId: string = otherCollider.node.name;
+            let damage = DamageManager.instance.calcEnemyDamage(enemyId);
+            CHRManager.instance.propCtx.addHP(-damage);
+        }
+    }
 
     private _move(dt: number) {
         if (!this._vector) {

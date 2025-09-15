@@ -25,7 +25,9 @@
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 0,
-                    "spawn_duration": 30
+                    "spawn_duration": 30,
+                    "hp": 5,
+                    "dmg": 2
                 }
             ]
         }

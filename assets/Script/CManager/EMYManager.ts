@@ -93,6 +93,9 @@ export default class EMYManager extends OBT_UIManager {
             spawnRole.spawn_count = Math.ceil(spawnRole.spawn_total / spawnRole.spawn_once_time);
             spawnRole.spawned_count = 0;
             spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - spawnRole.start_delay);
+
+            this.enemyData[spawnRole.enemy_type].hp = spawnRole.hp;
+            this.enemyData[spawnRole.enemy_type].dmg = spawnRole.dmg;
         })
         return true;
     }
@@ -237,6 +240,10 @@ export default class EMYManager extends OBT_UIManager {
             }
         }
         return this.enemyMap[target];
+    }
+
+    public getEnemyDamage(enemyType: string): number {
+        return this.enemyData[enemyType].dmg;
     }
 
     protected onDestroy(): void {
