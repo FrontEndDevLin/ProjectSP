@@ -30,9 +30,6 @@ export default class DropItemManager extends OBT_UIManager {
 
     private _dropRateMap: EMYInfo.EMYDropData = {};
 
-    // 关卡爆率修正数据
-    private _chapterData: any = {};
-
     protected onLoad(): void {
         if (!DropItemManager.instance) {
             DropItemManager.instance = this;
@@ -119,31 +116,26 @@ export default class DropItemManager extends OBT_UIManager {
             }
         }
 
-        // let dropTrophy: number = this._dropTrophy(emyRateData);
-        // if (dropTrophy) {
-        //     let vecAry: Vec3[] = this._getRandomVec3Group(1, position);
-        //     let trophyNode: Node;
-        //     switch (dropTrophy) {
-        //         case TROPHY_TYPE.NORMAL: {
-        //             trophyNode = this.loadUINode("dropItem/TrophyBlock", "TrophyBlockCtrl");
-        //         } break;
-        //         case TROPHY_TYPE.CHEST: {
-        //             trophyNode = this.loadUINode("dropItem/ChestBlock", "TrophyBlockCtrl");
-        //         } break;
-        //         case TROPHY_TYPE.GREAT_CHEST: {
-
-        //         } break;
-        //     }
-        //     if (trophyNode) {
-        //         // 战利品掉落不需要旋转角度
-        //         trophyNode.OO_param1 = {
-        //             targetVec: vecAry[0],
-        //             quality: dropTrophy
-        //         };
-        //         trophyNode.setPosition(position);
-        //         this.appendUINode(trophyNode);
-        //     }
-        // }
+        let dropTrophy: number = this._dropTrophy(emyRateData);
+        if (dropTrophy) {
+            let vecAry: Vec3[] = this._getRandomVec3Group(1, position);
+            let trophyNode: Node;
+            switch (dropTrophy) {
+                case ItemInfo.TROPHY_TYPE.NORMAL: {
+                    trophyNode = this.loadPrefab({ prefabPath: "DropItem/TrophyBlock" });
+                } break;
+            }
+            if (trophyNode) {
+                // 战利品掉落不需要旋转角度
+                trophyNode.setPosition(vecAry[0]);
+                // trophyNode.OO_param1 = {
+                //     targetVec: vecAry[0],
+                //     quality: dropTrophy
+                // };
+                // trophyNode.setPosition(position);
+                this.mountNode({ node: trophyNode, parentNode: this.dropItemRootNode });
+            }
+        }
     }
 
     /**
@@ -213,7 +205,8 @@ export default class DropItemManager extends OBT_UIManager {
     private _dropTrophy(emyRateData: any): number {
         let trophyDropRate: number = emyRateData.trophy_drop_rate;
         // 战利品爆率修正
-        let trophyDropAmend: number = this._chapterData.trophy_drop_amend;
+        // let trophyDropAmend: number = this._chapterData.trophy_drop_amend;
+        let trophyDropAmend = 1;
 
         let rate: number = trophyDropRate * trophyDropAmend;
         // 0->无, 1->普通战利品, 2->普通箱子, 3->极品箱子
@@ -231,11 +224,11 @@ export default class DropItemManager extends OBT_UIManager {
     private _beenChest() {
         // TODO: 战利品掉落有几率变成箱子，和角色幸运值挂钩。目前临时处理
         let num = getRandomNumber(1, 100);
-        if (num < 10) {
-            return ItemInfo.TROPHY_TYPE.CHEST;
-        } else {
+        // if (num < 10) {
+        //     return ItemInfo.TROPHY_TYPE.CHEST;
+        // } else {
             return ItemInfo.TROPHY_TYPE.NORMAL;
-        }
+        // }
     }
 
     update(deltaTime: number) {
