@@ -7,6 +7,17 @@
     "trophy_drop_rate": "战利品掉率",
     "exp_cnt": "掉落经验个数"
   },
+  "PEACE": {
+    "id": "PEACE",
+    "cld": 96,
+    "type": "normal",
+    "move": "none",
+    "pic": "",
+    "spd": 0,
+    "exp_drop_rate": 1,
+    "trophy_drop_rate": 1,
+    "exp_cnt": 4
+  },
   "EMY01": {
     "id": "EMY01",
     "cld": 100,

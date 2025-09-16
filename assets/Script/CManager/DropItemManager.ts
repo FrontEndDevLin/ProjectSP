@@ -1,8 +1,4 @@
-import { _decorator, Component, Node, Prefab, Size, Sprite, SpriteFrame, UITransform, v3, Vec3 } from 'cc';
-// import { ChapterManager } from './ChapterManager';
-// import { ExpBlockCtrl } from '../GameControllers/dropItem/ExpBlockCtrl';
-// import { TrophyBlockCtrl } from '../GameControllers/dropItem/TrophyBlockCtrl';
-// import { CurrencyManager } from './CurrencyManager';
+import { _decorator, Component, Node, Prefab, Size, Sprite, SpriteFrame, UITransform, v3, Vec3, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import EMYManager from './EMYManager';
 import { EMYInfo, PIXEL_UNIT } from '../Common/Namespace';
@@ -12,6 +8,8 @@ const { ccclass, property } = _decorator;
 
 import { ItemInfo } from '../Common/Namespace';
 import CHRManager from './CHRManager';
+import { ExpBlock } from '../Controllers/GamePlay/DropItem/ExpBlock';
+import { TrophyBlock } from '../Controllers/GamePlay/DropItem/TrophyBlock';
 
 /**
  * 物品掉落管理
@@ -30,6 +28,10 @@ export default class DropItemManager extends OBT_UIManager {
 
     private _dropRateMap: EMYInfo.EMYDropData = {};
 
+    private _expAssets: SpriteFrame[] = [];
+    private _expNodePool: NodePool = null;
+    private _trophyNodePool: NodePool = null;
+
     protected onLoad(): void {
         if (!DropItemManager.instance) {
             DropItemManager.instance = this;
@@ -39,10 +41,36 @@ export default class DropItemManager extends OBT_UIManager {
         }
 
         console.log("DropItem Manager loaded");
+        this._preloadExpAssets();
+
+        this._expNodePool = new NodePool("ExpBlock");
+        this.preloadExpBlock(10);
+        this.preloadTrophyBlock(2);
     }
 
     start() {
         
+    }
+
+    public preloadExpBlock(count: number) {
+        for (let i = 0; i < count; i++) {
+            let expNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "DropItem/ExpBlock" });
+            this._expNodePool.put(expNode);
+        }
+    }
+    public recoverExpBlock(expNode: Node) {
+        this.dropItemRootNode.removeChild(expNode);
+        this._expNodePool.put(expNode);
+    }
+    public preloadTrophyBlock(count: number) {
+        for (let i = 0; i < count; i++) {
+            let trophyNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "DropItem/TrophyBlock" });
+            this._trophyNodePool.put(trophyNode);
+        }
+    }
+    public recoverTrophyBlock(trophyNode: Node) {
+        this.dropItemRootNode.removeChild(trophyNode);
+        this._trophyNodePool.put(trophyNode);
     }
 
     public initRateMap() {
@@ -75,11 +103,10 @@ export default class DropItemManager extends OBT_UIManager {
         if (!this.dropItemRootNode) {
             this.dropItemRootNode = this.mountEmptyNode({ nodeName: "DropItemBox", parentNode: this.rootNode });
         }
-        let emyRateData: any = this._dropRateMap[emyId];
+        let emyRateData: EMYInfo.EMYDropInfo = this._dropRateMap[emyId];
         let dropExpCnt: number = this._dropExp(emyRateData);
         if (dropExpCnt) {
             let vecAry: Vec3[] = this._getRandomVec3Group(dropExpCnt, position);
-            // TODO: 请求CurrencyManager接口查询库存，有则+1，库存-1
             let expandExpCnt: number = 0;
             let storage: number = CHRManager.instance.currencyCtrl.getStorage();
             if (storage >= 1) {
@@ -91,9 +118,11 @@ export default class DropItemManager extends OBT_UIManager {
             }
             for (let i = 0; i < dropExpCnt; i++) {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
-                let expNode: Node = this.loadPrefab({ prefabPath: "DropItem/ExpBlock", scriptName: "ExpBlock" });
-
-                let pic: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`DropItem/exp`);
+                let expNode: Node = this._expNodePool.get();
+                if (!expNode) {
+                    expNode = this.loadPrefab({ prefabPath: "DropItem/ExpBlock", scriptName: "ExpBlock" });
+                }
+                let pic: SpriteFrame = this._expAssets[getRandomNumber(0, 4)];
                 const { width, height } = pic.rect;
                 let picSize: Size = new Size(width, height);
                 expNode.getComponent(UITransform).setContentSize(picSize);
@@ -104,9 +133,12 @@ export default class DropItemManager extends OBT_UIManager {
                 if (i < expandExpCnt) {
                     expNode.setScale(v3(1.4, 1.4, 0));
                     expCnt++;
+                } else {
+                    expNode.setScale(v3(1, 1, 0));
                 }
                 expNode.angle = getRandomNumber(0, 360);
-                expNode.OBT_param1 = { targetVec: vecAry[i], expCnt };
+                let scriptComp: ExpBlock = <ExpBlock>expNode.getComponent("ExpBlock");
+                scriptComp.init(vecAry[i], expCnt);
                 expNode.setPosition(position);
                 this.mountNode({ node: expNode, parentNode: this.dropItemRootNode });
             }
@@ -122,15 +154,16 @@ export default class DropItemManager extends OBT_UIManager {
             let trophyNode: Node;
             switch (dropTrophy) {
                 case ItemInfo.TROPHY_TYPE.NORMAL: {
-                    trophyNode = this.loadPrefab({ prefabPath: "DropItem/TrophyBlock" });
+                    trophyNode = this._trophyNodePool.get();
+                    if (!trophyNode) {
+                        trophyNode = this.loadPrefab({ prefabPath: "DropItem/TrophyBlock" });
+                    }
                 } break;
             }
             if (trophyNode) {
                 // 战利品掉落不需要旋转角度
-                trophyNode.OBT_param1 = {
-                    targetVec: vecAry[0],
-                    quality: dropTrophy
-                };
+                let scriptComp: TrophyBlock = <TrophyBlock>trophyNode.getComponent("TrophyBlock");
+                scriptComp.init(vecAry[0], dropTrophy);
                 trophyNode.setPosition(position);
                 this.mountNode({ node: trophyNode, parentNode: this.dropItemRootNode });
             }
@@ -148,6 +181,13 @@ export default class DropItemManager extends OBT_UIManager {
                 // let trophyBlockCtx: TrophyBlockCtrl = dropNode.getComponent("TrophyBlockCtrl") as TrophyBlockCtrl;
                 // trophyBlockCtx.recovery();
             }
+        }
+    }
+
+    private _preloadExpAssets() {
+        for (let i = 1; i <= 5; i++) {
+            let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`DropItem/exp-${i}`);
+            this._expAssets.push(assets);
         }
     }
 

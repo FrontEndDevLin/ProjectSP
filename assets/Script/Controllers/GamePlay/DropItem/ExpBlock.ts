@@ -14,27 +14,33 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('ExpBlock')
 export class ExpBlock extends OBT_Component {
+    private _init: boolean = false;
     // 掉落中，动画过程不可被拾取
-    private _droping: boolean = true;
+    private _droping: boolean = false;
 
     private _recovering: boolean = false;
 
+    private _expCnt: number;
+
     protected onLoad(): void {
-        this.node.OBT_param2 = {
-            absorbing: false,
-            recovery: this._beenRecovery.bind(this)
-        }
         // super.onLoad();
     }
 
     start() {
-        const targetVec: Vec3 = this.node.OBT_param1.targetVec;
+        
+    }
 
+    public init(targetVec: Vec3, expCnt: number) {
         if (!targetVec) {
             return;
         }
-        // console.log(targetVec);
-
+        this._init = true;
+        this.node.OBT_param2 = {
+            absorbing: false,
+            recovery: this._beenRecovery.bind(this)
+        }
+        this._expCnt = expCnt;
+        this._droping = true;
         tween(this.node)
             .to(0.1, { position: targetVec })
             .call(() => {
@@ -43,10 +49,22 @@ export class ExpBlock extends OBT_Component {
         .start();
     }
 
+    public unuse() {
+        this._recovering = false;
+        this._droping = false;
+        this._init = false;
+        if (this.node.OBT_param2) {
+            this.node.OBT_param2.absorbing = false;
+        }
+    }
+
     /**
      * 被角色吸收动画
      */
     private _absorb(dt: number) {
+        if (!this._init) {
+            return;
+        }
         if (this._recovering) {
             return;
         }
@@ -63,9 +81,8 @@ export class ExpBlock extends OBT_Component {
         let dis: number = getDistance(nodeLoc, crtLoc);
         if (dis <= 5) {
             // temp 可以做爆裂开的粒子效果
-            let expCnt: number = this.node.OBT_param1.expCnt;
-            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_EXP, expCnt);
-            this.node.destroy();
+            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._expCnt);
+            DropItemManager.instance.recoverExpBlock(this.node);
             return;
         }
 
@@ -97,7 +114,7 @@ export class ExpBlock extends OBT_Component {
         let nodeLoc: Vec3 = this.node.position;
         let dis: number = getDistance(nodeLoc, iconLoc);
         if (dis <= 5) {
-            // console.log('TODO: 经验被回收!');
+            console.log('TODO: 经验被回收!');
             // CurrencyManager.instance.addStorage(this.node.OBT_param1.expCnt);
             this.node.destroy();
             return;

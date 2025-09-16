@@ -1,4 +1,4 @@
-import { _decorator, Component, find, Game, Node, Prefab, sp, v3, Vec3, Animation, UITransform } from 'cc';
+import { _decorator, Component, find, Game, Node, Prefab, sp, v3, Vec3, Animation, NodePool, AnimationComponent } from 'cc';
 const { ccclass, property } = _decorator;
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
@@ -38,6 +38,10 @@ export default class EMYManager extends OBT_UIManager {
      */
     public enemyMap: EnemyMap = {};
 
+
+
+    private _alertNodePool: NodePool = null;
+
     protected onLoad(): void {
         if (!EMYManager.instance) {
             EMYManager.instance = this;
@@ -50,10 +54,24 @@ export default class EMYManager extends OBT_UIManager {
         this.enemyData = DBManager.instance.getDBData("EMY");
 
         this.particleCtrl = new EmyParticleCtrl();
+
+        this._alertNodePool = new NodePool();
+        this.preloadAlertNode(4);
     }
 
     start() {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._loadEnemy, this);
+    }
+
+    public preloadAlertNode(count: number) {
+        for (let i = 0; i < count; i++) {
+            let alertNode = this.loadPrefab({ prefabPath: `EMY/EmyAlert`, scriptName: "NONE" });
+            this._alertNodePool.put(alertNode);
+        }
+    }
+    public recoverAlertNode(node: Node) {
+        this.alertRootNode.removeChild(node);
+        this._alertNodePool.put(node);
     }
 
     public startListen() {
@@ -169,20 +187,25 @@ export default class EMYManager extends OBT_UIManager {
     private _createAnEnemy({ enemyType, pattern }: EMYInfo.CreateAnEnemyParams, delay: number = 0) {
         let loc: Vec3 = this._createEnemyLoc(pattern);
         // 生成警告标志
-        let alertNode = this.loadPrefab({ prefabPath: `EMY/EmyAlert`, scriptName: "NONE" });
+        let alertNode = this._alertNodePool.get();
+        if (!alertNode) {
+            alertNode = this.loadPrefab({ prefabPath: `EMY/EmyAlert`, scriptName: "NONE" });
+        }
         alertNode.angle = getRandomNumber(0, 360);
         let { x, y } = loc;
         alertNode.setPosition(v3(x, y));
+        let alertAnimation: AnimationComponent = alertNode.getComponent(Animation);
         setTimeout(() => {
             this.mountNode({ node: alertNode, parentNode: this.alertRootNode });
+            alertAnimation.play("emy_alert");
         }, delay);
         let enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName: "EMY" });
         enemyNode.OBT_param1 = this.enemyData[enemyType];
         enemyNode.setPosition(v3(x, y));
 
-        alertNode.getComponent(Animation).on(Animation.EventType.FINISHED, () => {
+        alertAnimation.once(Animation.EventType.FINISHED, () => {
+            this.recoverAlertNode(alertNode);
             this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
-            alertNode.destroy();
             this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
         })
     }

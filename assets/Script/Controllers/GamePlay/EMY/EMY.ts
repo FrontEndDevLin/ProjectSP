@@ -95,16 +95,26 @@ export class EMY extends OBT_Component {
      * 不同类型的兵行动逻辑不一样，普通杂兵只会向主角移动
      */
     private _move(dt) {
-        if (this._alive && ProcessManager.instance.isOnPlaying()) {
-            let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
-            
-            let speed = dt * this.props.spd * PIXEL_UNIT;
-            let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
-            let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
-            this.node.setPosition(newPos);
-
-            this._updateEnemyInfo(characterLoc);
+        if (!this._alive) {
+            return;
         }
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
+
+        let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+        switch (this.props.move) {
+            case "normal": {
+                let speed = dt * this.props.spd * PIXEL_UNIT;
+                let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
+                let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
+                this.node.setPosition(newPos);
+            } break;
+            default:
+                break;
+        }
+
+        this._updateEnemyInfo(characterLoc);
     }
     private _updateEnemyInfo(ctrVec: Vec3) {
         let cX = ctrVec.x;

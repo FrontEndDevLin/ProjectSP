@@ -14,38 +14,40 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('TrophyBlock')
 export class TrophyBlock extends OBT_Component {
+    private _init: boolean = false;
     // 掉落中，动画过程不可被拾取
-    private _droping: boolean = true;
+    private _droping: boolean = false;
     private _quality: number;
-    private _recovering: boolean = false;
 
     protected onLoad(): void {
+    }
+
+    start() {
+    }
+
+    public init(targetVec: Vec3, quality: ItemInfo.TROPHY_TYPE) {
         this.node.OBT_param2 = {
             absorbing: false,
             recovery: this._beenRecovery.bind(this)
         }
-    }
 
-    start() {
-        const prop1 = this.node.OBT_param1;
-        const targetVec: Vec3 = prop1.targetVec;
-        this._quality = prop1.quality;
+        this._quality = quality;
 
         switch (this._quality) {
             case ItemInfo.TROPHY_TYPE.NORMAL: {
-
             } break;
             case ItemInfo.TROPHY_TYPE.NORMAL: {
-
             } break;
             case ItemInfo.TROPHY_TYPE.NORMAL: {
-
             } break;
         }
 
         if (!targetVec) {
             return;
         }
+
+        this._droping = true;
+        this._init = true;
 
         tween(this.node)
             .to(0.1, { position: targetVec })
@@ -55,8 +57,16 @@ export class TrophyBlock extends OBT_Component {
             .start();
     }
 
+    public unuse() {
+        this._droping = false;
+        this._init = false;
+        if (this.node.OBT_param2) {
+            this.node.OBT_param2.absorbing = false;
+        }
+    }
+
     private _pickUp(dt: number) {
-        if (this._recovering) {
+        if (!this._init) {
             return;
         }
         if (this._droping) {
@@ -71,7 +81,6 @@ export class TrophyBlock extends OBT_Component {
         let nodeLoc: Vec3 = this.node.position;
         let dis: number = getDistance(nodeLoc, crtLoc);
         if (dis <= 3) {
-            console.log('TODO: 战利品被捡起!');
             switch (this._quality) {
                 case ItemInfo.TROPHY_TYPE.CHEST: {
                     // TODO: 去道具管理类生成一个宝箱
@@ -83,7 +92,7 @@ export class TrophyBlock extends OBT_Component {
             }
 
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY);
-            this.node.destroy();
+            DropItemManager.instance.recoverTrophyBlock(this.node);
             return;
         }
 
@@ -99,7 +108,6 @@ export class TrophyBlock extends OBT_Component {
     private _beenRecovery() {
         this._droping = false;
         this.node.OBT_param2.absorbing = true;
-        this._recovering = false;
     }
 
     update(dt: number) {

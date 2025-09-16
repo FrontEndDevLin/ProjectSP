@@ -256,6 +256,7 @@ export namespace GameCollider {
         DROP_ITEM_EXP = 20,
         DROP_ITEM_TROPHY = 21,
 
+        PEACE = 96,
         EMY_01 = 100,
 
         // 子弹碰撞id
