@@ -45,6 +45,7 @@ export default class DropItemManager extends OBT_UIManager {
 
         this._expNodePool = new NodePool("ExpBlock");
         this.preloadExpBlock(10);
+        this._trophyNodePool = new NodePool("TrophyBlock");
         this.preloadTrophyBlock(2);
     }
 

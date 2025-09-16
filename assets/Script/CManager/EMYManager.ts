@@ -141,12 +141,24 @@ export default class EMYManager extends OBT_UIManager {
             if (spawnRole.next_spawn_time < duration) {
                 continue;
             }
-            this.createEnemy({
+            let createOptions: EMYInfo.CreateEMYParams = {
                 enemyType: spawnRole.enemy_type,
                 enemyCount: spawnRole.spawn_once_time,
                 pattern: spawnRole.spawn_pattern,
                 batchMode: spawnRole.batch_mode
-            });
+            }
+            if (spawnRole.spawn_mode === "random") {
+                let rate: number = spawnRole.spawn_rate;
+                let num = getRandomNumber(1, 100);
+                // 命中，生成
+                if (num > rate * 100) {
+                    continue;
+                }
+                createOptions.relation = "peace";
+            } else {
+                createOptions.relation = "normal";
+            }
+            this.createEnemy(createOptions);
             if (spawnRole.spawned_count + 1 <= spawnRole.spawn_count) {
                 spawnRole.spawned_count++;
                 const { start_delay, spawned_count, spawn_interval } = spawnRole;
@@ -164,7 +176,7 @@ export default class EMYManager extends OBT_UIManager {
      * @param pattern 生成位置模式
      * @param batchMode 批量生成模式
      */
-    public createEnemy({ enemyType, enemyCount, pattern, batchMode }: EMYInfo.CreateEMYParams) {
+    public createEnemy({ enemyType, enemyCount, pattern, batchMode = "normal" }: EMYInfo.CreateEMYParams) {
         if (!this.alertRootNode) {
             this.alertRootNode = this.mountEmptyNode({ nodeName: "AlertBox", parentNode: this.rootNode });
         }

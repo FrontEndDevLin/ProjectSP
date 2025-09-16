@@ -67,6 +67,8 @@ export interface SaveDoc {
 export namespace GameConfigInfo {
     export interface EMYSpawnRole {
         enemy_type: string,
+        spawn_mode?: string,
+        spawn_rate?: number,
         // 总生成数量
         spawn_total: number,
         // 一次生成的数量
@@ -87,7 +89,7 @@ export namespace GameConfigInfo {
         // 是否生成完毕
         spwaned: boolean,
         hp: number,
-        dmg: number
+        dmg?: number
     }
 
     export interface WaveRole {
@@ -237,7 +239,9 @@ export namespace EMYInfo {
     export interface CreateAnEnemyParams {
         enemyType: string,
         // 生成位置模式
-        pattern: string
+        pattern: string,
+        // 关系 normal->正常敌对 peace->中立
+        relation?: string
     }
 
     export interface CreateEMYParams extends CreateAnEnemyParams {
