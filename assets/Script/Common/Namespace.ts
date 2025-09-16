@@ -214,6 +214,7 @@ export namespace EMYInfo {
     }
     export interface EMYProps extends EMYDropInfo {
         cld: number,
+        script?: string,
         type: string,
         move: string,
         pic: string,

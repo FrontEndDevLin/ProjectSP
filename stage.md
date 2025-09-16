@@ -44,7 +44,8 @@
   角色受击反馈
   角色受击扣血 done
   掉落物(材料、战利品、宝箱、中立生物) ffd700金色
-  EMY.ts 抽象化为基类
+  EMY.ts 抽象化为基类 done -> EMYBase.ts
+  EMYManager EnemyMap改造(uuid方案弃用)
 
 阶段5(波次2)
 

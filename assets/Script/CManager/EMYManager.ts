@@ -7,6 +7,7 @@ import OBT from '../OBT';
 import ProcessManager from './ProcessManager';
 import DBManager from './DBManager';
 import { EmyParticleCtrl } from './Class/EmyParticleCtrl';
+import { EMYBase } from '../Controllers/GamePlay/EMY/EMYBase';
 
 export interface EnemyInfo {
     x?: number,
@@ -211,8 +212,12 @@ export default class EMYManager extends OBT_UIManager {
             this.mountNode({ node: alertNode, parentNode: this.alertRootNode });
             alertAnimation.play("emy_alert");
         }, delay);
-        let enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName: "EMY" });
-        enemyNode.OBT_param1 = this.enemyData[enemyType];
+
+        let enemyProps: EMYInfo.EMYProps = this.enemyData[enemyType];
+        let scriptName: string = enemyProps.script || "EMYBase";
+        let enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName });
+        let enemyScript: EMYBase = <EMYBase>enemyNode.getComponent(scriptName);
+        enemyScript.init(enemyProps);
         enemyNode.setPosition(v3(x, y));
 
         alertAnimation.once(Animation.EventType.FINISHED, () => {

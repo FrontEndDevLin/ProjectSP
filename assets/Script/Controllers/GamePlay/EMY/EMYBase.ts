@@ -3,51 +3,63 @@ import OBT_Component from '../../../OBT_Component';
 import { EMYInfo, FLASH_TIME, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
-import BulletManager from '../../../CManager/BulletManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import { copyObject } from '../../../Common/utils';
 import DropItemManager from '../../../CManager/DropItemManager';
 import DamageManager from '../../../CManager/DamageManager';
 const { ccclass, property } = _decorator;
 
-@ccclass('EMY')
-export class EMY extends OBT_Component {
-    private _alive: boolean = true;
+@ccclass('EMYBase')
+export class EMYBase extends OBT_Component {
+    protected alive: boolean = true;
 
-    private _collider: BoxCollider2D = null;
+    protected collider: BoxCollider2D = null;
 
-    private _flashing: boolean = false;
-    private _flashTime: number = FLASH_TIME;
-    private _FLASH_COLOR: Color = new Color(0, 255, 255);
-    private _NORMAL_COLOR: Color = new Color(255, 255, 255);
-    private _spComp: SpriteComponent;
-    private _aniComp: AnimationComponent;
+    protected flashing: boolean = false;
+    protected flashTime: number = FLASH_TIME;
+    protected FLASH_COLOR: Color = new Color(0, 255, 255);
+    protected NORMAL_COLOR: Color = new Color(255, 255, 255);
+    protected spComp: SpriteComponent;
+    protected aniComp: AnimationComponent;
 
-    public props: EMYInfo.EMYProps;
+    protected props: EMYInfo.EMYProps;
 
     start() {
-
     }
 
     protected onLoad(): void {
-        this._collider = this.node.getComponent(BoxCollider2D);
-        this._spComp = this.view("PIC").getComponent(Sprite);
-        this._aniComp = this.view("PIC").getComponent(Animation);
-
-        this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
-
-        this.props = copyObject(this.node.OBT_param1);
-
+    }
+    public init(props: EMYInfo.EMYProps) {
+        if (!this.collider) {
+            this.loadCldComp();
+            this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        }
+        if (!this.spComp) {
+            this.loadSpComp();
+        }
+        if (!this.aniComp) {
+            this.loadAniComp();
+            this.aniComp.on(Animation.EventType.FINISHED, () => {
+                this._remove();
+            });
+        }
         this.node.OBT_param2 = {
             fadeOut: this._fadeout.bind(this)
         }
-
-        this._aniComp.on(Animation.EventType.FINISHED, () => {
-            this._remove();
-        });
+        this.props = copyObject(props);
     }
-    private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
-        if (!this._alive || !ProcessManager.instance.isOnPlaying()) {
+    protected loadCldComp() {
+        this.collider = this.node.getComponent(BoxCollider2D);
+    }
+    protected loadSpComp() {
+        this.spComp = this.view("PIC").getComponent(Sprite);
+    }
+    protected loadAniComp() {
+        this.aniComp = this.view("PIC").getComponent(Animation);
+    }
+
+    protected onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        if (!this.alive || !ProcessManager.instance.isOnPlaying()) {
             return;
         }
         switch (otherCollider.group) {
@@ -71,52 +83,58 @@ export class EMY extends OBT_Component {
     }
 
     private _flash() {
-        if (!this._flashing) {
-            this._flashing = true;
-            this._spComp.color = this._FLASH_COLOR;
+        if (!this.flashing) {
+            this.flashing = true;
+            this.spComp.color = this.FLASH_COLOR;
         }
         // 重置闪烁时间
-        this._flashTime = FLASH_TIME;
+        this.flashTime = FLASH_TIME;
     }
     private _cancelFlash() {
-        this._flashing = false;
-        this._spComp.color = this._NORMAL_COLOR;
+        this.flashing = false;
+        this.spComp.color = this.NORMAL_COLOR;
     }
     private _checkFlash(dt) {
-        if (this._flashing) {
-            this._flashTime -= dt;
-            if (this._flashTime <= 0) {
+        if (this.flashing) {
+            this.flashTime -= dt;
+            if (this.flashTime <= 0) {
                 this._cancelFlash();
             }
         }
     }
     
-    /**
-     * 不同类型的兵行动逻辑不一样，普通杂兵只会向主角移动
-     */
     private _move(dt) {
-        if (!this._alive) {
+        if (!this.alive) {
             return;
         }
         if (!ProcessManager.instance.isOnPlaying()) {
             return;
         }
 
-        let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
         switch (this.props.move) {
-            case "normal": {
-                let speed = dt * this.props.spd * PIXEL_UNIT;
-                let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
-                let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
-                this.node.setPosition(newPos);
+            case "none": {
+                // 移动类型为none时，不移动
             } break;
-            default:
-                break;
+            default: {
+                this.move(dt);
+            } break;
         }
 
-        this._updateEnemyInfo(characterLoc);
+        this._updateEnemyInfo();
     }
-    private _updateEnemyInfo(ctrVec: Vec3) {
+    /**
+     * 不同类型的兵行动逻辑不一样，普通杂兵只会向主角移动
+     * 如果移动逻辑不同，在另外的类里重写这个方法
+     */
+    protected move(dt) {
+        let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+        let speed = dt * this.props.spd * PIXEL_UNIT;
+        let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
+        let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
+        this.node.setPosition(newPos);
+    }
+    private _updateEnemyInfo() {
+        let ctrVec: Vec3 = CHRManager.instance.getCHRLoc();
         let cX = ctrVec.x;
         let cY = ctrVec.y;
         let { x, y } = this.node.position;
@@ -125,7 +143,7 @@ export class EMY extends OBT_Component {
     }
 
     public die() {
-        this._alive = false;
+        this.alive = false;
         this.node.getComponent(BoxCollider2D).destroy();
         // 播放死亡动画并爆出粒子效果，
         EMYManager.instance.updateEnemy(this.node.uuid, { alive: 0 });
@@ -136,7 +154,7 @@ export class EMY extends OBT_Component {
     // 干脆的死
     private _fadeout() {
         // 播放死亡动画，播放完后再销毁节点
-        this._aniComp.play("EMY01_die");
+        this.aniComp.play("EMY01_die");
     }
     private _remove() {
         this.node.destroy();
