@@ -37,9 +37,9 @@ export default class EMYManager extends OBT_UIManager {
     /**
      * 维护一个敌人map表，每一帧更新坐标和是否存活，当敌人被消灭后，播放完阵亡动画后从表中移除
      */
+    // 利用该计数器给敌人生成唯一id
+    private createCounter: number = 0;
     public enemyMap: EnemyMap = {};
-
-
 
     private _alertNodePool: NodePool = null;
 
