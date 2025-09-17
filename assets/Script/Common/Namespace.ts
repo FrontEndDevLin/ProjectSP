@@ -28,6 +28,7 @@ export namespace GamePlayEvent {
         LEVEL_UP_TIME_REDUCE,
         LEVEL_UP_TIMEOUT,
         LEVEL_UP_FINISH,
+        DROP_ITEM_RECOVER_FINISH,
         PREPARE_TIME_INIT,
         PREPARE_TIME_REDUCE,
         PREPARE_TIMEOUT,

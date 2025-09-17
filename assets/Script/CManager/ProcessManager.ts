@@ -61,6 +61,8 @@ export default class ProcessManager extends OBT_UIManager {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_FINISH, this._finishLevelUp, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._checkGameOver, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.DROP_ITEM_RECOVER_FINISH, this._finishDropItemRecovery, this);
     }
 
     protected initGlobal(isNewGame: boolean) {
@@ -131,13 +133,13 @@ export default class ProcessManager extends OBT_UIManager {
 
         EMYManager.instance.removeAllEnemy();
         DropItemManager.instance.resRecovery();
-
-        // TODO: 每一帧检测还有没有回收中的块，直到没有，1秒后进入下一环节
+    }
+    private _finishDropItemRecovery() {
         this.scheduleOnce(() => {
             // TODO: 移除所有进行中的项目：GUI
             this._setGameNode();
             this._nextStep();
-        }, 2)
+        }, 1)
     }
     private _finishLevelUp() {
         this.gameNode = GAME_NODE.PASS_LEVEL_UP;

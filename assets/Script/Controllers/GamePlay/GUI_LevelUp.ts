@@ -35,6 +35,7 @@ export class GUI_LevelUp extends OBT_Component {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
         const preLevelUpList: CHRInfo.UpdateProp[] = CHRManager.instance.propCtx.preUpdateList;
         preLevelUpList.forEach((updateProp, i) => {
+            cardSlotList[i].removeAllChildren();
             // preLevelUpList
             const levelUpCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/LevelUpCard" });
             levelUpCard.OBT_param1 = updateProp;
@@ -49,7 +50,6 @@ export class GUI_LevelUp extends OBT_Component {
     private _levelUpTimeout() {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
         let node: Node = cardSlotList[getRandomNumber(0, cardSlotList.length - 1)].children[0];
-        console.log('auto touch');
         node.OBT_param2.autoTouch();
     }
 

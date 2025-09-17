@@ -29,7 +29,7 @@
     "waves": [
         {
             "wave": 1,
-            "duration": 30,
+            "duration": 15,
             "spawn_roles": [
                 {
                     "enemy_type": "EMY01",

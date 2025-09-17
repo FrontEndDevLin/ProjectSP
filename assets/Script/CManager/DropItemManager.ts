@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, Prefab, Size, Sprite, SpriteFrame, UITransform, v3, Vec3, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import EMYManager from './EMYManager';
-import { EMYInfo, PIXEL_UNIT } from '../Common/Namespace';
+import { EMYInfo, GamePlayEvent, PIXEL_UNIT } from '../Common/Namespace';
 import OBT from '../OBT';
 import { getFloatNumber, getRandomNumber } from '../Common/utils';
 const { ccclass, property } = _decorator;
@@ -31,6 +31,8 @@ export default class DropItemManager extends OBT_UIManager {
     private _expAssets: SpriteFrame[] = [];
     private _expNodePool: NodePool = null;
     private _trophyNodePool: NodePool = null;
+
+    private _resRecovering: boolean = false;
 
     protected onLoad(): void {
         if (!DropItemManager.instance) {
@@ -123,7 +125,8 @@ export default class DropItemManager extends OBT_UIManager {
                 if (!expNode) {
                     expNode = this.loadPrefab({ prefabPath: "DropItem/ExpBlock", scriptName: "ExpBlock" });
                 }
-                let pic: SpriteFrame = this._expAssets[getRandomNumber(0, 1)];
+                // let pic: SpriteFrame = this._expAssets[getRandomNumber(0, 1)];
+                let pic: SpriteFrame = this._expAssets[0];
                 const { width, height } = pic.rect;
                 let picSize: Size = new Size(width, height);
                 expNode.getComponent(UITransform).setContentSize(picSize);
@@ -175,6 +178,10 @@ export default class DropItemManager extends OBT_UIManager {
      * 资源回收，用于关卡结束后
      */
     public resRecovery() {
+        if (this._resRecovering) {
+            return;
+        }
+        this._resRecovering = true;
         for (let dropNode of this.dropItemRootNode.children) {
             if (dropNode.name === "ExpBlock") {
                 dropNode.OBT_param2.recovery();
@@ -182,10 +189,18 @@ export default class DropItemManager extends OBT_UIManager {
                 dropNode.OBT_param2.recovery();
             }
         }
+
+        let interval = setInterval(() => {
+            if (!this.dropItemRootNode.children.length) {
+                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.DROP_ITEM_RECOVER_FINISH);
+                clearInterval(interval);
+                interval = null;
+            }
+        }, 1000);
     }
 
     private _preloadExpAssets() {
-        for (let i = 1; i <= 2; i++) {
+        for (let i = 1; i <= 1; i++) {
             let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`DropItem/exp-${i}`);
             this._expAssets.push(assets);
         }
