@@ -29,6 +29,7 @@ export class LevelUpCard extends OBT_Component {
 
     private _touchCard() {
         if (ProcessManager.instance.gameNode === GAME_NODE.LEVEL_UP) {
+            console.log('touch card')
             CHRManager.instance.levelUpProp(this._props.prop);
             // 通知更新属性UI, TODO:(UI更新后2秒, 移除升级UI)
             this.hideNodeByPath();

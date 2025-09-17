@@ -16,7 +16,15 @@ export interface EnemyInfo {
     alive: number
 }
 interface EnemyMap {
-    [uuid: string]: EnemyInfo
+    [nodeId: string]: EnemyInfo
+}
+interface EmyNodePoolMap {
+    [emyId: string]: NodePool
+}
+
+interface EmyPreloadConfig {
+    type: string,
+    count: number
 }
 
 export default class EMYManager extends OBT_UIManager {
@@ -43,6 +51,8 @@ export default class EMYManager extends OBT_UIManager {
 
     private _alertNodePool: NodePool = null;
 
+    private _emyNodePoolMap: EmyNodePoolMap = {};
+
     protected onLoad(): void {
         if (!EMYManager.instance) {
             EMYManager.instance = this;
@@ -58,10 +68,32 @@ export default class EMYManager extends OBT_UIManager {
 
         this._alertNodePool = new NodePool();
         this.preloadAlertNode(4);
+
+        this.preloadEmyNode([{ type: "EMY01", count: 4 }]);
     }
 
     start() {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._loadEnemy, this);
+    }
+
+    // config -> [{ type: "EMY01", count: 10 }, { type: "PEACE", count: 1 }]
+    public preloadEmyNode(configList: EmyPreloadConfig[]) {
+        configList.forEach(config => {
+            let { type, count } = config;
+            let enemyProps: EMYInfo.EMYProps = this.enemyData[type];
+            let scriptName = enemyProps.script || "EMYBase";
+            this._emyNodePoolMap[type] = new NodePool();
+
+            for (let i = 0; i < count; i++) {
+                let enemyNode = this.loadPrefab({ prefabPath: `EMY/${type}`, scriptName });
+                this._emyNodePoolMap[type].put(enemyNode);
+            }
+        })
+    }
+    public removeEmyNode(node: Node) {
+        let type: string = node.name;
+        this.enemyRootNode.removeChild(node);
+        this._emyNodePoolMap[type].put(node);
     }
 
     public preloadAlertNode(count: number) {
@@ -215,14 +247,19 @@ export default class EMYManager extends OBT_UIManager {
 
         let enemyProps: EMYInfo.EMYProps = this.enemyData[enemyType];
         let scriptName: string = enemyProps.script || "EMYBase";
-        let enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName });
+        let enemyNode = this._emyNodePoolMap[enemyType].get();
+        if (!enemyNode) {
+            enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName });
+        }
         let enemyScript: EMYBase = <EMYBase>enemyNode.getComponent(scriptName);
-        enemyScript.init(enemyProps);
+        this.createCounter++;
+        let nodeId: string = `${this.createCounter}`;
+        enemyScript.init(enemyProps, nodeId);
         enemyNode.setPosition(v3(x, y));
 
         alertAnimation.once(Animation.EventType.FINISHED, () => {
             this.recoverAlertNode(alertNode);
-            this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
+            this.enemyMap[nodeId] = { x, y, dis: 0, alive: 1 };
             this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
         })
     }
@@ -242,16 +279,16 @@ export default class EMYManager extends OBT_UIManager {
         return v3(locX, locY);
     }
 
-    public updateEnemy(uuid: string, enemyInfo: EnemyInfo) {
+    public updateEnemy(nodeId: string, enemyInfo: EnemyInfo) {
         for (let k in enemyInfo) {
-            if (!this.enemyMap[uuid]) {
+            if (!this.enemyMap[nodeId]) {
                 continue;
             }
-            this.enemyMap[uuid][k] = enemyInfo[k];
+            this.enemyMap[nodeId][k] = enemyInfo[k];
         }
     }
-    public removeEnemy(uuid: string) {
-        delete this.enemyMap[uuid];
+    public removeEnemy(nodeId: string) {
+        delete this.enemyMap[nodeId];
     }
     // 移除enemyRootNode下所有节点
     public removeAllEnemy() {
@@ -261,21 +298,21 @@ export default class EMYManager extends OBT_UIManager {
         });
         this.enemyMap = {};
     }
-    public getNearestEnemy(uuidList: string[]): EnemyInfo {
+    public getNearestEnemy(nodeIdList: string[]): EnemyInfo {
         let min: number = 0;
         let target: string = null;
-        for (let uuid in uuidList) {
-            if (!this.enemyMap[uuid]) {
+        for (let nodeId in nodeIdList) {
+            if (!this.enemyMap[nodeId]) {
                 continue;
             }
-            let dis = this.enemyMap[uuid].dis;
+            let dis = this.enemyMap[nodeId].dis;
             if (!target) {
                 min = dis;
-                target = uuid;
+                target = nodeId;
             } else {
                 if (dis < min) {
                     min = dis;
-                    target = uuid;
+                    target = nodeId;
                 }
             }
         }

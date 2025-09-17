@@ -43,7 +43,11 @@ export default class ProcessManager extends OBT_UIManager {
     private _prepareSecond: number = 0;
 
     start() {
-        
+        /**
+         * ProcessManager
+         * 初始化initGlobal：-> 将不会改变的节点、数据初始化(GUI、角色属性、地图)，只调用一次
+         * 波次初始化initWave: -> 每一波都会改变的数据(刷怪Role、波次时间、预载节点)，每一波开始前调用
+         */
     }
 
     protected onLoad(): void {
@@ -59,7 +63,17 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._checkGameOver, this);
     }
 
-    public initGUI() {
+    protected initGlobal(isNewGame: boolean) {
+        this._initGUI();
+        this._initSave(isNewGame);
+        CHRManager.instance.init(this.saveCtrl.save);
+    }
+    protected initWave() {
+        EMYManager.instance.setSpawnRole();
+        DropItemManager.instance.initRateMap();
+    }
+
+    private _initGUI() {
         MapManager.instance.initMap();
         CHRManager.instance.initCompass();
         CHRManager.instance.showCHR();
@@ -67,9 +81,7 @@ export default class ProcessManager extends OBT_UIManager {
         GUI_GamePlayManager.instance.initLevelUpGUI();
         GUI_GamePlayManager.instance.initPrepareGUI();
     }
-
-    // 最开始
-    public startGame(isNewGame: boolean): void {
+    private _initSave(isNewGame: boolean) {
         if (isNewGame) {
             // saveCtrl用普通类实现
             this.saveCtrl = new SaveCtrl();
@@ -80,13 +92,13 @@ export default class ProcessManager extends OBT_UIManager {
             // 需要做读取存档时，判断storage里有没有存档，有则读取存档；没有则读取InitSave.json
             let hasSaveDoc: boolean = false;
         }
+    }
 
-        // start 展示第1波UI，倒计时。 这一段用另外的方法包装
-        CHRManager.instance.init(this.saveCtrl.save);
-
-        EMYManager.instance.setSpawnRole();
-        DropItemManager.instance.initRateMap();
-        // end
+    // 最开始
+    public startGame(isNewGame: boolean): void {
+        this.initGlobal(isNewGame);
+        this.initWave();
+        MapManager.instance.showMap();
         this._startWave();
     }
 
@@ -108,7 +120,6 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_INIT, this._duration);
     }
     private _startWave() {
-        MapManager.instance.showMap();
         GUI_GamePlayManager.instance.showGamePlayGUI();
         CHRManager.instance.showCompass();
         this.gameNode = GAME_NODE.FIGHTING;

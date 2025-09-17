@@ -55,10 +55,12 @@ export class BaseWarCore extends OBT_Component {
             switch (selfCollider.tag) {
                 case GameCollider.TAG.CHR_RANGE_ALERT: {
                     // 将敌人放入队列中，结束碰撞时将敌人移出
-                    this._highEnemyList[otherCollider.node.uuid] = 1;
+                    let nodeId: string = otherCollider.node.OBT_param2.id;
+                    this._highEnemyList[nodeId] = 1;
                 } break;
                 case GameCollider.TAG.CHR_RANGE_ATTACK: {
-                    this._dangerEnemyList[otherCollider.node.uuid] = 1;
+                    let nodeId: string = otherCollider.node.OBT_param2.id;
+                    this._dangerEnemyList[nodeId] = 1;
                 } break;
             }
         }
@@ -67,10 +69,12 @@ export class BaseWarCore extends OBT_Component {
         if (otherCollider.group === GameCollider.GROUP.ENEMY) {
             switch (selfCollider.tag) {
                 case GameCollider.TAG.CHR_RANGE_ALERT: {
-                    delete this._highEnemyList[otherCollider.node.uuid];
+                    let nodeId: string = otherCollider.node.OBT_param2.id;
+                    delete this._highEnemyList[nodeId];
                 } break;
                 case GameCollider.TAG.CHR_RANGE_ATTACK: {
-                    delete this._dangerEnemyList[otherCollider.node.uuid];
+                    let nodeId: string = otherCollider.node.OBT_param2.id;
+                    delete this._dangerEnemyList[nodeId];
                 } break;
             }
         }

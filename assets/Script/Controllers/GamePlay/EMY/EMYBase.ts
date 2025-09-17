@@ -19,21 +19,31 @@ export class EMYBase extends OBT_Component {
     protected flashTime: number = FLASH_TIME;
     protected FLASH_COLOR: Color = new Color(0, 255, 255);
     protected NORMAL_COLOR: Color = new Color(255, 255, 255);
+    protected spNode: Node;
     protected spComp: SpriteComponent;
     protected aniComp: AnimationComponent;
 
     protected props: EMYInfo.EMYProps;
+
+    protected id: string;
 
     start() {
     }
 
     protected onLoad(): void {
     }
-    public init(props: EMYInfo.EMYProps) {
+    public init(props: EMYInfo.EMYProps, id: string) {
+        this.id = id;
+        this.alive = true;
+        if (!this.spNode) {
+            this.loadSpNode();
+        }
+        this.spNode.setScale(v3(1, 1));
         if (!this.collider) {
             this.loadCldComp();
             this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
         }
+        this.collider.enabled = true;
         if (!this.spComp) {
             this.loadSpComp();
         }
@@ -44,18 +54,22 @@ export class EMYBase extends OBT_Component {
             });
         }
         this.node.OBT_param2 = {
+            id,
             fadeOut: this._fadeout.bind(this)
         }
         this.props = copyObject(props);
+    }
+    protected loadSpNode() {
+        this.spNode = this.view("PIC");
     }
     protected loadCldComp() {
         this.collider = this.node.getComponent(BoxCollider2D);
     }
     protected loadSpComp() {
-        this.spComp = this.view("PIC").getComponent(Sprite);
+        this.spComp = this.spNode.getComponent(Sprite);
     }
     protected loadAniComp() {
-        this.aniComp = this.view("PIC").getComponent(Animation);
+        this.aniComp = this.spNode.getComponent(Animation);
     }
 
     protected onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
@@ -139,14 +153,14 @@ export class EMYBase extends OBT_Component {
         let cY = ctrVec.y;
         let { x, y } = this.node.position;
         let dis = Math.sqrt(Math.pow(x - cX, 2) + Math.pow(y - cY, 2));
-        EMYManager.instance.updateEnemy(this.node.uuid, { alive: 1, dis, x, y });
+        EMYManager.instance.updateEnemy(this.id, { alive: 1, dis, x, y });
     }
 
     public die() {
         this.alive = false;
-        this.node.getComponent(BoxCollider2D).destroy();
+        this.node.getComponent(BoxCollider2D).enabled = false;
         // 播放死亡动画并爆出粒子效果，
-        EMYManager.instance.updateEnemy(this.node.uuid, { alive: 0 });
+        EMYManager.instance.updateEnemy(this.id, { alive: 0 });
         DropItemManager.instance.dropItem(this.props.id, this.node.position);
         // TODO: 播放死亡动画，播放完后再销毁节点
         this._die();
@@ -157,12 +171,12 @@ export class EMYBase extends OBT_Component {
         this.aniComp.play("EMY01_die");
     }
     private _remove() {
-        this.node.destroy();
+        EMYManager.instance.removeEmyNode(this.node);
     }
 
     private _die() {
         this._fadeout();
-        EMYManager.instance.removeEnemy(this.node.uuid);
+        EMYManager.instance.removeEnemy(this.id);
         EMYManager.instance.particleCtrl.createDieParticle(this.node.position, 4);
         // this.node.destroy();
     }

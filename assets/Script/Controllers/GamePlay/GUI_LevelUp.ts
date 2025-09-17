@@ -49,6 +49,7 @@ export class GUI_LevelUp extends OBT_Component {
     private _levelUpTimeout() {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
         let node: Node = cardSlotList[getRandomNumber(0, cardSlotList.length - 1)].children[0];
+        console.log('auto touch');
         node.OBT_param2.autoTouch();
     }
 

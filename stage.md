@@ -39,13 +39,13 @@
   敌人受击反馈(着色器) done
   子弹穿透 done
   子弹死亡粒子 done
-  对象池实现(敌人)
+  对象池实现(敌人) done
   战利品拾取 done
   角色受击反馈
   角色受击扣血 done
   掉落物(材料、战利品、宝箱、中立生物) ffd700金色
-  EMY.ts 抽象化为基类 done -> EMYBase.ts
-  EMYManager EnemyMap改造(uuid方案弃用)
+  EMY.ts 抽象化为基类 done -> EMYBase.ts done
+  EMYManager EnemyMap改造(uuid方案弃用) done
 
 阶段5(波次2)
 

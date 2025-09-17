@@ -123,7 +123,7 @@ export default class DropItemManager extends OBT_UIManager {
                 if (!expNode) {
                     expNode = this.loadPrefab({ prefabPath: "DropItem/ExpBlock", scriptName: "ExpBlock" });
                 }
-                let pic: SpriteFrame = this._expAssets[getRandomNumber(0, 4)];
+                let pic: SpriteFrame = this._expAssets[getRandomNumber(0, 1)];
                 const { width, height } = pic.rect;
                 let picSize: Size = new Size(width, height);
                 expNode.getComponent(UITransform).setContentSize(picSize);
@@ -179,14 +179,13 @@ export default class DropItemManager extends OBT_UIManager {
             if (dropNode.name === "ExpBlock") {
                 dropNode.OBT_param2.recovery();
             } else if (dropNode.name === "TrophyBlock" || dropNode.name === "ChestBlock") {
-                // let trophyBlockCtx: TrophyBlockCtrl = dropNode.getComponent("TrophyBlockCtrl") as TrophyBlockCtrl;
-                // trophyBlockCtx.recovery();
+                dropNode.OBT_param2.recovery();
             }
         }
     }
 
     private _preloadExpAssets() {
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i <= 2; i++) {
             let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`DropItem/exp-${i}`);
             this._expAssets.push(assets);
         }
