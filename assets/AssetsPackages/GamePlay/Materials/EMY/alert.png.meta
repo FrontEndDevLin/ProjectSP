@@ -43,9 +43,9 @@
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
-        "offsetY": 1,
+        "offsetY": 0,
         "trimX": 0,
-        "trimY": 1,
+        "trimY": 2,
         "width": 25,
         "height": 21,
         "rawWidth": 25,
@@ -84,23 +84,23 @@
           ],
           "uv": [
             0,
-            24,
+            23,
             25,
-            24,
+            23,
             0,
-            3,
+            2,
             25,
-            3
+            2
           ],
           "nuv": [
             0,
-            0.12,
+            0.08,
             1,
-            0.12,
+            0.08,
             0,
-            0.96,
+            0.92,
             1,
-            0.96
+            0.92
           ],
           "minPos": [
             -12.5,
