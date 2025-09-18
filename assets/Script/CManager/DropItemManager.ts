@@ -10,6 +10,7 @@ import { ItemInfo } from '../Common/Namespace';
 import CHRManager from './CHRManager';
 import { ExpBlock } from '../Controllers/GamePlay/DropItem/ExpBlock';
 import { TrophyBlock } from '../Controllers/GamePlay/DropItem/TrophyBlock';
+import { ExpBlockParticleCtrl } from './Class/ExpBlockParticleCtrl';
 
 /**
  * 物品掉落管理
@@ -34,6 +35,9 @@ export default class DropItemManager extends OBT_UIManager {
 
     private _resRecovering: boolean = false;
 
+    // 经验块粒子特效管理
+    public expBlockParticleCtrl: ExpBlockParticleCtrl;
+
     protected onLoad(): void {
         if (!DropItemManager.instance) {
             DropItemManager.instance = this;
@@ -49,6 +53,8 @@ export default class DropItemManager extends OBT_UIManager {
         this.preloadExpBlock(10);
         this._trophyNodePool = new NodePool("TrophyBlock");
         this.preloadTrophyBlock(2);
+
+        this.expBlockParticleCtrl = new ExpBlockParticleCtrl();
     }
 
     start() {

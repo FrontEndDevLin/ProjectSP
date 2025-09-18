@@ -2,14 +2,14 @@ import { _decorator, Component, find, Node, v3, Vec3, NodePool } from 'cc';
 import { BaseCtrl } from './BaseCtrl';
 import OBT from '../../OBT';
 import { getAngleByVector, getRandomNumber, getVectorByAngle } from '../../Common/utils';
-import { BulletParticle } from '../../Controllers/GamePlay/Particle/BulletParticle';
+import { ExpBlockParticle } from '../../Controllers/GamePlay/Particle/ExpBlockParticle';
 const { ccclass, property } = _decorator;
 
 /**
- * 子弹粒子管理
+ * 经验块粒子管理
  */
-export class BulletParticleCtrl extends BaseCtrl {
-    static instance: BulletParticleCtrl = null;
+export class ExpBlockParticleCtrl extends BaseCtrl {
+    static instance: ExpBlockParticleCtrl = null;
 
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
@@ -19,20 +19,20 @@ export class BulletParticleCtrl extends BaseCtrl {
 
     constructor() {
         super();
-        if (!BulletParticleCtrl.instance) {
-            BulletParticleCtrl.instance = this;
+        if (!ExpBlockParticleCtrl.instance) {
+            ExpBlockParticleCtrl.instance = this;
         } else {
-            return BulletParticleCtrl.instance;
+            return ExpBlockParticleCtrl.instance;
         }
 
-        this._nodePool = new NodePool("BulletParticle");
+        this._nodePool = new NodePool("ExpBlockParticle");
         
-        this.preloadParticle(4);
+        this.preloadParticle(9);
     }
 
     public preloadParticle(count: number) {
         for (let i = 0; i < count; i++) {
-            let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/BulletParticle" });
+            let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/ExpBlockParticle" });
             this._nodePool.put(particleNode);
         }
     }
@@ -42,26 +42,20 @@ export class BulletParticleCtrl extends BaseCtrl {
         this._nodePool.put(node);
     }
 
-    public createDieParticle(loc: Vec3, vector: Vec3, speed: number, count: number) {
+    public createDieParticle(loc: Vec3, count: number) {
         if (!this.particleRootNode) {
-            this.particleRootNode = OBT.instance.uiManager.mountEmptyNode({ nodeName: "BulletParticleBox", parentNode: this.rootNode });
+            this.particleRootNode = OBT.instance.uiManager.mountEmptyNode({ nodeName: "ExpBlockParticleBox", parentNode: this.rootNode });
         }
-        let baseAngle: number = getAngleByVector(vector);
         for (let i = 0; i < count; i++) {
             let particleNode = this._nodePool.get();
             if (!particleNode) {
-                particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/BulletParticle" });
+                particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/ExpBlockParticle" });
             }
             let scale = getRandomNumber(0, 40) / 100 + 1;
             particleNode.setScale(v3(scale, scale, 0));
-
-            let angle = getRandomNumber(baseAngle - 18, baseAngle + 18);
-            let newVector = getVectorByAngle(angle);
-
-            let scriptComp = <BulletParticle>particleNode.getComponent("BulletParticle");
-            scriptComp.init({ vector: newVector, speed })
-
             particleNode.setPosition(loc);
+            let scriptComp = <ExpBlockParticle>particleNode.getComponent("ExpBlockParticle");
+            scriptComp.init();
             OBT.instance.uiManager.mountNode({ node: particleNode, parentNode: this.particleRootNode });
         }
     }

@@ -83,6 +83,7 @@ export class ExpBlock extends OBT_Component {
             // temp 可以做爆裂开的粒子效果
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._expCnt);
             DropItemManager.instance.recoverExpBlock(this.node);
+            DropItemManager.instance.expBlockParticleCtrl.createDieParticle(nodeLoc, 3);
             return;
         }
 
@@ -114,9 +115,8 @@ export class ExpBlock extends OBT_Component {
         let nodeLoc: Vec3 = this.node.position;
         let dis: number = getDistance(nodeLoc, iconLoc);
         if (dis <= 5) {
-            console.log('TODO: 经验被回收!');
-            // CurrencyManager.instance.addStorage(this.node.OBT_param1.expCnt);
-            this.node.destroy();
+            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.RECOVER_EXP, this._expCnt);
+            DropItemManager.instance.recoverExpBlock(this.node);
             return;
         }
 

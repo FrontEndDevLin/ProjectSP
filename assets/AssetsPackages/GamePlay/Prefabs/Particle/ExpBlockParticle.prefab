@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "EmyDieParticle",
+    "_name": "ExpBlockParticle",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "EmyDieParticle",
+    "_name": "ExpBlockParticle",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -107,9 +107,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
+      "r": 127,
       "g": 255,
-      "b": 208,
+      "b": 170,
       "a": 255
     },
     "_spriteFrame": {

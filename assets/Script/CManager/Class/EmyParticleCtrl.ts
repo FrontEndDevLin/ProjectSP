@@ -2,7 +2,7 @@ import { _decorator, Component, find, Node, NodePool, v3, Vec3 } from 'cc';
 import { BaseCtrl } from './BaseCtrl';
 import OBT from '../../OBT';
 import { getRandomNumber } from '../../Common/utils';
-import { EmyDieParticle } from '../../Controllers/GamePlay/EMY/EmyDieParticle';
+import { EmyDieParticle } from '../../Controllers/GamePlay/Particle/EmyDieParticle';
 const { ccclass, property } = _decorator;
 
 /**
@@ -31,7 +31,7 @@ export class EmyParticleCtrl extends BaseCtrl {
 
     public preloadParticle(count: number) {
         for (let i = 0; i < count; i++) {
-            let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "EMY/EmyDieParticle" });
+            let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/EmyDieParticle" });
             this._nodePool.put(particleNode);
         }
     }

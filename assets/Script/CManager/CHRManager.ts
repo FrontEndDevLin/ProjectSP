@@ -37,6 +37,7 @@ export default class CHRManager extends OBT_UIManager {
         })
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._pickUpExp, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.RECOVER_EXP, this._recoverExp, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this._pickUpTrophy, this);
     }
 
@@ -64,6 +65,9 @@ export default class CHRManager extends OBT_UIManager {
     private _pickUpExp(expCnt: number) {
         this.addExp(expCnt);
         this.currencyCtrl.addCurrency(expCnt);
+    }
+    private _recoverExp(expCnt: number) {
+        this.currencyCtrl.addStorage(expCnt);
     }
     private _pickUpTrophy() {
         // 临时，需要通过计算角色属性(战利品回血量)来得到

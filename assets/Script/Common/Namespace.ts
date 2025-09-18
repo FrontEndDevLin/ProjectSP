@@ -35,6 +35,7 @@ export namespace GamePlayEvent {
         PREPARE_FINISH,
         PICK_UP_EXP,
         PICK_UP_TROPHY,
+        RECOVER_EXP,
         EXP_CHANGE,
         HP_CHANGE,
         PROP_INIT,
