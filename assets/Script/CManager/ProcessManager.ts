@@ -69,6 +69,8 @@ export default class ProcessManager extends OBT_UIManager {
         this._initGUI();
         this._initSave(isNewGame);
         CHRManager.instance.init(this.saveCtrl.save);
+
+        // TODO: 这里将各个管理的根节点挂载，避免层级问题
     }
     protected initWave() {
         EMYManager.instance.setSpawnRole();
