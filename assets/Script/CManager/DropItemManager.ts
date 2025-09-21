@@ -11,6 +11,7 @@ import CHRManager from './CHRManager';
 import { ExpBlock } from '../Controllers/GamePlay/DropItem/ExpBlock';
 import { TrophyBlock } from '../Controllers/GamePlay/DropItem/TrophyBlock';
 import { ExpBlockParticleCtrl } from './Class/ExpBlockParticleCtrl';
+import ProcessManager from './ProcessManager';
 
 /**
  * 物品掉落管理
@@ -61,6 +62,11 @@ export default class DropItemManager extends OBT_UIManager {
         
     }
 
+    public initRootNode() {
+        this.dropItemRootNode = this.mountEmptyNode({ nodeName: "DropItemBox", parentNode: ProcessManager.instance.unitRootNode });
+        this.expBlockParticleCtrl.initRootNode();
+    }
+
     public preloadExpBlock(count: number) {
         for (let i = 0; i < count; i++) {
             let expNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "DropItem/ExpBlock" });
@@ -109,9 +115,6 @@ export default class DropItemManager extends OBT_UIManager {
      * 敌人死亡后，调用该接口，由该接口决定掉落物品
      */
     public dropItem(emyId: string, position: Vec3) {
-        if (!this.dropItemRootNode) {
-            this.dropItemRootNode = this.mountEmptyNode({ nodeName: "DropItemBox", parentNode: this.rootNode });
-        }
         let emyRateData: EMYInfo.EMYDropInfo = this._dropRateMap[emyId];
         let dropExpCnt: number = this._dropExp(emyRateData);
         if (dropExpCnt) {

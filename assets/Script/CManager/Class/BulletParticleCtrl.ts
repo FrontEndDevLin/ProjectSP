@@ -3,6 +3,7 @@ import { BaseCtrl } from './BaseCtrl';
 import OBT from '../../OBT';
 import { getAngleByVector, getRandomNumber, getVectorByAngle } from '../../Common/utils';
 import { BulletParticle } from '../../Controllers/GamePlay/Particle/BulletParticle';
+import ProcessManager from '../ProcessManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -10,8 +11,6 @@ const { ccclass, property } = _decorator;
  */
 export class BulletParticleCtrl extends BaseCtrl {
     static instance: BulletParticleCtrl = null;
-
-    public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
     private _nodePool: NodePool;
     // 死亡粒子效果根节点
@@ -30,6 +29,10 @@ export class BulletParticleCtrl extends BaseCtrl {
         this.preloadParticle(4);
     }
 
+    public initRootNode() {
+        this.particleRootNode = OBT.instance.uiManager.mountEmptyNode({ nodeName: "BulletParticleBox", parentNode: ProcessManager.instance.particleRootNode });
+    }
+
     public preloadParticle(count: number) {
         for (let i = 0; i < count; i++) {
             let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/BulletParticle" });
@@ -43,9 +46,6 @@ export class BulletParticleCtrl extends BaseCtrl {
     }
 
     public createDieParticle(loc: Vec3, vector: Vec3, speed: number, count: number) {
-        if (!this.particleRootNode) {
-            this.particleRootNode = OBT.instance.uiManager.mountEmptyNode({ nodeName: "BulletParticleBox", parentNode: this.rootNode });
-        }
         let baseAngle: number = getAngleByVector(vector);
         for (let i = 0; i < count; i++) {
             let particleNode = this._nodePool.get();

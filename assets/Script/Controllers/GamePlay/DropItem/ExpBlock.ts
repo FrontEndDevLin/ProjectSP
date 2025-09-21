@@ -79,7 +79,7 @@ export class ExpBlock extends OBT_Component {
         let crtLoc: Vec3 = CHRManager.instance.getCHRLoc();
         let nodeLoc: Vec3 = this.node.position;
         let dis: number = getDistance(nodeLoc, crtLoc);
-        if (dis <= 5) {
+        if (dis <= 20) {
             // temp 可以做爆裂开的粒子效果
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._expCnt);
             DropItemManager.instance.recoverExpBlock(this.node);

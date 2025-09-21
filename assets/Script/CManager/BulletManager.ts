@@ -5,6 +5,7 @@ import OBT from '../OBT';
 import DBManager from './DBManager';
 import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
 import { Bullet } from '../Controllers/GamePlay/Bullet/Bullet';
+import ProcessManager from './ProcessManager';
 const { ccclass, property } = _decorator;
 
 interface BulletPoolMap {
@@ -35,7 +36,6 @@ interface BulletPreloadConfig {
  */
 export default class BulletManager extends OBT_UIManager {
     static instance: BulletManager = null;
-    public rootNode: Node = find("Canvas/GamePlay/GamePlay");
     public bulletRootNode: Node = null;
 
     public bulletData: BulletInfo.BulletDBData = {};
@@ -75,6 +75,10 @@ export default class BulletManager extends OBT_UIManager {
     //         this._bulletCldMap[bulletAttr.cld] = bulletAttr;
     //     }
     // }
+    public initRootNode() {
+        this.bulletRootNode = this.mountEmptyNode({ nodeName: "BulletBox", parentNode: ProcessManager.instance.unitRootNode });
+        this.particleCtrl.initRootNode();
+    }
 
     public preloadBullet(configList: BulletPreloadConfig[]) {
         configList.forEach(({ bulletId, count }) => {
@@ -115,10 +119,6 @@ export default class BulletManager extends OBT_UIManager {
     }
 
     public createBullet(bulletId: string, position: Vec3, vector: Vec3) {
-        if (!this.bulletRootNode) {
-            this.bulletRootNode = this.mountEmptyNode({ nodeName: "BulletBox", parentNode: this.rootNode });
-        }
-
         // console.log(`创建子弹${bulletId}`)
         const bulletAttr = this.bulletData[bulletId];
         const nodePool = this._nodePoolMap[bulletId];

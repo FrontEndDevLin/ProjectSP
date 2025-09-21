@@ -74,6 +74,9 @@ export class CHR extends OBT_Component {
     // 角色受击处理/吸收战利品
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+            if (otherCollider.tag === GameCollider.TAG.PEACE) {
+                return;
+            }
             let enemyId: string = otherCollider.node.name;
             let damage = DamageManager.instance.calcEnemyDamage(enemyId);
             CHRManager.instance.propCtx.addHP(-damage);

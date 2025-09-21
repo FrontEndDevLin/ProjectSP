@@ -1,8 +1,8 @@
 import { find, Node } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
+import ProcessManager from "./ProcessManager";
 export default class MapManager extends OBT_UIManager {
     static instance: MapManager;
-    public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
     private _mapNode: Node;
 
@@ -16,7 +16,7 @@ export default class MapManager extends OBT_UIManager {
     }
 
     public initMap() {
-        this._mapNode = this.showPrefab({ prefabPath: "Map", scriptName: "NONE" });
+        this._mapNode = this.showPrefab({ prefabPath: "Map", scriptName: "NONE", parentNode: ProcessManager.instance.mapRootNode });
     }
 
     public showMap() {

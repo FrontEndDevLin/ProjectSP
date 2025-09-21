@@ -6,6 +6,7 @@ import LevelCtrl from "./Class/LevelCtrl";
 import OBT from "../OBT";
 import PropCtrl from "./Class/PropCtrl";
 import { CurrencyCtrl } from "./Class/CurrencyCtrl";
+import ProcessManager from "./ProcessManager";
 export default class CHRManager extends OBT_UIManager {
     static instance: CHRManager;
 
@@ -75,11 +76,14 @@ export default class CHRManager extends OBT_UIManager {
         this.propCtx.addHP(health);
     }
 
+    public initCHR() {
+
+    }
     public showCHR() {
-        this.showPrefab({ prefabPath: "CHR/CHR01", scriptName: "CHR" });
+        this.showPrefab({ prefabPath: "CHR/CHR01", scriptName: "CHR", parentNode: ProcessManager.instance.unitRootNode });
     }
     public initCompass() {
-        this._compassNode = this.showPrefab({ prefabPath: "Compass" });
+        this._compassNode = this.showPrefab({ prefabPath: "Compass", parentNode: ProcessManager.instance.uiRootNode });
     }
     public showCompass() {
         this.showNode(this._compassNode);

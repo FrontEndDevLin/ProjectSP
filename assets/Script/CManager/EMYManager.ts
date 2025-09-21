@@ -69,11 +69,17 @@ export default class EMYManager extends OBT_UIManager {
         this._alertNodePool = new NodePool();
         this.preloadAlertNode(4);
 
-        this.preloadEmyNode([{ type: "EMY01", count: 4 }]);
+        this.preloadEmyNode([{ type: "EMY01", count: 4 }, { type: "EMY_Peace", count: 2 }]);
     }
 
     start() {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._loadEnemy, this);
+    }
+
+    public initRootNode() {
+        this.alertRootNode = this.mountEmptyNode({ nodeName: "AlertBox", parentNode: ProcessManager.instance.unitRootNode });
+        this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: ProcessManager.instance.unitRootNode });
+        this.particleCtrl.initRootNode();
     }
 
     // config -> [{ type: "EMY01", count: 10 }, { type: "PEACE", count: 1 }]
@@ -81,6 +87,7 @@ export default class EMYManager extends OBT_UIManager {
         configList.forEach(config => {
             let { type, count } = config;
             let enemyProps: EMYInfo.EMYProps = this.enemyData[type];
+            console.log(type)
             let scriptName = enemyProps.script || "EMYBase";
             this._emyNodePoolMap[type] = new NodePool();
 
@@ -138,7 +145,7 @@ export default class EMYManager extends OBT_UIManager {
     }
     public setSpawnRole(): boolean {
         this._waveRole = { ...ProcessManager.instance.waveRole };
-        
+        console.log(this.enemyData)
         // 初始化spawned_count和next_spawn_time
         this._waveRole.spawn_roles.forEach((spawnRole: GameConfigInfo.EMYSpawnRole, i: number) => {
             spawnRole.spawn_count = Math.ceil(spawnRole.spawn_total / spawnRole.spawn_once_time);
@@ -174,24 +181,34 @@ export default class EMYManager extends OBT_UIManager {
             if (spawnRole.next_spawn_time < duration) {
                 continue;
             }
-            let createOptions: EMYInfo.CreateEMYParams = {
-                enemyType: spawnRole.enemy_type,
-                enemyCount: spawnRole.spawn_once_time,
-                pattern: spawnRole.spawn_pattern,
-                batchMode: spawnRole.batch_mode
-            }
+
+            let canCreate: boolean = true;
+            let relation: string = "normal";
             if (spawnRole.spawn_mode === "random") {
                 let rate: number = spawnRole.spawn_rate;
                 let num = getRandomNumber(1, 100);
                 // 命中，生成
+                console.log("尝试生成中立生物，生成结果", num > rate * 100);
                 if (num > rate * 100) {
-                    continue;
+                    canCreate = false;
+                } else {
+                    console.log('生成中立生物')
+                    canCreate = true;
                 }
-                createOptions.relation = "peace";
-            } else {
-                createOptions.relation = "normal";
+                relation = "peace";
             }
-            this.createEnemy(createOptions);
+
+            let createOptions: EMYInfo.CreateEMYParams = {
+                enemyType: spawnRole.enemy_type,
+                enemyCount: spawnRole.spawn_once_time,
+                pattern: spawnRole.spawn_pattern,
+                batchMode: spawnRole.batch_mode,
+                relation
+            }
+
+            if (canCreate) {
+                this.createEnemy(createOptions);
+            }
             if (spawnRole.spawned_count + 1 <= spawnRole.spawn_count) {
                 spawnRole.spawned_count++;
                 const { start_delay, spawned_count, spawn_interval } = spawnRole;
@@ -209,13 +226,7 @@ export default class EMYManager extends OBT_UIManager {
      * @param pattern 生成位置模式
      * @param batchMode 批量生成模式
      */
-    public createEnemy({ enemyType, enemyCount, pattern, batchMode = "normal" }: EMYInfo.CreateEMYParams) {
-        if (!this.alertRootNode) {
-            this.alertRootNode = this.mountEmptyNode({ nodeName: "AlertBox", parentNode: this.rootNode });
-        }
-        if (!this.enemyRootNode) {
-            this.enemyRootNode = this.mountEmptyNode({ nodeName: "EnemyBox", parentNode: this.rootNode });
-        }
+    public createEnemy({ enemyType, enemyCount, pattern, batchMode = "normal", relation }: EMYInfo.CreateEMYParams) {
         console.log(`生成${enemyCount}个${enemyType}类型的敌人, 生成位置模式为${pattern}, 批量生成模式为${batchMode}`);
 
         switch (batchMode) {

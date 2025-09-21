@@ -2,9 +2,9 @@ import { find, Node } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import OBT from "../OBT";
 import { GamePlayEvent } from "../Common/Namespace";
+import ProcessManager from "./ProcessManager";
 export default class GUI_GamePlayManager extends OBT_UIManager {
     static instance: GUI_GamePlayManager;
-    public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
     private _GUIGamePlayNode: Node;
     // 升级界面
@@ -22,13 +22,13 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
 
     public initGamePlayGUI() {
-        this._GUIGamePlayNode = this.showPrefab({ prefabPath: "GUI_GamePlay" });
+        this._GUIGamePlayNode = this.showPrefab({ prefabPath: "GUI_GamePlay", parentNode: ProcessManager.instance.uiRootNode });
     }
     public initLevelUpGUI() {
-        this._GUILevelUpNode = this.showPrefab({ prefabPath: "GUI_LevelUp" });
+        this._GUILevelUpNode = this.showPrefab({ prefabPath: "GUI_LevelUp", parentNode: ProcessManager.instance.uiRootNode });
     }
     public initPrepareGUI() {
-        this._GUIPrepareNode = this.showPrefab({ prefabPath: "GUI_Prepare" });
+        this._GUIPrepareNode = this.showPrefab({ prefabPath: "GUI_Prepare", parentNode: ProcessManager.instance.uiRootNode });
     }
 
     public showGamePlayGUI() {

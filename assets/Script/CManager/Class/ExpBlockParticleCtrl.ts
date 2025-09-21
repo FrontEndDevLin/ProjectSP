@@ -3,6 +3,7 @@ import { BaseCtrl } from './BaseCtrl';
 import OBT from '../../OBT';
 import { getAngleByVector, getRandomNumber, getVectorByAngle } from '../../Common/utils';
 import { ExpBlockParticle } from '../../Controllers/GamePlay/Particle/ExpBlockParticle';
+import ProcessManager from '../ProcessManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -10,8 +11,6 @@ const { ccclass, property } = _decorator;
  */
 export class ExpBlockParticleCtrl extends BaseCtrl {
     static instance: ExpBlockParticleCtrl = null;
-
-    public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
     private _nodePool: NodePool;
     // 死亡粒子效果根节点
@@ -30,6 +29,10 @@ export class ExpBlockParticleCtrl extends BaseCtrl {
         this.preloadParticle(9);
     }
 
+    public initRootNode() {
+        this.particleRootNode = OBT.instance.uiManager.mountEmptyNode({ nodeName: "ExpBlockParticleBox", parentNode: ProcessManager.instance.particleRootNode });
+    }
+
     public preloadParticle(count: number) {
         for (let i = 0; i < count; i++) {
             let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/ExpBlockParticle" });
@@ -43,9 +46,6 @@ export class ExpBlockParticleCtrl extends BaseCtrl {
     }
 
     public createDieParticle(loc: Vec3, count: number) {
-        if (!this.particleRootNode) {
-            this.particleRootNode = OBT.instance.uiManager.mountEmptyNode({ nodeName: "ExpBlockParticleBox", parentNode: this.rootNode });
-        }
         for (let i = 0; i < count; i++) {
             let particleNode = this._nodePool.get();
             if (!particleNode) {

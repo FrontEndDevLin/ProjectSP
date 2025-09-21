@@ -20,6 +20,7 @@ export class EMYBase extends OBT_Component {
     protected FLASH_COLOR: Color = new Color(0, 255, 255);
     protected NORMAL_COLOR: Color = new Color(255, 255, 255);
     protected spNode: Node;
+    // protected spCompList: SpriteComponent[];
     protected spComp: SpriteComponent;
     protected aniComp: AnimationComponent;
 

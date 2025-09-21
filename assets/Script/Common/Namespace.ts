@@ -315,7 +315,7 @@ export const SCREEN_HEIGHT = 1280;
 // 速度1，实际等于 1*PIXEL_UNIT = 20px/s
 export const PIXEL_UNIT = 20;
 
-export const FLASH_TIME: number = 0.1;
+export const FLASH_TIME: number = 0.06;
 
 export const COLOR = {
   NORMAL: "#F5F5F5",

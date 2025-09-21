@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "6e437388-8971-486e-be6f-aff989a0ad6a",
+  "uuid": "45f854ad-2c61-49db-9c39-f4eb60a247e9",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "PEACE"
+    "syncNodeName": "EMY_Peace"
   }
 }

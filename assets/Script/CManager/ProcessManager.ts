@@ -11,6 +11,7 @@ import DBManager from './DBManager';
 import DropItemManager from './DropItemManager';
 import SaveCtrl from './Class/SaveCtrl';
 import ItemsManager from './ItemsManager';
+import BulletManager from './BulletManager';
 const { ccclass, property } = _decorator;
 
 const LEVEL_UP_TIME: number = 10;
@@ -22,6 +23,11 @@ const PREPARE_TIME: number = 5555;
 export default class ProcessManager extends OBT_UIManager {
     static instance: ProcessManager = null;
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
+
+    public uiRootNode: Node;
+    public particleRootNode: Node;
+    public unitRootNode: Node;
+    public mapRootNode: Node;
 
     // 当前节点 战斗中-升级中-备战中
     public gameNode: GAME_NODE;
@@ -59,6 +65,11 @@ export default class ProcessManager extends OBT_UIManager {
         }
         this.gameConfig = DBManager.instance.getDBData("GameConfig");
 
+        this.mapRootNode = this.mountEmptyNode({ nodeName: "MapRoot" })
+        this.unitRootNode = this.mountEmptyNode({ nodeName: "UnitRoot" });
+        this.particleRootNode = this.mountEmptyNode({ nodeName: "ParticleRoot" });
+        this.uiRootNode = this.mountEmptyNode({ nodeName: "UIRoot" });
+
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_FINISH, this._finishLevelUp, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._checkGameOver, this);
 
@@ -66,10 +77,12 @@ export default class ProcessManager extends OBT_UIManager {
     }
 
     protected initGlobal(isNewGame: boolean) {
-        this._initGUI();
+        this._initMapAndGUI();
+        this._initOtherRootNode();
         this._initSave(isNewGame);
         CHRManager.instance.init(this.saveCtrl.save);
 
+        console.log(this.rootNode.children)
         // TODO: 这里将各个管理的根节点挂载，避免层级问题
     }
     protected initWave() {
@@ -77,13 +90,13 @@ export default class ProcessManager extends OBT_UIManager {
         DropItemManager.instance.initRateMap();
     }
 
-    private _initGUI() {
+    private _initMapAndGUI() {
         MapManager.instance.initMap();
-        CHRManager.instance.initCompass();
-        CHRManager.instance.showCHR();
         GUI_GamePlayManager.instance.initGamePlayGUI();
         GUI_GamePlayManager.instance.initLevelUpGUI();
         GUI_GamePlayManager.instance.initPrepareGUI();
+        CHRManager.instance.initCompass();
+        CHRManager.instance.showCHR();
     }
     private _initSave(isNewGame: boolean) {
         if (isNewGame) {
@@ -96,6 +109,11 @@ export default class ProcessManager extends OBT_UIManager {
             // 需要做读取存档时，判断storage里有没有存档，有则读取存档；没有则读取InitSave.json
             let hasSaveDoc: boolean = false;
         }
+    }
+    private _initOtherRootNode() {
+        EMYManager.instance.initRootNode();
+        BulletManager.instance.initRootNode();
+        DropItemManager.instance.initRootNode();
     }
 
     // 最开始
