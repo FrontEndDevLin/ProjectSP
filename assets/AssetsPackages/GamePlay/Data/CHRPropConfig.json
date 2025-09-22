@@ -65,11 +65,44 @@
             "basic_val": 5,
             "forward_val": true,
             "percent": false
+        },
+        "luck": {
+            "prop": "luck",
+            "txt": "幸运",
+            "basic_val": 0,
+            "forward_val": true,
+            "percent": false
+        },
+        "exp_eff": {
+            "prop": "exp_eff",
+            "txt": "%经验加成",
+            "basic_val": 1,
+            "forward_val": true,
+            "percent": true
+        },
+        "pick_range": {
+            "prop": "pick_range",
+            "txt": "拾取范围",
+            "basic_val": 5,
+            "forward_val": true,
+            "percent": false
         }
     },
     "prop_group": {
-        "major": [],
-        "sub": [],
+        "major": ["hp", "dmg", "range_dmg", "melee_dmg", "range", "atk_spd", "def", "spd", "avd", "luck"],
+        "sub": ["exp_eff", "pick_range"],
         "unvisiable": []
+    },
+    "level_up_config": {
+        "hp": [2, 3, 4, 5],
+        "dmg": [3, 6, 9, 12],
+        "range_dmg": [1, 2, 3, 4],
+        "melee_dmg": [2, 3, 4, 5],
+        "range": [10, 15, 20, 25],
+        "atk_spd": [5, 10, 15, 20],
+        "def": [1, 2, 3, 4],
+        "spd": [3, 6, 9, 12],
+        "avd": [3, 6, 9, 12],
+        "luck": [5, 10, 15, 20]
     }
 }
