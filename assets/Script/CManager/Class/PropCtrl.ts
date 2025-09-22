@@ -3,6 +3,25 @@ import { getRandomNumbers } from "../../Common/utils";
 import OBT from "../../OBT";
 import { BaseCtrl } from "./BaseCtrl";
 
+/**
+ * TODO: 升级逻辑
+ * 根据角色等级决定刷新品质
+ * 1-3 白色
+ * 4 概率蓝色
+ * 5 全蓝
+ * 6-8 概率蓝色
+ * 9 概率紫色
+ * 10 全紫
+ * 11-14 概率白、蓝、紫
+ * 15 全紫
+ * 16-18 概率白、蓝、紫
+ * 19 概率白、蓝、紫、红
+ * 20 全红
+ * 逢5全红、其他都是概率白、蓝、紫、红
+ * 
+ * 考虑不同核心有没有对应的特殊属性(元素伤害？风、冰、火、雷)
+ */
+
 export default class PropCtrl extends BaseCtrl {
     // 基准属性，不可修改
     private _basicProps: CHRInfo.CHRBasicProps;

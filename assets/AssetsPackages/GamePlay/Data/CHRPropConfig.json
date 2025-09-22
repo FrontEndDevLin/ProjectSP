@@ -1,0 +1,75 @@
+{
+    "desc": {
+        "forward_val": "当forward_val为true时, 数据超过0为正向属性。当forward_val为false时, 数据小于0为正向属性"
+    },
+    "prop_def": {
+        "hp": {
+            "prop": "hp",
+            "txt": "生命",
+            "basic_val": 0,
+            "forward_val": true,
+            "percent": false
+        },
+        "dmg": {
+            "prop": "dmg",
+            "txt": "%伤害",
+            "basic_val": 1,
+            "forward_val": true,
+            "percent": true
+        },
+        "range_dmg": {
+            "prop": "range_dmg",
+            "txt": "远程伤害",
+            "basic_val": 0,
+            "forward_val": true,
+            "percent": false
+        },
+        "melee_dmg": {
+            "prop": "melee_dmg",
+            "txt": "近战伤害",
+            "basic_val": 0,
+            "forward_val": true,
+            "percent": false
+        },
+        "range": {
+            "prop": "range",
+            "txt": "范围",
+            "basic_val": 10,
+            "forward_val": true,
+            "percent": false
+        },
+        "atk_spd": {
+            "prop": "atk_spd",
+            "txt": "%攻击速度",
+            "basic_val": 1,
+            "forward_val": true,
+            "percent": true
+        },
+        "def": {
+            "prop": "def",
+            "txt": "防御",
+            "basic_val": 0,
+            "forward_val": true,
+            "percent": false
+        },
+        "spd": {
+            "prop": "spd",
+            "txt": "速度",
+            "basic_val": 5,
+            "forward_val": true,
+            "percent": false
+        },
+        "avd": {
+            "prop": "avd",
+            "txt": "灵活",
+            "basic_val": 5,
+            "forward_val": true,
+            "percent": false
+        }
+    },
+    "prop_group": {
+        "major": [],
+        "sub": [],
+        "unvisiable": []
+    }
+}
