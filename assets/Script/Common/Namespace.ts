@@ -62,7 +62,7 @@ export interface SaveDoc {
     wave: number,
     status: number,
     // 和CHRProp.Prop一样
-    chr_prop: CHRInfo.CHRProps,
+    chr_prop: CHRInfo.PropValMap,
     chr_slot: CHRInfo.CHRSlot
 }
 
@@ -127,6 +127,40 @@ export namespace CHRInfo {
         prop: string,
         value?: number
     }
+
+    export interface Prop {
+        prop: string,
+        txt: string,
+        val: number,
+        basic_val: number,
+        forward_val: boolean,
+        percent: boolean
+    }
+    export interface PropValMap {
+        [prop: string]: number
+    }
+    export interface PropMap {
+        [prop: string]: Prop
+    }
+    export enum GroupKeys {
+        major = 'major',
+        sub = 'sub',
+        unvisiable = 'unvisiable'
+    }
+    export interface PropGroup {
+        major: string[],
+        sub: string[],
+        unvisiable: string[]
+    }
+    export interface QualityConfig {
+        [prop: string]: number[]
+    }
+    export interface PropDBData {
+        prop_def: PropMap,
+        prop_group: PropGroup,
+        quality_config: QualityConfig
+    }
+
     // 角色基础数值支撑属性
     export interface CHRBasicProps {
         basic_dmg: number,

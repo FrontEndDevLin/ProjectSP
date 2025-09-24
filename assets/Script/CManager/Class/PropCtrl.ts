@@ -1,6 +1,7 @@
 import { CHRInfo, COLOR, GamePlayEvent } from "../../Common/Namespace";
 import { getRandomNumbers } from "../../Common/utils";
 import OBT from "../../OBT";
+import DBManager from "../DBManager";
 import { BaseCtrl } from "./BaseCtrl";
 
 /**
@@ -22,47 +23,29 @@ import { BaseCtrl } from "./BaseCtrl";
  * 考虑不同核心有没有对应的特殊属性(元素伤害？风、冰、火、雷)
  */
 
-export default class PropCtrl extends BaseCtrl {
-    // 基准属性，不可修改
-    private _basicProps: CHRInfo.CHRBasicProps;
-    // 可修改
-    private _props: CHRInfo.CHRProps;
+export default class PropCtrl2 extends BaseCtrl {
+    public propDBData: CHRInfo.PropDBData;
+    // 升级时，直接修改propMap里面的数据
+    public propMap: CHRInfo.PropMap;
+    public propGroup: CHRInfo.PropGroup;
+    public qualityConfig: CHRInfo.QualityConfig;
 
     private _curHP: number = 0;
-
-    public propList: CHRInfo.CHRPropsAttr[] = [
-        { prop: "hp", propTxt: "生命", group: "main", value: 0, percent: false, buff_pos: true },
-        { prop: "range", propTxt: "范围", group: "main", value: 0, percent: false, buff_pos: true },
-        { prop: "dmg", propTxt: "伤害", group: "main", value: 0, percent: true, buff_pos: true },
-        { prop: "atk_spd", propTxt: "%攻击速度", group: "main", value: 0, percent: true, buff_pos: true },
-        { prop: "def", propTxt: "防御力", group: "main", value: 0, percent: false, buff_pos: true },
-        { prop: "spd", propTxt: "速度", group: "main", value: 0, percent: false, buff_pos: true },
-        { prop: "avd", propTxt: "%闪避", group: "main", value: 0, percent: false, buff_pos: true },
-        { prop: "exp_eff", propTxt: "%经验加成", group: "sub", value: 0, percent: true, buff_pos: true },
-        { prop: "pick_range", propTxt: "拾取范围", group: "sub", value: 0, percent: false, buff_pos: true }
-    ];
-
-    // able to update props list
-    private _ableUpdatePropsList: string[] = ["hp", "range", "atk_spd", "def", "spd", "avd"];
 
     // 可升级的属性(随机)
     public preUpdateList: CHRInfo.UpdateProp[] = [];
 
-    private _updateList = {
-        hp: [3, 6, 9],
-        range: [20, 40, 60],
-        atk_spd: [3, 6, 9],
-        def: [1, 2, 3],
-        spd: [2, 4, 6],
-        avd: [2, 4, 6]
-    }
-
     constructor() {
         super();
+
+        this.propDBData = DBManager.instance.getDBData("CHRPropConfig");
+        this.propMap = this.propDBData.prop_def;
+        this.propGroup = this.propDBData.prop_group;
+        this.qualityConfig = this.propDBData.quality_config;
     }
 
     public initHP() {
-        let maxHP: number = this._props.hp;
+        let maxHP: number = this.propMap["hp"].val;
         this._curHP = maxHP;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.HP_CHANGE, this._curHP);
     }
@@ -71,7 +54,7 @@ export default class PropCtrl extends BaseCtrl {
             return;
         }
         if (n > 0) {
-            let maxHP: number = this._props.hp;
+            let maxHP: number = this.propMap["hp"].val;
             if (this._curHP === maxHP) {
                 return;
             }
@@ -85,63 +68,58 @@ export default class PropCtrl extends BaseCtrl {
         return this._curHP;
     }
 
-    private _getPropInfo(propKey: string): CHRInfo.CHRPropsAttr {
-        let targetProp: CHRInfo.CHRPropsAttr;
-        for (let props of this.propList) {
-            if (props.prop === propKey) {
-                targetProp = props;
-                break;
+    private _getPropInfo(propKey: string): CHRInfo.Prop {
+        return this.propMap[propKey];
+    }
+    // new ..
+    public getPropBasicValue(propKey: string) {
+        return this.propMap[propKey].basic_val;
+    }
+    public getPropValue(propKey: string) {
+        return this.propMap[propKey].val;
+    }
+
+    private _getPropsList(group?: CHRInfo.GroupKeys): CHRInfo.Prop[] {
+        const propList: CHRInfo.Prop[] = [];
+        const propKeyList: string[] = this.propGroup[group];
+        propKeyList.forEach(propKey => {
+            propList.push(this.propMap[propKey])
+        });
+        return propList;
+    }
+    public getMainPropsList() {
+        return this._getPropsList(CHRInfo.GroupKeys.major);
+    }
+    public getSubPropsList() {
+        return this._getPropsList(CHRInfo.GroupKeys.sub);
+    }
+
+    // private _syncPropList() {
+    //     this.propList.forEach(propAttr => {
+    //         propAttr.value = this._props[propAttr.prop];
+    //     });
+    // }
+
+    public initProps(props: CHRInfo.PropValMap) {
+        console.log(props)
+        for (let prop in props) {
+            if (this.propMap[prop]) {
+                this.propMap[prop].val = props[prop];
             }
         }
-        return targetProp;
-    }
 
-    private _getPropsList(group?: string): CHRInfo.CHRPropsAttr[] {
-        const propsList: CHRInfo.CHRPropsAttr[] = [];
-        this.propList.forEach(propItem => {
-            if (group) {
-                if (propItem.group === group) {
-                    propsList.push(propItem);
-                }
-            } else {
-                propsList.push(propItem);
-            }
-        });
-        return propsList;
-    }
-
-    private _syncPropList() {
-        this.propList.forEach(propAttr => {
-            propAttr.value = this._props[propAttr.prop];
-        });
-    }
-
-    public initProps(basicProps: CHRInfo.CHRBasicProps, props: CHRInfo.CHRProps) {
-        this._basicProps = basicProps;
         // 保存对存档数据的引用，修改这里即可同步修改到存档
-        this._props = props;
-        this._syncPropList();
-    }
-
-    public getPropValue(propKey: string) {
-        let basicVal: number = this._basicProps[`basic_${propKey}`];
-        return basicVal ? basicVal + this._props[propKey] : this._props[propKey];
-    }
-
-    public getMainPropsList() {
-        return this._getPropsList("main");
-    }
-
-    public getSubPropsList() {
-        return this._getPropsList("sub");
+        // this._syncPropList();
     }
 
     private _getPreUpdateProps(): string[] {
-        let randomIdxList: number[] = getRandomNumbers(0, this._ableUpdatePropsList.length - 1, 3);
+        // 主要属性才可升级
+        let majorProps: string[] = this.propGroup[CHRInfo.GroupKeys.major];
+        let randomIdxList: number[] = getRandomNumbers(0, majorProps.length - 1, 3);
         let props: string[] = [];
         for (let i = 0; i < randomIdxList.length; i++) {
             let idx: number = randomIdxList[i];
-            props.push(this._ableUpdatePropsList[idx]);
+            props.push(majorProps[idx]);
         }
         return props;
     }
@@ -150,18 +128,20 @@ export default class PropCtrl extends BaseCtrl {
     public refreshPreUpdateList() {
         let props: string[] = this._getPreUpdateProps();
         const list: CHRInfo.UpdateProp[] = [];
+        // TODO: level结合当前等级计算
+        let level = 1;
         // TODO: 每一个主要属性设计一个图标，在这里可以返回，UI界面可以显示
-        props.forEach(propKey => {
-            let propInfo: CHRInfo.CHRPropsAttr = this._getPropInfo(propKey);
+        props.forEach(prop => {
+            let propInfo: CHRInfo.Prop = this._getPropInfo(prop);
             list.push({
-                prop: propKey,
-                propTxt: propInfo.propTxt,
+                prop,
+                propTxt: propInfo.txt,
                 icon: "",
-                level: 1,   // 品质
+                level,   // 品质
                 // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
-                value: this._updateList[propKey][0],
+                value: this.qualityConfig[prop][0],
                 // pos: true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
-                // percent: true -> 
+                // percent: propInfo.percent
             })
         })
 
@@ -171,7 +151,7 @@ export default class PropCtrl extends BaseCtrl {
     }
 
     public levelUpProp(propKey: string): boolean {
-        if (this._ableUpdatePropsList.indexOf(propKey) === -1) {
+        if (this.propGroup[CHRInfo.GroupKeys.major].indexOf(propKey) === -1) {
             return false;
         }
         if (!this.preUpdateList.length) {
@@ -180,7 +160,7 @@ export default class PropCtrl extends BaseCtrl {
         // let prop: CHRInfo.UpdateProp;
         for (let item of this.preUpdateList) {
             if (item.prop === propKey) {
-                this._props[propKey] += item.value;
+                this.propMap[propKey].val += item.value;
                 break;
             }
         }
@@ -188,7 +168,7 @@ export default class PropCtrl extends BaseCtrl {
         // 选择一个升级属性后不可再继续升级，所以清空
         this.preUpdateList = [];
 
-        this._syncPropList();
+        // this._syncPropList();
 
         return true;
     }
@@ -198,7 +178,7 @@ export default class PropCtrl extends BaseCtrl {
         let txt: string = "";
         let buffType: string = buff.type || "prop";
         if (buffType === "prop") {
-            let prop: CHRInfo.CHRPropsAttr = this._getPropInfo(buff.prop);
+            let prop: CHRInfo.Prop = this._getPropInfo(buff.prop);
             let oValue: number = buff.value;
             let value: string = `${oValue}`;
             if (oValue > 0) {
@@ -210,7 +190,7 @@ export default class PropCtrl extends BaseCtrl {
             }
             
             let color: string = this.getBuffTxtColor(buff);
-            txt = `<color=${color}>${value}</color>${prop.propTxt}`;
+            txt = `<color=${color}>${value}</color>${prop.txt}`;
         } else if (buffType === "event") {
             // let scriptName: string = buff.script;
             // txt = getScriptTypeItems(scriptName).getBuffTxt();
@@ -218,20 +198,20 @@ export default class PropCtrl extends BaseCtrl {
         return txt;
     }
     public getBuffTxtColor(buff: CHRInfo.Buff): string {
-        let prop: CHRInfo.CHRPropsAttr = this._getPropInfo(buff.prop);
+        let prop: CHRInfo.Prop = this._getPropInfo(buff.prop);
         let value = buff.value;
-        let buff_pos: boolean = prop.buff_pos;
+        let forward_val: boolean = prop.forward_val;
         let color: string = "";
         if (value === 0) {
             color = COLOR.NORMAL;
         } else if (value > 0) {
-            if (buff_pos) {
+            if (forward_val) {
                 color = COLOR.SUCCESS;
             } else {
                 color = COLOR.DANGER;
             }
         } else {
-            if (buff_pos) {
+            if (forward_val) {
                 color = COLOR.DANGER;
             } else {
                 color = COLOR.SUCCESS;

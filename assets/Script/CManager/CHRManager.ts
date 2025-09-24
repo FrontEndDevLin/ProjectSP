@@ -54,9 +54,9 @@ export default class CHRManager extends OBT_UIManager {
         this._levelCtrl.initLevel(level);
     }
 
-    private _initProps(props: CHRInfo.CHRProps) {
+    private _initProps(props: CHRInfo.PropValMap) {
         this.propCtx = new PropCtrl();
-        this.propCtx.initProps(this.CHRDBData.basic_props, props);
+        this.propCtx.initProps(props);
     }
 
     private _initCurrency() {

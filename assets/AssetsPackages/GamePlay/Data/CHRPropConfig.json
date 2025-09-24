@@ -6,6 +6,7 @@
         "hp": {
             "prop": "hp",
             "txt": "生命",
+            "val": 0,
             "basic_val": 0,
             "forward_val": true,
             "percent": false
@@ -13,6 +14,7 @@
         "dmg": {
             "prop": "dmg",
             "txt": "%伤害",
+            "val": 0,
             "basic_val": 1,
             "forward_val": true,
             "percent": true
@@ -20,6 +22,7 @@
         "range_dmg": {
             "prop": "range_dmg",
             "txt": "远程伤害",
+            "val": 0,
             "basic_val": 0,
             "forward_val": true,
             "percent": false
@@ -27,6 +30,7 @@
         "melee_dmg": {
             "prop": "melee_dmg",
             "txt": "近战伤害",
+            "val": 0,
             "basic_val": 0,
             "forward_val": true,
             "percent": false
@@ -34,6 +38,7 @@
         "range": {
             "prop": "range",
             "txt": "范围",
+            "val": 0,
             "basic_val": 10,
             "forward_val": true,
             "percent": false
@@ -41,6 +46,7 @@
         "atk_spd": {
             "prop": "atk_spd",
             "txt": "%攻击速度",
+            "val": 0,
             "basic_val": 1,
             "forward_val": true,
             "percent": true
@@ -48,6 +54,7 @@
         "def": {
             "prop": "def",
             "txt": "防御",
+            "val": 0,
             "basic_val": 0,
             "forward_val": true,
             "percent": false
@@ -55,6 +62,7 @@
         "spd": {
             "prop": "spd",
             "txt": "速度",
+            "val": 0,
             "basic_val": 5,
             "forward_val": true,
             "percent": false
@@ -62,6 +70,7 @@
         "avd": {
             "prop": "avd",
             "txt": "灵活",
+            "val": 0,
             "basic_val": 5,
             "forward_val": true,
             "percent": false
@@ -69,6 +78,7 @@
         "luck": {
             "prop": "luck",
             "txt": "幸运",
+            "val": 0,
             "basic_val": 0,
             "forward_val": true,
             "percent": false
@@ -76,6 +86,7 @@
         "exp_eff": {
             "prop": "exp_eff",
             "txt": "%经验加成",
+            "val": 0,
             "basic_val": 1,
             "forward_val": true,
             "percent": true
@@ -83,6 +94,7 @@
         "pick_range": {
             "prop": "pick_range",
             "txt": "拾取范围",
+            "val": 0,
             "basic_val": 5,
             "forward_val": true,
             "percent": false
@@ -93,7 +105,7 @@
         "sub": ["exp_eff", "pick_range"],
         "unvisiable": []
     },
-    "level_up_config": {
+    "quality_config": {
         "hp": [2, 3, 4, 5],
         "dmg": [3, 6, 9, 12],
         "range_dmg": [1, 2, 3, 4],
