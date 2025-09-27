@@ -17,9 +17,9 @@ export class CHRAttrItem extends OBT_Component {
     }
 
     private _updateView() {
-        const prop: CHRInfo.CHRPropsAttr = this.node.OBT_param1;
-        this.view("Label").getComponent(Label).string = `${prop.propTxt}`;
-        this.view("Value").getComponent(Label).string = `${prop.value}`;
+        const prop: CHRInfo.Prop = this.node.OBT_param1;
+        this.view("Label").getComponent(Label).string = `${prop.txt}`;
+        this.view("Value").getComponent(Label).string = `${prop.val}`;
     }
 
     protected onDestroy(): void {

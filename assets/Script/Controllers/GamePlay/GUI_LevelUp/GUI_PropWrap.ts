@@ -51,13 +51,13 @@ export class GUI_PropWrap extends OBT_Component {
     private _initCHRAttrCard() {
         this.hideNodeByPath("Board/SubBoardWrap");
 
-        const groupPropsList: CHRInfo.CHRPropsAttr[][] = [CHRManager.instance.propCtx.getMainPropsList(), CHRManager.instance.propCtx.getSubPropsList()];
-        groupPropsList.forEach((propsList: CHRInfo.CHRPropsAttr[], groupIdx: number) => {
+        const groupPropsList: CHRInfo.Prop[][] = [CHRManager.instance.propCtx.getMainPropsList(), CHRManager.instance.propCtx.getSubPropsList()];
+        groupPropsList.forEach((propsList: CHRInfo.Prop[], groupIdx: number) => {
             let parentNodePath: string = "Board/MainBoardWrap";
             if (groupIdx === 1) {
                 parentNodePath = "Board/SubBoardWrap";
             }
-            propsList.forEach((prop, i: number) => {
+            propsList.forEach((prop: CHRInfo.Prop, i: number) => {
                 const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/CHRAttrItem" });
                 propNode.OBT_param1 = prop;
                 OBT.instance.uiManager.mountNode({ node: propNode, parentNode: this.view(parentNodePath) });
