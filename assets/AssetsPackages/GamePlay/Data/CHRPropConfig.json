@@ -37,11 +37,11 @@
         },
         "range": {
             "prop": "range",
-            "txt": "范围",
+            "txt": "%范围",
             "val": 0,
             "basic_val": 10,
             "forward_val": true,
-            "percent": false
+            "percent": true
         },
         "atk_spd": {
             "prop": "atk_spd",
@@ -61,11 +61,11 @@
         },
         "spd": {
             "prop": "spd",
-            "txt": "速度",
+            "txt": "%速度",
             "val": 0,
-            "basic_val": 5,
+            "basic_val": 8,
             "forward_val": true,
-            "percent": false
+            "percent": true
         },
         "avd": {
             "prop": "avd",

@@ -31,7 +31,7 @@ export class CHR extends OBT_Component {
         this._collider = this.node.getComponent(BoxCollider2D);
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
-        this._baseSpd = CHRManager.instance.propCtx.getPropValue("spd");
+        this._baseSpd = CHRManager.instance.propCtx.getPropRealValue("spd");
 
         WarCoreManager.instance.setWarCoreRootNode(this.view("Pic"));
         WarCoreManager.instance.mountAtkWarCore(getSaveCtrl().save.chr_slot.atk_core);
@@ -48,7 +48,7 @@ export class CHR extends OBT_Component {
         this._vector = vector;
     }
     private _initPickRangeCollider() {
-        let pickRange: number = CHRManager.instance.propCtx.getPropValue("pick_range");
+        let pickRange: number = CHRManager.instance.propCtx.getPropRealValue("pick_range");
         // let increasePickRange: number = getCharacterPropValue("pick_range");
         let increasePickRange: number = 0;
         this._pickRangeCollider.radius = (pickRange + (pickRange * increasePickRange)) * PIXEL_UNIT;

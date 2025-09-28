@@ -1,5 +1,5 @@
 import { CHRInfo, COLOR, GamePlayEvent } from "../../Common/Namespace";
-import { getRandomNumbers } from "../../Common/utils";
+import { getFloatNumber, getRandomNumbers } from "../../Common/utils";
 import OBT from "../../OBT";
 import DBManager from "../DBManager";
 import { BaseCtrl } from "./BaseCtrl";
@@ -77,6 +77,24 @@ export default class PropCtrl2 extends BaseCtrl {
     }
     public getPropValue(propKey: string) {
         return this.propMap[propKey].val;
+    }
+    public getPropRealValue(propKey: string): number {
+        let prop: CHRInfo.Prop = this._getPropInfo(propKey);
+        let basicVal: number = prop.basic_val;
+        let val: number = prop.val;
+        if (basicVal === 0) {
+            if (prop.percent) {
+                // 应该不会存在百分比类型的属性，但基础值为0的情况
+            } else {
+                return val;
+            }
+        } else {
+            if (prop.percent) {
+                return getFloatNumber(basicVal + basicVal * val / 100, 4);
+            } else {
+                return basicVal + val;
+            }
+        }
     }
 
     private _getPropsList(group?: CHRInfo.GroupKeys): CHRInfo.Prop[] {
