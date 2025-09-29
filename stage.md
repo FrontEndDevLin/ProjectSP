@@ -68,6 +68,20 @@
   属性绑定角色
 
 
+"hp": 6, done
+"dmg": 100, done
+"range_dmg": 0,
+"melee_dmg": 0,
+"range": 0,
+"atk_spd": 0, done
+"def": 0,
+"spd": 0, done
+"avd": 0,
+"luck": 0,
+"exp_eff": 0, done
+"pick_range": 0
+
+
 阶段5(波次2)
 
 阶段n(进化数据设计)

@@ -1,5 +1,7 @@
 import { GamePlayEvent } from "../../Common/Namespace";
+import { getFloatNumber } from "../../Common/utils";
 import OBT from "../../OBT";
+import CHRManager from "../CHRManager";
 import { BaseCtrl } from "./BaseCtrl";
 import { getSaveCtrl } from "./SaveCtrl";
 
@@ -47,9 +49,14 @@ export default class LevelCtrl extends BaseCtrl {
     }
 
     public addExp(n: number) {
-        // TODO: n要经过经验获取效率的修正
-        n += 2;
-        this.expCurrent += n;
+        if (n <= 0) {
+            return;
+        }
+        // n经过经验获取效率的修正
+        let expEffVal: number = CHRManager.instance.propCtx.getPropRealValue("exp_eff");
+        let relExp: number = getFloatNumber(n * expEffVal, 2);
+
+        this.expCurrent += relExp;
         let c: number = this.expCurrent - this.expTotal;
         if (c >= 0) {
             this._levelUp();

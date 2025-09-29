@@ -4,7 +4,7 @@ import { EMYInfo, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import BulletManager from '../../../CManager/BulletManager';
-import { getVectorByAngle } from '../../../Common/utils';
+import { getFloatNumber, getVectorByAngle } from '../../../Common/utils';
 import ProcessManager from '../../../CManager/ProcessManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 const { ccclass, property } = _decorator;
@@ -155,8 +155,12 @@ export class BaseWarCore extends OBT_Component {
             // 向量要根据贴图的旋转角度计算
             BulletManager.instance.createBullet("CHR_Bullet001", chrLoc, vector);
             // this._attacking = true;
-            // this._cd = this.weaponPanel.atk_spd;
-            this._cd = WarCoreManager.instance.atkWarCore.cd;
+
+            // 冷却结合攻击速度修正
+            let cd: number = WarCoreManager.instance.atkWarCore.cd;
+            let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
+            let realCd: number = getFloatNumber(cd / atkSpdVal, 3);
+            this._cd = realCd;
         });
     }
 

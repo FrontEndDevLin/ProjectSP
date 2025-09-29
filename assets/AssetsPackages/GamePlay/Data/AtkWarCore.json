@@ -12,6 +12,6 @@
         "icon_gaming": "...",
         "bullet": "CHR_Bullet001",
         "range": 8,
-        "cd": 0.2
+        "cd": 0.4
     }
 }

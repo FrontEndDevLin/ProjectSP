@@ -80,7 +80,7 @@ export class TrophyBlock extends OBT_Component {
         let crtLoc: Vec3 = CHRManager.instance.getCHRLoc();
         let nodeLoc: Vec3 = this.node.position;
         let dis: number = getDistance(nodeLoc, crtLoc);
-        if (dis <= 3) {
+        if (dis <= 20) {
             switch (this._quality) {
                 case ItemInfo.TROPHY_TYPE.CHEST: {
                     // TODO: 去道具管理类生成一个宝箱
@@ -96,7 +96,7 @@ export class TrophyBlock extends OBT_Component {
             return;
         }
 
-        let speed = dt * 10 * PIXEL_UNIT;
+        let speed = dt * 24 * PIXEL_UNIT;
         let vector: Vec3 = v3(crtLoc.x - nodeLoc.x, crtLoc.y - nodeLoc.y).normalize();
         let newPos: Vec3 = nodeLoc.add(new Vec3(vector.x * speed, vector.y * speed));
         this.node.setPosition(newPos);
