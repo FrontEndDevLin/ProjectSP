@@ -1,8 +1,8 @@
 import { _decorator, Color, Component, EventTouch, Label, Node, Sprite } from 'cc';
-import OBT_Component from '../../../OBT_Component';
-import { CHRInfo, GamePlayEvent } from '../../../Common/Namespace';
-import CHRManager from '../../../CManager/CHRManager';
-import OBT from '../../../OBT';
+import OBT_Component from '../../OBT_Component';
+import { CHRInfo, GamePlayEvent } from '../../Common/Namespace';
+import CHRManager from '../../CManager/CHRManager';
+import OBT from '../../OBT';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prop')
@@ -16,6 +16,9 @@ export class GUI_Prop extends OBT_Component {
         });
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_INIT, this._initCHRAttrCard, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_UI, this._showPropUI, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._hidePropUI, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._hidePropUI, this);
 
         this.view("Mask").on(Node.EventType.TOUCH_END, this._touchMask, this);
 
@@ -62,7 +65,7 @@ export class GUI_Prop extends OBT_Component {
                 parentNodePath = "GUI_PropWrap/Board/SubBoardWrap";
             }
             propsList.forEach((prop: CHRInfo.Prop, i: number) => {
-                const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/CHRAttrItem" });
+                const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prop/CHRAttrItem" });
                 propNode.OBT_param1 = prop;
                 OBT.instance.uiManager.mountNode({ node: propNode, parentNode: this.view(parentNodePath) });
             })
@@ -74,6 +77,15 @@ export class GUI_Prop extends OBT_Component {
 
     private _touchMask(e: EventTouch) {
         OBT.instance.eventCenter.emit(GamePlayEvent.GUI.HIDE_PROP_UI);
+    }
+
+    private _showPropUI() {
+        // this._hideMask();
+        this.showNodeByPath();
+    }
+    private _hidePropUI() {
+        // this._showMask();
+        this.hideNodeByPath();
     }
 
     protected onDestroy(): void {

@@ -47,6 +47,7 @@ export namespace GamePlayEvent {
         SHOW_GAME_PLAY = 100,
         HIDE_GAME_PLAY,
         SHOW_LEVEL_UP_UI,
+        HIDE_LEVEL_UP_UI,
         SHOW_PROP_UI,
         HIDE_PROP_UI
     }

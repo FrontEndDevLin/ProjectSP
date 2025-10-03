@@ -58,7 +58,7 @@ export class GUI_PropWrap extends OBT_Component {
                 parentNodePath = "Board/SubBoardWrap";
             }
             propsList.forEach((prop: CHRInfo.Prop, i: number) => {
-                const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/CHRAttrItem" });
+                const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prop/CHRAttrItem" });
                 propNode.OBT_param1 = prop;
                 OBT.instance.uiManager.mountNode({ node: propNode, parentNode: this.view(parentNodePath) });
             })

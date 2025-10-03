@@ -92,7 +92,8 @@ export default class ProcessManager extends OBT_UIManager {
         MapManager.instance.initMap();
         CHRManager.instance.initCompass();
         GUI_GamePlayManager.instance.initGamePlayGUI();
-        // GUI_GamePlayManager.instance.initLevelUpGUI();
+        GUI_GamePlayManager.instance.initLevelUpGUI();
+        GUI_GamePlayManager.instance.initPropGUI();
         GUI_GamePlayManager.instance.initPrepareGUI();
         CHRManager.instance.showCHR();
     }

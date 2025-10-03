@@ -42,13 +42,11 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.STORAGE_CHANGE, this._updateStorage, this);
 
-        this.view("GUI_LevelUp").addComponent("GUI_LevelUp");
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_LEVEL_UP_UI, this._showMask, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_LEVEL_UP_UI, this._hideMask, this);
 
-        this.view("GUI_Prop").addComponent("GUI_Prop");
-        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_UI, this._showPropUI, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._hidePropUI, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._hidePropUI, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showMask, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_UI, this._hideMask, this);
     }
 
     start() {
@@ -99,15 +97,6 @@ export class GUI_GamePlay extends OBT_Component {
     }
     private _hideMask() {
         this.view("Mask").setPosition(v3(3000, 0, 0));
-    }
-
-    private _showPropUI() {
-        this._hideMask();
-        this.showNodeByPath("GUI_Prop");
-    }
-    private _hidePropUI() {
-        this._showMask();
-        this.hideNodeByPath("GUI_Prop");
     }
 
     protected onDestroy(): void {

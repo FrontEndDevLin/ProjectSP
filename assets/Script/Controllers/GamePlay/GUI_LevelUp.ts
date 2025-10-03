@@ -21,10 +21,9 @@ export class GUI_LevelUp extends OBT_Component {
 
         // this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
 
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._levelUpTimeInit, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._levelUpDeadTime, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIMEOUT, this._levelUpTimeout, this);
-
-        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_LEVEL_UP_UI, this._showLevelUpUI, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE, this._updateLevelUpCard, this);
 
@@ -37,7 +36,6 @@ export class GUI_LevelUp extends OBT_Component {
 
     private _showLevelUpUI() {
         this.showNodeByPath();
-        this.view("Bottom/Link").active = true;
     }
 
     private _showPropUI() {
@@ -55,6 +53,10 @@ export class GUI_LevelUp extends OBT_Component {
             levelUpCard.OBT_param1 = updateProp;
             OBT.instance.uiManager.mountNode({ node: levelUpCard, parentNode: cardSlotList[i] });
         })
+    }
+
+    private _levelUpTimeInit() {
+        this.view("Bottom/Link").active = true;
     }
 
     private _levelUpDeadTime() {
