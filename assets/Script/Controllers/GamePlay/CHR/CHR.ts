@@ -7,6 +7,7 @@ import WarCoreManager from '../../../CManager/WarCoreManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import { getSaveCtrl } from '../../../CManager/Class/SaveCtrl';
 import DamageManager from '../../../CManager/DamageManager';
+import { getRandomNumber } from '../../../Common/utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -49,9 +50,7 @@ export class CHR extends OBT_Component {
     }
     private _initPickRangeCollider() {
         let pickRange: number = CHRManager.instance.propCtx.getPropRealValue("pick_range");
-        // let increasePickRange: number = getCharacterPropValue("pick_range");
-        let increasePickRange: number = 0;
-        this._pickRangeCollider.radius = (pickRange + (pickRange * increasePickRange)) * PIXEL_UNIT;
+        this._pickRangeCollider.radius = pickRange;
         this._pickRangeCollider.on(Contact2DType.BEGIN_CONTACT, this._onPickDomainBeginContact, this);
     }
     private _onPickDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
@@ -77,9 +76,28 @@ export class CHR extends OBT_Component {
             if (otherCollider.tag === GameCollider.TAG.PEACE) {
                 return;
             }
-            let enemyId: string = otherCollider.node.name;
-            let damage = DamageManager.instance.calcEnemyDamage(enemyId);
-            CHRManager.instance.propCtx.addHP(-damage);
+            // 根据角色闪避属性，决定是否受击
+            let avdVal: number = CHRManager.instance.propCtx.getPropRealValue("avd");
+            let isHit: boolean = true;
+            if (avdVal > 0) {
+                if (avdVal > 60) {
+                    avdVal = 60;
+                }
+                let randomNum = getRandomNumber(1, 100);
+                // 打不中
+                if (randomNum <= avdVal) {
+                    isHit = false;
+                }
+            }
+
+            if (isHit) {
+                let enemyId: string = otherCollider.node.name;
+                let damage = DamageManager.instance.calcEnemyDamage(enemyId);
+                CHRManager.instance.propCtx.addHP(-damage);
+            } else {
+                // 通知伤害数字管理，跳出“闪避”字样
+                console.log('触发闪避')
+            }
         }
         if (otherCollider.group === GameCollider.GROUP.DROP_ITEM) {
             switch (otherCollider.tag) {
@@ -105,8 +123,7 @@ export class CHR extends OBT_Component {
         // }
         
         // let spd = this._baseSpd + getCharacterPropValue("spd") * this._baseSpd;
-        let gamePlaySpd = this._baseSpd;
-        let speed = dt * gamePlaySpd * PIXEL_UNIT;
+        let speed = dt * this._baseSpd;
         let newPosition = this.node.position.add(new Vec3(this._vector.x * speed, this._vector.y * speed));
 
         let thresholdX = SCREEN_WIDTH / 2;

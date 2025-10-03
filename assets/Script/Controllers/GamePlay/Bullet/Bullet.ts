@@ -1,7 +1,7 @@
 import { _decorator, BoxCollider2D, Component, Contact2DType, Node, Sprite, v3, Vec3 } from 'cc';
 // import { BulletAttr, BulletInitParams } from '../../Interface';
 import OBT_Component from '../../../OBT_Component';
-import { BulletInfo, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
+import { BulletInfo, GameCollider } from '../../../Common/Namespace';
 import { getDistance } from '../../../Common/utils';
 import BulletManager from '../../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
@@ -55,7 +55,7 @@ export class Bullet extends OBT_Component {
 
         this._attr = attr;
         this._vector = vector;
-        this._maxDisPx = attr.max_dis * PIXEL_UNIT;
+        this._maxDisPx = attr.max_dis;
         this._piercing = attr.piercing;
         // 子弹运动
         this._init = true;
@@ -89,8 +89,8 @@ export class Bullet extends OBT_Component {
         if (!this._init || !this._alive) {
             return;
         }
-        let ax = dt * this._attr.speed * this._vector.x * PIXEL_UNIT;
-        let ay = dt * this._attr.speed * this._vector.y * PIXEL_UNIT;
+        let ax = dt * this._attr.speed * this._vector.x;
+        let ay = dt * this._attr.speed * this._vector.y;
         let { x, y } = this.node.position;
         let newLoc = v3(x + ax, y + ay);
         // 如果两点之间距离超过_maxDisPx，销毁

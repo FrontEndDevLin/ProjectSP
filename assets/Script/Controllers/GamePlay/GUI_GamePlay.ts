@@ -2,7 +2,7 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, Component, Label, Node, UITransform, Widget } from 'cc';
+import { _decorator, Component, Label, Node, UITransform, v3, Widget } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
@@ -25,6 +25,10 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._updateCountdownView, this);
 
+        // 升级倒计时
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._updateCountdownView, this);
+
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.EXP_CHANGE, this._updateExpBar, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._updateHPBar, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP, this._updateLevel, this);
@@ -37,6 +41,14 @@ export class GUI_GamePlay extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.STORAGE_CHANGE, this._updateStorage, this);
+
+        this.view("GUI_LevelUp").addComponent("GUI_LevelUp");
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_LEVEL_UP_UI, this._showMask, this);
+
+        this.view("GUI_Prop").addComponent("GUI_Prop");
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_UI, this._showPropUI, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._hidePropUI, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._hidePropUI, this);
     }
 
     start() {
@@ -72,7 +84,7 @@ export class GUI_GamePlay extends OBT_Component {
         this.view("CHRStatus/EXPWrap/EXPProg").getComponent(UITransform).width = expBarWidth;
     }
     private _updateLevel() {
-        this.view("CHRStatus/Level/Val").getComponent(Label).string = `${CHRManager.instance.getLevel()}`;
+        this.view("CHRStatus/EXPWrap/Level/Val").getComponent(Label).string = `${CHRManager.instance.getLevel()}`;
     }
 
     private _updateCurrency() {
@@ -80,6 +92,22 @@ export class GUI_GamePlay extends OBT_Component {
     }
     private _updateStorage() {
         this.view("CHRStatus/Collect/Storage/Val").getComponent(Label).string = `${CHRManager.instance.currencyCtrl.getStorage()}`;
+    }
+
+    private _showMask() {
+        this.view("Mask").setPosition(v3(0, 0, 0));
+    }
+    private _hideMask() {
+        this.view("Mask").setPosition(v3(3000, 0, 0));
+    }
+
+    private _showPropUI() {
+        this._hideMask();
+        this.showNodeByPath("GUI_Prop");
+    }
+    private _hidePropUI() {
+        this._showMask();
+        this.hideNodeByPath("GUI_Prop");
     }
 
     protected onDestroy(): void {

@@ -2,7 +2,7 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, Color, Component, EventTouch, Game, Label, Node, Sprite, UITransform, Widget } from 'cc';
+import { _decorator, Color, Component, EventTouch, Game, Label, Node, Sprite, UITransform, v3, Widget } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
@@ -17,18 +17,32 @@ export class GUI_LevelUp extends OBT_Component {
     protected onLoad(): void {
         // this._initCHRAttrCard();
 
-        this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
+        // this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
 
-        this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
+        // this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._updateCountdownView, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._levelUpDeadTime, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIMEOUT, this._levelUpTimeout, this);
 
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_LEVEL_UP_UI, this._showLevelUpUI, this);
+
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE, this._updateLevelUpCard, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showLevelUpUI, this);
+        this.view("Bottom/Link").on(Node.EventType.TOUCH_END, this._showPropUI, this);
     }
 
     start() {
+    }
+
+    private _showLevelUpUI() {
+        this.showNodeByPath();
+        this.view("Bottom/Link").active = true;
+    }
+
+    private _showPropUI() {
+        this.hideNodeByPath();
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PROP_UI);
     }
 
     private _updateLevelUpCard() {
@@ -43,8 +57,11 @@ export class GUI_LevelUp extends OBT_Component {
         })
     }
 
-    private _updateCountdownView(duration) {
-        this.view("Container/TopBar/Countdown").getComponent(Label).string = duration;
+    private _levelUpDeadTime() {
+        // 如果快超时了还停留在属性界面，切换回升级界面，隐藏“查看属性”入口
+        this._showLevelUpUI();
+
+        this.view("Bottom/Link").active = false;
     }
 
     private _levelUpTimeout() {

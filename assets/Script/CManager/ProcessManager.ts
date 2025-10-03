@@ -14,7 +14,7 @@ import ItemsManager from './ItemsManager';
 import BulletManager from './BulletManager';
 const { ccclass, property } = _decorator;
 
-const LEVEL_UP_TIME: number = 10;
+const LEVEL_UP_TIME: number = 5555;
 const PREPARE_TIME: number = 5555;
 
 /**
@@ -81,8 +81,6 @@ export default class ProcessManager extends OBT_UIManager {
         this._initOtherRootNode();
         this._initSave(isNewGame);
         CHRManager.instance.init(this.saveCtrl.save);
-
-        console.log(this.rootNode.children)
         // TODO: 这里将各个管理的根节点挂载，避免层级问题
     }
     protected initWave() {
@@ -92,10 +90,10 @@ export default class ProcessManager extends OBT_UIManager {
 
     private _initMapAndGUI() {
         MapManager.instance.initMap();
-        GUI_GamePlayManager.instance.initGamePlayGUI();
-        GUI_GamePlayManager.instance.initLevelUpGUI();
-        GUI_GamePlayManager.instance.initPrepareGUI();
         CHRManager.instance.initCompass();
+        GUI_GamePlayManager.instance.initGamePlayGUI();
+        // GUI_GamePlayManager.instance.initLevelUpGUI();
+        GUI_GamePlayManager.instance.initPrepareGUI();
         CHRManager.instance.showCHR();
     }
     private _initSave(isNewGame: boolean) {
@@ -149,8 +147,8 @@ export default class ProcessManager extends OBT_UIManager {
     }
     private _passWave() {
         this.gameNode = GAME_NODE.PASS_FIGHT;
+        CHRManager.instance.hideCompass();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_PASS);
-
         EMYManager.instance.removeAllEnemy();
         DropItemManager.instance.resRecovery();
     }
@@ -208,7 +206,7 @@ export default class ProcessManager extends OBT_UIManager {
     private _nextStep() {
         switch (this.gameNode) {
             case GAME_NODE.LEVEL_UP: {
-                GUI_GamePlayManager.instance.hideGamePlayGUI();
+                // GUI_GamePlayManager.instance.hideGamePlayGUI();
                 CHRManager.instance.propCtx.refreshPreUpdateList();
                 GUI_GamePlayManager.instance.showLevelUpGUI();
                 this._levelUpDuration = LEVEL_UP_TIME;
@@ -271,7 +269,12 @@ export default class ProcessManager extends OBT_UIManager {
                 this._levelUpSecond += dt;
                 if (this._levelUpSecond >= 1) {
                     this._levelUpSecond -= 1;
+                    
                     this._levelUpDuration -= 1;
+                    if (this._levelUpDuration === 5) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME);
+                    }
+
                     OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._levelUpDuration);
 
                     if (this._levelUpDuration <= 0) {

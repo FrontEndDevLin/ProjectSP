@@ -9,8 +9,8 @@
         "prefab": "CHR_Bullet001",
         "type": "bullet",
         "script": "Bullet",
-        "speed": 24,
-        "max_dis": 10,
+        "speed": 480,
+        "max_dis": 200,
         "piercing": 1,
         "damage": 3,
         "cld": 500

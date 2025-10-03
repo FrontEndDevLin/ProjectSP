@@ -143,7 +143,7 @@ export class EMYBase extends OBT_Component {
      */
     protected move(dt) {
         let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
-        let speed = dt * this.props.spd * PIXEL_UNIT;
+        let speed = dt * this.props.spd;
         let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
         let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
         this.node.setPosition(newPos);

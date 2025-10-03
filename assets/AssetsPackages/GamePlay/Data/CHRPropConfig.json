@@ -63,7 +63,7 @@
             "prop": "spd",
             "txt": "%速度",
             "val": 0,
-            "basic_val": 8,
+            "basic_val": 160,
             "forward_val": true,
             "percent": true
         },
@@ -95,7 +95,7 @@
             "prop": "pick_range",
             "txt": "拾取范围",
             "val": 0,
-            "basic_val": 5,
+            "basic_val": 100,
             "forward_val": true,
             "percent": false
         }

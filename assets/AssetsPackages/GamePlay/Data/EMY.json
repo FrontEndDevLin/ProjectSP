@@ -24,7 +24,7 @@
     "type": "normal",
     "move": "normal",
     "pic": "",
-    "spd": 2,
+    "spd": 40,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 0.05,
     "exp_cnt": 1

@@ -2,7 +2,6 @@ import { _decorator, UIOpacity, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { getRandomNumber, getRandomVector } from '../../../Common/utils';
 import { PIXEL_UNIT } from '../../../Common/Namespace';
-import BulletManager from '../../../CManager/BulletManager';
 import DropItemManager from '../../../CManager/DropItemManager';
 const { ccclass, property } = _decorator;
 

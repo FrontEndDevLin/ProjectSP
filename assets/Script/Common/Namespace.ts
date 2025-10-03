@@ -26,6 +26,7 @@ export namespace GamePlayEvent {
         LEVEL_UP,
         LEVEL_UP_TIME_INIT,
         LEVEL_UP_TIME_REDUCE,
+        LEVEL_UP_DEAD_TIME,
         LEVEL_UP_TIMEOUT,
         LEVEL_UP_FINISH,
         DROP_ITEM_RECOVER_FINISH,
@@ -44,7 +45,10 @@ export namespace GamePlayEvent {
 
     export enum GUI {
         SHOW_GAME_PLAY = 100,
-        HIDE_GAME_PLAY
+        HIDE_GAME_PLAY,
+        SHOW_LEVEL_UP_UI,
+        SHOW_PROP_UI,
+        HIDE_PROP_UI
     }
 
     export enum STORE {

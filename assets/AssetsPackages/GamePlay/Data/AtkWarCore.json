@@ -11,7 +11,7 @@
         "icon_ui": "...",
         "icon_gaming": "...",
         "bullet": "CHR_Bullet001",
-        "range": 8,
+        "range": 160,
         "cd": 0.4
     }
 }

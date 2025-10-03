@@ -84,7 +84,8 @@ export default class PropCtrl2 extends BaseCtrl {
         let val: number = prop.val;
         if (basicVal === 0) {
             if (prop.percent) {
-                // 应该不会存在百分比类型的属性，但基础值为0的情况
+                // 存在百分比类型的属性，但基础值为0(闪避)
+                return val;
             } else {
                 return val;
             }
@@ -119,7 +120,6 @@ export default class PropCtrl2 extends BaseCtrl {
     // }
 
     public initProps(props: CHRInfo.PropValMap) {
-        console.log(props)
         for (let prop in props) {
             if (this.propMap[prop]) {
                 this.propMap[prop].val = props[prop];

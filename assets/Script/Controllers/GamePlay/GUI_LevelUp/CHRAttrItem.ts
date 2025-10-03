@@ -13,7 +13,7 @@ export class CHRAttrItem extends OBT_Component {
     }
 
     start() {
-
+        
     }
 
     private _updateView() {

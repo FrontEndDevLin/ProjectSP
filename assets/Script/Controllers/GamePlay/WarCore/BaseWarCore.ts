@@ -1,6 +1,6 @@
 import { _decorator, BoxCollider2D, CircleCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { EMYInfo, GameCollider, PIXEL_UNIT } from '../../../Common/Namespace';
+import { EMYInfo, GameCollider  } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import BulletManager from '../../../CManager/BulletManager';
@@ -12,7 +12,7 @@ const { ccclass, property } = _decorator;
 @ccclass('BaseWarCore')
 export class BaseWarCore extends OBT_Component {
     // 警戒碰撞盒
-    private _alertDomainCollider: CircleCollider2D = null;
+    // private _alertDomainCollider: CircleCollider2D = null;
     // 攻击碰撞盒
     private _attackDomainCollider: CircleCollider2D = null;
     // 警戒范围内的敌人
@@ -35,7 +35,7 @@ export class BaseWarCore extends OBT_Component {
         for (let collider of colliders) {
             switch (collider.tag) {
                 case GameCollider.TAG.CHR_RANGE_ALERT: {
-                    this._alertDomainCollider = collider;
+                    // this._alertDomainCollider = collider;
                 } break;
                 case GameCollider.TAG.CHR_RANGE_ATTACK: {
                     this._attackDomainCollider = collider;
@@ -45,9 +45,9 @@ export class BaseWarCore extends OBT_Component {
             collider.on(Contact2DType.END_CONTACT, this._onCHRDomainEndContact, this);
         }
         // let { range, alert } = this.weaponPanel;
-        let range: number = CHRManager.instance.propCtx.getPropValue("range") + WarCoreManager.instance.atkWarCore.range;
-        this._attackDomainCollider.radius = range * PIXEL_UNIT;
-        this._alertDomainCollider.radius = (range + 2) * PIXEL_UNIT;
+        let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + WarCoreManager.instance.atkWarCore.range;
+        this._attackDomainCollider.radius = range;
+        // this._alertDomainCollider.radius = (range + 2) * PIXEL_UNIT;
     }
 
     private _onCHRDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {

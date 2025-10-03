@@ -1,7 +1,6 @@
 import { _decorator, UIOpacity, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { getRandomNumber, getRandomVector } from '../../../Common/utils';
-import { PIXEL_UNIT } from '../../../Common/Namespace';
 import BulletManager from '../../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
 
@@ -37,7 +36,7 @@ export class BulletParticle extends OBT_Component {
      * 移动动画
      */
     private _move(dt: number) {
-        let speed = dt * this._speed * PIXEL_UNIT;
+        let speed = dt * this._speed;
         let nodeLoc = this.node.position;
         let newPos: Vec3 = nodeLoc.add(new Vec3(this._vector.x * speed, this._vector.y * speed));
         this.node.setPosition(newPos);

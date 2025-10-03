@@ -85,7 +85,7 @@
         "__id__": 3
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 9
@@ -97,7 +97,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 187,
+      "y": 207,
       "z": 0
     },
     "_lrot": {
@@ -357,7 +357,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 137,
+      "y": 197,
       "z": 0
     },
     "_lrot": {
@@ -637,7 +637,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 40,
+      "width": 80,
       "height": 25.2
     },
     "_anchorPoint": {
@@ -673,7 +673,7 @@
       "b": 51,
       "a": 255
     },
-    "_string": "主要",
+    "_string": "主要属性",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -1027,7 +1027,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 40,
+      "width": 80,
       "height": 25.2
     },
     "_anchorPoint": {
@@ -1063,7 +1063,7 @@
       "b": 245,
       "a": 255
     },
-    "_string": "次要",
+    "_string": "次要属性",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -1312,7 +1312,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 110,
+      "y": 170,
       "z": 0
     },
     "_lrot": {
@@ -1652,7 +1652,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 260,
-      "height": 420
+      "height": 460
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1732,7 +1732,7 @@
     "_startAxis": 0,
     "_paddingLeft": 0,
     "_paddingRight": 0,
-    "_paddingTop": 0,
+    "_paddingTop": 16,
     "_paddingBottom": 0,
     "_spacingX": 0,
     "_spacingY": 10,
@@ -1757,6 +1757,7 @@
       "__id__": 0
     },
     "fileId": "ac9/hUBAlII7LHXZicSfhM",
+    "instance": null,
     "targetOverrides": null
   }
 ]
