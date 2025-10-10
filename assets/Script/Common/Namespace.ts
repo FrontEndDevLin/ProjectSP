@@ -225,14 +225,43 @@ export namespace CHRInfo {
 }
 
 export namespace ItemInfo {
+    export enum Group {
+        NORMAL = "normal",
+        LIMIT = "limit",
+        SPECIAL = "special"
+    }
+
     export interface Item {
         id: string,
         item_type: string,
         level: number,
         label: string,
-        group: string,
+        group: Group,
         group_label: string,
+        max: number,
+        price: number,
         buff_list: CHRInfo.Buff[]
+    }
+
+    export interface ItemMap {
+        [itemId: string]: Item
+    }
+
+    export interface ItemData {
+        item_def: ItemMap,
+        item_id_list: string[]
+    }
+
+    export interface GroupMap {
+        normal: string[],
+        limit: string[],
+        special: string[]
+    }
+
+    // 背包定义
+    export interface BackpackItem {
+        id: string,
+        count: number
     }
 
     export enum TROPHY_TYPE {

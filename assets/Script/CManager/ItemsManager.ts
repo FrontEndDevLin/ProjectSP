@@ -16,9 +16,18 @@ export default class ItemsManager extends OBT_UIManager {
     static instance: ItemsManager;
     public rootNode: Node = find("Canvas/GamePlay/GamePlay");
 
-    public itemsData: ItemInfo.Item[] = [];
+    public itemData: ItemInfo.ItemData;
+    // 按道具的群组来分组
+    private  _groupMap: ItemInfo.GroupMap = {
+        normal: [],
+        limit: [],
+        special: []
+    };
 
     public storeItemList: ItemInfo.Item[] = [];
+
+    // 当前背包道具
+    public backpack: ItemInfo.BackpackItem[] = [];
 
     protected onLoad(): void {
         if (!ItemsManager.instance) {
@@ -28,7 +37,40 @@ export default class ItemsManager extends OBT_UIManager {
             return;
         }
 
-        this.itemsData = DBManager.instance.getDBData("Items").items;
+        this._initItemData();
+    }
+
+    private _initItemData() {
+        this.itemData = DBManager.instance.getDBData("Items");
+
+        const { item_def, item_id_list } = this.itemData;
+
+        for (let id of item_id_list) {
+            let item: ItemInfo.Item = item_def[id];
+            this._groupMap[item.group].push(id);
+        }
+    }
+
+    // 刷新商店时，获取背包里已达上限/唯一的道具列表，以进行忽略操作
+    private _getStoreIgnoreList(): string[] {
+        let ignoreList: string[] = [];
+        this.backpack.forEach((backpackItem: ItemInfo.BackpackItem, i: number) => {
+            let itemId: string = backpackItem.id;
+            let item: ItemInfo.Item = this.getItemById(itemId);
+            switch (item.group) {
+                case ItemInfo.Group.SPECIAL: {
+                    ignoreList.push(itemId);
+                } break;
+                case ItemInfo.Group.LIMIT: {
+                    item.max = item.max || 1;
+                    if (backpackItem.count >= item.max) {
+                        ignoreList.push(itemId);
+                    }
+                } break;
+            }
+        });
+
+        return ignoreList;
     }
 
     private _loadStoreList(n: number = 3): ItemInfo.Item[] {
@@ -36,7 +78,7 @@ export default class ItemsManager extends OBT_UIManager {
         if (n === 0) {
             return items;
         }
-        let ignoreList = []
+        let ignoreList = this._getStoreIgnoreList();
         for (let i = 0; i < n; i++) {
             let item: ItemInfo.Item = this._getRandomItemByStore({ ignoreKeyList: ignoreList });
             if (item) {
@@ -73,20 +115,19 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     private _getItemsList(ignoreKeyList: string[] = []) {
-        // TODO: 从itemsMap中获取道具池给用户选择，需要先排除掉角色已拥有的独特道具，和已达到限制的道具
         let pool: ItemInfo.Item[] = [];
-        for (let item of this.itemsData) {
+        for (let id of this.itemData.item_id_list) {
             // 排除已进入当前商店列表的项目
-            if (ignoreKeyList.indexOf(item.id) !== -1) {
+            if (ignoreKeyList.indexOf(id) !== -1) {
                 continue;
             }
-            pool.push(item)
+            pool.push(this.getItemById(id))
         }
         return pool;
     }
 
     public getItemById(id) {
-        return this.itemsData.find(item => item.id === id);
+        return this.itemData.item_def[id];
     }
 
     // private _getRandomItem(quality: number = ItemInfo.TROPHY_TYPE.CHEST): ItemInfo.Item {
@@ -145,6 +186,28 @@ export default class ItemsManager extends OBT_UIManager {
 
         // _loadStoreList只做刷新商店
         this._loadStoreList();
+    }
+
+    // 获得道具
+    public obtainItem(id: string) {
+        let hasItemInBackpack:  boolean = false;
+        for (let backpackItem of this.backpack) {
+            if (backpackItem.id === id) {
+                backpackItem.count++;
+                break;
+            }
+        }
+        if (!hasItemInBackpack) {
+            this.backpack.push({ id, count: 1 });
+        }
+        // TODO: 修改角色属性/插入事件
+    }
+
+    // 购买道具
+    public buyItem(id: string) {
+        // TODO: 购买操作
+
+        this.obtainItem(id);
     }
 
     protected onDestroy(): void {

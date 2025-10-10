@@ -1,6 +1,9 @@
 {
-    "desc": {},
-    "unuse": {
+    "desc": {
+        "group": "limit",
+        "max": "当group为limit(限制)时, 该属性生效"
+    },
+    "desc_unuse": {
         "id": "item5",
         "item_type": "item",
         "level": 1,
@@ -19,8 +22,8 @@
             }
         ]
     },
-    "items": [
-        {
+    "item_def": {
+        "item1": {
             "id": "item1",
             "item_type": "item",
             "level": 1,
@@ -40,7 +43,7 @@
                 }
             ]
         },
-        {
+        "item2": {
             "id": "item2",
             "item_type": "item",
             "level": 1,
@@ -55,7 +58,7 @@
                 }
             ]
         },
-        {
+        "item3": {
             "id": "item3",
             "item_type": "item",
             "level": 1,
@@ -75,7 +78,7 @@
                 }
             ]
         },
-        {
+        "item4": {
             "id": "item4",
             "item_type": "item",
             "level": 1,
@@ -90,5 +93,8 @@
                 }
             ]
         }
+    },
+    "item_id_list": [
+        "item1", "item2", "item3", "item4"
     ]
 }
