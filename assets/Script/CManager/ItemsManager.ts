@@ -117,7 +117,7 @@ export default class ItemsManager extends OBT_UIManager {
     private _getItemsList(ignoreKeyList: string[] = []) {
         let pool: ItemInfo.Item[] = [];
         for (let id of this.itemData.item_id_list) {
-            // 排除已进入当前商店列表的项目
+            // 排除已进入当前商店列表/已达上限的项目
             if (ignoreKeyList.indexOf(id) !== -1) {
                 continue;
             }

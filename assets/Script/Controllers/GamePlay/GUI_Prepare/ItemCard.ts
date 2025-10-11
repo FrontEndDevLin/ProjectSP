@@ -30,7 +30,7 @@ export class ItemCard extends OBT_Component {
     }
 
     private _touchCard() {
-        console.log('购买道具')
+        ItemsManager.instance.buyItem(this._item.id);
         // if (ProcessManager.instance.gameNode === GAME_NODE.LEVEL_UP) {
         //     CHRManager.instance.levelUpProp(this._props.prop);
         //     // 通知更新属性UI, TODO:(UI更新后2秒, 移除升级UI)

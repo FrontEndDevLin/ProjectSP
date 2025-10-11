@@ -20,7 +20,7 @@ export class GUI_Prepare extends OBT_Component {
 
         // this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
 
-        this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
+        // this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_REDUCE, this._updateCountdownView, this);
@@ -37,14 +37,14 @@ export class GUI_Prepare extends OBT_Component {
         const storeItemList: ItemInfo.Item[] = ItemsManager.instance.storeItemList;
         storeItemList.forEach((item, i) => {
             // preLevelUpList
-            const itemCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_LevelUp/ItemCard" });
+            const itemCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prepare/ItemCard" });
             itemCard.OBT_param1 = item;
             OBT.instance.uiManager.mountNode({ node: itemCard, parentNode: cardSlotList[i] });
         });
     }
 
     private _updateCountdownView(duration) {
-        this.view("Container/TopBar/Countdown").getComponent(Label).string = duration;
+        this.view("Countdown").getComponent(Label).string = duration;
     }
 
     private _prepareTimeout() {
