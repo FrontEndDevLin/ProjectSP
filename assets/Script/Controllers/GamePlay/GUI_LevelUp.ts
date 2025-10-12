@@ -35,6 +35,9 @@ export class GUI_LevelUp extends OBT_Component {
     }
 
     private _showLevelUpUI() {
+        if (ProcessManager.instance.gameNode !== GAME_NODE.LEVEL_UP) {
+            return;
+        }
         this.showNodeByPath();
     }
 
@@ -45,7 +48,7 @@ export class GUI_LevelUp extends OBT_Component {
 
     private _updateLevelUpCard() {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
-        const preLevelUpList: CHRInfo.UpdateProp[] = CHRManager.instance.propCtx.preUpdateList;
+        const preLevelUpList: CHRInfo.upgradeProp[] = CHRManager.instance.propCtx.preUpgradeList;
         preLevelUpList.forEach((updateProp, i) => {
             cardSlotList[i].removeAllChildren();
             // preLevelUpList

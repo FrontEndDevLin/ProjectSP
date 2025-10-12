@@ -193,14 +193,20 @@ export default class ItemsManager extends OBT_UIManager {
         let hasItemInBackpack:  boolean = false;
         for (let backpackItem of this.backpack) {
             if (backpackItem.id === id) {
+                hasItemInBackpack = true;
                 backpackItem.count++;
+                // TODO: 道具更新
                 break;
             }
         }
         if (!hasItemInBackpack) {
             this.backpack.push({ id, count: 1 });
+            // TODO: 道具更新
         }
         // TODO: 修改角色属性/插入事件
+        let item: ItemInfo.Item = this.getItemById(id);
+        CHRManager.instance.upgradePropByBuff(item.buff_list);
+        console.log(this.backpack)
     }
 
     // 购买道具
@@ -211,7 +217,7 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     protected onDestroy(): void {
-        console.log('销毁地图管理ing')
+        console.log('销毁道具管理ing')
 
         ItemsManager.instance = null;
     }

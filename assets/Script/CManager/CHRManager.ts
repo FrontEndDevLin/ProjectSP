@@ -101,13 +101,21 @@ export default class CHRManager extends OBT_UIManager {
         return this._levelCtrl.getLevelUpCnt();
     }
 
-    public levelUpProp(propKey: string) {
-        let updatePropRes: boolean = this.propCtx.levelUpProp(propKey);
-        if (updatePropRes) {
+    public upgradeProp(propKey: string) {
+        let res: boolean = this.propCtx.upgradeProp(propKey);
+        if (res) {
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_UPDATE);
         }
         this._levelCtrl.finishOnceTimeLevelUp();
-        return updatePropRes;
+        return res;
+    }
+
+    public upgradePropByBuff(buffList: CHRInfo.Buff[]) {
+        let res: boolean = this.propCtx.upgradePropByBuff(buffList);
+        if (res) {
+            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_UPDATE);
+        }
+        return res;
     }
 
     // 更新角色位置

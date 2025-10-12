@@ -7,7 +7,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('LevelUpIconWrap')
 export class LevelUpIconWrap extends OBT_Component {
-    private _props: CHRInfo.UpdateProp;
+    private _props: CHRInfo.upgradeProp;
 
     protected onLoad(): void {
         // this.node.once(Node.EventType.TOUCH_END, this._touchCard, this);

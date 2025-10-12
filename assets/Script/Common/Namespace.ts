@@ -214,7 +214,7 @@ export namespace CHRInfo {
     //     buff_pos?: boolean
     // }
 
-    export interface UpdateProp {
+    export interface upgradeProp {
         prop: string,
         propTxt: string,
         icon: string,

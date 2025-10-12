@@ -7,9 +7,10 @@ import OBT_Component from '../../OBT_Component';
 import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
-import { GamePlayEvent } from '../../Common/Namespace';
+import { GAME_NODE, GamePlayEvent } from '../../Common/Namespace';
 import DropItemManager from '../../CManager/DropItemManager';
 import { transportWorldPosition } from '../../Common/utils';
+import ProcessManager from '../../CManager/ProcessManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_GamePlay')
@@ -93,6 +94,9 @@ export class GUI_GamePlay extends OBT_Component {
     }
 
     private _showMask() {
+        if (ProcessManager.instance.gameNode !== GAME_NODE.LEVEL_UP) {
+            return;
+        }
         this.view("Mask").setPosition(v3(0, 0, 0));
     }
     private _hideMask() {

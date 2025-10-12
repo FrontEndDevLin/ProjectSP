@@ -8,14 +8,14 @@ const { ccclass, property } = _decorator;
 
 @ccclass('LevelUpCard')
 export class LevelUpCard extends OBT_Component {
-    private _props: CHRInfo.UpdateProp;
+    private _props: CHRInfo.upgradeProp;
 
     protected onLoad(): void {
         this.node.OBT_param2 = {
             autoTouch: this._touchCard.bind(this)
         }
 
-        const props: CHRInfo.UpdateProp = this.node.OBT_param1;
+        const props: CHRInfo.upgradeProp = this.node.OBT_param1;
         this._props = props;
 
         this.view("Content/Txt").getComponent(Label).string = `+${props.value} ${props.propTxt}`;
@@ -29,7 +29,7 @@ export class LevelUpCard extends OBT_Component {
 
     private _touchCard() {
         if (ProcessManager.instance.gameNode === GAME_NODE.LEVEL_UP) {
-            CHRManager.instance.levelUpProp(this._props.prop);
+            CHRManager.instance.upgradeProp(this._props.prop);
             // 通知更新属性UI, TODO:(UI更新后2秒, 移除升级UI)
             this.hideNodeByPath();
         }

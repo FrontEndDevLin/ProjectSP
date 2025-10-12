@@ -33,7 +33,7 @@ export default class PropCtrl2 extends BaseCtrl {
     private _curHP: number = 0;
 
     // 可升级的属性(随机)
-    public preUpdateList: CHRInfo.UpdateProp[] = [];
+    public preUpgradeList: CHRInfo.upgradeProp[] = [];
 
     constructor() {
         super();
@@ -130,7 +130,7 @@ export default class PropCtrl2 extends BaseCtrl {
         // this._syncPropList();
     }
 
-    private _getPreUpdateProps(): string[] {
+    private _getPreUpgradeProps(): string[] {
         // 主要属性才可升级
         let majorProps: string[] = this.propGroup[CHRInfo.GroupKeys.major];
         let randomIdxList: number[] = getRandomNumbers(0, majorProps.length - 1, 3);
@@ -143,9 +143,9 @@ export default class PropCtrl2 extends BaseCtrl {
     }
 
     // 获取升级列表
-    public refreshPreUpdateList() {
-        let props: string[] = this._getPreUpdateProps();
-        const list: CHRInfo.UpdateProp[] = [];
+    public refreshPreUpgradeList() {
+        let props: string[] = this._getPreUpgradeProps();
+        const list: CHRInfo.upgradeProp[] = [];
         // TODO: level结合当前等级计算
         let level = 1;
         // TODO: 每一个主要属性设计一个图标，在这里可以返回，UI界面可以显示
@@ -163,20 +163,20 @@ export default class PropCtrl2 extends BaseCtrl {
             })
         })
 
-        this.preUpdateList = list;
+        this.preUpgradeList = list;
         OBT.instance.eventCenter.emit(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE);
         return true;
     }
 
-    public levelUpProp(propKey: string): boolean {
+    public upgradeProp(propKey: string): boolean {
         if (this.propGroup[CHRInfo.GroupKeys.major].indexOf(propKey) === -1) {
             return false;
         }
-        if (!this.preUpdateList.length) {
+        if (!this.preUpgradeList.length) {
             return false;
         }
-        // let prop: CHRInfo.UpdateProp;
-        for (let item of this.preUpdateList) {
+        // let prop: CHRInfo.upgradeProp;
+        for (let item of this.preUpgradeList) {
             if (item.prop === propKey) {
                 this.propMap[propKey].val += item.value;
                 break;
@@ -184,10 +184,20 @@ export default class PropCtrl2 extends BaseCtrl {
         }
 
         // 选择一个升级属性后不可再继续升级，所以清空
-        this.preUpdateList = [];
+        this.preUpgradeList = [];
 
         // this._syncPropList();
 
+        return true;
+    }
+
+    public upgradePropByBuff(buffList: CHRInfo.Buff[]): boolean {
+        if (!buffList || !buffList.length) {
+            return false;
+        }
+        buffList.forEach((buff: CHRInfo.Buff) => {
+            this.propMap[buff.prop].val += buff.value;
+        });
         return true;
     }
 

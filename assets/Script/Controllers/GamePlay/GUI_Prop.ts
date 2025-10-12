@@ -80,11 +80,9 @@ export class GUI_Prop extends OBT_Component {
     }
 
     private _showPropUI() {
-        // this._hideMask();
         this.showNodeByPath();
     }
     private _hidePropUI() {
-        // this._showMask();
         this.hideNodeByPath();
     }
 
