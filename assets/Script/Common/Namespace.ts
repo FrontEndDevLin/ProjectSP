@@ -34,6 +34,7 @@ export namespace GamePlayEvent {
         PREPARE_TIME_REDUCE,
         PREPARE_TIMEOUT,
         PREPARE_FINISH,
+        ITEM_CHANGE,
         PICK_UP_EXP,
         PICK_UP_TROPHY,
         RECOVER_EXP,
@@ -238,6 +239,7 @@ export namespace ItemInfo {
         label: string,
         group: Group,
         group_label: string,
+        ico: string,
         max: number,
         price: number,
         buff_list: CHRInfo.Buff[]

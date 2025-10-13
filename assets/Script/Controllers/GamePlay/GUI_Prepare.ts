@@ -2,7 +2,7 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, Color, Component, EventTouch, Game, Label, Node, Sprite, UITransform, Widget } from 'cc';
+import { _decorator, Color, Component, EventTouch, Game, Label, Node, Sprite, SpriteFrame, UITransform, Widget } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
@@ -15,12 +15,15 @@ const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
 export class GUI_Prepare extends OBT_Component {
+    private _backpackWrapNode: Node;
+
     protected onLoad(): void {
         // this._initCHRAttrCard();
 
         // this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
 
         // this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
+        OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_REDUCE, this._updateCountdownView, this);
@@ -30,12 +33,20 @@ export class GUI_Prepare extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showPrepareUI, this);
 
-        this.view("Container/StoreWrap/Ref").on(Node.EventType.TOUCH_END, this._refreshStore, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ITEM_CHANGE, this._updateItemList, this);
+
+        this.view("Container/StoreWrap/RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshStore, this);
 
         this.view("Bottom/PropTxt").on(Node.EventType.TOUCH_END, this._showPropUI, this);
+
+        this._loadItemList();
     }
 
     start() {
+    }
+
+    private _updateCurrency() {
+        this.view("Currency/Val").getComponent(Label).string = `${CHRManager.instance.currencyCtrl.getCurrency()}`;
     }
 
     private _updateStoreItemCard() {
@@ -45,10 +56,9 @@ export class GUI_Prepare extends OBT_Component {
         });
         const storeItemList: ItemInfo.Item[] = ItemsManager.instance.storeItemList;
         storeItemList.forEach((item, i) => {
-            // preLevelUpList
-            const itemCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prepare/ItemCard" });
-            itemCard.OBT_param1 = item;
-            OBT.instance.uiManager.mountNode({ node: itemCard, parentNode: cardSlotList[i] });
+            const storeItemCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prepare/StoreItem" });
+            storeItemCard.OBT_param1 = item;
+            OBT.instance.uiManager.mountNode({ node: storeItemCard, parentNode: cardSlotList[i] });
         });
     }
 
@@ -79,6 +89,37 @@ export class GUI_Prepare extends OBT_Component {
         this.showNodeByPath("Mask");
         this.showNodeByPath("Container");
         this.showNodeByPath("Bottom");
+    }
+
+    private _mountItemRectNode(backpackItem: ItemInfo.BackpackItem) {
+        if (!this._backpackWrapNode) {
+            this._backpackWrapNode = this.view("Container/InfoWrap/WrapLeft/ScrollView/view/content");
+        }
+        const itemRect: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prepare/ItemRect" });
+        itemRect.OBT_param1 = backpackItem;
+
+        OBT.instance.uiManager.mountNode({ node: itemRect, parentNode: this._backpackWrapNode });
+    }
+    private _loadItemList() {
+        let backpack: ItemInfo.BackpackItem[] = ItemsManager.instance.backpack;
+        backpack.forEach((backpackItem: ItemInfo.BackpackItem, i: number) => {
+            this._mountItemRectNode(backpackItem);
+        })
+    }
+    private _updateItemList({ hasItemInBackpack, backpackItem }: { hasItemInBackpack: Boolean, backpackItem: ItemInfo.BackpackItem }) {
+        if (hasItemInBackpack) {
+            // 背包已有该道具，更新数量
+            for (let node of this._backpackWrapNode.children) {
+                let nodeBackpackItem: ItemInfo.BackpackItem = node.OBT_param1;
+                if (nodeBackpackItem.id === backpackItem.id) {
+                    node.OBT_param2.update();
+                    break;
+                }
+            }
+        } else {
+            // 背包没有该道具，追加到列表后
+            this._mountItemRectNode(backpackItem);
+        }
     }
 
     protected onDestroy(): void {

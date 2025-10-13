@@ -195,18 +195,20 @@ export default class ItemsManager extends OBT_UIManager {
             if (backpackItem.id === id) {
                 hasItemInBackpack = true;
                 backpackItem.count++;
-                // TODO: 道具更新
+                // 道具更新, 数量变化
+                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ITEM_CHANGE, { hasItemInBackpack, backpackItem });
                 break;
             }
         }
         if (!hasItemInBackpack) {
-            this.backpack.push({ id, count: 1 });
-            // TODO: 道具更新
+            let backpackItem: ItemInfo.BackpackItem = { id, count: 1 };
+            this.backpack.push(backpackItem);
+            // 道具更新, 新增道具
+            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ITEM_CHANGE, { hasItemInBackpack, backpackItem });
         }
         // TODO: 修改角色属性/插入事件
         let item: ItemInfo.Item = this.getItemById(id);
         CHRManager.instance.upgradePropByBuff(item.buff_list);
-        console.log(this.backpack)
     }
 
     // 购买道具

@@ -29,6 +29,7 @@
             "level": 1,
             "label": "道具1",
             "group_label": "道具",
+            "ico": "Star",
             "group": "normal",
             "buff_list": [
                 {
@@ -49,6 +50,7 @@
             "level": 1,
             "label": "道具2",
             "group_label": "道具",
+            "ico": "Star",
             "group": "normal",
             "buff_list": [
                 {
@@ -64,6 +66,7 @@
             "level": 1,
             "label": "道具3",
             "group_label": "道具",
+            "ico": "Star",
             "group": "normal",
             "buff_list": [
                 {
@@ -84,6 +87,7 @@
             "level": 1,
             "label": "道具4",
             "group_label": "道具",
+            "ico": "Star",
             "group": "normal",
             "buff_list": [
                 {
