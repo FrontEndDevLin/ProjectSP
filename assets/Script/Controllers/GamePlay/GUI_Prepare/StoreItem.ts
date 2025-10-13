@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, RichText } from 'cc';
+import { _decorator, Color, Component, Label, Node, RichText, Sprite } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { CHRInfo, GAME_NODE, GamePlayEvent, ItemInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
@@ -19,6 +19,11 @@ export class StoreItem extends OBT_Component {
         this.view("ItemCard").addComponent("ItemCard");
 
         this.view("OperBar/BuyBtn").once(Node.EventType.TOUCH_END, this._buyItem, this);
+
+        // 244,164,96锁定颜色
+        this.view("OperBar/LockBtn").on(Node.EventType.TOUCH_END, this._toggleLock, this);
+
+        this._changeLockBtn();
     }
 
     start() {
@@ -32,6 +37,19 @@ export class StoreItem extends OBT_Component {
         //     // 通知更新属性UI, TODO:(UI更新后2秒, 移除升级UI)
             this.hideNodeByPath();
         // }
+    }
+
+    private _toggleLock() {
+        ItemsManager.instance.toggleLockStoreItem(this._item.id);
+        this._changeLockBtn();
+    }
+
+    private _changeLockBtn() {
+        let color = new Color(58, 58, 58);
+        if (this._item.lock) {
+            color = new Color(244, 164, 96);
+        }
+        this.view("OperBar/LockBtn").getComponent(Sprite).color = color;
     }
 
     protected onDestroy(): void {

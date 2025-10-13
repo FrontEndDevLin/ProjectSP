@@ -30,6 +30,7 @@ export class GUI_Prepare extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIMEOUT, this._prepareTimeout, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.STORE_ITEM_LIST_UPDATE, this._updateStoreItemCard, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.STORE.STORE_REF_COST_CHANGE, this._updateRefCost, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showPrepareUI, this);
 
@@ -60,6 +61,10 @@ export class GUI_Prepare extends OBT_Component {
             storeItemCard.OBT_param1 = item;
             OBT.instance.uiManager.mountNode({ node: storeItemCard, parentNode: cardSlotList[i] });
         });
+    }
+
+    private _updateRefCost(cost: number) {
+        this.view("Container/StoreWrap/RefreshBtn/Cost").getComponent(Label).string = `${cost}`;
     }
 
     private _updateCountdownView(duration) {

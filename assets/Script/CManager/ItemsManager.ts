@@ -2,7 +2,7 @@ import { find, Node } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import { CHRInfo, GamePlayEvent, ItemInfo } from "../Common/Namespace";
 import DBManager from "./DBManager";
-import { getRandomNumber } from "../Common/utils";
+import { copyObject, getRandomNumber } from "../Common/utils";
 import ProcessManager from "./ProcessManager";
 import OBT from "../OBT";
 import CHRManager from "./CHRManager";
@@ -11,6 +11,8 @@ interface GetRandomItemConfig {
     quality?: number,
     ignoreKeyList?: string[]
 }
+
+const STORE_ITEM_COUNT: number = 3;
 
 export default class ItemsManager extends OBT_UIManager {
     static instance: ItemsManager;
@@ -24,6 +26,10 @@ export default class ItemsManager extends OBT_UIManager {
         special: []
     };
 
+    // 触发刷新的次数
+    private _refreshTime: number = 0;
+    // 下次刷新的费用
+    private _nextRefreshCost: number = 0;
     public storeItemList: ItemInfo.Item[] = [];
 
     // 当前背包道具
@@ -73,22 +79,32 @@ export default class ItemsManager extends OBT_UIManager {
         return ignoreList;
     }
 
-    private _loadStoreList(n: number = 3): ItemInfo.Item[] {
-        let items: ItemInfo.Item[] = []
-        if (n === 0) {
-            return items;
+    private _getLockStoreItem(): ItemInfo.Item[] {
+        return this.storeItemList.filter(item => item.lock === true);
+    }
+    private _loadStoreList(n: number = STORE_ITEM_COUNT): Boolean {
+        // 筛除已锁定的道具(TODO: 已锁定的道具，不要出现在开箱的物品列表里，避免唯一道具出现多个的情况)
+        let items: ItemInfo.Item[] = this._getLockStoreItem();
+        n = n - items.length;
+        if (n <= 0) {
+            return false;
         }
         let ignoreList = this._getStoreIgnoreList();
+        if (items.length) {
+            items.forEach((item: ItemInfo.Item) => {
+                ignoreList.push(item.id)
+            });
+        }
         for (let i = 0; i < n; i++) {
             let item: ItemInfo.Item = this._getRandomItemByStore({ ignoreKeyList: ignoreList });
             if (item) {
                 ignoreList.push(item.id);
-                items.push(item);
+                items.push(copyObject(item));
             }
         }
         this.storeItemList = items;
         OBT.instance.eventCenter.emit(GamePlayEvent.STORE.STORE_ITEM_LIST_UPDATE);
-        return items;
+        return true;
     }
 
     // 获取一个符合当前阶段的道具，刷新商店用
@@ -160,6 +176,14 @@ export default class ItemsManager extends OBT_UIManager {
         // return props;
     // }
 
+    // 刷新花费, 目前固定为1
+    private _setNextRefreshCost() {
+        // 后续结合刷新次数，当前波次决定
+        this._nextRefreshCost = 1 + this._refreshTime - this._refreshTime;
+
+        OBT.instance.eventCenter.emit(GamePlayEvent.STORE.STORE_REF_COST_CHANGE, this._nextRefreshCost);
+    }
+
     // 获取指定道具的富文本属性标签词条
     public getItemsPanelRichTxt(key: string): string {
         if (!key) {
@@ -181,11 +205,32 @@ export default class ItemsManager extends OBT_UIManager {
     }
     
     // 刷新商店
-    public refreshStoreList() {
-        // 这个方法里面做扣金币操作
+    public refreshStoreList(autoRefresh?: boolean): boolean {
+        if (this._getLockStoreItem().length >= STORE_ITEM_COUNT) {
+            // console.log('锁定数量上限');
+            return false;
+        }
+
+        // 是否为系统自动刷新，用于刚进入备战流程
+        if (autoRefresh) {
+            this._refreshTime = 0;
+            this._setNextRefreshCost();
+        } else {
+            let nowCurrency: number = CHRManager.instance.currencyCtrl.getCurrency();
+            // 金币不够
+            if (nowCurrency - this._nextRefreshCost < 0) {
+                // console.log('金币不足');
+                return false;
+            }
+            // 这个方法里面做扣金币操作
+            CHRManager.instance.currencyCtrl.addCurrency(-this._nextRefreshCost);
+        }
 
         // _loadStoreList只做刷新商店
         this._loadStoreList();
+
+        this._refreshTime++;
+        this._setNextRefreshCost();
     }
 
     // 获得道具
@@ -216,6 +261,14 @@ export default class ItemsManager extends OBT_UIManager {
         // TODO: 购买操作
 
         this.obtainItem(id);
+    }
+
+    // 锁定，解锁商店
+    public toggleLockStoreItem(id: string) {
+        let item: ItemInfo.Item = this.storeItemList.find(item => item.id === id);
+        if (item) {
+            item.lock = !item.lock;
+        }
     }
 
     protected onDestroy(): void {

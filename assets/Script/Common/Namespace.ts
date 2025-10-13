@@ -55,7 +55,9 @@ export namespace GamePlayEvent {
 
     export enum STORE {
         LEVEL_UP_LIST_UPDATE = 130,
-        STORE_ITEM_LIST_UPDATE
+        STORE_ITEM_LIST_UPDATE,
+
+        STORE_REF_COST_CHANGE
     }
 
     export enum CURRENCY {
@@ -242,6 +244,7 @@ export namespace ItemInfo {
         ico: string,
         max: number,
         price: number,
+        lock: boolean,
         buff_list: CHRInfo.Buff[]
     }
 

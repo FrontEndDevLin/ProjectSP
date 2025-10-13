@@ -216,7 +216,7 @@ export default class ProcessManager extends OBT_UIManager {
             case GAME_NODE.PREPARE: {
                 GUI_GamePlayManager.instance.hideGamePlayGUI();
                 // CHRManager.instance.propCtx.refreshPreUpgradeList();
-                ItemsManager.instance.refreshStoreList();
+                ItemsManager.instance.refreshStoreList(true);
                 GUI_GamePlayManager.instance.showPrepareGUI();
                 this._prepareDuration = PREPARE_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._prepareDuration);
