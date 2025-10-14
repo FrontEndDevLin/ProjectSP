@@ -11,7 +11,7 @@ export class CurrencyCtrl extends BaseCtrl {
     static instance: CurrencyCtrl = null;
 
     // 金币量
-    private _currency: number = 0;
+    private _currency: number = 2;
     // 库存量
     private _storage: number = 0;
 

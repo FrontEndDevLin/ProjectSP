@@ -47,7 +47,7 @@ export default class ItemsManager extends OBT_UIManager {
 
         this._initItemData();
 
-        this._itemPreviewNode = this.showPrefab({ prefabPath: "GUI_Prepare/GUI_ItemPreview", parentNode: this.node });
+        this._itemPreviewNode = this.showPrefab({ prefabPath: "GUI_Prepare/GUI_ItemPreview", parentNode: ProcessManager.instance.uiRootNode });
     }
 
     private _initItemData() {
@@ -296,6 +296,8 @@ export default class ItemsManager extends OBT_UIManager {
         this._itemPreviewNode.OBT_param2.updateView(item);
 
         this.showNode(this._itemPreviewNode);
+
+        OBT.instance.printStructure()
     }
 
     protected onDestroy(): void {

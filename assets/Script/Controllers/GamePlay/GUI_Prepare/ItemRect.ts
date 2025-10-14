@@ -27,11 +27,17 @@ export class ItemRect extends OBT_Component {
         this.view("Sprite").getComponent(Sprite).spriteFrame = assets;
 
         this.node.getComponent(UIOpacity).opacity = 255;
+
+        this.node.on(Node.EventType.TOUCH_END, this._previewItem, this);
     }
 
     private _updateCount() {
         let countStr = this._backpackItem.count > 1 ? `x${this._backpackItem.count}` : "";
         this.view("Dot").getComponent(Label).string = countStr;
+    }
+
+    private _previewItem() {
+        ItemsManager.instance.previewItem(this._backpackItem.id, 1);
     }
 
     start() {
