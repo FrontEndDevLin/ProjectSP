@@ -60,6 +60,9 @@ export class GUI_PropWrap extends OBT_Component {
             propsList.forEach((prop: CHRInfo.Prop, i: number) => {
                 const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prop/CHRAttrItem" });
                 propNode.OBT_param1 = prop;
+                propNode.OBT_param2 = {
+                    index: i
+                }
                 OBT.instance.uiManager.mountNode({ node: propNode, parentNode: this.view(parentNodePath) });
             })
         })

@@ -1,9 +1,12 @@
+import { Node, UITransform } from "cc";
 import { CHRInfo, COLOR, GamePlayEvent } from "../../Common/Namespace";
-import { getFloatNumber, getRandomNumbers } from "../../Common/utils";
+import { getFloatNumber, getRandomNumbers, transportWorldPosition } from "../../Common/utils";
 import OBT from "../../OBT";
 import CHRManager from "../CHRManager";
 import DBManager from "../DBManager";
+import ProcessManager from "../ProcessManager";
 import { BaseCtrl } from "./BaseCtrl";
+import GUI_GamePlayManager from "../GUI_GamePlayManager";
 
 /**
  * TODO: 升级逻辑
@@ -40,6 +43,8 @@ export default class PropCtrl extends BaseCtrl {
     // 可升级的属性(随机)
     public preUpgradeList: CHRInfo.upgradeProp[] = [];
 
+    private _propIntroNode: Node;
+
     constructor() {
         super();
 
@@ -47,6 +52,8 @@ export default class PropCtrl extends BaseCtrl {
         this.propMap = this.propDBData.prop_def;
         this.propGroup = this.propDBData.prop_group;
         this.qualityConfig = this.propDBData.quality_config;
+
+        this._initPropIntroGUI();
     }
 
     public initHP() {
@@ -277,5 +284,26 @@ export default class PropCtrl extends BaseCtrl {
             }
         }
         return color;
+    }
+
+    // 属性详情说明
+    private _initPropIntroGUI() {
+        this._propIntroNode = OBT.instance.uiManager.showPrefab({ prefabPath: "GUI_Prop/GUI_PropIntro", parentNode: ProcessManager.instance.uiRootNode });
+    }
+    public showPropIntro(propKey: string, index: number) {
+        let prop: CHRInfo.Prop = this.getPropInfo(propKey)
+        this._propIntroNode.OBT_param2.updateView(prop);
+
+        const propGUINode: Node = GUI_GamePlayManager.instance.getPropGUINode();
+
+        const targetNode: Node = propGUINode.getChildByPath("GUI_PropWrap/Board/MainBoardWrap").children[index];
+        let position = transportWorldPosition(targetNode.worldPosition);
+        const contentNode: Node = this._propIntroNode.getChildByPath("Container");
+        position.y = position.y - 22; 
+        contentNode.setPosition(position);
+        OBT.instance.uiManager.showNode(this._propIntroNode);
+    }
+    public hidePropIntro() {
+        OBT.instance.uiManager.hideNode(this._propIntroNode);
     }
 }

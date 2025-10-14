@@ -35,6 +35,9 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     public initPrepareGUI() {
         this._GUIPrepareNode = this.showPrefab({ prefabPath: "GUI_Prepare", parentNode: ProcessManager.instance.uiRootNode });
     }
+    public getPropGUINode() {
+        return this._GUIPropNode;
+    }
 
     public showGamePlayGUI() {
         this.showNode(this._GUIGamePlayNode);

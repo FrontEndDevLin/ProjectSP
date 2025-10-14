@@ -28,7 +28,7 @@ export class CHRAttrItem extends OBT_Component {
     private _showPropInfo() {
         const prop: CHRInfo.Prop = this.node.OBT_param1;
         let index = this.node.OBT_param2 ? this.node.OBT_param2.index : 0;
-        CHRManager.instance.showPropIntro(prop.prop, index);
+        CHRManager.instance.propCtx.showPropIntro(prop.prop, index);
     }
 
     protected onDestroy(): void {

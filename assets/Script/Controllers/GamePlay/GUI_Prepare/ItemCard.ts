@@ -9,19 +9,26 @@ const { ccclass, property } = _decorator;
 
 @ccclass('ItemCard')
 export class ItemCard extends OBT_Component {
-    private _item: ItemInfo.Item;
-
     protected onLoad(): void {
         const item: ItemInfo.Item = this.node.OBT_param1;
-        this._item = item;
 
-        this.view("Head/TitleWrap/ItemName").getComponent(Label).string = item.label;
-        let buffTxt: string = ItemsManager.instance.getItemsPanelRichTxt(item.id);
-        this.view("Content/RichTxt").getComponent(RichText).string = buffTxt;
+        this.node.OBT_param2 = {
+            updateView: this._updateView.bind(this)
+        }
+
+        if (item) {
+            this._updateView(item);
+        }
     }
 
     start() {
 
+    }
+
+    private _updateView(item) {
+        this.view("Head/TitleWrap/ItemName").getComponent(Label).string = item.label;
+        let buffTxt: string = ItemsManager.instance.getItemsPanelRichTxt(item.id);
+        this.view("Content/RichTxt").getComponent(RichText).string = buffTxt;
     }
 
     update(deltaTime: number) {

@@ -19,8 +19,6 @@ export default class CHRManager extends OBT_UIManager {
     public propCtx: PropCtrl;
     public currencyCtrl: CurrencyCtrl;
 
-    private _propIntroNode: Node;
-
     protected onLoad(): void {
         if (!CHRManager.instance) {
             CHRManager.instance = this
@@ -48,7 +46,6 @@ export default class CHRManager extends OBT_UIManager {
         this._initLevel(saveDoc.chr_slot.level);
         this._initProps(saveDoc.chr_prop);
         this._initCurrency();
-        this._initPropIntroGUI();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_INIT);
     }
 
@@ -77,19 +74,6 @@ export default class CHRManager extends OBT_UIManager {
         // 临时，需要通过计算角色属性(战利品回血量)来得到
         let health: number = 3;
         this.propCtx.addHP(health);
-    }
-
-    // 属性详情说明
-    private _initPropIntroGUI() {
-        this._propIntroNode = this.showPrefab({ prefabPath: "GUI_Prop/GUI_PropIntro", parentNode: ProcessManager.instance.uiRootNode });
-    }
-    public showPropIntro(propKey: string, index: number) {
-        let prop: CHRInfo.Prop = this.propCtx.getPropInfo(propKey)
-        this._propIntroNode.OBT_param2.updateView(prop);
-        this.showNode(this._propIntroNode);
-    }
-    public hidePropIntro() {
-        this.hideNode(this._propIntroNode);
     }
 
     public initCHR() {

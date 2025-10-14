@@ -35,6 +35,8 @@ export default class ItemsManager extends OBT_UIManager {
     // 当前背包道具
     public backpack: ItemInfo.BackpackItem[] = [];
 
+    private _itemPreviewNode: Node;
+
     protected onLoad(): void {
         if (!ItemsManager.instance) {
             ItemsManager.instance = this
@@ -44,6 +46,8 @@ export default class ItemsManager extends OBT_UIManager {
         }
 
         this._initItemData();
+
+        this._itemPreviewNode = this.showPrefab({ prefabPath: "GUI_Prepare/GUI_ItemPreview", parentNode: this.node });
     }
 
     private _initItemData() {
@@ -284,6 +288,14 @@ export default class ItemsManager extends OBT_UIManager {
         if (item) {
             item.lock = !item.lock;
         }
+    }
+
+    // 预览道具
+    public previewItem(id: string, index: number) {
+        let item: ItemInfo.Item = this.getItemById(id);
+        this._itemPreviewNode.OBT_param2.updateView(item);
+
+        this.showNode(this._itemPreviewNode);
     }
 
     protected onDestroy(): void {
