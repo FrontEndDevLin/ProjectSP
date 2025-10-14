@@ -19,6 +19,7 @@ export class GUI_Prop extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_UI, this._showPropUI, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._hidePropUI, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._hidePropUI, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_DEAD_TIME, this._hidePropUI, this);
 
         this.view("Mask").on(Node.EventType.TOUCH_END, this._touchMask, this);
 
@@ -67,6 +68,9 @@ export class GUI_Prop extends OBT_Component {
             propsList.forEach((prop: CHRInfo.Prop, i: number) => {
                 const propNode: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prop/CHRAttrItem" });
                 propNode.OBT_param1 = prop;
+                propNode.OBT_param2 = {
+                    index: i
+                };
                 OBT.instance.uiManager.mountNode({ node: propNode, parentNode: this.view(parentNodePath) });
             })
         })

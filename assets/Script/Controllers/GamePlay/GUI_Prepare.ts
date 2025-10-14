@@ -27,6 +27,7 @@ export class GUI_Prepare extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_REDUCE, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_DEAD_TIME, this._prepareDeadTime, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIMEOUT, this._prepareTimeout, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.STORE_ITEM_LIST_UPDATE, this._updateStoreItemCard, this);
@@ -69,6 +70,13 @@ export class GUI_Prepare extends OBT_Component {
 
     private _updateCountdownView(duration) {
         this.view("Countdown").getComponent(Label).string = duration;
+    }
+
+    private _prepareDeadTime() {
+        // 如果快超时了还停留在属性界面，切换回升级界面，隐藏“查看属性”入口
+        this._showPrepareUI();
+
+        this.view("Bottom/PropTxt").active = false;
     }
 
     private _prepareTimeout() {

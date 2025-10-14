@@ -24,7 +24,7 @@ import { BaseCtrl } from "./BaseCtrl";
  * 考虑不同核心有没有对应的特殊属性(元素伤害？风、冰、火、雷)
  */
 
-export default class PropCtrl2 extends BaseCtrl {
+export default class PropCtrl extends BaseCtrl {
     public propDBData: CHRInfo.PropDBData;
     // 升级时，直接修改propMap里面的数据
     public propMap: CHRInfo.PropMap;
@@ -73,7 +73,7 @@ export default class PropCtrl2 extends BaseCtrl {
         return this._curHP;
     }
 
-    private _getPropInfo(propKey: string): CHRInfo.Prop {
+    public getPropInfo(propKey: string): CHRInfo.Prop {
         return this.propMap[propKey];
     }
     // new ..
@@ -84,7 +84,7 @@ export default class PropCtrl2 extends BaseCtrl {
         return this.propMap[propKey].val;
     }
     public getPropRealValue(propKey: string): number {
-        let prop: CHRInfo.Prop = this._getPropInfo(propKey);
+        let prop: CHRInfo.Prop = this.getPropInfo(propKey);
         let basicVal: number = prop.basic_val;
         let val: number = prop.val;
         if (basicVal === 0) {
@@ -179,7 +179,7 @@ export default class PropCtrl2 extends BaseCtrl {
         let level = 1;
         // TODO: 每一个主要属性设计一个图标，在这里可以返回，UI界面可以显示
         props.forEach(prop => {
-            let propInfo: CHRInfo.Prop = this._getPropInfo(prop);
+            let propInfo: CHRInfo.Prop = this.getPropInfo(prop);
             list.push({
                 prop,
                 propTxt: propInfo.txt,
@@ -237,7 +237,7 @@ export default class PropCtrl2 extends BaseCtrl {
         let txt: string = "";
         let buffType: string = buff.type || "prop";
         if (buffType === "prop") {
-            let prop: CHRInfo.Prop = this._getPropInfo(buff.prop);
+            let prop: CHRInfo.Prop = this.getPropInfo(buff.prop);
             let oValue: number = buff.value;
             let value: string = `${oValue}`;
             if (oValue > 0) {
@@ -257,7 +257,7 @@ export default class PropCtrl2 extends BaseCtrl {
         return txt;
     }
     public getBuffTxtColor(buff: CHRInfo.Buff): string {
-        let prop: CHRInfo.Prop = this._getPropInfo(buff.prop);
+        let prop: CHRInfo.Prop = this.getPropInfo(buff.prop);
         let value = buff.value;
         let forward_val: boolean = prop.forward_val;
         let color: string = "";

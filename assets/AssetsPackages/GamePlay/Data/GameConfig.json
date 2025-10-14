@@ -17,7 +17,7 @@
     "waves": [
         {
             "wave": 1,
-            "duration": 10,
+            "duration": 2,
             "spawn_roles": [
                 {
                     "enemy_type": "EMY_Peace",

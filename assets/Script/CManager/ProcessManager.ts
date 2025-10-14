@@ -293,7 +293,12 @@ export default class ProcessManager extends OBT_UIManager {
                 this._prepareSecond += dt;
                 if (this._prepareSecond >= 1) {
                     this._prepareSecond -= 1;
+
                     this._prepareDuration -= 1;
+                    if (this._prepareDuration === 5) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_DEAD_TIME);
+                    }
+
                     OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_TIME_REDUCE, this._prepareDuration);
 
                     if (this._prepareDuration <= 0) {

@@ -32,6 +32,7 @@ export namespace GamePlayEvent {
         DROP_ITEM_RECOVER_FINISH,
         PREPARE_TIME_INIT,
         PREPARE_TIME_REDUCE,
+        PREPARE_DEAD_TIME,
         PREPARE_TIMEOUT,
         PREPARE_FINISH,
         ITEM_CHANGE,
@@ -57,6 +58,7 @@ export namespace GamePlayEvent {
         LEVEL_UP_LIST_UPDATE = 130,
         STORE_ITEM_LIST_UPDATE,
 
+        LEVEL_UP_REF_COST_CHANGE,
         STORE_REF_COST_CHANGE
     }
 
@@ -142,7 +144,9 @@ export namespace CHRInfo {
         val: number,
         basic_val: number,
         forward_val: boolean,
-        percent: boolean
+        percent: boolean,
+        intro: string,
+        ico?: string
     }
     export interface PropValMap {
         [prop: string]: number
