@@ -208,14 +208,13 @@ export default class ProcessManager extends OBT_UIManager {
         switch (this.gameNode) {
             case GAME_NODE.LEVEL_UP: {
                 // GUI_GamePlayManager.instance.hideGamePlayGUI();
-                CHRManager.instance.propCtx.refreshPreUpgradeList();
+                CHRManager.instance.propCtx.refreshPreUpgradeList(true);
                 GUI_GamePlayManager.instance.showLevelUpGUI();
                 this._levelUpDuration = LEVEL_UP_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._levelUpDuration);
             } break;
             case GAME_NODE.PREPARE: {
                 GUI_GamePlayManager.instance.hideGamePlayGUI();
-                // CHRManager.instance.propCtx.refreshPreUpgradeList();
                 ItemsManager.instance.refreshStoreList(true);
                 GUI_GamePlayManager.instance.showPrepareGUI();
                 this._prepareDuration = PREPARE_TIME;

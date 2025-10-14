@@ -17,6 +17,7 @@ export class StoreItem extends OBT_Component {
         this._item = item;
         this.view("ItemCard").OBT_param1 = item;
         this.view("ItemCard").addComponent("ItemCard");
+        this.view("OperBar/BuyBtn/Price/Cost").getComponent(Label).string = `${item.price}`;
 
         this.view("OperBar/BuyBtn").once(Node.EventType.TOUCH_END, this._buyItem, this);
 
@@ -31,12 +32,10 @@ export class StoreItem extends OBT_Component {
     }
 
     private _buyItem() {
-        ItemsManager.instance.buyItem(this._item.id);
-        // if (ProcessManager.instance.gameNode === GAME_NODE.LEVEL_UP) {
-        //     CHRManager.instance.upgradeProp(this._props.prop);
-        //     // 通知更新属性UI, TODO:(UI更新后2秒, 移除升级UI)
+        let buyRes: boolean = ItemsManager.instance.buyItem(this._item.id);
+        if (buyRes) {
             this.hideNodeByPath();
-        // }
+        }
     }
 
     private _toggleLock() {

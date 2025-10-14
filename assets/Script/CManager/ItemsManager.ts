@@ -99,7 +99,10 @@ export default class ItemsManager extends OBT_UIManager {
             let item: ItemInfo.Item = this._getRandomItemByStore({ ignoreKeyList: ignoreList });
             if (item) {
                 ignoreList.push(item.id);
-                items.push(copyObject(item));
+                let storeItem: ItemInfo.Item = copyObject(item);
+                // TODO: 计算价格
+                storeItem.price = 1;
+                items.push(storeItem);
             }
         }
         this.storeItemList = items;
@@ -214,7 +217,6 @@ export default class ItemsManager extends OBT_UIManager {
         // 是否为系统自动刷新，用于刚进入备战流程
         if (autoRefresh) {
             this._refreshTime = 0;
-            this._setNextRefreshCost();
         } else {
             let nowCurrency: number = CHRManager.instance.currencyCtrl.getCurrency();
             // 金币不够
@@ -224,12 +226,12 @@ export default class ItemsManager extends OBT_UIManager {
             }
             // 这个方法里面做扣金币操作
             CHRManager.instance.currencyCtrl.addCurrency(-this._nextRefreshCost);
+
+            this._refreshTime++;
         }
 
         // _loadStoreList只做刷新商店
         this._loadStoreList();
-
-        this._refreshTime++;
         this._setNextRefreshCost();
     }
 
@@ -257,10 +259,23 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     // 购买道具
-    public buyItem(id: string) {
-        // TODO: 购买操作
+    public buyItem(id: string): boolean {
+        let storeItem: ItemInfo.Item = this.storeItemList.find((item: ItemInfo.Item) => item.id === id);
+        if (!storeItem) {
+            return false;
+        }
+
+        let price: number = storeItem.price;
+        let nowCurrency: number = CHRManager.instance.currencyCtrl.getCurrency();
+        if (nowCurrency < price) {
+            console.log('元件不足');
+            return false;
+        }
 
         this.obtainItem(id);
+        // 扣除元件
+        CHRManager.instance.currencyCtrl.addCurrency(-price);
+        return true;
     }
 
     // 锁定，解锁商店

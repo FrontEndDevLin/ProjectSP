@@ -1,6 +1,7 @@
 import { CHRInfo, COLOR, GamePlayEvent } from "../../Common/Namespace";
 import { getFloatNumber, getRandomNumbers } from "../../Common/utils";
 import OBT from "../../OBT";
+import CHRManager from "../CHRManager";
 import DBManager from "../DBManager";
 import { BaseCtrl } from "./BaseCtrl";
 
@@ -32,6 +33,10 @@ export default class PropCtrl2 extends BaseCtrl {
 
     private _curHP: number = 0;
 
+    // 触发刷新的次数
+    private _refreshTime: number = 0;
+    // 下次刷新的费用
+    private _nextRefreshCost: number = 0;
     // 可升级的属性(随机)
     public preUpgradeList: CHRInfo.upgradeProp[] = [];
 
@@ -142,8 +147,32 @@ export default class PropCtrl2 extends BaseCtrl {
         return props;
     }
 
+    // 刷新花费, 目前固定为1
+    private _setNextRefreshCost() {
+        // 后续结合刷新次数，当前波次决定
+        this._nextRefreshCost = 1 + this._refreshTime - this._refreshTime;
+
+        OBT.instance.eventCenter.emit(GamePlayEvent.STORE.LEVEL_UP_REF_COST_CHANGE, this._nextRefreshCost);
+    }
+
     // 获取升级列表
-    public refreshPreUpgradeList() {
+    public refreshPreUpgradeList(autoRefresh?: boolean): boolean {
+        if (autoRefresh) {
+            this._refreshTime = 0;
+        } else {
+            // 扣钱
+            let nowCurrency: number = CHRManager.instance.currencyCtrl.getCurrency();
+            // 金币不够
+            if (nowCurrency - this._nextRefreshCost < 0) {
+                // console.log('金币不足');
+                return false;
+            }
+            // 这个方法里面做扣金币操作
+            CHRManager.instance.currencyCtrl.addCurrency(-this._nextRefreshCost);
+
+            this._refreshTime++;
+        }
+
         let props: string[] = this._getPreUpgradeProps();
         const list: CHRInfo.upgradeProp[] = [];
         // TODO: level结合当前等级计算
@@ -165,6 +194,8 @@ export default class PropCtrl2 extends BaseCtrl {
 
         this.preUpgradeList = list;
         OBT.instance.eventCenter.emit(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE);
+
+        this._setNextRefreshCost();
         return true;
     }
 

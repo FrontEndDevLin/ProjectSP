@@ -28,6 +28,10 @@ export class GUI_LevelUp extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.LEVEL_UP_LIST_UPDATE, this._updateLevelUpCard, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showLevelUpUI, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.STORE.LEVEL_UP_REF_COST_CHANGE, this._updateRefCost, this);
+
+        this.view("Container/StoreWrap/RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshLevelUpList, this);
         this.view("Bottom/Link").on(Node.EventType.TOUCH_END, this._showPropUI, this);
     }
 
@@ -73,6 +77,14 @@ export class GUI_LevelUp extends OBT_Component {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
         let node: Node = cardSlotList[getRandomNumber(0, cardSlotList.length - 1)].children[0];
         node.OBT_param2.autoTouch();
+    }
+
+    private _updateRefCost(cost: number) {
+        this.view("Container/StoreWrap/RefreshBtn/Cost").getComponent(Label).string = `${cost}`;
+    }
+
+    private _refreshLevelUpList() {
+        CHRManager.instance.propCtx.refreshPreUpgradeList();
     }
 
     protected onDestroy(): void {

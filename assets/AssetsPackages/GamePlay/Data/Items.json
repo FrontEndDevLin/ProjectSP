@@ -30,6 +30,7 @@
             "label": "道具1",
             "group_label": "道具",
             "ico": "Star",
+            "price": 1,
             "group": "normal",
             "buff_list": [
                 {
@@ -51,6 +52,7 @@
             "label": "道具2",
             "group_label": "道具",
             "ico": "Star",
+            "price": 1,
             "group": "normal",
             "buff_list": [
                 {
@@ -67,6 +69,7 @@
             "label": "道具3",
             "group_label": "道具",
             "ico": "Star",
+            "price": 1,
             "group": "normal",
             "buff_list": [
                 {
@@ -88,6 +91,7 @@
             "label": "道具4",
             "group_label": "道具",
             "ico": "Star",
+            "price": 1,
             "group": "normal",
             "buff_list": [
                 {
