@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { CHRInfo, GAME_NODE, GamePlayEvent } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
@@ -18,6 +18,8 @@ export class LevelUpCard extends OBT_Component {
         const props: CHRInfo.upgradeProp = this.node.OBT_param1;
         this._props = props;
 
+        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${props.ico}`);
+        this.view("Head/Pic").getComponent(Sprite).spriteFrame = assets;
         this.view("Content/Txt").getComponent(Label).string = `+${props.value} ${props.propTxt}`;
 
         this.node.once(Node.EventType.TOUCH_END, this._touchCard, this);

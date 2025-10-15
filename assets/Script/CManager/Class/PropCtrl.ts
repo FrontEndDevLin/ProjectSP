@@ -186,7 +186,7 @@ export default class PropCtrl extends BaseCtrl {
             list.push({
                 prop,
                 propTxt: propInfo.txt,
-                icon: "",
+                ico: propInfo.ico,
                 level,   // 品质
                 // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
                 value: this.qualityConfig[prop][0],
@@ -241,18 +241,20 @@ export default class PropCtrl extends BaseCtrl {
         let buffType: string = buff.type || "prop";
         if (buffType === "prop") {
             let prop: CHRInfo.Prop = this.getPropInfo(buff.prop);
+            let propTxt: string = prop.txt;
             let oValue: number = buff.value;
             let value: string = `${oValue}`;
             if (oValue > 0) {
                 value = `+${oValue}`;
             }
-    
+            
             if (prop.percent) {
                 value = `${value}%`;
+                propTxt = propTxt.replace("%", "");
             }
             
             let color: string = this.getBuffTxtColor(buff);
-            txt = `<color=${color}>${value}</color>${prop.txt}`;
+            txt = `<color=${color}>${value}</color>${propTxt}`;
         } else if (buffType === "event") {
             // let scriptName: string = buff.script;
             // txt = getScriptTypeItems(scriptName).getBuffTxt();

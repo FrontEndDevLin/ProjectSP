@@ -227,7 +227,7 @@ export namespace CHRInfo {
     export interface upgradeProp {
         prop: string,
         propTxt: string,
-        icon: string,
+        ico: string,
         level: number,   // 品质
         // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
         value: number

@@ -11,7 +11,7 @@
             "forward_val": true,
             "percent": false,
             "intro": "角色生命值",
-            "ico": ""
+            "ico": "HP"
         },
         "dmg": {
             "prop": "dmg",
@@ -21,7 +21,7 @@
             "forward_val": true,
             "percent": true,
             "intro": "角色伤害百分比修正",
-            "ico": ""
+            "ico": "HP"
         },
         "range_dmg": {
             "prop": "range_dmg",
@@ -31,7 +31,7 @@
             "forward_val": true,
             "percent": false,
             "intro": "介绍文本",
-            "ico": ""
+            "ico": "HP"
         },
         "melee_dmg": {
             "prop": "melee_dmg",
@@ -41,7 +41,7 @@
             "forward_val": true,
             "percent": false,
             "intro": "介绍文本",
-            "ico": ""
+            "ico": "HP"
         },
         "range": {
             "prop": "range",
@@ -51,7 +51,7 @@
             "forward_val": true,
             "percent": true,
             "intro": "介绍文本",
-            "ico": ""
+            "ico": "HP"
         },
         "atk_spd": {
             "prop": "atk_spd",
@@ -61,7 +61,7 @@
             "forward_val": true,
             "percent": true,
             "intro": "介绍文本",
-            "ico": ""
+            "ico": "HP"
         },
         "def": {
             "prop": "def",
@@ -71,7 +71,7 @@
             "forward_val": true,
             "percent": false,
             "intro": "介绍文本",
-            "ico": ""
+            "ico": "HP"
         },
         "spd": {
             "prop": "spd",
@@ -81,7 +81,7 @@
             "forward_val": true,
             "percent": true,
             "intro": "介绍文本",
-            "ico": ""
+            "ico": "HP"
         },
         "avd": {
             "prop": "avd",
@@ -91,7 +91,7 @@
             "forward_val": true,
             "percent": false,
             "intro": "介绍文本",
-            "ico": ""
+            "ico": "HP"
         },
         "luck": {
             "prop": "luck",
@@ -101,7 +101,7 @@
             "forward_val": true,
             "percent": false,
             "intro": "介绍文本",
-            "ico": ""
+            "ico": "HP"
         },
         "exp_eff": {
             "prop": "exp_eff",

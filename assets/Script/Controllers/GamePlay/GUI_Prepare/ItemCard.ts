@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, RichText } from 'cc';
+import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { CHRInfo, GAME_NODE, GamePlayEvent, ItemInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
@@ -27,6 +27,10 @@ export class ItemCard extends OBT_Component {
 
     private _updateView(item) {
         this.view("Head/TitleWrap/ItemName").getComponent(Label).string = item.label;
+
+        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Item/${item.ico}`);
+        this.view("Head/Pic").getComponent(Sprite).spriteFrame = assets;
+
         let buffTxt: string = ItemsManager.instance.getItemsPanelRichTxt(item.id);
         this.view("Content/RichTxt").getComponent(RichText).string = buffTxt;
     }
