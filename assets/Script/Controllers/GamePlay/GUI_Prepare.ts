@@ -11,6 +11,7 @@ import { CHRInfo, GAME_NODE, GamePlayEvent, ItemInfo } from '../../Common/Namesp
 import ProcessManager from '../../CManager/ProcessManager';
 import { getRandomNumber } from '../../Common/utils';
 import ItemsManager from '../../CManager/ItemsManager';
+import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -104,19 +105,26 @@ export class GUI_Prepare extends OBT_Component {
         this.showNodeByPath("Bottom");
     }
 
-    private _mountItemRectNode(backpackItem: ItemInfo.BackpackItem) {
+    private _mountItemRectNode(backpackItem: ItemInfo.BackpackItem, index?: number) {
         if (!this._backpackWrapNode) {
             this._backpackWrapNode = this.view("Container/InfoWrap/WrapLeft/ScrollView/view/content");
+            GUI_GamePlayManager.instance.setBackpackWrapNode(this._backpackWrapNode);
         }
         const itemRect: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prepare/ItemRect" });
         itemRect.OBT_param1 = backpackItem;
+        if (!index) {
+            index = this._backpackWrapNode.children.length
+        }
+        itemRect.OBT_param2 = {
+            index
+        }
 
         OBT.instance.uiManager.mountNode({ node: itemRect, parentNode: this._backpackWrapNode });
     }
     private _loadItemList() {
         let backpack: ItemInfo.BackpackItem[] = ItemsManager.instance.backpack;
         backpack.forEach((backpackItem: ItemInfo.BackpackItem, i: number) => {
-            this._mountItemRectNode(backpackItem);
+            this._mountItemRectNode(backpackItem, i);
         })
     }
     private _updateItemList({ hasItemInBackpack, backpackItem }: { hasItemInBackpack: Boolean, backpackItem: ItemInfo.BackpackItem }) {

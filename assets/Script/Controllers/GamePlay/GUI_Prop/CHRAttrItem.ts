@@ -28,7 +28,8 @@ export class CHRAttrItem extends OBT_Component {
     private _showPropInfo() {
         const prop: CHRInfo.Prop = this.node.OBT_param1;
         let index = this.node.OBT_param2 ? this.node.OBT_param2.index : 0;
-        CHRManager.instance.propCtx.showPropIntro(prop.prop, index);
+        let propKey = prop.prop;
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PROP_INTRO_UI, propKey, index)
     }
 
     protected onDestroy(): void {

@@ -14,9 +14,7 @@ export class ItemRect extends OBT_Component {
     protected onLoad(): void {
         const backpackItem: ItemInfo.BackpackItem = this.node.OBT_param1;
 
-        this.node.OBT_param2 = {
-            update: this._updateCount.bind(this)
-        }
+        this.node.OBT_param2.update = this._updateCount.bind(this);
 
         this._backpackItem = backpackItem;
 
@@ -37,7 +35,8 @@ export class ItemRect extends OBT_Component {
     }
 
     private _previewItem() {
-        ItemsManager.instance.previewItem(this._backpackItem.id, 1);
+        let index = this.node.OBT_param2.index || 0;
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_ITEM_UI, this._backpackItem.id, index);
     }
 
     start() {

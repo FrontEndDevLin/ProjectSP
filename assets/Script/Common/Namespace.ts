@@ -51,7 +51,10 @@ export namespace GamePlayEvent {
         SHOW_LEVEL_UP_UI,
         HIDE_LEVEL_UP_UI,
         SHOW_PROP_UI,
-        HIDE_PROP_UI
+        HIDE_PROP_UI,
+        SHOW_PREVIEW_ITEM_UI,
+        // HIDE_PREVIEW_ITEM_UI,
+        SHOW_PROP_INTRO_UI
     }
 
     export enum STORE {

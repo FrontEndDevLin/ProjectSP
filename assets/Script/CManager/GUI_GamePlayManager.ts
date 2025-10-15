@@ -13,6 +13,13 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     private _GUIPrepareNode: Node;
     // 属性界面
     private _GUIPropNode: Node;
+    // 弹窗界面
+    private _GUIPopupNode: Node;
+
+    // 属性外壳
+    private _propWrap: Node;
+    // 背包外壳
+    private _backPackWrap: Node;
 
     protected onLoad(): void {
         if (!GUI_GamePlayManager.instance) {
@@ -35,8 +42,8 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     public initPrepareGUI() {
         this._GUIPrepareNode = this.showPrefab({ prefabPath: "GUI_Prepare", parentNode: ProcessManager.instance.uiRootNode });
     }
-    public getPropGUINode() {
-        return this._GUIPropNode;
+    public initPopupGUI() {
+        this._GUIPopupNode = this.showPrefab({ prefabPath: "GUI_Popup", parentNode: ProcessManager.instance.uiRootNode });
     }
 
     public showGamePlayGUI() {
@@ -66,6 +73,25 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
     public hidePrepareGUI() {
         this.hideNode(this._GUIPrepareNode);
+    }
+    public showPopupGUI() {
+        this.showNode(this._GUIPopupNode);
+    }
+    public hidePopupGUI() {
+        this.hideNode(this._GUIPopupNode);
+    }
+
+    public setBackpackWrapNode(node: Node) {
+        this._backPackWrap = node;
+    }
+    public getBackpackWrapNode() {
+        return this._backPackWrap;
+    }
+    public setPropWrapNode(node: Node) {
+        this._propWrap = node;
+    }
+    public getPropWrapNode() {
+        return this._propWrap;
     }
 
     protected onDestroy(): void {
