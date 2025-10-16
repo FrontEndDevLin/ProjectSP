@@ -57,6 +57,8 @@ export class GUI_Prop extends OBT_Component {
         }
         this.hideNodeByPath(hidePath);
         this.showNodeByPath(showPath);
+
+        GUI_GamePlayManager.instance.setPropWrapNode(this.view(showPath));
     }
 
     private _initCHRAttrCard() {
