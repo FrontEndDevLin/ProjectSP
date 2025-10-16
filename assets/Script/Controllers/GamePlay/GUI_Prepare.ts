@@ -2,14 +2,12 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, Color, Component, EventTouch, Game, Label, Node, Sprite, SpriteFrame, UITransform, Widget } from 'cc';
+import { _decorator, Label, Node } from 'cc';
 import OBT_Component from '../../OBT_Component';
-import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
-import { CHRInfo, GAME_NODE, GamePlayEvent, ItemInfo } from '../../Common/Namespace';
+import { GAME_NODE, GamePlayEvent, ItemInfo } from '../../Common/Namespace';
 import ProcessManager from '../../CManager/ProcessManager';
-import { getRandomNumber } from '../../Common/utils';
 import ItemsManager from '../../CManager/ItemsManager';
 import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
 const { ccclass, property } = _decorator;
@@ -26,7 +24,7 @@ export class GUI_Prepare extends OBT_Component {
         // this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._prepareInit, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_REDUCE, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_DEAD_TIME, this._prepareDeadTime, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIMEOUT, this._prepareTimeout, this);
@@ -43,6 +41,8 @@ export class GUI_Prepare extends OBT_Component {
         this.view("Bottom/PropTxt").on(Node.EventType.TOUCH_END, this._showPropUI, this);
 
         this._loadItemList();
+
+        this.view("Bottom/NextWave").on(Node.EventType.TOUCH_END, this._nextWave, this);
     }
 
     start() {
@@ -69,6 +69,10 @@ export class GUI_Prepare extends OBT_Component {
         this.view("Container/StoreWrap/RefreshBtn/Cost").getComponent(Label).string = `${cost}`;
     }
 
+    private _prepareInit(duration) {
+        this._updateCountdownView(duration);
+        this.view("Header/TitleWrap/Val").getComponent(Label).string = `${ProcessManager.instance.waveRole.wave + 1}`;
+    }
     private _updateCountdownView(duration) {
         this.view("Countdown").getComponent(Label).string = duration;
     }
@@ -81,9 +85,7 @@ export class GUI_Prepare extends OBT_Component {
     }
 
     private _prepareTimeout() {
-        // const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
-        // let node: Node = cardSlotList[getRandomNumber(0, cardSlotList.length - 1)].children[0];
-        // node.OBT_param2.autoTouch();
+        this._nextWave();
     }
 
     private _refreshStore() {
@@ -141,6 +143,11 @@ export class GUI_Prepare extends OBT_Component {
             // 背包没有该道具，追加到列表后
             this._mountItemRectNode(backpackItem);
         }
+    }
+
+    // 下一波
+    private _nextWave() {
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_FINISH);
     }
 
     protected onDestroy(): void {

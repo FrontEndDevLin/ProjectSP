@@ -42,6 +42,8 @@ export class Compass extends OBT_Component {
         this.node.on(Node.EventType.TOUCH_START, this._touchStart);
         this.node.on(Node.EventType.TOUCH_END, this._touchEnd);
         this.node.on(Node.EventType.TOUCH_MOVE, this._touchMove);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, this._touchEnd, this);
     }
 
     private _touchStart = (event: EventTouch) => {

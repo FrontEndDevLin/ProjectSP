@@ -203,6 +203,7 @@ export default class DropItemManager extends OBT_UIManager {
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.DROP_ITEM_RECOVER_FINISH);
                 clearInterval(interval);
                 interval = null;
+                this._resRecovering = false;
             }
         }, 1000);
     }

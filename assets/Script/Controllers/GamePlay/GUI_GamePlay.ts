@@ -59,6 +59,8 @@ export class GUI_GamePlay extends OBT_Component {
         this._updateLevel();
         this._updateCurrency();
         this._updateStorage();
+
+        this.view("Wave/Val").getComponent(Label).string = `${ProcessManager.instance.waveRole.wave}`;
     }
 
     private _updateCountdownView(duration) {

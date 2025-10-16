@@ -1,4 +1,4 @@
-import { find, Vec3, Node } from "cc";
+import { find, Vec3, Node, v3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import DBManager from "./DBManager";
 import { CHRInfo, GamePlayEvent, SaveDoc } from "../Common/Namespace";
@@ -18,6 +18,8 @@ export default class CHRManager extends OBT_UIManager {
     public CHRDBData: any;
     public propCtx: PropCtrl;
     public currencyCtrl: CurrencyCtrl;
+
+    private _CHRNode: Node;
 
     protected onLoad(): void {
         if (!CHRManager.instance) {
@@ -76,11 +78,11 @@ export default class CHRManager extends OBT_UIManager {
         this.propCtx.addHP(health);
     }
 
-    public initCHR() {
-
+    public resetCHRPosition() {
+        this._CHRNode.setPosition(v3(0, 0, 0));
     }
     public showCHR() {
-        this.showPrefab({ prefabPath: "CHR/CHR01", scriptName: "CHR", parentNode: ProcessManager.instance.unitRootNode });
+        this._CHRNode = this.showPrefab({ prefabPath: "CHR/CHR01", scriptName: "CHR", parentNode: ProcessManager.instance.unitRootNode });
     }
     public initCompass() {
         this._compassNode = this.showPrefab({ prefabPath: "Compass", parentNode: ProcessManager.instance.uiRootNode });

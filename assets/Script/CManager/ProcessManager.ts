@@ -71,21 +71,20 @@ export default class ProcessManager extends OBT_UIManager {
         this.uiRootNode = this.mountEmptyNode({ nodeName: "UIRoot" });
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_FINISH, this._finishLevelUp, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_FINISH, this._finishPrepare, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._checkGameOver, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.DROP_ITEM_RECOVER_FINISH, this._finishDropItemRecovery, this);
     }
 
     protected initGlobal(isNewGame: boolean) {
+        // 这里将各个管理的根节点挂载，避免层级问题
         this._initMapAndGUI();
         this._initOtherRootNode();
         this._initSave(isNewGame);
         CHRManager.instance.init(this.saveCtrl.save);
-        // TODO: 这里将各个管理的根节点挂载，避免层级问题
-    }
-    protected initWave() {
-        EMYManager.instance.setSpawnRole();
-        DropItemManager.instance.initRateMap();
+
+        MapManager.instance.showMap();
     }
 
     private _initMapAndGUI() {
@@ -104,7 +103,6 @@ export default class ProcessManager extends OBT_UIManager {
             this.saveCtrl = new SaveCtrl();
             // 先加载存档，后续管理类再从存档中拿取数据
             this.saveCtrl.initSave();
-            this._loadWave();
         } else {
             // 需要做读取存档时，判断storage里有没有存档，有则读取存档；没有则读取InitSave.json
             let hasSaveDoc: boolean = false;
@@ -119,20 +117,22 @@ export default class ProcessManager extends OBT_UIManager {
     // 最开始
     public startGame(isNewGame: boolean): void {
         this.initGlobal(isNewGame);
-        this.initWave();
-        MapManager.instance.showMap();
-        this._startWave();
+        this._loadWave();
+    }
+    private _nextWave() {
+        this.saveCtrl.save.wave++;
+        this._loadWave();
     }
 
-    public toWave() {
+    private _loadWave() {
+        // 加载当前波次配置
+        const currentWave: number = this.saveCtrl.save.wave;
+        this.waveRole = this.gameConfig.waves[currentWave - 1];
 
-    }
-
-    // 是否处于战斗中
-    public isOnPlaying() {
-        return this.gameNode === GAME_NODE.FIGHTING;
-    }
-    private preplay() {
+        // 角色归位
+        CHRManager.instance.resetCHRPosition();
+        
+        // 设置波次时间
         if (this.isOnPlaying()) {
             console.log("战斗中不可设置波次时间");
             return;
@@ -140,12 +140,21 @@ export default class ProcessManager extends OBT_UIManager {
         let duration: number = this.waveRole.duration;
         this._duration = Math.floor(duration);
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_INIT, this._duration);
-    }
-    private _startWave() {
+
+        // 设置敌人刷新规则, 道具掉落概率
+        EMYManager.instance.setSpawnRole();
+        DropItemManager.instance.initRateMap();
+
+        // 显示操作UI, 进入战斗
         GUI_GamePlayManager.instance.showGamePlayGUI();
         CHRManager.instance.showCompass();
         this.gameNode = GAME_NODE.FIGHTING;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_START, this._duration);
+    }
+
+    // 是否处于战斗中
+    public isOnPlaying() {
+        return this.gameNode === GAME_NODE.FIGHTING;
     }
     private _passWave() {
         this.gameNode = GAME_NODE.PASS_FIGHT;
@@ -156,7 +165,6 @@ export default class ProcessManager extends OBT_UIManager {
     }
     private _finishDropItemRecovery() {
         this.scheduleOnce(() => {
-            // TODO: 移除所有进行中的项目：GUI
             this._setGameNode();
             this._nextStep();
         }, 1)
@@ -167,15 +175,12 @@ export default class ProcessManager extends OBT_UIManager {
             GUI_GamePlayManager.instance.hideLevelUpGUI();
             this._setGameNode();
             this._nextStep();
-        }, 1)
+        }, 0.5)
     }
     private _finishPrepare() {
         this.gameNode = GAME_NODE.PASS_PREPARE;
-        this.scheduleOnce(() => {
-            GUI_GamePlayManager.instance.hidePrepareGUI();
-            this._setGameNode();
-            this._nextStep();
-        }, 1)
+        GUI_GamePlayManager.instance.hidePrepareGUI();
+        this._nextStep();
     }
     // 根据当前过渡节点，设置下一节点
     private _setGameNode() {
@@ -191,7 +196,7 @@ export default class ProcessManager extends OBT_UIManager {
                 }
             } break;
             case GAME_NODE.PASS_PREPARE: {
-                this.gameNode = GAME_NODE.FIGHTING;
+                // this.gameNode = GAME_NODE.FIGHTING;
             } break;
         }
     }
@@ -221,17 +226,13 @@ export default class ProcessManager extends OBT_UIManager {
                 this._prepareDuration = PREPARE_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._prepareDuration);
             } break;
-            case GAME_NODE.FIGHTING: {
+            case GAME_NODE.PASS_PREPARE: {
                 // temp 临时置为 GAME_NODE.PASS_LEVEL_UP，可以使流程暂停
-                this.gameNode = GAME_NODE.PASS_LEVEL_UP
-                console.log('进入下一波，第一阶段结束')
+                // this.gameNode = GAME_NODE.PASS_LEVEL_UP
+                // console.log('进入下一波，第一阶段结束')
+                this._nextWave();
             } break;
         }
-    }
-    private _loadWave() {
-        const currentWave: number = this.saveCtrl.save.wave;
-        this.waveRole = this.gameConfig.waves[currentWave - 1];
-        this.preplay();
     }
     private _prepareTimeout() {
         this._finishPrepare();

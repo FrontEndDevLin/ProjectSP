@@ -250,8 +250,10 @@ export default class EMYManager extends OBT_UIManager {
         alertNode.setPosition(v3(x, y));
         let alertAnimation: AnimationComponent = alertNode.getComponent(Animation);
         setTimeout(() => {
-            this.mountNode({ node: alertNode, parentNode: this.alertRootNode });
-            alertAnimation.play("emy_alert");
+            if (ProcessManager.instance.isOnPlaying()) {
+                this.mountNode({ node: alertNode, parentNode: this.alertRootNode });
+                alertAnimation.play("emy_alert");
+            }
         }, delay);
 
         let enemyProps: EMYInfo.EMYProps = this.enemyData[enemyType];
@@ -268,8 +270,10 @@ export default class EMYManager extends OBT_UIManager {
 
         alertAnimation.once(Animation.EventType.FINISHED, () => {
             this.recoverAlertNode(alertNode);
-            this.enemyMap[nodeId] = { x, y, dis: 0, alive: 1 };
-            this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
+            if (ProcessManager.instance.isOnPlaying()) {
+                this.enemyMap[nodeId] = { x, y, dis: 0, alive: 1 };
+                this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
+            }
         })
     }
     private _createEnemyLoc(pattern: string): Vec3 {

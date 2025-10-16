@@ -57,7 +57,11 @@ export default class OBT extends Component {
                 this._getStructure(sNode, obj[node.name])
             }
         } else {
-            obj[node.name] = 1;
+            if (obj[node.name]) {
+                obj[node.name]++;
+            } else {
+                obj[node.name] = 1;
+            }
         }
     }
 }
