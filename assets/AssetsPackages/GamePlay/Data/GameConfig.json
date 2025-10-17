@@ -18,6 +18,17 @@
         {
             "wave": 1,
             "duration": 2,
+            "preload": {
+                "alert": 4,
+                "exp": 10,
+                "exp_particle": 9,
+                "trophy": 2,
+                "emy": [{ "emyId": "EMY01", "count": 4 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy_particle": 20,
+                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 2 }],
+                "bullet_particle": 4,
+                "dmg_txt": 5
+            },
             "spawn_roles": [
                 {
                     "enemy_type": "EMY_Peace",
@@ -48,6 +59,17 @@
         {
             "wave": 2,
             "duration": 10,
+            "preload": {
+                "alert": 4,
+                "exp": 10,
+                "exp_particle": 9,
+                "trophy": 2,
+                "emy": [{ "emyId": "EMY01", "count": 4 }, { "emyId": "EMY02", "count": 6 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy_particle": 20,
+                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 2 }],
+                "bullet_particle": 4,
+                "dmg_txt": 5
+            },
             "spawn_roles": [
                 {
                     "enemy_type": "EMY_Peace",
@@ -64,13 +86,25 @@
                 {
                     "enemy_type": "EMY01",
                     "spawn_total": 12,
-                    "spawn_once_time": 2,
+                    "spawn_once_time": 1,
                     "spawn_interval": 1.6,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 0,
                     "spawn_duration": 30,
                     "hp": 5,
+                    "dmg": 2
+                },
+                {
+                    "enemy_type": "EMY02",
+                    "spawn_total": 12,
+                    "spawn_once_time": 2,
+                    "spawn_interval": 2.4,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 0,
+                    "spawn_duration": 30,
+                    "hp": 2,
                     "dmg": 2
                 }
             ]

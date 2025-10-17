@@ -25,8 +25,6 @@ export class BulletParticleCtrl extends BaseCtrl {
         }
 
         this._nodePool = new NodePool("BulletParticle");
-        
-        this.preloadParticle(4);
     }
 
     public initRootNode() {
@@ -34,7 +32,7 @@ export class BulletParticleCtrl extends BaseCtrl {
     }
 
     public preloadParticle(count: number) {
-        for (let i = 0; i < count; i++) {
+        for (let i = this._nodePool.size(); i < count; i++) {
             let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/BulletParticle" });
             this._nodePool.put(particleNode);
         }

@@ -25,8 +25,6 @@ export class ExpBlockParticleCtrl extends BaseCtrl {
         }
 
         this._nodePool = new NodePool("ExpBlockParticle");
-        
-        this.preloadParticle(9);
     }
 
     public initRootNode() {
@@ -34,7 +32,7 @@ export class ExpBlockParticleCtrl extends BaseCtrl {
     }
 
     public preloadParticle(count: number) {
-        for (let i = 0; i < count; i++) {
+        for (let i = this._nodePool.size(); i < count; i++) {
             let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/ExpBlockParticle" });
             this._nodePool.put(particleNode);
         }

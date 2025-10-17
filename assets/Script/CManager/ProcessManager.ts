@@ -129,6 +129,11 @@ export default class ProcessManager extends OBT_UIManager {
         const currentWave: number = this.saveCtrl.save.wave;
         this.waveRole = this.gameConfig.waves[currentWave - 1];
 
+        // 预加载节点
+        EMYManager.instance.preloadNode();
+        DropItemManager.instance.preloadNode();
+        BulletManager.instance.preloadNode();
+
         // 角色归位
         CHRManager.instance.resetCHRPosition();
         

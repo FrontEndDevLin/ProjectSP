@@ -107,9 +107,32 @@ export namespace GameConfigInfo {
         dmg?: number
     }
 
+    export interface EmyPreloadConfig {
+        emyId: string,
+        count: number
+    }
+
+    export interface BulletPreloadConfig {
+        bulletId: string,
+        count: number
+    }
+
+    export interface PreloadConfig {
+        alert: number,
+        exp: number,
+        exp_particle: number,
+        trophy: number,
+        emy: EmyPreloadConfig[],
+        emy_particle: number,
+        bullet: BulletPreloadConfig[],
+        bullet_particle: number,
+        dmg_txt: number
+    }
+
     export interface WaveRole {
         wave: number,
         duration: number,
+        preload: PreloadConfig,
         spawn_roles: EMYSpawnRole[]
     }
 
@@ -345,6 +368,7 @@ export namespace GameCollider {
 
         PEACE = 96,
         EMY_01 = 100,
+        EMY_02 = 101,
 
         // 子弹碰撞id
         BULLET_BASE = 500

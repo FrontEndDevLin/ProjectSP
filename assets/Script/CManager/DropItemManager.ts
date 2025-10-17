@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, Prefab, Size, Sprite, SpriteFrame, UITransform, v3, Vec3, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import EMYManager from './EMYManager';
-import { EMYInfo, GamePlayEvent, PIXEL_UNIT } from '../Common/Namespace';
+import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT } from '../Common/Namespace';
 import OBT from '../OBT';
 import { getFloatNumber, getRandomNumber } from '../Common/utils';
 const { ccclass, property } = _decorator;
@@ -51,9 +51,7 @@ export default class DropItemManager extends OBT_UIManager {
         this._preloadExpAssets();
 
         this._expNodePool = new NodePool("ExpBlock");
-        this.preloadExpBlock(10);
         this._trophyNodePool = new NodePool("TrophyBlock");
-        this.preloadTrophyBlock(2);
 
         this.expBlockParticleCtrl = new ExpBlockParticleCtrl();
     }
@@ -62,13 +60,20 @@ export default class DropItemManager extends OBT_UIManager {
         
     }
 
+    public preloadNode() {
+        const preloadConfig: GameConfigInfo.PreloadConfig = ProcessManager.instance.waveRole.preload;
+        this.preloadExpBlock(preloadConfig.exp);
+        this.preloadTrophyBlock(preloadConfig.trophy);
+        this.expBlockParticleCtrl.preloadParticle(preloadConfig.exp_particle);
+    }
+
     public initRootNode() {
         this.dropItemRootNode = this.mountEmptyNode({ nodeName: "DropItemBox", parentNode: ProcessManager.instance.unitRootNode });
         this.expBlockParticleCtrl.initRootNode();
     }
 
     public preloadExpBlock(count: number) {
-        for (let i = 0; i < count; i++) {
+        for (let i = this._expNodePool.size(); i < count; i++) {
             let expNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "DropItem/ExpBlock" });
             this._expNodePool.put(expNode);
         }
@@ -78,7 +83,7 @@ export default class DropItemManager extends OBT_UIManager {
         this._expNodePool.put(expNode);
     }
     public preloadTrophyBlock(count: number) {
-        for (let i = 0; i < count; i++) {
+        for (let i = this._trophyNodePool.size(); i < count; i++) {
             let trophyNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "DropItem/TrophyBlock" });
             this._trophyNodePool.put(trophyNode);
         }

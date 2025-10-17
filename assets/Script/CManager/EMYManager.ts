@@ -22,11 +22,6 @@ interface EmyNodePoolMap {
     [emyId: string]: NodePool
 }
 
-interface EmyPreloadConfig {
-    type: string,
-    count: number
-}
-
 export default class EMYManager extends OBT_UIManager {
     static instance: EMYManager = null;
 
@@ -67,13 +62,17 @@ export default class EMYManager extends OBT_UIManager {
         this.particleCtrl = new EmyParticleCtrl();
 
         this._alertNodePool = new NodePool();
-        this.preloadAlertNode(4);
-
-        this.preloadEmyNode([{ type: "EMY01", count: 4 }, { type: "EMY_Peace", count: 2 }]);
     }
 
     start() {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE_TINY, this._loadEnemy, this);
+    }
+    
+    public preloadNode() {
+        const preloadConfig: GameConfigInfo.PreloadConfig = ProcessManager.instance.waveRole.preload;
+        this.preloadAlertNode(preloadConfig.alert);
+        this.preloadEmyNode(preloadConfig.emy);
+        this.particleCtrl.preloadParticle(preloadConfig.emy_particle);
     }
 
     public initRootNode() {
@@ -83,17 +82,17 @@ export default class EMYManager extends OBT_UIManager {
     }
 
     // config -> [{ type: "EMY01", count: 10 }, { type: "PEACE", count: 1 }]
-    public preloadEmyNode(configList: EmyPreloadConfig[]) {
+    protected preloadEmyNode(configList: GameConfigInfo.EmyPreloadConfig[]) {
         configList.forEach(config => {
-            let { type, count } = config;
-            let enemyProps: EMYInfo.EMYProps = this.enemyData[type];
-            console.log(type)
+            let { emyId, count } = config;
+            let enemyProps: EMYInfo.EMYProps = this.enemyData[emyId];
             let scriptName = enemyProps.script || "EMYBase";
-            this._emyNodePoolMap[type] = new NodePool();
-
-            for (let i = 0; i < count; i++) {
-                let enemyNode = this.loadPrefab({ prefabPath: `EMY/${type}`, scriptName });
-                this._emyNodePoolMap[type].put(enemyNode);
+            if (!this._emyNodePoolMap[emyId]) {
+                this._emyNodePoolMap[emyId] = new NodePool();
+            }
+            for (let i = this._emyNodePoolMap[emyId].size(); i < count; i++) {
+                let enemyNode = this.loadPrefab({ prefabPath: `EMY/${emyId}`, scriptName });
+                this._emyNodePoolMap[emyId].put(enemyNode);
             }
         })
     }
@@ -103,8 +102,8 @@ export default class EMYManager extends OBT_UIManager {
         this._emyNodePoolMap[type].put(node);
     }
 
-    public preloadAlertNode(count: number) {
-        for (let i = 0; i < count; i++) {
+    protected preloadAlertNode(count: number) {
+        for (let i = this._alertNodePool.size(); i < count; i++) {
             let alertNode = this.loadPrefab({ prefabPath: `EMY/EmyAlert`, scriptName: "NONE" });
             this._alertNodePool.put(alertNode);
         }

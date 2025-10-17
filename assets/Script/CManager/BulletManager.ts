@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BulletInfo, GameCollider } from '../Common/Namespace';
+import { BulletInfo, GameCollider, GameConfigInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
@@ -10,10 +10,6 @@ const { ccclass, property } = _decorator;
 
 interface BulletPoolMap {
     [bulletId: string]: NodePool
-}
-interface BulletPreloadConfig {
-    bulletId: string,
-    count: number
 }
 
 /**
@@ -65,8 +61,13 @@ export default class BulletManager extends OBT_UIManager {
         this.bulletData = DBManager.instance.getDBData("Bullet");
         
         // this._initBulletCldMap();
+    }
 
-        this.preloadBullet([{ bulletId: "CHR_Bullet001", count: 2 }]);
+    public preloadNode() {
+        const preloadConfig: GameConfigInfo.PreloadConfig = ProcessManager.instance.waveRole.preload;
+        console.log(preloadConfig.bullet);
+        this.preloadBullet(preloadConfig.bullet);
+        this.particleCtrl.preloadParticle(preloadConfig.bullet_particle);
     }
 
     // private _initBulletCldMap(): void {
@@ -80,15 +81,16 @@ export default class BulletManager extends OBT_UIManager {
         this.particleCtrl.initRootNode();
     }
 
-    public preloadBullet(configList: BulletPreloadConfig[]) {
+    public preloadBullet(configList: GameConfigInfo.BulletPreloadConfig[]) {
         configList.forEach(({ bulletId, count }) => {
-            const nodePool = new NodePool();
-            const bulletAttr = this.bulletData[bulletId];
-            for (let i = 0; i < count; i++) {
-                const bulletNode: Node = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
-                nodePool.put(bulletNode);
+            const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
+            if (!this._nodePoolMap[bulletId]) {
+                this._nodePoolMap[bulletId] = new NodePool();
             }
-            this._nodePoolMap[bulletId] = nodePool;
+            for (let i = this._nodePoolMap[bulletId].size(); i < count; i++) {
+                const bulletNode: Node = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
+                this._nodePoolMap[bulletId].put(bulletNode);
+            }
         });
     }
     public recoverBullet(bulletId: string, node: Node) {

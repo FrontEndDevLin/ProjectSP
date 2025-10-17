@@ -25,7 +25,6 @@ export class EmyParticleCtrl extends BaseCtrl {
         }
 
         this._nodePool = new NodePool("EmyDieParticle");
-        this.preloadParticle(20);
     }
 
     public initRootNode() {
@@ -33,7 +32,7 @@ export class EmyParticleCtrl extends BaseCtrl {
     }
 
     public preloadParticle(count: number) {
-        for (let i = 0; i < count; i++) {
+        for (let i = this._nodePool.size(); i < count; i++) {
             let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/EmyDieParticle" });
             this._nodePool.put(particleNode);
         }

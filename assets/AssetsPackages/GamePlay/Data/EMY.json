@@ -28,5 +28,16 @@
     "exp_drop_rate": 1,
     "trophy_drop_rate": 0.05,
     "exp_cnt": 1
+  },
+  "EMY02": {
+    "id": "EMY02",
+    "cld": 101,
+    "type": "normal",
+    "move": "normal",
+    "pic": "",
+    "spd": 60,
+    "exp_drop_rate": 1,
+    "trophy_drop_rate": 0.05,
+    "exp_cnt": 1
   }
 }
