@@ -65,7 +65,6 @@ export default class BulletManager extends OBT_UIManager {
 
     public preloadNode() {
         const preloadConfig: GameConfigInfo.PreloadConfig = ProcessManager.instance.waveRole.preload;
-        console.log(preloadConfig.bullet);
         this.preloadBullet(preloadConfig.bullet);
         this.particleCtrl.preloadParticle(preloadConfig.bullet_particle);
     }

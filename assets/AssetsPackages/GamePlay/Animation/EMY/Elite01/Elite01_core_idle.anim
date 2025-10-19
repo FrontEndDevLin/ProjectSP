@@ -1,17 +1,17 @@
 [
   {
     "__type__": "cc.AnimationClip",
-    "_name": "EMY01_die",
+    "_name": "Elite01_core_idle",
     "_objFlags": 0,
     "__editorExtras__": {
       "embeddedPlayerGroups": []
     },
     "_native": "",
-    "sample": 4,
-    "speed": 1,
-    "wrapMode": 1,
+    "sample": 1,
+    "speed": 0.6,
+    "wrapMode": 22,
     "enableTrsBlending": false,
-    "_duration": 0.25,
+    "_duration": 1,
     "_hash": 500763545,
     "_tracks": [
       {
@@ -67,7 +67,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.25
+      1
     ],
     "_values": [
       {
@@ -86,7 +86,7 @@
         "__type__": "cc.RealKeyframeValue",
         "interpolationMode": 0,
         "tangentWeightMode": 0,
-        "value": 0,
+        "value": 0.96,
         "rightTangent": 0,
         "rightTangentWeight": 1,
         "leftTangent": 0,
@@ -108,7 +108,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.25
+      1
     ],
     "_values": [
       {
@@ -127,7 +127,7 @@
         "__type__": "cc.RealKeyframeValue",
         "interpolationMode": 0,
         "tangentWeightMode": 0,
-        "value": 0,
+        "value": 1,
         "rightTangent": 0,
         "rightTangentWeight": 1,
         "leftTangent": 0,
@@ -149,7 +149,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.25
+      1
     ],
     "_values": [
       {

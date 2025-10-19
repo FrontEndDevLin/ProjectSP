@@ -1,6 +1,6 @@
 {
     "desc": "存储当前存档数据",
-    "wave": 1,
+    "wave": 3,
     "status": 1,
     "chr_prop": {
         "desc": "这里存角色的面板数据",

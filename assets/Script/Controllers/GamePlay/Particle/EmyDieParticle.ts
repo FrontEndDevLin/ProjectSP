@@ -13,6 +13,8 @@ export class EmyDieParticle extends OBT_Component {
     // 移动的向量，随机生成
     private _vector: Vec3;
 
+    private _fadeSpd: number;
+
     protected onLoad(): void {
         
     }
@@ -21,12 +23,12 @@ export class EmyDieParticle extends OBT_Component {
         
     }
 
-    public init() {
+    public init(fadeSpd: number = 200) {
         this._active = true;
         // 随机一个透明度，匀速递减。在有透明度时，做直线运动，透明度归零时销毁
         this._opacity = getRandomNumber(160, 240);
         this.node.getComponent(UIOpacity).opacity = this._opacity;
-
+        this._fadeSpd = fadeSpd;
         this._vector = getRandomVector();
     }
 
@@ -51,7 +53,7 @@ export class EmyDieParticle extends OBT_Component {
             return;
         }
 
-        this._opacity -= dt * 200;
+        this._opacity -= dt * this._fadeSpd;
         this.node.getComponent(UIOpacity).opacity = this._opacity;
     }
 

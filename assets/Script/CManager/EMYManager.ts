@@ -1,7 +1,7 @@
 import { _decorator, Component, find, Game, Node, Prefab, sp, v3, Vec3, Animation, NodePool, AnimationComponent } from 'cc';
 const { ccclass, property } = _decorator;
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
+import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT, Point, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
 import { getFloatNumber, getRandomNumber } from '../Common/utils';
 import OBT from '../OBT';
 import ProcessManager from './ProcessManager';
@@ -146,6 +146,7 @@ export default class EMYManager extends OBT_UIManager {
         this._waveRole = { ...ProcessManager.instance.waveRole };
         // 初始化spawned_count和next_spawn_time
         this._waveRole.spawn_roles.forEach((spawnRole: GameConfigInfo.EMYSpawnRole, i: number) => {
+            spawnRole.spawn_once_time = spawnRole.spawn_once_time || 1;
             spawnRole.spawn_count = Math.ceil(spawnRole.spawn_total / spawnRole.spawn_once_time);
             spawnRole.spawned_count = 0;
             spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - spawnRole.start_delay);
@@ -198,7 +199,8 @@ export default class EMYManager extends OBT_UIManager {
             let createOptions: EMYInfo.CreateEMYParams = {
                 enemyType: spawnRole.enemy_type,
                 enemyCount: spawnRole.spawn_once_time,
-                pattern: spawnRole.spawn_pattern,
+                spawnPattern: spawnRole.spawn_pattern,
+                spawnPoint: spawnRole.spawn_point,
                 batchMode: spawnRole.batch_mode,
                 relation
             }
@@ -223,7 +225,7 @@ export default class EMYManager extends OBT_UIManager {
      * @param pattern 生成位置模式
      * @param batchMode 批量生成模式
      */
-    public createEnemy({ enemyType, enemyCount, pattern, batchMode = "normal", relation }: EMYInfo.CreateEMYParams) {
+    public createEnemy({ enemyType, enemyCount, spawnPattern, spawnPoint, batchMode = "normal", relation }: EMYInfo.CreateEMYParams) {
         // console.log(`生成${enemyCount}个${enemyType}类型的敌人, 生成位置模式为${pattern}, 批量生成模式为${batchMode}`);
 
         switch (batchMode) {
@@ -232,13 +234,13 @@ export default class EMYManager extends OBT_UIManager {
                     return
                 }
                 for (let i = 0; i < enemyCount; i++) {
-                    this._createAnEnemy({ enemyType, pattern }, (i + 1) * 60);
+                    this._createAnEnemy({ enemyType, spawnPattern, spawnPoint }, (i + 1) * 60);
                 }
             } break;
         }
     }
-    private _createAnEnemy({ enemyType, pattern }: EMYInfo.CreateAnEnemyParams, delay: number = 0) {
-        let loc: Vec3 = this._createEnemyLoc(pattern);
+    private _createAnEnemy({ enemyType, spawnPattern, spawnPoint }: EMYInfo.CreateAnEnemyParams, delay: number = 0) {
+        let loc: Vec3 = this._createEnemyLoc(spawnPattern, spawnPoint);
         // 生成警告标志
         let alertNode = this._alertNodePool.get();
         if (!alertNode) {
@@ -275,7 +277,20 @@ export default class EMYManager extends OBT_UIManager {
             }
         })
     }
-    private _createEnemyLoc(pattern: string): Vec3 {
+    private _createEnemyLoc(pattern: string, spawnPoint: Point): Vec3 {
+        let vec: Vec3 = v3(0, 0, 0);
+        switch (pattern) {
+            case "random": {
+                vec = this._createRandomLoc();
+            } break;
+            case "fixed": {
+                vec = v3(spawnPoint[0], spawnPoint[1], 0);
+            } break;
+        }
+        return vec;
+    }
+
+    private _createRandomLoc() {
         let x = SCREEN_WIDTH / 2;
         let y = SCREEN_HEIGHT / 2;
 
@@ -286,7 +301,7 @@ export default class EMYManager extends OBT_UIManager {
         let dis = Math.sqrt(Math.pow(locX - characterLoc.x, 2) + Math.pow(locY - characterLoc.y, 2));
         // 生成一个随机坐标，判断是否与角色距离过近（小于8个单位），如果过近重新生成
         if (dis < 8 * PIXEL_UNIT) {
-            return this._createEnemyLoc(pattern);
+            return this._createRandomLoc();
         }
         return v3(locX, locY);
     }

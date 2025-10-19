@@ -43,7 +43,7 @@ export class EmyParticleCtrl extends BaseCtrl {
         this._nodePool.put(node);
     }
 
-    public createDieParticle(loc: Vec3, count: number) {
+    public createDieParticle(loc: Vec3, count: number, fadeSpd?: number) {
         for (let i = 0; i < count; i++) {
             let particleNode = this._nodePool.get();
             if (!particleNode) {
@@ -53,9 +53,15 @@ export class EmyParticleCtrl extends BaseCtrl {
             particleNode.setScale(v3(scale, scale, 0));
             particleNode.setPosition(loc);
             let scriptComp = <EmyDieParticle>particleNode.getComponent("EmyDieParticle");
-            scriptComp.init();
+            scriptComp.init(fadeSpd);
             OBT.instance.uiManager.mountNode({ node: particleNode, parentNode: this.dieParticleRootNode });
         }
+    }
+
+    public createGroupDieParticle(locList: Vec3[], count: number) {
+        locList.forEach((loc: Vec3) => {
+            this.createDieParticle(loc, count, 100);
+        })
     }
 }
 

@@ -91,6 +91,7 @@ export namespace GameConfigInfo {
         spawn_interval: number,
         // 生成位置模式 random随机, pixed->固定位置, corners->屏幕四个角落",
         spawn_pattern: string,
+        spawn_point: Point,
         // 批量生成模式
         batch_mode: string,
         start_delay: number,
@@ -307,6 +308,11 @@ export namespace ItemInfo {
     }
 }
 
+// export type Point = [number, number];
+export interface Point {
+    [idx: number]: number
+}
+
 export namespace EMYInfo {
     export interface EMYDropInfo {
         id: string,
@@ -322,12 +328,17 @@ export namespace EMYInfo {
         script?: string,
         type: string,
         move: string,
+        broken_point: Point[] | Point[][],
         pic: string,
         spd: number,
         hp: number,
         dmg: number
     }
+    export interface EMYNormalData {
+        [EMYId: string]: EMYProps
+    }
     export interface EMYDBData {
+        // EMY_def: EMYNormalData
         [EMYId: string]: EMYProps
     }
 
@@ -345,7 +356,9 @@ export namespace EMYInfo {
     export interface CreateAnEnemyParams {
         enemyType: string,
         // 生成位置模式
-        pattern: string,
+        spawnPattern: string,
+        // 生成点位
+        spawnPoint?: Point,
         // 关系 normal->正常敌对 peace->中立
         relation?: string
     }
