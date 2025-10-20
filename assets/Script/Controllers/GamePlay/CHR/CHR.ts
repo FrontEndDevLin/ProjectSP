@@ -93,6 +93,9 @@ export class CHR extends OBT_Component {
             if (isHit) {
                 let enemyId: string = otherCollider.node.name;
                 let isSpecDmg: boolean = otherCollider.group === GameCollider.GROUP.EMY_BULLET;
+                if (isSpecDmg) {
+                    enemyId = otherCollider.node.OBT_param1;
+                }
                 let damage = DamageManager.instance.calcEnemyDamage(enemyId, isSpecDmg);
                 CHRManager.instance.propCtx.addHP(-damage);
             } else {

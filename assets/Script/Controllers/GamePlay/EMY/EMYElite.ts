@@ -4,7 +4,7 @@ import { EMYInfo, FLASH_TIME, GameCollider, PIXEL_UNIT, Point } from '../../../C
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
-import { copyObject, getFloatNumber, getVectorByAngle } from '../../../Common/utils';
+import { copyObject, getAngleByVector, getFloatNumber, getRandomNumber, getVectorByAngle } from '../../../Common/utils';
 import DropItemManager from '../../../CManager/DropItemManager';
 import DamageManager from '../../../CManager/DamageManager';
 import BulletManager from '../../../CManager/BulletManager';
@@ -32,7 +32,7 @@ export class EMYElite extends OBT_Component {
     private _maxHp: number;
 
     protected id: string;
-    private _bulletId: string = "";
+    private _bulletId: string = "EMY_Bullet020";
 
     start() {
     }
@@ -95,6 +95,7 @@ export class EMYElite extends OBT_Component {
     protected changePhase() {
         console.log('进入二阶段');
         this._breakShell();
+        this._vector = null;
         this.phase = 2;
     }
 
@@ -199,19 +200,71 @@ export class EMYElite extends OBT_Component {
     /**
      * 不同类型的兵行动逻辑不一样，普通杂兵只会向主角移动
      * 如果移动逻辑不同，在另外的类里重写这个方法
+     * 
+     * 生成一个向量, 朝该向量移动, 该向量与角色保持在120度内(-60, 60)
+     * 每一帧出一个随机数, 命中之后(转向)重新生成向量
+     * 当角色与该向量角度超出时, 转向
      */
+    private _vector: Vec3;
     protected move(dt) {
         // 攻击前摇不移动
         if (this._isCharging()) {
             return;
         }
-        return;
-        let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+        // return;
+        if (this.phase === 1) {
+            let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+            this._vector = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
+        }
+
+        if (this.phase === 2) {
+            if (!this._vector) {
+                this._vector = this._createVector();
+            }
+            const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
+            const curLoc: Vec3 = this.node.position;
+            let vecX = chrLoc.x - curLoc.x;
+            let vecY = chrLoc.y - curLoc.y;
+            let angle = Number((Math.atan(vecY / vecX) * (180 / Math.PI)).toFixed(2));
+            if (vecX < 0) {
+                if (vecY > 0) {
+                    angle += 180;
+                } else {
+                    angle -= 180;
+                }
+            }
+            let curAngle: number = getAngleByVector(this._vector);
+            if (curAngle < angle - 60 || curAngle > angle + 60) {
+                this._vector = this._createVector();
+            } else if (getRandomNumber(1, 1000) <= 4) {
+                // 0.4%概率改变方向
+                this._vector = this._createVector();
+            }
+        }
         let speed = dt * this.props.spd;
-        let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
-        let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
+        let newPos: Vec3 = this.node.position.add(new Vec3(this._vector.x * speed, this._vector.y * speed));
         this.node.setPosition(newPos);
+
+        // const angleList: number[] = [angle - 20, angle, angle + 20];
+        // angleList.forEach((ang: number) => {
+        //     let vector = getVectorByAngle(ang);
+        //     BulletManager.instance.createBullet(this._bulletId, curLoc, vector, this.props.id);
+        // });
     }
+    private _createVector(): Vec3 {
+        const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
+        const curLoc: Vec3 = this.node.position;
+        
+        let vecX = chrLoc.x - curLoc.x;
+        let vecY = chrLoc.y - curLoc.y;
+        let angle = Number((Math.atan(vecY / vecX) * (180 / Math.PI)).toFixed(2));
+        if (vecX < 0) {
+            angle -= 180;
+        }
+        let randomAngle: number = getRandomNumber(angle - 60, angle + 60);
+        return getVectorByAngle(randomAngle);
+    }
+
     private _updateEnemyInfo() {
         let ctrVec: Vec3 = CHRManager.instance.getCHRLoc();
         let cX = ctrVec.x;
@@ -279,7 +332,7 @@ export class EMYElite extends OBT_Component {
             const angleList: number[] = [angle - 20, angle, angle + 20];
             angleList.forEach((ang: number) => {
                 let vector = getVectorByAngle(ang);
-                BulletManager.instance.createBullet(this._bulletId, curLoc, vector);
+                BulletManager.instance.createBullet(this._bulletId, curLoc, vector, this.props.id);
             });
 
             this._currentCharge = 0;

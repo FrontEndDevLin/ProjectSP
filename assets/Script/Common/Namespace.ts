@@ -428,7 +428,9 @@ export namespace BulletInfo {
     // 子弹初始化参数
     export interface BulletInitParams {
         attr: BulletAttr,
-        vector: Vec3
+        vector: Vec3,
+        // 指定enemyId, 是敌人创建的子弹, 伤害计算由GameConfig提供
+        enemyId?: string
     }
 }
 
