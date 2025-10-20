@@ -4,7 +4,8 @@
     "type": "敌人类型 normal->小怪",
     "move": "移动逻辑 normal->走脸",
     "broken_point": "死亡时的爆炸点位",
-    "attack": "攻击逻辑 normal->走脸",
+    "attack": "攻击逻辑 none->只有碰撞攻击, remote->远程攻击",
+    "attack_cd": "攻击冷却",
     "exp_drop_rate": "经验掉率",
     "trophy_drop_rate": "战利品掉率",
     "trophy": "战利品类型 core->核心",
@@ -51,6 +52,8 @@
     "type": "elite",
     "script": "EMYElite",
     "move": "normal,random",
+    "attack": "none,remote",
+    "attack_cd": [1, 2],
     "broken_point": [
       [[-25, 52], [-8, 52], [8, 52], [25, 52], [-25, -52], [-8, -52], [8, -52], [25, -52], [-52, 25], [-52, 8], [-52, -8], [-52, -25], [52, 25], [52, 8], [52, -8], [52, -25]],
       [
@@ -63,7 +66,7 @@
       ]
     ],
     "pic": "",
-    "spd": 120,
+    "spd": 100,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 1,
     "trophy": "core",

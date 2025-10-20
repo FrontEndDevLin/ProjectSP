@@ -11,7 +11,8 @@
                 "spawn_once_time": "一次生成的数量",
                 "spawn_interval": "生成间隔",
                 "start_delay": "波次开始后延迟(秒)",
-                "spawn_duration": "该组生成持续时间(秒)"
+                "spawn_duration": "该组生成持续时间(秒)",
+                "spec_dmg": "特殊攻击(除碰撞攻击)的伤害"
             }
         }
     },
@@ -135,7 +136,8 @@
                     "spawn_duration": 1,
                     "start_delay": 0,
                     "hp": 120,
-                    "dmg": 3
+                    "dmg": 2,
+                    "spec_dmg": 4
                 }
             ]
         }

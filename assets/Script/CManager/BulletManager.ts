@@ -111,6 +111,9 @@ export default class BulletManager extends OBT_UIManager {
         //     this._bulletCldMap[bData.cld] = bData;
         // }
     }
+    public setBulletDamage(bulletId: string, damage: number) {
+        this.bulletData[bulletId].damage = damage;
+    }
     public getBulletDamage(bulletId): number {
         return this.bulletData[bulletId].damage;
         // return this._bulletCldMap[cld].damage;

@@ -31,7 +31,7 @@ export default class OBT extends Component {
 
     protected onLoad(): void {
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape;
-        // return
+        // return;
         OBT.instance = this
         this.resourceManager = new OBT_ResourceManager();
 

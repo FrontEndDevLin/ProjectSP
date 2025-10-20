@@ -105,7 +105,8 @@ export namespace GameConfigInfo {
         // 是否生成完毕
         spwaned: boolean,
         hp: number,
-        dmg?: number
+        dmg?: number,
+        spec_dmg?: number
     }
 
     export interface EmyPreloadConfig {
@@ -328,11 +329,14 @@ export namespace EMYInfo {
         script?: string,
         type: string,
         move: string,
+        attack: string,
+        attack_cd: number[],
         broken_point: Point[] | Point[][],
         pic: string,
         spd: number,
         hp: number,
-        dmg: number
+        dmg: number,
+        spec_dmg: number
     }
     export interface EMYNormalData {
         [EMYId: string]: EMYProps
@@ -394,7 +398,8 @@ export namespace GameCollider {
         ENEMY = 1<<3,
         CHR_BULLET = 1<<4,
         PICK_DOMAIN = 1<<5,
-        DROP_ITEM = 1<<6
+        DROP_ITEM = 1<<6,
+        EMY_BULLET = 1<<7
         // CTR_RIM = 1<<5,
     }
 }
@@ -405,7 +410,7 @@ export namespace BulletInfo {
         prefab: string,
         type: string,
         script: string,
-        damage: number,
+        damage?: number,
         speed: number,
         // 最大飞行距离
         max_dis: number,

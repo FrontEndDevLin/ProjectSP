@@ -2,7 +2,8 @@
     "desc": {
         "intro": "子弹配置, 在这个文件中定义子弹的伤害, 飞行速度, 最大飞行距离等",
         "max_dis": "最大飞行距离",
-        "cld": "碰撞体id"
+        "cld": "碰撞体id",
+        "type": "当type为EMY_bullet时, 为敌人发射的子弹, 伤害由SpawnRole决定"
     },
     "CHR_Bullet001": {
         "id": "CHR_Bullet001",
@@ -14,5 +15,15 @@
         "piercing": 1,
         "damage": 3,
         "cld": 500
+    },
+    "EMY_Bullet020": {
+        "id": "EMY_Bullet020",
+        "prefab": "EMY_Bullet020",
+        "type": "EMY_bullet",
+        "script": "Bullet",
+        "speed": 200,
+        "max_dis": 400,
+        "piercing": 1,
+        "cld": 520
     }
 }

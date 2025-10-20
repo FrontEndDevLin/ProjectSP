@@ -72,7 +72,7 @@ export class CHR extends OBT_Component {
 
     // 角色受击处理/吸收战利品
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
-        if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+        if (otherCollider.group === GameCollider.GROUP.ENEMY || otherCollider.group === GameCollider.GROUP.EMY_BULLET) {
             if (otherCollider.tag === GameCollider.TAG.PEACE) {
                 return;
             }
@@ -92,7 +92,8 @@ export class CHR extends OBT_Component {
 
             if (isHit) {
                 let enemyId: string = otherCollider.node.name;
-                let damage = DamageManager.instance.calcEnemyDamage(enemyId);
+                let isSpecDmg: boolean = otherCollider.group === GameCollider.GROUP.EMY_BULLET;
+                let damage = DamageManager.instance.calcEnemyDamage(enemyId, isSpecDmg);
                 CHRManager.instance.propCtx.addHP(-damage);
             } else {
                 // 通知伤害数字管理，跳出“闪避”字样

@@ -4,15 +4,16 @@ import { EMYInfo, FLASH_TIME, GameCollider, PIXEL_UNIT, Point } from '../../../C
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
-import { copyObject, getFloatNumber } from '../../../Common/utils';
+import { copyObject, getFloatNumber, getVectorByAngle } from '../../../Common/utils';
 import DropItemManager from '../../../CManager/DropItemManager';
 import DamageManager from '../../../CManager/DamageManager';
+import BulletManager from '../../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EMYElite')
 export class EMYElite extends OBT_Component {
     // 阶段
-    protected face: number = 1;
+    protected phase: number = 1;
 
     protected alive: boolean = true;
 
@@ -31,6 +32,7 @@ export class EMYElite extends OBT_Component {
     private _maxHp: number;
 
     protected id: string;
+    private _bulletId: string = "";
 
     start() {
     }
@@ -65,6 +67,8 @@ export class EMYElite extends OBT_Component {
         this.props = copyObject(props);
         this._maxHp = this.props.hp;
         this.updateHpBar();
+
+        BulletManager.instance.setBulletDamage("EMY_Bullet020", this.props.dmg)
     }
     protected loadSpNode() {
         this.spNodes[0] = this.view("Shell");
@@ -88,10 +92,10 @@ export class EMYElite extends OBT_Component {
     }
 
     // 二阶段
-    protected changeFace() {
+    protected changePhase() {
         console.log('进入二阶段');
         this._breakShell();
-        this.face = 2;
+        this.phase = 2;
     }
 
     private _breakShell() {
@@ -132,8 +136,8 @@ export class EMYElite extends OBT_Component {
                 let bulletId: string = otherCollider.node.name;
                 let damage: number = DamageManager.instance.calcAttackDamage(bulletId);
                 this.props.hp -= damage;
-                if (this.face === 1 && this.props.hp <= this._maxHp / 2) {
-                    this.changeFace();
+                if (this.phase === 1 && this.props.hp <= this._maxHp / 2) {
+                    this.changePhase();
                 }
                 this.updateHpBar();
                 // DamageManager.instance.showDamageTxt(realDamage, this.node.position);
@@ -153,7 +157,7 @@ export class EMYElite extends OBT_Component {
     private _flash() {
         if (!this.flashing) {
             this.flashing = true;
-            let spComp: SpriteComponent = this.spComps[this.face - 1];
+            let spComp: SpriteComponent = this.spComps[this.phase - 1];
             spComp.color = this.FLASH_COLOR;
         }
         // 重置闪烁时间
@@ -161,7 +165,7 @@ export class EMYElite extends OBT_Component {
     }
     private _cancelFlash() {
         this.flashing = false;
-        let spComp: SpriteComponent = this.spComps[this.face - 1];
+        let spComp: SpriteComponent = this.spComps[this.phase - 1];
         spComp.color = this.NORMAL_COLOR;
     }
     private _checkFlash(dt) {
@@ -197,6 +201,10 @@ export class EMYElite extends OBT_Component {
      * 如果移动逻辑不同，在另外的类里重写这个方法
      */
     protected move(dt) {
+        // 攻击前摇不移动
+        if (this._isCharging()) {
+            return;
+        }
         return;
         let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
         let speed = dt * this.props.spd;
@@ -240,12 +248,57 @@ export class EMYElite extends OBT_Component {
         this._breakCore();
     }
 
+    private _chargeTime: number = 0.6;
+    private _currentCharge: number = 0;
+    private _cd: number = 0;
+
+    private _tryRemoteAttack(dt: number) {
+        if (this.phase === 1) {
+            return;
+        }
+        if (this._cd <= 0) {
+            this._remoteAttack(dt);
+        } else {
+            this._cd -= dt;
+        }
+    }
+    private _remoteAttack(dt: number) {
+        this._currentCharge += dt;
+        if (this._currentCharge >= this._chargeTime) {
+            /**
+             * 远程攻击 向角色和角色夹角30度的位置发射3枚子弹
+             */
+            const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
+            const curLoc: Vec3 = this.node.position;
+            let vecX = chrLoc.x - curLoc.x;
+            let vecY = chrLoc.y - curLoc.y;
+            let angle = Number((Math.atan(vecY / vecX) * (180 / Math.PI)).toFixed(2));
+            if (vecX < 0) {
+                angle -= 180;
+            }
+            const angleList: number[] = [angle - 20, angle, angle + 20];
+            angleList.forEach((ang: number) => {
+                let vector = getVectorByAngle(ang);
+                BulletManager.instance.createBullet(this._bulletId, curLoc, vector);
+            });
+
+            this._currentCharge = 0;
+            this._cd = this.props.attack_cd[1];
+        }
+    }
+    // 是否处于攻击前摇
+    private _isCharging() {
+        return this.phase === 2 && this._cd <= 0 && this._currentCharge < this._chargeTime;
+    }
+
     update(deltaTime: number) {
         if (!ProcessManager.instance.isOnPlaying()) {
             return;
         }
         this._move(deltaTime);
         this._checkFlash(deltaTime);
+
+        this._tryRemoteAttack(deltaTime);
     }
 }
 

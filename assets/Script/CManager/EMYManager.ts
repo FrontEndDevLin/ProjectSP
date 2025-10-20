@@ -153,6 +153,7 @@ export default class EMYManager extends OBT_UIManager {
 
             this.enemyData[spawnRole.enemy_type].hp = spawnRole.hp;
             this.enemyData[spawnRole.enemy_type].dmg = spawnRole.dmg;
+            this.enemyData[spawnRole.enemy_type].spec_dmg = spawnRole.spec_dmg;
         })
         return true;
     }
@@ -346,8 +347,8 @@ export default class EMYManager extends OBT_UIManager {
         return this.enemyMap[target];
     }
 
-    public getEnemyDamage(enemyType: string): number {
-        return this.enemyData[enemyType].dmg;
+    public getEnemyDamage(enemyType: string, isSpec?: boolean): number {
+        return isSpec ? (this.enemyData[enemyType].spec_dmg || 0) : this.enemyData[enemyType].dmg;
     }
 
     protected onDestroy(): void {
