@@ -211,47 +211,33 @@ export class EMYElite extends OBT_Component {
         if (this._isCharging()) {
             return;
         }
-        // return;
-        if (this.phase === 1) {
-            let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
-            this._vector = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
-        }
-
-        if (this.phase === 2) {
-            if (!this._vector) {
-                this._vector = this._createVector();
-            }
-            const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
-            const curLoc: Vec3 = this.node.position;
-            let vecX = chrLoc.x - curLoc.x;
-            let vecY = chrLoc.y - curLoc.y;
-            let angle = Number((Math.atan(vecY / vecX) * (180 / Math.PI)).toFixed(2));
-            if (vecX < 0) {
-                if (vecY > 0) {
-                    angle += 180;
-                } else {
-                    angle -= 180;
+        switch (this.phase) {
+            case 1: {
+                let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+                this._vector = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
+            } break;
+            case 2: {
+                if (!this._vector) {
+                    this._vector = this._createVector();
                 }
-            }
-            let curAngle: number = getAngleByVector(this._vector);
-            if (curAngle < angle - 60 || curAngle > angle + 60) {
-                this._vector = this._createVector();
-            } else if (getRandomNumber(1, 1000) <= 4) {
-                // 0.4%概率改变方向
-                this._vector = this._createVector();
-            }
+                // 获取角色相对于自身的夹角
+                let angle = this._getToCHRAngle();
+                // 当前向量于自身的夹角
+                let curAngle: number = getAngleByVector(this._vector);
+                if (curAngle < angle - 60 || curAngle > angle + 60) {
+                    this._vector = this._createVector();
+                } else if (getRandomNumber(1, 1000) <= 4) {
+                    // 0.4%概率改变方向
+                    this._vector = this._createVector();
+                }
+            } break;
         }
         let speed = dt * this.props.spd;
         let newPos: Vec3 = this.node.position.add(new Vec3(this._vector.x * speed, this._vector.y * speed));
         this.node.setPosition(newPos);
-
-        // const angleList: number[] = [angle - 20, angle, angle + 20];
-        // angleList.forEach((ang: number) => {
-        //     let vector = getVectorByAngle(ang);
-        //     BulletManager.instance.createBullet(this._bulletId, curLoc, vector, this.props.id);
-        // });
     }
-    private _createVector(): Vec3 {
+    // 获取角色相对于自身的夹角
+    private _getToCHRAngle(): number {
         const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
         const curLoc: Vec3 = this.node.position;
         
@@ -259,8 +245,16 @@ export class EMYElite extends OBT_Component {
         let vecY = chrLoc.y - curLoc.y;
         let angle = Number((Math.atan(vecY / vecX) * (180 / Math.PI)).toFixed(2));
         if (vecX < 0) {
-            angle -= 180;
+            if (vecY > 0) {
+                angle += 180;
+            } else {
+                angle -= 180;
+            }
         }
+        return angle;
+    }
+    private _createVector(): Vec3 {
+        let angle: number = this._getToCHRAngle();
         let randomAngle: number = getRandomNumber(angle - 60, angle + 60);
         return getVectorByAngle(randomAngle);
     }
@@ -280,7 +274,6 @@ export class EMYElite extends OBT_Component {
         // 播放死亡动画并爆出粒子效果，
         EMYManager.instance.updateEnemy(this.id, { alive: 0 });
         DropItemManager.instance.dropItem(this.props.id, this.node.position);
-        // TODO: 播放死亡动画，播放完后再销毁节点
         this._die();
     }
     // 干脆的死
@@ -321,18 +314,11 @@ export class EMYElite extends OBT_Component {
             /**
              * 远程攻击 向角色和角色夹角30度的位置发射3枚子弹
              */
-            const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
-            const curLoc: Vec3 = this.node.position;
-            let vecX = chrLoc.x - curLoc.x;
-            let vecY = chrLoc.y - curLoc.y;
-            let angle = Number((Math.atan(vecY / vecX) * (180 / Math.PI)).toFixed(2));
-            if (vecX < 0) {
-                angle -= 180;
-            }
+            let angle: number = this._getToCHRAngle();
             const angleList: number[] = [angle - 20, angle, angle + 20];
             angleList.forEach((ang: number) => {
                 let vector = getVectorByAngle(ang);
-                BulletManager.instance.createBullet(this._bulletId, curLoc, vector, this.props.id);
+                BulletManager.instance.createBullet(this._bulletId, this.node.position, vector, this.props.id);
             });
 
             this._currentCharge = 0;
