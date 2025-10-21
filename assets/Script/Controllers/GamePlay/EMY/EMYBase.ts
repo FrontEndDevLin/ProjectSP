@@ -166,6 +166,11 @@ export class EMYBase extends OBT_Component {
         // TODO: 播放死亡动画，播放完后再销毁节点
         this._die();
     }
+    // 逃跑, 用来代替fadeout
+    protected runAway() {
+
+    }
+
     // 干脆的死
     private _fadeout() {
         // TODO: 直接调用fadeout会导致没有更新enemyMap
