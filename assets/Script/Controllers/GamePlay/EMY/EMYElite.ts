@@ -69,6 +69,8 @@ export class EMYElite extends OBT_Component {
         this.updateHpBar();
 
         BulletManager.instance.setBulletDamage("EMY_Bullet020", this.props.dmg)
+
+        // this.props.core
     }
     protected loadSpNode() {
         this.spNodes[0] = this.view("Shell");
@@ -278,6 +280,7 @@ export class EMYElite extends OBT_Component {
     }
     // 干脆的死
     private _fadeout() {
+        this.view("Elite_HPBar").active = false;
         // 播放死亡动画，播放完后再销毁节点
         this.aniComps[1].play("EMY01_die");
     }
@@ -288,8 +291,6 @@ export class EMYElite extends OBT_Component {
     private _die() {
         this._fadeout();
         EMYManager.instance.removeEnemy(this.id);
-
-        this.view("Elite_HPBar").active = false;
 
         this._breakCore();
     }

@@ -106,7 +106,9 @@ export namespace GameConfigInfo {
         spwaned: boolean,
         hp: number,
         dmg?: number,
-        spec_dmg?: number
+        spec_dmg?: number,
+        // 当wave_type为CORE时, 指定该core属性为true, 在该敌人死亡后波次结束
+        core?: boolean
     }
 
     export interface EmyPreloadConfig {
@@ -131,11 +133,22 @@ export namespace GameConfigInfo {
         dmg_txt: number
     }
 
+    export enum WAVE_TYPE {
+        NORMAL = 1,
+        CORE = 2
+    }
+
+    export interface TrophyConfig {
+        [enemy_type: string]: ItemInfo.TROPHY_TYPE
+    }
+
     export interface WaveRole {
         wave: number,
+        wave_type: WAVE_TYPE,
         duration: number,
         preload: PreloadConfig,
-        spawn_roles: EMYSpawnRole[]
+        spawn_roles: EMYSpawnRole[],
+        trophy_config?: TrophyConfig
     }
 
     export interface GameConfig {
@@ -304,6 +317,7 @@ export namespace ItemInfo {
     export enum TROPHY_TYPE {
         NONE = 0,
         NORMAL = 1,
+        CORE = 2,
         CHEST,
         GREAT_CHEST
     }
@@ -336,7 +350,9 @@ export namespace EMYInfo {
         spd: number,
         hp: number,
         dmg: number,
-        spec_dmg: number
+        spec_dmg: number,
+        // 当wave_type为CORE时, 指定该core属性为true, 在该敌人死亡后波次结束
+        core?: boolean
     }
     export interface EMYNormalData {
         [EMYId: string]: EMYProps

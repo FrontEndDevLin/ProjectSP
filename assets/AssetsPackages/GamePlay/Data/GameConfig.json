@@ -1,24 +1,26 @@
 {
     "desc": {
-        "wave": {
-            "spawn_role": {
-                "spawn_mode": "生成模式: normal->正常模式 random->随机出现",
-                "spawn_rate": "spawn_mode为random时, 随机出现的概率",
-                "spawn_pattern": "生成位置模式: random->随机 pixed->固定位置, corners->屏幕四个角落",
-                "spawn_point": "当spawn_pattern为pixed时, 指定生成点位",
-                "batch_mode": "批量生成模式: normal->无(在随机位置生成); 还需实现组合生成; 扎堆生成等",
-                "spawn_total": "总生成数量",
-                "spawn_once_time": "一次生成的数量",
-                "spawn_interval": "生成间隔",
-                "start_delay": "波次开始后延迟(秒)",
-                "spawn_duration": "该组生成持续时间(秒)",
-                "spec_dmg": "特殊攻击(除碰撞攻击)的伤害"
-            }
+        "spawn_role": {
+            "spawn_mode": "生成模式: normal->正常模式 random->随机出现",
+            "spawn_rate": "spawn_mode为random时, 随机出现的概率",
+            "spawn_pattern": "生成位置模式: random->随机 pixed->固定位置, corners->屏幕四个角落",
+            "spawn_point": "当spawn_pattern为pixed时, 指定生成点位",
+            "batch_mode": "批量生成模式: normal->无(在随机位置生成); 还需实现组合生成; 扎堆生成等",
+            "spawn_total": "总生成数量",
+            "spawn_once_time": "一次生成的数量",
+            "spawn_interval": "生成间隔",
+            "start_delay": "波次开始后延迟(秒)",
+            "spawn_duration": "该组生成持续时间(秒)",
+            "spec_dmg": "特殊攻击(除碰撞攻击)的伤害"
+        },
+        "trophy_config": {
+            "enemy_id": "掉落战利品配置, 配置在这里的, 战利品固定掉落。否则按照概率掉落"
         }
     },
     "waves": [
         {
             "wave": 1,
+            "wave_type": 1,
             "duration": 2,
             "preload": {
                 "alert": 4,
@@ -60,6 +62,7 @@
         },
         {
             "wave": 2,
+            "wave_type": 1,
             "duration": 10,
             "preload": {
                 "alert": 4,
@@ -113,8 +116,8 @@
         },
         {
             "wave": 3,
-            "is_elite": true,
-            "duration": 300,
+            "wave_type": 2,
+            "duration": 60,
             "preload": {
                 "alert": 4,
                 "exp": 10,
@@ -129,17 +132,19 @@
             "spawn_roles": [
                 {
                     "enemy_type": "Elite_EMY01",
-                    "spawn_total": 1,
                     "spawn_mode": "normal",
                     "spawn_pattern": "fixed",
                     "spawn_point": [0, 200],
-                    "spawn_duration": 1,
-                    "start_delay": 0,
+                    "start_delay": 1,
                     "hp": 120,
                     "dmg": 2,
-                    "spec_dmg": 4
+                    "spec_dmg": 4,
+                    "core": true
                 }
-            ]
+            ],
+            "trophy_config": {
+                "Elite_EMY01": 2
+            }
         }
     ]
 }

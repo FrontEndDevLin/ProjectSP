@@ -146,7 +146,10 @@ export default class EMYManager extends OBT_UIManager {
         this._waveRole = { ...ProcessManager.instance.waveRole };
         // 初始化spawned_count和next_spawn_time
         this._waveRole.spawn_roles.forEach((spawnRole: GameConfigInfo.EMYSpawnRole, i: number) => {
+            spawnRole.spawn_total = spawnRole.spawn_total || 1;
             spawnRole.spawn_once_time = spawnRole.spawn_once_time || 1;
+            spawnRole.start_delay = spawnRole.start_delay || 0;
+            spawnRole.spawn_duration = spawnRole.spawn_duration || 1;
             spawnRole.spawn_count = Math.ceil(spawnRole.spawn_total / spawnRole.spawn_once_time);
             spawnRole.spawned_count = 0;
             spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - spawnRole.start_delay);
@@ -154,6 +157,7 @@ export default class EMYManager extends OBT_UIManager {
             this.enemyData[spawnRole.enemy_type].hp = spawnRole.hp;
             this.enemyData[spawnRole.enemy_type].dmg = spawnRole.dmg;
             this.enemyData[spawnRole.enemy_type].spec_dmg = spawnRole.spec_dmg;
+            this.enemyData[spawnRole.enemy_type].core = spawnRole.core;
         })
         return true;
     }

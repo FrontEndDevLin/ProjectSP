@@ -120,6 +120,11 @@ export default class DropItemManager extends OBT_UIManager {
      * 敌人死亡后，调用该接口，由该接口决定掉落物品
      */
     public dropItem(emyId: string, position: Vec3) {
+        this.dropExpItem(emyId, position);
+        this.dropTrophyItem(emyId, position);
+    }
+
+    public dropExpItem(emyId: string, position: Vec3) {
         let emyRateData: EMYInfo.EMYDropInfo = this._dropRateMap[emyId];
         let dropExpCnt: number = this._dropExp(emyRateData);
         if (dropExpCnt) {
@@ -164,7 +169,9 @@ export default class DropItemManager extends OBT_UIManager {
                 CHRManager.instance.currencyCtrl.addStorage(-expandExpCnt);
             }
         }
-
+    }
+    public dropTrophyItem(emyId: string, position: Vec3) {
+        let emyRateData: EMYInfo.EMYDropInfo = this._dropRateMap[emyId];
         let dropTrophy: number = this._dropTrophy(emyRateData);
         if (dropTrophy) {
             let vecAry: Vec3[] = this._getRandomVec3Group(1, position);
@@ -175,6 +182,9 @@ export default class DropItemManager extends OBT_UIManager {
                     if (!trophyNode) {
                         trophyNode = this.loadPrefab({ prefabPath: "DropItem/TrophyBlock" });
                     }
+                } break;
+                case ItemInfo.TROPHY_TYPE.CORE: {
+                    console.log('掉落核心!!!!')
                 } break;
             }
             if (trophyNode) {
@@ -256,7 +266,7 @@ export default class DropItemManager extends OBT_UIManager {
     }
 
     // 判断掉落经验 判断当前关卡的全局掉落修正
-    private _dropExp(emyRateData: any): number {
+    private _dropExp(emyRateData: EMYInfo.EMYDropInfo): number {
         let expDropRate: number = emyRateData.exp_drop_rate;
         // 经验爆率修正
         // let expDropAmend: number = this._chapterData.exp_drop_amend;
@@ -270,7 +280,13 @@ export default class DropItemManager extends OBT_UIManager {
         }
     }
     // 是否掉落战利品
-    private _dropTrophy(emyRateData: any): number {
+    private _dropTrophy(emyRateData: EMYInfo.EMYDropInfo): number {
+        // 先查看是否有固定掉落
+        let trophy: ItemInfo.TROPHY_TYPE = ProcessManager.instance.getFixedDropTrophy(emyRateData.id);
+        if (typeof trophy === 'number') {
+            return trophy;
+        }
+        // 没有配置固定掉落再进行概率计算
         let trophyDropRate: number = emyRateData.trophy_drop_rate;
         // 战利品爆率修正
         // let trophyDropAmend: number = this._chapterData.trophy_drop_amend;
@@ -284,7 +300,7 @@ export default class DropItemManager extends OBT_UIManager {
             if (Math.random() <= rate) {
                 return this._beenChest();
             } else {
-                return 0;
+                return ItemInfo.TROPHY_TYPE.NONE;
             }
         }
     }

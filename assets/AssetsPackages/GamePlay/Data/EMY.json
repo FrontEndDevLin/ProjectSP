@@ -69,7 +69,6 @@
     "spd": 100,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 1,
-    "trophy": "core",
     "exp_cnt": 8
   }
 }

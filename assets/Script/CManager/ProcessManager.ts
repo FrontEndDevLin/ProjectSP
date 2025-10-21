@@ -6,7 +6,7 @@ import CHRManager from '../CManager/CHRManager';
 import EMYManager from '../CManager/EMYManager';
 import GUI_GamePlayManager from '../CManager/GUI_GamePlayManager';
 import OBT from '../OBT';
-import { GAME_NODE, GameConfigInfo, GamePlayEvent } from '../Common/Namespace';
+import { GAME_NODE, GameConfigInfo, GamePlayEvent, ItemInfo } from '../Common/Namespace';
 import DBManager from './DBManager';
 import DropItemManager from './DropItemManager';
 import SaveCtrl from './Class/SaveCtrl';
@@ -157,6 +157,14 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_START, this._duration);
     }
 
+    public getFixedDropTrophy(enemyType: string): ItemInfo.TROPHY_TYPE {
+        let trophyConfig: GameConfigInfo.TrophyConfig = this.waveRole.trophy_config;
+        if (trophyConfig) {
+            return trophyConfig[enemyType];
+        }
+        return null;
+    }
+
     // 是否处于战斗中
     public isOnPlaying() {
         return this.gameNode === GAME_NODE.FIGHTING;
@@ -264,6 +272,12 @@ export default class ProcessManager extends OBT_UIManager {
                         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._duration);
                         if (this._duration <= 0) {
                             this._passWave();
+                        } else {
+                            if (this.waveRole.wave_type === GameConfigInfo.WAVE_TYPE.CORE) {
+                                if (this._duration === 5) {
+                                    // TODO: 核心精英怪逃走，并留下核心可捡
+                                }
+                            }
                         }
                     }
                 }
