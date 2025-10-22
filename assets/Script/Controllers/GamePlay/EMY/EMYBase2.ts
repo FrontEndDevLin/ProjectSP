@@ -9,8 +9,8 @@ import DropItemManager from '../../../CManager/DropItemManager';
 import DamageManager from '../../../CManager/DamageManager';
 const { ccclass, property } = _decorator;
 
-@ccclass('EMYBase')
-export class EMYBase extends OBT_Component {
+@ccclass('EMYBase2')
+export class EMYBase2 extends OBT_Component {
     protected alive: boolean = true;
 
     protected collider: BoxCollider2D = null;
@@ -19,10 +19,6 @@ export class EMYBase extends OBT_Component {
     protected flashTime: number = FLASH_TIME;
     protected FLASH_COLOR: Color = new Color(0, 255, 255);
     protected NORMAL_COLOR: Color = new Color(255, 255, 255);
-    protected spNode: Node;
-    // protected spCompList: SpriteComponent[];
-    protected spComp: SpriteComponent;
-    protected aniComp: Animation;
 
     protected props: EMYInfo.EMYProps;
 
@@ -36,41 +32,19 @@ export class EMYBase extends OBT_Component {
     public init(props: EMYInfo.EMYProps, id: string) {
         this.id = id;
         this.alive = true;
-        if (!this.spNode) {
-            this.loadSpNode();
-        }
-        this.spNode.setScale(v3(1, 1));
         if (!this.collider) {
             this.loadCldComp();
             this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
         }
         this.collider.enabled = true;
-        if (!this.spComp) {
-            this.loadSpComp();
-        }
-        if (!this.aniComp) {
-            this.loadAniComp();
-            this.aniComp.on(Animation.EventType.FINISHED, () => {
-                this._remove();
-            });
-        }
         this.node.OBT_param2 = {
             id,
             runAway: this.runAway.bind(this)
         }
         this.props = copyObject(props);
     }
-    protected loadSpNode() {
-        this.spNode = this.view("PIC");
-    }
     protected loadCldComp() {
         this.collider = this.node.getComponent(BoxCollider2D);
-    }
-    protected loadSpComp() {
-        this.spComp = this.spNode.getComponent(Sprite);
-    }
-    protected loadAniComp() {
-        this.aniComp = this.spNode.getComponent(Animation);
     }
 
     protected onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
@@ -88,7 +62,7 @@ export class EMYBase extends OBT_Component {
                     this.die();
                 } else {
                     // 受击效果
-                    this._flash();
+                    this.flash();
                 }
             } break;
             // case GP_GROUP.CHARACTER: {
@@ -97,17 +71,17 @@ export class EMYBase extends OBT_Component {
         }
     }
 
-    private _flash() {
+    protected flash() {
         if (!this.flashing) {
             this.flashing = true;
-            this.spComp.color = this.FLASH_COLOR;
+            // this.spComp.color = this.FLASH_COLOR;
         }
         // 重置闪烁时间
         this.flashTime = FLASH_TIME;
     }
     private _cancelFlash() {
         this.flashing = false;
-        this.spComp.color = this.NORMAL_COLOR;
+        // this.spComp.color = this.NORMAL_COLOR;
     }
     private _checkFlash(dt) {
         if (this.flashing) {
@@ -172,7 +146,7 @@ export class EMYBase extends OBT_Component {
     }
 
     private _playDieAni() {
-        this.aniComp.play("EMY01_die");
+        // this.aniComp.play("EMY01_die");
     }
     private _remove() {
         EMYManager.instance.removeEmyNode(this.node);

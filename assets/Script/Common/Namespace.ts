@@ -107,8 +107,8 @@ export namespace GameConfigInfo {
         hp: number,
         dmg?: number,
         spec_dmg?: number,
-        // 当wave_type为CORE时, 指定该core属性为true, 在该敌人死亡后波次结束
-        core?: boolean
+        // 是否在逃跑(超时)掉落战利品
+        timeout_drop_trophy?: boolean
     }
 
     export interface EmyPreloadConfig {
@@ -135,7 +135,7 @@ export namespace GameConfigInfo {
 
     export enum WAVE_TYPE {
         NORMAL = 1,
-        CORE = 2
+        ELITE = 2
     }
 
     export interface TrophyConfig {
@@ -146,6 +146,8 @@ export namespace GameConfigInfo {
         wave: number,
         wave_type: WAVE_TYPE,
         duration: number,
+        max_emy: number,
+        max_emy_elite_fight: number,
         preload: PreloadConfig,
         spawn_roles: EMYSpawnRole[],
         trophy_config?: TrophyConfig
@@ -351,8 +353,7 @@ export namespace EMYInfo {
         hp: number,
         dmg: number,
         spec_dmg: number,
-        // 当wave_type为CORE时, 指定该core属性为true, 在该敌人死亡后波次结束
-        core?: boolean
+        timeout_drop_trophy?: boolean
     }
     export interface EMYNormalData {
         [EMYId: string]: EMYProps

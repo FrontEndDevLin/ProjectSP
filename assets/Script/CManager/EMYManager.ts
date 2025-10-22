@@ -18,6 +18,9 @@ export interface EnemyInfo {
 interface EnemyMap {
     [nodeId: string]: EnemyInfo
 }
+interface EliteEmyStatus {
+    [nodeId: string]: number 
+}
 interface EmyNodePoolMap {
     [emyId: string]: NodePool
 }
@@ -36,13 +39,13 @@ export default class EMYManager extends OBT_UIManager {
 
     public particleCtrl: EmyParticleCtrl;
 
-    // private _spawnRoles: any[] = [];
     /**
-     * 维护一个敌人map表，每一帧更新坐标和是否存活，当敌人被消灭后，播放完阵亡动画后从表中移除
+     * enemyMap 敌人map表，每一帧更新坐标和是否存活，当敌人被消灭后，播放完阵亡动画后从表中移除
      */
-    // 利用该计数器给敌人生成唯一id
+    // 敌人唯一id
     private createCounter: number = 0;
     public enemyMap: EnemyMap = {};
+    public eliteEnemyStatus: EliteEmyStatus = {};
 
     private _alertNodePool: NodePool = null;
 
@@ -113,35 +116,6 @@ export default class EMYManager extends OBT_UIManager {
         this._alertNodePool.put(node);
     }
 
-    public startListen() {
-        
-    }
-
-    // public getDBEnemyList(attrList: string[] = ['id']): any[] {
-    //     if (!this.enemyData) {
-    //         console.error("this.enemyData not loaded");
-    //         return;
-    //     }
-    //     let list: any[] = [];
-    //     for (let emyId in this.enemyData) {
-    //         if (!emyId.includes("EMY")) {
-    //             continue;
-    //         }
-    //         let emyItem = this.enemyData[emyId];
-    //         let item = {};
-    //         for (let key of attrList) {
-    //             item[key] = emyItem[key];
-    //         }
-    //         list.push(item);
-    //     }
-    //     return list;
-    // }
-
-    private _roleMap: any = {
-        // "timeNode": [
-        //     { role: "normal", emy: 1, emyMax: 2 }
-        // ]
-    }
     public setSpawnRole(): boolean {
         this._waveRole = { ...ProcessManager.instance.waveRole };
         // 初始化spawned_count和next_spawn_time
@@ -157,7 +131,7 @@ export default class EMYManager extends OBT_UIManager {
             this.enemyData[spawnRole.enemy_type].hp = spawnRole.hp;
             this.enemyData[spawnRole.enemy_type].dmg = spawnRole.dmg;
             this.enemyData[spawnRole.enemy_type].spec_dmg = spawnRole.spec_dmg;
-            this.enemyData[spawnRole.enemy_type].core = spawnRole.core;
+            this.enemyData[spawnRole.enemy_type].timeout_drop_trophy = spawnRole.timeout_drop_trophy;
         })
         return true;
     }
@@ -183,6 +157,10 @@ export default class EMYManager extends OBT_UIManager {
                 continue;
             }
             if (spawnRole.next_spawn_time < duration) {
+                continue;
+            }
+
+            if (this._isMoreThanMaxEmy(spawnRole)) {
                 continue;
             }
 
@@ -221,6 +199,42 @@ export default class EMYManager extends OBT_UIManager {
                 spawnRole.spwaned = false;
             }
         }
+    }
+
+    // 判断当前敌人数量是否超过最大同屏数
+    private _isMoreThanMaxEmy(spawnRole: GameConfigInfo.EMYSpawnRole) {
+        let res: boolean = false;
+        let currentEmyCnt: number = this.getEnemyCount();
+
+        switch (this._waveRole.wave_type) {
+            case GameConfigInfo.WAVE_TYPE.NORMAL: {
+                if (currentEmyCnt >= this._waveRole.max_emy) {
+                    res = true;
+                }
+            } break;
+            case GameConfigInfo.WAVE_TYPE.ELITE: {
+                // 是否为普通敌人, 精英敌人不受最大同屏数影响
+                if (!this._isEliteEnemy(spawnRole.enemy_type)) {
+                    // 判断场上有无精英敌人, 有则拿 max_emy_elite_fight, 没有则拿 max_emy
+                    let max_emy: number = this._waveRole.max_emy;
+                    if (this._hasEliteEnemy()) {
+                        max_emy = this._waveRole.max_emy_elite_fight;
+                    }
+                    if (currentEmyCnt >= max_emy) {
+                        res = true;
+                    }
+                }
+            } break;
+        }
+
+        return res;
+    }
+
+    private _isEliteEnemy(enemyType: string): boolean {
+        return this._waveRole.wave_type === GameConfigInfo.WAVE_TYPE.ELITE && enemyType.indexOf('Elite_') !== -1;
+    }
+    private _hasEliteEnemy(): boolean {
+        return Object.keys(this.eliteEnemyStatus).length > 0;
     }
 
     /**
@@ -263,6 +277,7 @@ export default class EMYManager extends OBT_UIManager {
         }, delay);
 
         let enemyProps: EMYInfo.EMYProps = this.enemyData[enemyType];
+        let isEliteEnemy: boolean = this._isEliteEnemy(enemyType);
         let scriptName: string = enemyProps.script || "EMYBase";
         let enemyNode = this._emyNodePoolMap[enemyType].get();
         if (!enemyNode) {
@@ -278,6 +293,9 @@ export default class EMYManager extends OBT_UIManager {
             this.recoverAlertNode(alertNode);
             if (ProcessManager.instance.isOnPlaying()) {
                 this.enemyMap[nodeId] = { x, y, dis: 0, alive: 1 };
+                if (isEliteEnemy) {
+                    this.eliteEnemyStatus[nodeId] = 1;
+                }
                 this.mountNode({ node: enemyNode, parentNode: this.enemyRootNode });
             }
         })
@@ -321,14 +339,18 @@ export default class EMYManager extends OBT_UIManager {
     }
     public removeEnemy(nodeId: string) {
         delete this.enemyMap[nodeId];
+        if (this.eliteEnemyStatus[nodeId]) {
+            delete this.eliteEnemyStatus[nodeId];
+        }
     }
     // 移除enemyRootNode下所有节点
     public removeAllEnemy() {
         const nodeList: Node[] = this.enemyRootNode.children;
         nodeList.forEach(node => {
-            node.OBT_param2.fadeOut();
+            node.OBT_param2.runAway();
         });
         this.enemyMap = {};
+        this.eliteEnemyStatus = {};
     }
     public getNearestEnemy(nodeIdList: string[]): EnemyInfo {
         let min: number = 0;
@@ -349,6 +371,10 @@ export default class EMYManager extends OBT_UIManager {
             }
         }
         return this.enemyMap[target];
+    }
+
+    public getEnemyCount() {
+        return Object.keys(this.enemyMap).length;
     }
 
     public getEnemyDamage(enemyType: string, isSpec?: boolean): number {

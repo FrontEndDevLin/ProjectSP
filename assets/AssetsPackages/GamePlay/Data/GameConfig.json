@@ -1,5 +1,7 @@
 {
     "desc": {
+        "max_emy": "最大同屏小怪数",
+        "max_emy_elite_fight": "只有在wave_type为2时生效。在有精英怪存在时, 最大同屏小怪数",
         "spawn_role": {
             "spawn_mode": "生成模式: normal->正常模式 random->随机出现",
             "spawn_rate": "spawn_mode为random时, 随机出现的概率",
@@ -11,7 +13,8 @@
             "spawn_interval": "生成间隔",
             "start_delay": "波次开始后延迟(秒)",
             "spawn_duration": "该组生成持续时间(秒)",
-            "spec_dmg": "特殊攻击(除碰撞攻击)的伤害"
+            "spec_dmg": "特殊攻击(除碰撞攻击)的伤害",
+            "timeout_drop_trophy": "是否在逃跑(超时)掉落物品"
         },
         "trophy_config": {
             "enemy_id": "掉落战利品配置, 配置在这里的, 战利品固定掉落。否则按照概率掉落"
@@ -21,6 +24,7 @@
         {
             "wave": 1,
             "wave_type": 1,
+            "max_emy": 30,
             "duration": 2,
             "preload": {
                 "alert": 4,
@@ -63,6 +67,7 @@
         {
             "wave": 2,
             "wave_type": 1,
+            "max_emy": 30,
             "duration": 10,
             "preload": {
                 "alert": 4,
@@ -117,7 +122,9 @@
         {
             "wave": 3,
             "wave_type": 2,
-            "duration": 60,
+            "duration": 5,
+            "max_emy": 30,
+            "max_emy_elite_fight": 4,
             "preload": {
                 "alert": 4,
                 "exp": 10,
@@ -139,7 +146,7 @@
                     "hp": 120,
                     "dmg": 2,
                     "spec_dmg": 4,
-                    "core": true
+                    "timeout_drop_trophy": true
                 }
             ],
             "trophy_config": {

@@ -272,12 +272,6 @@ export default class ProcessManager extends OBT_UIManager {
                         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._duration);
                         if (this._duration <= 0) {
                             this._passWave();
-                        } else {
-                            if (this.waveRole.wave_type === GameConfigInfo.WAVE_TYPE.CORE) {
-                                if (this._duration === 5) {
-                                    // TODO: 核心精英怪逃走，并留下核心可捡
-                                }
-                            }
                         }
                     }
                 }

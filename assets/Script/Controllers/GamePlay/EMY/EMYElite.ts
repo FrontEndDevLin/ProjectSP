@@ -1,4 +1,4 @@
-import { _decorator, BoxCollider2D, Color, Component, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation, AnimationComponent, UITransform } from 'cc';
+import { _decorator, BoxCollider2D, Color, Component, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation, UITransform } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { EMYInfo, FLASH_TIME, GameCollider, PIXEL_UNIT, Point } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
@@ -26,7 +26,7 @@ export class EMYElite extends OBT_Component {
     protected spNodes: Node[] = [];
     // protected spCompList: SpriteComponent[];
     protected spComps: SpriteComponent[] = [];
-    protected aniComps: AnimationComponent[] = [];
+    protected aniComps: Animation[] = [];
 
     protected props: EMYInfo.EMYProps;
     private _maxHp: number;
@@ -62,7 +62,7 @@ export class EMYElite extends OBT_Component {
         }
         this.node.OBT_param2 = {
             id,
-            fadeOut: this._fadeout.bind(this)
+            runAway: this.runAway.bind(this)
         }
         this.props = copyObject(props);
         this._maxHp = this.props.hp;
@@ -271,28 +271,33 @@ export class EMYElite extends OBT_Component {
     }
 
     public die() {
+        this.view("Elite_HPBar").active = false;
         this.alive = false;
         this.node.getComponent(BoxCollider2D).enabled = false;
-        // 播放死亡动画并爆出粒子效果，
-        EMYManager.instance.updateEnemy(this.id, { alive: 0 });
+        EMYManager.instance.removeEnemy(this.id);
+        this._playDieAni();
+        // 掉落物品并爆出粒子效果
         DropItemManager.instance.dropItem(this.props.id, this.node.position);
-        this._die();
+        this._breakCore();
     }
-    // 干脆的死
-    private _fadeout() {
-        this.view("Elite_HPBar").active = false;
-        // 播放死亡动画，播放完后再销毁节点
+    // 逃跑
+    protected runAway() {
+        this.alive = false;
+        this.node.getComponent(BoxCollider2D).enabled = false;
+        EMYManager.instance.removeEnemy(this.id);
+        this._playDieAni();
+        // 如果是核心精英, 掉落核心
+        if (this.props.timeout_drop_trophy) {
+            console.log('精英逃跑')
+            DropItemManager.instance.dropTrophyItem(this.props.id, this.node.position);
+        }
+    }
+
+    private _playDieAni() {
         this.aniComps[1].play("EMY01_die");
     }
     private _remove() {
         EMYManager.instance.removeEmyNode(this.node);
-    }
-
-    private _die() {
-        this._fadeout();
-        EMYManager.instance.removeEnemy(this.id);
-
-        this._breakCore();
     }
 
     private _chargeTime: number = 0.6;
