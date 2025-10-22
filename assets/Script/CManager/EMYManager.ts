@@ -160,37 +160,38 @@ export default class EMYManager extends OBT_UIManager {
                 continue;
             }
 
-            if (this._isMoreThanMaxEmy(spawnRole)) {
-                continue;
-            }
+            let isMoreThanMaxEmy: boolean = this._isMoreThanMaxEmy(spawnRole);
 
-            let canCreate: boolean = true;
-            let relation: string = "normal";
-            if (spawnRole.spawn_mode === "random") {
-                let rate: number = spawnRole.spawn_rate;
-                let num = getRandomNumber(1, 100);
-                // 命中，生成
-                if (num > rate * 100) {
-                    canCreate = false;
-                } else {
-                    // console.log('生成中立生物')
-                    canCreate = true;
+            if (!isMoreThanMaxEmy) {
+                let canCreate: boolean = true;
+                let relation: string = "normal";
+                if (spawnRole.spawn_mode === "random") {
+                    let rate: number = spawnRole.spawn_rate;
+                    let num = getRandomNumber(1, 100);
+                    // 命中，生成
+                    if (num > rate * 100) {
+                        canCreate = false;
+                    } else {
+                        // console.log('生成中立生物')
+                        canCreate = true;
+                    }
+                    relation = "peace";
                 }
-                relation = "peace";
+    
+                let createOptions: EMYInfo.CreateEMYParams = {
+                    enemyType: spawnRole.enemy_type,
+                    enemyCount: spawnRole.spawn_once_time,
+                    spawnPattern: spawnRole.spawn_pattern,
+                    spawnPoint: spawnRole.spawn_point,
+                    batchMode: spawnRole.batch_mode,
+                    relation
+                }
+    
+                if (canCreate) {
+                    this.createEnemy(createOptions);
+                }
             }
 
-            let createOptions: EMYInfo.CreateEMYParams = {
-                enemyType: spawnRole.enemy_type,
-                enemyCount: spawnRole.spawn_once_time,
-                spawnPattern: spawnRole.spawn_pattern,
-                spawnPoint: spawnRole.spawn_point,
-                batchMode: spawnRole.batch_mode,
-                relation
-            }
-
-            if (canCreate) {
-                this.createEnemy(createOptions);
-            }
             if (spawnRole.spawned_count + 1 <= spawnRole.spawn_count) {
                 spawnRole.spawned_count++;
                 const { start_delay, spawned_count, spawn_interval } = spawnRole;
@@ -374,7 +375,7 @@ export default class EMYManager extends OBT_UIManager {
     }
 
     public getEnemyCount() {
-        return Object.keys(this.enemyMap).length;
+        return Object.keys(this.enemyMap).length + this.alertRootNode.children.length;
     }
 
     public getEnemyDamage(enemyType: string, isSpec?: boolean): number {

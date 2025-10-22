@@ -86,9 +86,9 @@ export class TrophyBlock extends OBT_Component {
                     // TODO: 去道具管理类生成一个宝箱
                     // ItemsManager.instance.pickChest(TROPHY_TYPE.CHEST);
                 } break;
-            
-                default:
-                    break;
+                case ItemInfo.TROPHY_TYPE.CORE: {
+                    console.log('捡起核心')
+                } break;
             }
 
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY);

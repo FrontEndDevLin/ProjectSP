@@ -184,7 +184,7 @@ export default class DropItemManager extends OBT_UIManager {
                     }
                 } break;
                 case ItemInfo.TROPHY_TYPE.CORE: {
-                    console.log('掉落核心!!!!')
+                    trophyNode = this.loadPrefab({ prefabPath: "DropItem/CoreBlock", scriptName: "TrophyBlock" });
                 } break;
             }
             if (trophyNode) {

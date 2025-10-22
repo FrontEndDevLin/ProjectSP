@@ -288,7 +288,6 @@ export class EMYElite extends OBT_Component {
         this._playDieAni();
         // 如果是核心精英, 掉落核心
         if (this.props.timeout_drop_trophy) {
-            console.log('精英逃跑')
             DropItemManager.instance.dropTrophyItem(this.props.id, this.node.position);
         }
     }

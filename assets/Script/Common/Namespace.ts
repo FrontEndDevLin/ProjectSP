@@ -399,6 +399,7 @@ export namespace GameCollider {
 
         DROP_ITEM_EXP = 20,
         DROP_ITEM_TROPHY = 21,
+        DROP_ITEM_CORE = 22,
 
         PEACE = 96,
         EMY_01 = 100,

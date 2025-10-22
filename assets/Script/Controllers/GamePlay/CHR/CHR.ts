@@ -105,10 +105,10 @@ export class CHR extends OBT_Component {
         }
         if (otherCollider.group === GameCollider.GROUP.DROP_ITEM) {
             switch (otherCollider.tag) {
-                case GameCollider.TAG.DROP_ITEM_TROPHY: {
+                case GameCollider.TAG.DROP_ITEM_TROPHY:
+                case GameCollider.TAG.DROP_ITEM_CORE: {
                     otherCollider.node.OBT_param2.absorbing = true;
                 } break;
-            
                 default:
                     break;
             }
