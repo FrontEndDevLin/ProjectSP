@@ -3,6 +3,7 @@ import { Vec3 } from "cc"
 export enum GAME_NODE {
     FIGHTING, // 进行中
     PASS_FIGHT, // 通过
+    CORE_SELECT, // 核心选择
     LEVEL_UP, // 升级中
     PASS_LEVEL_UP, // 升级结束
     PREPARE, // 备战中
@@ -23,6 +24,10 @@ export namespace GamePlayEvent {
         TIME_REDUCE,
         FIGHT_PASS,
         GAME_OVER,
+        CORE_SELECT_TIME_INIT,
+        CORE_SELECT_DEAD_TIME,
+        CORE_SELECT_TIME_REDUCE,
+        CORE_SELECT_TIMEOUT,
         LEVEL_UP,
         LEVEL_UP_TIME_INIT,
         LEVEL_UP_TIME_REDUCE,
@@ -55,7 +60,8 @@ export namespace GamePlayEvent {
         SHOW_PREVIEW_ITEM_UI,
         // HIDE_PREVIEW_ITEM_UI,
         SHOW_PROP_INTRO_UI,
-        UPDATE_TROPHY_ICON
+        UPDATE_TROPHY_ICON,
+        SHOW_CORE_SELECT_UI
     }
 
     export enum STORE {

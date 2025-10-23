@@ -14,6 +14,7 @@ import ItemsManager from './ItemsManager';
 import BulletManager from './BulletManager';
 const { ccclass, property } = _decorator;
 
+const CORE_SELECT_TIME: number = 5555;
 const LEVEL_UP_TIME: number = 5555;
 const PREPARE_TIME: number = 5555;
 
@@ -40,6 +41,10 @@ export default class ProcessManager extends OBT_UIManager {
     // 持续时间
     private _duration: number = 0;
     private _tinyCd: number = 0;
+
+    // 核心选择持续时间
+    private _coreSelectDuration: number = CORE_SELECT_TIME;
+    private _coreSelectSecond: number = 0;
 
     // 升级持续时间
     private _levelUpDuration: number = LEVEL_UP_TIME;
@@ -91,6 +96,7 @@ export default class ProcessManager extends OBT_UIManager {
         MapManager.instance.initMap();
         CHRManager.instance.initCompass();
         GUI_GamePlayManager.instance.initGamePlayGUI();
+        GUI_GamePlayManager.instance.initCoreSelectGUI();
         GUI_GamePlayManager.instance.initLevelUpGUI();
         GUI_GamePlayManager.instance.initPrepareGUI();
         GUI_GamePlayManager.instance.initPropGUI();
@@ -206,7 +212,7 @@ export default class ProcessManager extends OBT_UIManager {
                     // TODO: 判断第一个战利品是什么类型, 如果是核心, 走核心选择流程, 否则走开箱流程
                     switch (trophy) {
                         case ItemInfo.TROPHY_TYPE.CORE: {
-                            
+                            this.gameNode = GAME_NODE.CORE_SELECT;
                         } break;
                     }
                 } else {
@@ -244,6 +250,13 @@ export default class ProcessManager extends OBT_UIManager {
     // }
     private _nextStep() {
         switch (this.gameNode) {
+            case GAME_NODE.CORE_SELECT: {
+                console.log('进入核心选择流程');
+                // TODO: WarCoreManager.instance.initCoreSelectList()
+                GUI_GamePlayManager.instance.showCoreSelectGUI();
+                this._coreSelectDuration = CORE_SELECT_TIME;
+                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._levelUpDuration);
+            } break;
             case GAME_NODE.LEVEL_UP: {
                 // GUI_GamePlayManager.instance.hideGamePlayGUI();
                 CHRManager.instance.propCtx.refreshPreUpgradeList(true);
@@ -292,6 +305,27 @@ export default class ProcessManager extends OBT_UIManager {
                         if (this._duration <= 0) {
                             this._passWave();
                         }
+                    }
+                }
+            } break;
+            case GAME_NODE.CORE_SELECT: {
+                if (this._coreSelectDuration <= 0) {
+                    return;
+                }
+
+                this._coreSelectSecond += dt;
+                if (this._coreSelectSecond >= 1) {
+                    this._coreSelectSecond -= 1;
+                    
+                    this._coreSelectDuration -= 1;
+                    if (this._coreSelectDuration === 5) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_DEAD_TIME);
+                    }
+
+                    OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_REDUCE, this._coreSelectDuration);
+
+                    if (this._coreSelectDuration <= 0) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIMEOUT);
                     }
                 }
             } break;

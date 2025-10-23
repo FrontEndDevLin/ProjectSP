@@ -7,6 +7,8 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     static instance: GUI_GamePlayManager;
 
     private _GUIGamePlayNode: Node;
+    // 核心选择界面
+    private _GUICoreSelectNode: Node;
     // 升级界面
     private _GUILevelUpNode: Node;
     // 备战界面
@@ -45,6 +47,9 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     public initPopupGUI() {
         this._GUIPopupNode = this.showPrefab({ prefabPath: "GUI_Popup", parentNode: ProcessManager.instance.uiRootNode });
     }
+    public initCoreSelectGUI() {
+        this._GUICoreSelectNode = this.showPrefab({ prefabPath: "GUI_CoreSelect", parentNode: ProcessManager.instance.uiRootNode });
+    }
 
     public showGamePlayGUI() {
         this.showNode(this._GUIGamePlayNode);
@@ -79,6 +84,14 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
     public hidePopupGUI() {
         this.hideNode(this._GUIPopupNode);
+    }
+
+    public showCoreSelectGUI() {
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_CORE_SELECT_UI);
+        this.showNode(this._GUICoreSelectNode);
+    }
+    public hideCoreSelectGUI() {
+        this.hideNode(this._GUICoreSelectNode);
     }
 
     public setBackpackWrapNode(node: Node) {

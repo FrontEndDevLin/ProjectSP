@@ -26,6 +26,9 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.TIME_REDUCE, this._updateCountdownView, this);
 
+        // 核心选择倒计时
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_REDUCE, this._updateCountdownView, this);
         // 升级倒计时
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._updateCountdownView, this);
@@ -46,6 +49,8 @@ export class GUI_GamePlay extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_LEVEL_UP_UI, this._showMask, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_LEVEL_UP_UI, this._hideMask, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_CORE_SELECT_UI, this._showMask, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showMask, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_UI, this._hideMask, this);
@@ -97,10 +102,13 @@ export class GUI_GamePlay extends OBT_Component {
     }
 
     private _showMask() {
-        if (ProcessManager.instance.gameNode !== GAME_NODE.LEVEL_UP) {
-            return;
+        let currentGameNode: GAME_NODE = ProcessManager.instance.gameNode;
+        switch (currentGameNode) {
+            case GAME_NODE.LEVEL_UP:
+            case GAME_NODE.CORE_SELECT: {
+                this.view("Mask").setPosition(v3(0, 0, 0));
+            } break;
         }
-        this.view("Mask").setPosition(v3(0, 0, 0));
     }
     private _hideMask() {
         this.view("Mask").setPosition(v3(3000, 0, 0));
