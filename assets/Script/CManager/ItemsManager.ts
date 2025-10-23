@@ -37,6 +37,9 @@ export default class ItemsManager extends OBT_UIManager {
 
     private _itemPreviewNode: Node;
 
+    // 当前捡起的战利品列表, 不包含普通战利品
+    private _pickUpTrophyList: ItemInfo.TROPHY_TYPE[] = [];
+
     protected onLoad(): void {
         if (!ItemsManager.instance) {
             ItemsManager.instance = this
@@ -48,6 +51,8 @@ export default class ItemsManager extends OBT_UIManager {
         this._initItemData();
 
         this._itemPreviewNode = this.showPrefab({ prefabPath: "GUI_Prepare/GUI_ItemPreview", parentNode: ProcessManager.instance.uiRootNode });
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this._pickUpTrophy, this);
     }
 
     private _initItemData() {
@@ -298,6 +303,25 @@ export default class ItemsManager extends OBT_UIManager {
         this.showNode(this._itemPreviewNode);
 
         OBT.instance.printStructure()
+    }
+
+    // 捡起道具
+    private _pickUpTrophy(trophy: ItemInfo.TROPHY_TYPE) {
+        switch (trophy) {
+            case ItemInfo.TROPHY_TYPE.CORE: {
+                this._pickUpTrophyList.unshift(trophy);
+                OBT.instance.eventCenter.emit(GamePlayEvent.GUI.UPDATE_TROPHY_ICON);
+            } break;
+        }
+    }
+    public getPickUpTrophyList(): ItemInfo.TROPHY_TYPE[] {
+        return this._pickUpTrophyList;
+    }
+    public hasTrophy(): boolean {
+        return this._pickUpTrophyList.length > 0;
+    }
+    public getNextTrophy(): ItemInfo.TROPHY_TYPE {
+        return this._pickUpTrophyList[0];
     }
 
     protected onDestroy(): void {

@@ -199,7 +199,26 @@ export default class ProcessManager extends OBT_UIManager {
     private _setGameNode() {
         let currentGameNode: GAME_NODE = this.gameNode;
         switch (currentGameNode) {
-            case GAME_NODE.PASS_FIGHT:
+            case GAME_NODE.PASS_FIGHT: {
+                // 判断有无战利品掉落
+                let trophy: ItemInfo.TROPHY_TYPE = ItemsManager.instance.getNextTrophy();
+                if (trophy) {
+                    // TODO: 判断第一个战利品是什么类型, 如果是核心, 走核心选择流程, 否则走开箱流程
+                    switch (trophy) {
+                        case ItemInfo.TROPHY_TYPE.CORE: {
+                            
+                        } break;
+                    }
+                } else {
+                    // TODO: 与下面升级判断同代码，需要优化
+                    let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
+                    if (levelUpCnt) {
+                        this.gameNode = GAME_NODE.LEVEL_UP;
+                    } else {
+                        this.gameNode = GAME_NODE.PREPARE;
+                    }
+                }
+            } break;
             case GAME_NODE.PASS_LEVEL_UP: {
                 let levelUpCnt: number = CHRManager.instance.getLevelUpCnt();
                 if (levelUpCnt) {

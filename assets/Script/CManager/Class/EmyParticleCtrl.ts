@@ -47,7 +47,7 @@ export class EmyParticleCtrl extends BaseCtrl {
         for (let i = 0; i < count; i++) {
             let particleNode = this._nodePool.get();
             if (!particleNode) {
-                particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "EMY/EmyDieParticle" });
+                particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/EmyDieParticle" });
             }
             let scale = getRandomNumber(0, 40) / 100 + 1;
             particleNode.setScale(v3(scale, scale, 0));

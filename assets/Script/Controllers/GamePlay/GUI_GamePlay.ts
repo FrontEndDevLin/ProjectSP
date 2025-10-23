@@ -39,6 +39,7 @@ export class GUI_GamePlay extends OBT_Component {
         });
 
         this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
+        this.view("TrophyIconWrap").addComponent("TrophyIconWrap");
 
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.STORAGE_CHANGE, this._updateStorage, this);

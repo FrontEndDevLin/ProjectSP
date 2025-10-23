@@ -1,7 +1,7 @@
 {
     "desc": {
         "max_emy": "最大同屏小怪数",
-        "max_emy_elite_fight": "只有在wave_type为2时生效。在有精英怪存在时, 最大同屏小怪数",
+        "max_emy_elite_fight": "只有在wave_type为2,3时生效。在有精英怪存在时, 最大同屏小怪数",
         "spawn_role": {
             "spawn_mode": "生成模式: normal->正常模式 random->随机出现",
             "spawn_rate": "spawn_mode为random时, 随机出现的概率",
