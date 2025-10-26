@@ -1,6 +1,6 @@
 import { _decorator, BoxCollider2D, CircleCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { EMYInfo, GameCollider  } from '../../../Common/Namespace';
+import { EMYInfo, GameCollider, WarCoreInfo  } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import BulletManager from '../../../CManager/BulletManager';
@@ -9,8 +9,11 @@ import ProcessManager from '../../../CManager/ProcessManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 const { ccclass, property } = _decorator;
 
-@ccclass('BaseWarCore')
-export class BaseWarCore extends OBT_Component {
+/**
+ * 散射攻击核心
+ */
+@ccclass('ScatterAtkWarCore')
+export class ScatterAtkWarCore extends OBT_Component {
     // 警戒碰撞盒
     // private _alertDomainCollider: CircleCollider2D = null;
     // 攻击碰撞盒
@@ -22,8 +25,12 @@ export class BaseWarCore extends OBT_Component {
 
     private _cd: number = 0;
 
+    protected warCore: WarCoreInfo.AtkWarCoreAttr;
+
     start() {
+        this.warCore = WarCoreManager.instance.atkWarCore;
         this._initDomainCollider();
+        console.log(this.warCore)
     }
 
     protected onLoad(): void {
@@ -45,7 +52,7 @@ export class BaseWarCore extends OBT_Component {
             collider.on(Contact2DType.END_CONTACT, this._onCHRDomainEndContact, this);
         }
         // let { range, alert } = this.weaponPanel;
-        let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + WarCoreManager.instance.atkWarCore.range;
+        let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + this.warCore.range;
         this._attackDomainCollider.radius = range;
         // this._alertDomainCollider.radius = (range + 2) * PIXEL_UNIT;
     }
@@ -148,16 +155,28 @@ export class BaseWarCore extends OBT_Component {
             if (vecX < 0) {
                 angle -= 180;
             }
-            let vector = getVectorByAngle(angle);
+
+            let angleList: number[] = [];
+            let split: number = this.warCore.split;
+            let splitAngle: number = 15;
+            let min = -Math.floor(split / 2);
+            let max = min + split;
+            for (let i = min; i < max; i++) {
+                angleList.push(angle + splitAngle * i);
+            }
+
+            angleList.forEach((angle: number) => {
+                let vector = getVectorByAngle(angle);
+                BulletManager.instance.createBullet(this.warCore.bullet, chrLoc, vector);
+            });
 
             // console.log(Vec3.angle(v3(1,0,0), {x: vecX, y: vecY, z: 0}));
             // console.log(Number((Math.atan(vecY / vecX)).toFixed(2)));
             // 向量要根据贴图的旋转角度计算
-            BulletManager.instance.createBullet("CHR_Bullet001", chrLoc, vector);
             // this._attacking = true;
 
             // 冷却结合攻击速度修正
-            let cd: number = WarCoreManager.instance.atkWarCore.cd;
+            let cd: number = this.warCore.cd;
             let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
             let realCd: number = getFloatNumber(cd / atkSpdVal, 3);
             this._cd = realCd;

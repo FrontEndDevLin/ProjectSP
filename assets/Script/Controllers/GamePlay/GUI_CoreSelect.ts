@@ -7,24 +7,22 @@ import OBT_Component from '../../OBT_Component';
 import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
-import { CHRInfo, GAME_NODE, GamePlayEvent } from '../../Common/Namespace';
+import { CHRInfo, GAME_NODE, GamePlayEvent, WarCoreInfo } from '../../Common/Namespace';
 import ProcessManager from '../../CManager/ProcessManager';
 import { getRandomNumber } from '../../Common/utils';
+import WarCoreManager from '../../CManager/WarCoreManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_CoreSelect')
 export class GUI_CoreSelect extends OBT_Component {
     protected onLoad(): void {
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._coreSelectTimeInit, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._coreSelectDeadTime, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIMEOUT, this._coreSelectTimeout, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._coreSelectTimeInit, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_DEAD_TIME, this._coreSelectDeadTime, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIMEOUT, this._coreSelectTimeout, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showCoreSelectUI, this);
 
         this.view("Bottom/Link").on(Node.EventType.TOUCH_END, this._showPropUI, this);
-
-        // temp
-        this._initCoreCard();
     }
 
     start() {
@@ -44,16 +42,19 @@ export class GUI_CoreSelect extends OBT_Component {
 
     private _initCoreCard() {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
-        const preSelCoreList: number[] = [1, 2, 3];   // WarCoreManager...
-        preSelCoreList.forEach((updateProp, i) => {
+
+        const atkWarCoreList: WarCoreInfo.AtkWarCoreAttr[] = WarCoreManager.instance.getPreCheckAtkWarCoreList();
+
+        atkWarCoreList.forEach((atkWarCore: WarCoreInfo.AtkWarCoreAttr, i) => {
             cardSlotList[i].removeAllChildren();
             const coreCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_CoreSelect/CoreCard" });
-            coreCard.OBT_param1 = updateProp;
+            coreCard.OBT_param1 = atkWarCore;
             OBT.instance.uiManager.mountNode({ node: coreCard, parentNode: cardSlotList[i] });
         })
     }
 
     private _coreSelectTimeInit() {
+        this._initCoreCard();
         this.view("Bottom/Link").active = true;
     }
 

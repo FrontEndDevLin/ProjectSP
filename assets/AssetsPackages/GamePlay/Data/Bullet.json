@@ -16,6 +16,17 @@
         "damage": 200,
         "cld": 500
     },
+    "CHR_Bullet002": {
+        "id": "CHR_Bullet002",
+        "prefab": "CHR_Bullet002",
+        "type": "bullet",
+        "script": "Bullet",
+        "speed": 480,
+        "max_dis": 220,
+        "piercing": 1,
+        "damage": 2,
+        "cld": 501
+    },
     "EMY_Bullet020": {
         "id": "EMY_Bullet020",
         "prefab": "EMY_Bullet020",

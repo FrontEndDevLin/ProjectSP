@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "0866d821-5efd-4b22-bd6f-fc6a67e4c0a2",
+  "uuid": "e4587333-9277-4532-9e78-42d2a75bc4df",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "BaseWarCore"
+    "syncNodeName": "CHR_Bullet002"
   }
 }

@@ -92,6 +92,9 @@ export default class DropItemManager extends OBT_UIManager {
         this.dropItemRootNode.removeChild(trophyNode);
         this._trophyNodePool.put(trophyNode);
     }
+    public removeCoreBlock(coreNode: Node) {
+        this.dropItemRootNode.removeChild(coreNode);
+    }
 
     public initRateMap() {
         this._dropRateMap = {};

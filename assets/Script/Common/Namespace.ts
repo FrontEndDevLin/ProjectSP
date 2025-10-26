@@ -167,17 +167,24 @@ export namespace GameConfigInfo {
 
 export namespace WarCoreInfo {
     export interface AtkWarCoreAttr {
+        id: string,
         intro: string,
         atk_intro: string,
         icon_ui: string,
         icon_gaming: string,
         bullet: string,
+        // 分裂
+        split?: number,
         range: number,
         cd: number
     }
 
-    export interface AtkWarCoreDBData {
+    export interface AtkWarCoreMap {
         [atkWarCoreId: string]: AtkWarCoreAttr
+    }
+    export interface WarCoreDBData {
+        atk_war_core_def: AtkWarCoreMap,
+        pub_atk_war_core: string[]
     }
 }
 

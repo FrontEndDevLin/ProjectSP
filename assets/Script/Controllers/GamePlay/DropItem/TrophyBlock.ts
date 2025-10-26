@@ -81,18 +81,12 @@ export class TrophyBlock extends OBT_Component {
         let nodeLoc: Vec3 = this.node.position;
         let dis: number = getDistance(nodeLoc, crtLoc);
         if (dis <= 20) {
-            // switch (this._quality) {
-            //     case ItemInfo.TROPHY_TYPE.CHEST: {
-            //         // TODO: 去道具管理类生成一个宝箱
-            //         // ItemsManager.instance.pickChest(TROPHY_TYPE.CHEST);
-            //     } break;
-            //     case ItemInfo.TROPHY_TYPE.CORE: {
-            //         console.log('捡起核心')
-            //     } break;
-            // }
-
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this._quality);
-            DropItemManager.instance.recoverTrophyBlock(this.node);
+            if (this._quality === ItemInfo.TROPHY_TYPE.CORE) {
+                DropItemManager.instance.removeCoreBlock(this.node);
+            } else {
+                DropItemManager.instance.recoverTrophyBlock(this.node);
+            }
             return;
         }
 
