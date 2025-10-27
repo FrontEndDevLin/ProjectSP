@@ -2,14 +2,15 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, Label, Node } from 'cc';
+import { _decorator, Label, Node, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
-import { GAME_NODE, GamePlayEvent, ItemInfo } from '../../Common/Namespace';
+import { GAME_NODE, GamePlayEvent, ItemInfo, WarCoreInfo } from '../../Common/Namespace';
 import ProcessManager from '../../CManager/ProcessManager';
 import ItemsManager from '../../CManager/ItemsManager';
 import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
+import WarCoreManager from '../../CManager/WarCoreManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -36,6 +37,8 @@ export class GUI_Prepare extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ITEM_CHANGE, this._updateItemList, this);
 
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE, this._updateAtkWarCoreInfo, this);
+
         this.view("Container/StoreWrap/RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshStore, this);
 
         this.view("Bottom/PropTxt").on(Node.EventType.TOUCH_END, this._showPropUI, this);
@@ -43,6 +46,8 @@ export class GUI_Prepare extends OBT_Component {
         this._loadItemList();
 
         this.view("Bottom/NextWave").on(Node.EventType.TOUCH_END, this._nextWave, this);
+
+        this.view("Container/InfoWrap/WrapRight/CoreWrap/WarCoreSlot").on(Node.EventType.TOUCH_END, this._showAtkCorePreview, this);
     }
 
     start() {
@@ -148,6 +153,16 @@ export class GUI_Prepare extends OBT_Component {
     // 下一波
     private _nextWave() {
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_FINISH);
+    }
+
+    private _updateAtkWarCoreInfo() {
+        const warCore: WarCoreInfo.AtkWarCoreAttr = WarCoreManager.instance.atkWarCore;
+        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${warCore.icon_ui}`);
+        this.view("Container/InfoWrap/WrapRight/CoreWrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
+    }
+
+    private _showAtkCorePreview() {
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_WAR_CORE_UI);
     }
 
     protected onDestroy(): void {

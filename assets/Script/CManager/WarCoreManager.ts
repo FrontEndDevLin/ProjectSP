@@ -39,6 +39,7 @@ export default class WarCoreManager extends OBT_UIManager {
         const warCore: WarCoreInfo.AtkWarCoreAttr = this.warCoreData.atk_war_core_def[atkWarCoreId];
         if (warCore) {
             this.atkWarCore = warCore;
+            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
             this.showPrefab({ prefabPath: `WarCore/${warCore.id}`, parentNode: this.warCoreRootNode, scriptName: warCore.id });
         }
     }
