@@ -28,6 +28,7 @@ export namespace GamePlayEvent {
         CORE_SELECT_DEAD_TIME,
         CORE_SELECT_TIME_REDUCE,
         CORE_SELECT_TIMEOUT,
+        CORE_SELECT_FINISH,
         LEVEL_UP,
         LEVEL_UP_TIME_INIT,
         LEVEL_UP_TIME_REDUCE,
@@ -61,7 +62,8 @@ export namespace GamePlayEvent {
         // HIDE_PREVIEW_ITEM_UI,
         SHOW_PROP_INTRO_UI,
         UPDATE_TROPHY_ICON,
-        SHOW_CORE_SELECT_UI
+        SHOW_CORE_SELECT_UI,
+        HIDE_CORE_SELECT_UI
     }
 
     export enum STORE {
@@ -168,6 +170,7 @@ export namespace GameConfigInfo {
 export namespace WarCoreInfo {
     export interface AtkWarCoreAttr {
         id: string,
+        name: string,
         intro: string,
         atk_intro: string,
         icon_ui: string,

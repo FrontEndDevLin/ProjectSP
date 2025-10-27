@@ -25,7 +25,7 @@
             "wave": 1,
             "wave_type": 1,
             "max_emy": 30,
-            "duration": 2,
+            "duration": 15,
             "preload": {
                 "alert": 4,
                 "exp": 10,
@@ -68,7 +68,7 @@
             "wave": 2,
             "wave_type": 1,
             "max_emy": 30,
-            "duration": 10,
+            "duration": 20,
             "preload": {
                 "alert": 4,
                 "exp": 10,
@@ -188,6 +188,49 @@
             "trophy_config": {
                 "Elite_EMY01": 2
             }
+        },
+        {
+            "wave": 4,
+            "wave_type": 1,
+            "max_emy": 30,
+            "duration": 15,
+            "preload": {
+                "alert": 4,
+                "exp": 10,
+                "exp_particle": 9,
+                "trophy": 2,
+                "emy": [{ "emyId": "EMY01", "count": 4 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy_particle": 20,
+                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 2 }],
+                "bullet_particle": 4,
+                "dmg_txt": 5
+            },
+            "spawn_roles": [
+                {
+                    "enemy_type": "EMY_Peace",
+                    "spawn_total": 4,
+                    "spawn_mode": "random",
+                    "spawn_rate": 0.05,
+                    "spawn_once_time": 1,
+                    "spawn_interval": 3,
+                    "spawn_pattern": "random",
+                    "start_delay": 3,
+                    "spawn_duration": 30,
+                    "hp": 15
+                },
+                {
+                    "enemy_type": "EMY01",
+                    "spawn_total": 12,
+                    "spawn_once_time": 2,
+                    "spawn_interval": 1.6,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 0,
+                    "spawn_duration": 30,
+                    "hp": 5,
+                    "dmg": 2
+                }
+            ]
         }
     ]
 }

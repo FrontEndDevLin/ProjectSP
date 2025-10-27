@@ -35,7 +35,7 @@ export class CHR extends OBT_Component {
         this._baseSpd = CHRManager.instance.propCtx.getPropRealValue("spd");
 
         WarCoreManager.instance.setWarCoreRootNode(this.view("Pic"));
-        WarCoreManager.instance.mountAtkWarCore(getSaveCtrl().save.chr_slot.atk_core);
+        WarCoreManager.instance.initAtkWarCore(getSaveCtrl().save.chr_slot.atk_core);
     }
 
     private _compassTouchStart() {

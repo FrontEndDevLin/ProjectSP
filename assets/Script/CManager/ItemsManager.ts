@@ -323,6 +323,12 @@ export default class ItemsManager extends OBT_UIManager {
     public getNextTrophy(): ItemInfo.TROPHY_TYPE {
         return this._pickUpTrophyList[0];
     }
+    public expendTrophy() {
+        if (this._pickUpTrophyList.length) {
+            this._pickUpTrophyList.shift();
+            OBT.instance.eventCenter.emit(GamePlayEvent.GUI.UPDATE_TROPHY_ICON);
+        }
+    }
 
     protected onDestroy(): void {
         console.log('销毁道具管理ing')

@@ -211,7 +211,7 @@ export default class DropItemManager extends OBT_UIManager {
         for (let dropNode of this.dropItemRootNode.children) {
             if (dropNode.name === "ExpBlock") {
                 dropNode.OBT_param2.recovery();
-            } else if (dropNode.name === "TrophyBlock" || dropNode.name === "ChestBlock") {
+            } else if (dropNode.name === "TrophyBlock" || dropNode.name === "ChestBlock" || dropNode.name === "CoreBlock") {
                 dropNode.OBT_param2.recovery();
             }
         }

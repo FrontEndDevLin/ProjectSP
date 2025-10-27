@@ -71,6 +71,7 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
     public hideLevelUpGUI() {
         this.hideNode(this._GUILevelUpNode);
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.HIDE_LEVEL_UP_UI);
     }
 
     public showPrepareGUI() {
@@ -91,6 +92,7 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
         this.showNode(this._GUICoreSelectNode);
     }
     public hideCoreSelectGUI() {
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.HIDE_CORE_SELECT_UI);
         this.hideNode(this._GUICoreSelectNode);
     }
 

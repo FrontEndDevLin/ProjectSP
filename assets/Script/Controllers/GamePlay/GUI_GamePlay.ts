@@ -51,6 +51,7 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_LEVEL_UP_UI, this._hideMask, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_CORE_SELECT_UI, this._showMask, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_CORE_SELECT_UI, this._hideMask, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showMask, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_UI, this._hideMask, this);

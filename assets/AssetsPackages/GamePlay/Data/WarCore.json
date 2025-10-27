@@ -9,9 +9,10 @@
     "atk_war_core_def": {
         "BaseAtkWarCore": {
             "id": "BaseAtkWarCore",
+            "name": "无",
             "intro": "基础攻击核心",
             "atk_intro": "基础飞弹攻击",
-            "icon_ui": "...",
+            "icon_ui": "",
             "icon_gaming": "...",
             "bullet": "CHR_Bullet001",
             "range": 200,
@@ -19,9 +20,10 @@
         },
         "ScatterAtkWarCore": {
             "id": "ScatterAtkWarCore",
+            "name": "散射",
             "intro": "散射攻击核心",
             "atk_intro": "基础飞弹会进行分裂",
-            "icon_ui": "...",
+            "icon_ui": "HP",
             "icon_gaming": "...",
             "bullet": "CHR_Bullet002",
             "split": 3,

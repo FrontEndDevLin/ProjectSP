@@ -1,9 +1,10 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BulletInfo, WarCoreInfo } from '../Common/Namespace';
+import { BulletInfo, GamePlayEvent, WarCoreInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { getRandomNumbers } from '../Common/utils';
+import ItemsManager from './ItemsManager';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -34,16 +35,27 @@ export default class WarCoreManager extends OBT_UIManager {
         this.warCoreRootNode = node;
     }
 
-    public mountAtkWarCore(atkWarCoreId: string) {
-        if (this.atkWarCore) {
-            console.log('当前已有挂载攻击核心，需要先卸载');
-            this.unmountAtkWarCore();
-        }
+    private _setAtkWarCore(atkWarCoreId: string) {
         const warCore: WarCoreInfo.AtkWarCoreAttr = this.warCoreData.atk_war_core_def[atkWarCoreId];
         if (warCore) {
             this.atkWarCore = warCore;
             this.showPrefab({ prefabPath: `WarCore/${warCore.id}`, parentNode: this.warCoreRootNode, scriptName: warCore.id });
         }
+    }
+
+    public initAtkWarCore(atkWarCoreId: string) {
+        this._setAtkWarCore(atkWarCoreId);
+    }
+
+    // 仅限核心选择时调用
+    public mountAtkWarCore(atkWarCoreId: string) {
+        if (this.atkWarCore) {
+            console.log('当前已有挂载攻击核心，需要先卸载');
+            this.unmountAtkWarCore();
+        }
+        this._setAtkWarCore(atkWarCoreId);
+        ItemsManager.instance.expendTrophy();
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_FINISH);
     }
     // 卸载当前核心，卸载时，如当前核心有增益类buff，角色属性等值减去所有增益属性
     protected unmountAtkWarCore() {
