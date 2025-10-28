@@ -45,6 +45,8 @@ export class GUI_CoreSelect extends OBT_Component {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
 
         const atkWarCoreList: WarCoreInfo.AtkWarCoreAttr[] = WarCoreManager.instance.getPreCheckAtkWarCoreList();
+        atkWarCoreList.push(atkWarCoreList[0])
+        atkWarCoreList.push(atkWarCoreList[0])
 
         atkWarCoreList.forEach((atkWarCore: WarCoreInfo.AtkWarCoreAttr, i) => {
             cardSlotList[i].removeAllChildren();

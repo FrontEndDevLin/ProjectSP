@@ -122,7 +122,7 @@
         {
             "wave": 3,
             "wave_type": 2,
-            "duration": 10,
+            "duration": 5,
             "max_emy": 30,
             "max_emy_elite_fight": 3,
             "preload": {
