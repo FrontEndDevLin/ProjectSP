@@ -11,6 +11,7 @@ import { CHRInfo, GAME_NODE, GamePlayEvent, WarCoreInfo } from '../../Common/Nam
 import ProcessManager from '../../CManager/ProcessManager';
 import { getRandomNumber } from '../../Common/utils';
 import WarCoreManager from '../../CManager/WarCoreManager';
+import { CoreCard } from './GUI_CoreSelect/CoreCard';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_CoreSelect')
@@ -48,7 +49,8 @@ export class GUI_CoreSelect extends OBT_Component {
         atkWarCoreList.forEach((atkWarCore: WarCoreInfo.AtkWarCoreAttr, i) => {
             cardSlotList[i].removeAllChildren();
             const coreCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_CoreSelect/CoreCard" });
-            coreCard.OBT_param1 = atkWarCore;
+            const coreCardCtx: CoreCard = <CoreCard>coreCard.getComponent("CoreCard");
+            coreCardCtx.updateView(atkWarCore);
             OBT.instance.uiManager.mountNode({ node: coreCard, parentNode: cardSlotList[i] });
         })
     }

@@ -65,10 +65,10 @@ export class GUI_Popup extends OBT_Component {
 
     private _showAtkCorePreviewPopup() {
         if (!this.atkCorePreviewPopupCtx) {
-            this.atkCorePreviewPopupCtx = <AtkCorePreview>this.view("ItemPreview").getComponent("ItemPreview");
+            this.atkCorePreviewPopupCtx = <AtkCorePreview>this.view("AtkCorePreview").getComponent("AtkCorePreview");
         }
         // let item: ItemInfo.Item = ItemsManager.instance.getItemById(id);
-        // this.atkCorePreviewPopupCtx.showPreviewPopup(item, index);
+        this.atkCorePreviewPopupCtx.showPreviewPopup();
         this.showNodeByPath();
     }
     private _hideAtkCorePreviewPopup() {

@@ -16,14 +16,6 @@ export class CoreCard extends OBT_Component {
             autoTouch: this._touchCard.bind(this)
         }
 
-        const props: WarCoreInfo.AtkWarCoreAttr = this.node.OBT_param1;
-        this._props = props;
-
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${props.icon_ui}`);
-        this.view("Head/Pic").getComponent(Sprite).spriteFrame = assets;
-        this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.name;
-        // this.view("Content/Txt").getComponent(Label).string = props.intro;
-
         this.node.once(Node.EventType.TOUCH_END, this._touchCard, this);
     }
 
@@ -31,7 +23,18 @@ export class CoreCard extends OBT_Component {
 
     }
 
+    public updateView(props: WarCoreInfo.AtkWarCoreAttr) {
+        this._props = props;
+
+        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${props.icon_ui}`);
+        this.view("Head/Pic").getComponent(Sprite).spriteFrame = assets;
+        this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.name;
+    }
+
     private _touchCard() {
+        if (!this._props) {
+            return;
+        }
         if (ProcessManager.instance.gameNode === GAME_NODE.CORE_SELECT) {
             WarCoreManager.instance.mountAtkWarCore(this._props.id);
             this.hideNodeByPath();

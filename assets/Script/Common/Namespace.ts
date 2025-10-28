@@ -29,6 +29,7 @@ export namespace GamePlayEvent {
         CORE_SELECT_TIME_REDUCE,
         CORE_SELECT_TIMEOUT,
         CORE_SELECT_FINISH,
+        ATK_CORE_CHANGE,
         LEVEL_UP,
         LEVEL_UP_TIME_INIT,
         LEVEL_UP_TIME_REDUCE,
@@ -63,7 +64,8 @@ export namespace GamePlayEvent {
         SHOW_PROP_INTRO_UI,
         UPDATE_TROPHY_ICON,
         SHOW_CORE_SELECT_UI,
-        HIDE_CORE_SELECT_UI
+        HIDE_CORE_SELECT_UI,
+        SHOW_PREVIEW_WAR_CORE_UI
     }
 
     export enum STORE {
