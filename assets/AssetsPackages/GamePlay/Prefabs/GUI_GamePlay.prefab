@@ -3038,7 +3038,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 235,
+      "y": 295,
       "z": 0
     },
     "_lrot": {
@@ -3623,7 +3623,7 @@
     "_target": null,
     "_left": 0,
     "_right": 0,
-    "_top": 100,
+    "_top": 40,
     "_bottom": 0,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
@@ -3652,8 +3652,6 @@
       "__id__": 0
     },
     "fileId": "98/eiHLHpAZYoNgIAdV28b",
-    "instance": null,
-    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -3683,7 +3681,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 182.2,
+      "y": 242.2,
       "z": 0
     },
     "_lrot": {
@@ -3753,7 +3751,7 @@
     "_target": null,
     "_left": 0,
     "_right": 0,
-    "_top": 140,
+    "_top": 80,
     "_bottom": 0,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
