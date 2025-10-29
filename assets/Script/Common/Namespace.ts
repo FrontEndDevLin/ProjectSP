@@ -471,8 +471,8 @@ export namespace BulletInfo {
     }
 }
 
-export const SCREEN_WIDTH = 720;
-export const SCREEN_HEIGHT = 1280;
+export const SCREEN_WIDTH = 1280;
+export const SCREEN_HEIGHT = 720;
 // 速度1，实际等于 1*PIXEL_UNIT = 20px/s
 export const PIXEL_UNIT = 20;
 

@@ -149,7 +149,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -60,
+      "x": -70,
       "y": 0,
       "z": 0
     },
@@ -292,7 +292,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -20,
+      "x": -30,
       "y": 0,
       "z": 0
     },
@@ -651,7 +651,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 120,
+      "width": 130,
       "height": 56
     },
     "_anchorPoint": {
@@ -730,7 +730,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
+      "width": 220,
       "height": 60
     },
     "_anchorPoint": {
@@ -828,7 +828,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
+      "x": -110,
       "y": -40,
       "z": 0
     },
@@ -878,7 +878,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -86,
+      "x": 10,
       "y": 125.14,
       "z": 0
     },
@@ -919,7 +919,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 172,
+      "width": 200,
       "height": 49.72
     },
     "_anchorPoint": {
@@ -957,7 +957,7 @@
       "b": 255,
       "a": 255
     },
-    "_maxWidth": 172,
+    "_maxWidth": 200,
     "_fontFamily": "Arial",
     "_font": null,
     "_isSystemFontUsed": true,
@@ -1007,7 +1007,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -86,
+      "x": 10,
       "y": 53.42,
       "z": 0
     },
@@ -1048,7 +1048,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 172,
+      "width": 200,
       "height": 93.72
     },
     "_anchorPoint": {
@@ -1086,7 +1086,7 @@
       "b": 255,
       "a": 255
     },
-    "_maxWidth": 172,
+    "_maxWidth": 200,
     "_fontFamily": "Arial",
     "_font": null,
     "_isSystemFontUsed": true,
@@ -1136,7 +1136,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -86,
+      "x": 10,
       "y": -29.299999999999997,
       "z": 0
     },
@@ -1177,7 +1177,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 172,
+      "width": 200,
       "height": 71.72
     },
     "_anchorPoint": {
@@ -1204,7 +1204,7 @@
       "__id__": 49
     },
     "_lineHeight": 22,
-    "_string": "生命加成减少50%<br/>远程伤害加成提升50%",
+    "_string": "生命加成减少50%<br/>远程伤害加成提升50%<br/>啊啊啊啊啊啊啊啊啊啊啊",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
     "_fontSize": 18,
@@ -1215,7 +1215,7 @@
       "b": 255,
       "a": 255
     },
-    "_maxWidth": 172,
+    "_maxWidth": 200,
     "_fontFamily": "Arial",
     "_font": null,
     "_isSystemFontUsed": true,
@@ -1256,12 +1256,12 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
+      "width": 220,
       "height": 300
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
+      "x": 0,
       "y": 0.5
     },
     "_id": ""
@@ -1335,7 +1335,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
+      "width": 220,
       "height": 380
     },
     "_anchorPoint": {
