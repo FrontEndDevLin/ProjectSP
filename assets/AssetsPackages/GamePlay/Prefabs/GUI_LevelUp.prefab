@@ -200,7 +200,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -224,
+      "x": -194,
       "y": 0,
       "z": 0
     },
@@ -241,8 +241,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 192,
-      "height": 50.4
+      "width": 252,
+      "height": 55.44
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -280,10 +280,10 @@
     "_string": "升级一个属性",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 32,
-    "_fontSize": 32,
+    "_actualFontSize": 42,
+    "_fontSize": 42,
     "_fontFamily": "Arial",
-    "_lineHeight": 40,
+    "_lineHeight": 44,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": null,
