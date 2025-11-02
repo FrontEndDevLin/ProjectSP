@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "83a76cc2-154e-4ebc-bab6-132ea88d898e",
+  "uuid": "1e427430-b358-4e3c-b61b-4ac7fad143e7",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "GUI_LevelUp"
+    "syncNodeName": "Countdown"
   }
 }

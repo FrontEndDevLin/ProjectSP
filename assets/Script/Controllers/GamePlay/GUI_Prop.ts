@@ -17,12 +17,8 @@ export class GUI_Prop extends OBT_Component {
         });
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_INIT, this._initCHRAttrCard, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_UI, this._showPropUI, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._hidePropUI, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._hidePropUI, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_DEAD_TIME, this._hidePropUI, this);
 
-        this.view("Mask").on(Node.EventType.TOUCH_END, this._touchMask, this);
+        // this.view("Mask").on(Node.EventType.TOUCH_END, this._touchMask, this);
 
         this.view("GUI_PropWrap").on(Node.EventType.TOUCH_END, this._touchContainer, this);
 
@@ -82,17 +78,6 @@ export class GUI_Prop extends OBT_Component {
     }
 
     private _touchContainer(e: EventTouch) {
-    }
-
-    private _touchMask(e: EventTouch) {
-        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.HIDE_PROP_UI);
-    }
-
-    private _showPropUI() {
-        this.showNodeByPath();
-    }
-    private _hidePropUI() {
-        this.hideNodeByPath();
     }
 
     protected onDestroy(): void {

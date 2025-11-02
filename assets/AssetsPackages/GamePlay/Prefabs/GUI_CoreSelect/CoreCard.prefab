@@ -100,7 +100,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 150,
+      "y": 160,
       "z": 0
     },
     "_lrot": {
@@ -149,7 +149,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -70,
+      "x": -105,
       "y": 0,
       "z": 0
     },
@@ -292,7 +292,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -30,
+      "x": -65,
       "y": 0,
       "z": 0
     },
@@ -383,7 +383,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 7.326171875,
+      "width": 7.9921875,
       "height": 30.240000000000002
     },
     "_anchorPoint": {
@@ -422,8 +422,8 @@
     "_string": "-",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 22,
-    "_fontSize": 22,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
     "_fontFamily": "Arial",
     "_lineHeight": 24,
     "_overflow": 0,
@@ -542,7 +542,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 72,
+      "width": 76,
       "height": 25.2
     },
     "_anchorPoint": {
@@ -581,8 +581,8 @@
     "_string": "进攻核心",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 18,
-    "_fontSize": 18,
+    "_actualFontSize": 19,
+    "_fontSize": 19,
     "_fontFamily": "Arial",
     "_lineHeight": 20,
     "_overflow": 0,
@@ -651,7 +651,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 130,
+      "width": 200,
       "height": 56
     },
     "_anchorPoint": {
@@ -730,7 +730,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 220,
+      "width": 290,
       "height": 60
     },
     "_anchorPoint": {
@@ -828,7 +828,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -110,
+      "x": -145,
       "y": -40,
       "z": 0
     },
@@ -879,7 +879,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 10,
-      "y": 125.14,
+      "y": 126.36,
       "z": 0
     },
     "_lrot": {
@@ -919,8 +919,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
-      "height": 49.72
+      "width": 270,
+      "height": 63.279999999999994
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -945,11 +945,11 @@
     "__prefab": {
       "__id__": 37
     },
-    "_lineHeight": 22,
+    "_lineHeight": 28,
     "_string": "基础攻击将会分裂<br/>分裂成<color=#67C23A>3</color>个子弹",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
-    "_fontSize": 18,
+    "_fontSize": 24,
     "_fontColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -957,7 +957,7 @@
       "b": 255,
       "a": 255
     },
-    "_maxWidth": 200,
+    "_maxWidth": 270,
     "_fontFamily": "Arial",
     "_font": null,
     "_isSystemFontUsed": true,
@@ -1008,7 +1008,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 10,
-      "y": 53.42,
+      "y": 35.08,
       "z": 0
     },
     "_lrot": {
@@ -1048,8 +1048,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
-      "height": 93.72
+      "width": 270,
+      "height": 119.28
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1074,11 +1074,11 @@
     "__prefab": {
       "__id__": 43
     },
-    "_lineHeight": 22,
+    "_lineHeight": 28,
     "_string": "伤害: <color=#67C23A>3</color><br/>暴击: 1.5|1%概率<br/>冷却: 0.3s<br/>范围: <color=#67C23A>200</color>",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
-    "_fontSize": 18,
+    "_fontSize": 24,
     "_fontColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -1086,7 +1086,7 @@
       "b": 255,
       "a": 255
     },
-    "_maxWidth": 200,
+    "_maxWidth": 270,
     "_fontFamily": "Arial",
     "_font": null,
     "_isSystemFontUsed": true,
@@ -1137,7 +1137,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 10,
-      "y": -29.299999999999997,
+      "y": -70.2,
       "z": 0
     },
     "_lrot": {
@@ -1177,8 +1177,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
-      "height": 71.72
+      "width": 270,
+      "height": 91.28
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1203,11 +1203,11 @@
     "__prefab": {
       "__id__": 49
     },
-    "_lineHeight": 22,
+    "_lineHeight": 28,
     "_string": "生命加成减少50%<br/>远程伤害加成提升50%<br/>啊啊啊啊啊啊啊啊啊啊啊",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
-    "_fontSize": 18,
+    "_fontSize": 24,
     "_fontColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -1215,7 +1215,7 @@
       "b": 255,
       "a": 255
     },
-    "_maxWidth": 200,
+    "_maxWidth": 270,
     "_fontFamily": "Arial",
     "_font": null,
     "_isSystemFontUsed": true,
@@ -1256,8 +1256,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 220,
-      "height": 300
+      "width": 290,
+      "height": 316
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1335,8 +1335,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 220,
-      "height": 380
+      "width": 290,
+      "height": 400
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1419,7 +1419,7 @@
     "_paddingTop": 10,
     "_paddingBottom": 10,
     "_spacingX": 0,
-    "_spacingY": 10,
+    "_spacingY": 12,
     "_verticalDirection": 1,
     "_horizontalDirection": 0,
     "_constraint": 0,

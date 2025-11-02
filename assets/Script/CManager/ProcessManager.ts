@@ -96,11 +96,11 @@ export default class ProcessManager extends OBT_UIManager {
     private _initMapAndGUI() {
         MapManager.instance.initMap();
         CHRManager.instance.initCompass();
-        GUI_GamePlayManager.instance.initGamePlayGUI();
-        GUI_GamePlayManager.instance.initCoreSelectGUI();
         GUI_GamePlayManager.instance.initLevelUpGUI();
-        GUI_GamePlayManager.instance.initPrepareGUI();
-        GUI_GamePlayManager.instance.initPropGUI();
+        GUI_GamePlayManager.instance.initCoreSelectGUI();
+        GUI_GamePlayManager.instance.initGamePlayGUI();
+        // GUI_GamePlayManager.instance.initPrepareGUI();
+        // GUI_GamePlayManager.instance.initPropGUI();
         GUI_GamePlayManager.instance.initPopupGUI();
         CHRManager.instance.showCHR();
     }
@@ -261,6 +261,7 @@ export default class ProcessManager extends OBT_UIManager {
         switch (this.gameNode) {
             case GAME_NODE.CORE_SELECT: {
                 console.log('进入核心选择流程');
+                // GUI_GamePlayManager.instance.hideGamePlayGUI();
                 // TODO: WarCoreManager.instance.initCoreSelectList()
                 GUI_GamePlayManager.instance.showCoreSelectGUI();
                 this._coreSelectDuration = CORE_SELECT_TIME;

@@ -17,28 +17,14 @@ const { ccclass, property } = _decorator;
 @ccclass('GUI_CoreSelect')
 export class GUI_CoreSelect extends OBT_Component {
     protected onLoad(): void {
+        this.view("GUI_Prop").addComponent("GUI_Prop");
+
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._coreSelectTimeInit, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_DEAD_TIME, this._coreSelectDeadTime, this);
+        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_DEAD_TIME, this._coreSelectDeadTime, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIMEOUT, this._coreSelectTimeout, this);
-
-        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showCoreSelectUI, this);
-
-        this.view("Bottom/Link").on(Node.EventType.TOUCH_END, this._showPropUI, this);
     }
 
     start() {
-    }
-
-    private _showCoreSelectUI() {
-        if (ProcessManager.instance.gameNode !== GAME_NODE.CORE_SELECT) {
-            return;
-        }
-        this.showNodeByPath();
-    }
-
-    private _showPropUI() {
-        this.hideNodeByPath();
-        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PROP_UI);
     }
 
     private _initCoreCard() {
@@ -59,14 +45,10 @@ export class GUI_CoreSelect extends OBT_Component {
 
     private _coreSelectTimeInit() {
         this._initCoreCard();
-        this.view("Bottom/Link").active = true;
     }
 
     private _coreSelectDeadTime() {
-        // 如果快超时了还停留在属性界面，切换回升级界面，隐藏“查看属性”入口
-        this._showCoreSelectUI();
-
-        this.view("Bottom/Link").active = false;
+        // 如果快超时了
     }
 
     private _coreSelectTimeout() {

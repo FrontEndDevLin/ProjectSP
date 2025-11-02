@@ -33,8 +33,6 @@ export class GUI_Prepare extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.STORE_ITEM_LIST_UPDATE, this._updateStoreItemCard, this);
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.STORE_REF_COST_CHANGE, this._updateRefCost, this);
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GUI.HIDE_PROP_UI, this._showPrepareUI, this);
-
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ITEM_CHANGE, this._updateItemList, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE, this._updateAtkWarCoreInfo, this);
