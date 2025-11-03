@@ -17,9 +17,12 @@ const { ccclass, property } = _decorator;
 @ccclass('GUI_CoreSelect')
 export class GUI_CoreSelect extends OBT_Component {
     protected onLoad(): void {
-        this.view("GUI_Prop").addComponent("GUI_Prop");
+        // this.view("GUI_Prop").addComponent("GUI_Prop");
+        this.view("TrophyIconWrap").addComponent("TrophyIconWrap");
 
+        // 核心选择倒计时
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._coreSelectTimeInit, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_REDUCE, this._updateCountdownView, this);
         // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_DEAD_TIME, this._coreSelectDeadTime, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIMEOUT, this._coreSelectTimeout, this);
     }
@@ -43,8 +46,13 @@ export class GUI_CoreSelect extends OBT_Component {
         })
     }
 
-    private _coreSelectTimeInit() {
+    private _updateCountdownView(duration) {
+        this.view("Countdown").getComponent(Label).string = duration;
+    }
+
+    private _coreSelectTimeInit(duration) {
         this._initCoreCard();
+        this._updateCountdownView(duration);
     }
 
     private _coreSelectDeadTime() {

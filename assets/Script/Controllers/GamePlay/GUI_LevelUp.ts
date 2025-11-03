@@ -17,10 +17,17 @@ export class GUI_LevelUp extends OBT_Component {
     protected onLoad(): void {
         // this._initCHRAttrCard();
 
-        // this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
+        this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
 
         // this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
-        this.view("GUI_Prop").addComponent("GUI_Prop");
+        this.view("Wrap/GUI_Prop").addComponent("GUI_Prop");
+
+        // 升级倒计时
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_REDUCE, this._updateCountdownView, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_START, this._updateCurrency, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
 
         // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIME_INIT, this._levelUpTimeInit, this);
         // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_DEAD_TIME, this._levelUpDeadTime, this);
@@ -30,15 +37,19 @@ export class GUI_LevelUp extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.LEVEL_UP_REF_COST_CHANGE, this._updateRefCost, this);
 
-        this.view("Container/StoreWrap/RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshLevelUpList, this);
+        this.view("RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshLevelUpList, this);
         // this.view("Bottom/Link").on(Node.EventType.TOUCH_END, this._showPropUI, this);
     }
 
     start() {
     }
 
+    private _updateCurrency() {
+        this.view("Currency/Val").getComponent(Label).string = `${CHRManager.instance.currencyCtrl.getCurrency()}`;
+    }
+
     private _updateLevelUpCard() {
-        const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
+        const cardSlotList: Node[] = this.view("Wrap/Container/StoreWrap/CardWrap").children;
         const preLevelUpList: CHRInfo.upgradeProp[] = CHRManager.instance.propCtx.preUpgradeList;
         preLevelUpList.forEach((updateProp, i) => {
             cardSlotList[i].removeAllChildren();
@@ -49,8 +60,8 @@ export class GUI_LevelUp extends OBT_Component {
         })
     }
 
-    private _levelUpTimeInit() {
-        // this.view("Bottom/Link").active = true;
+    private _updateCountdownView(duration) {
+        this.view("Countdown").getComponent(Label).string = duration;
     }
 
     private _levelUpDeadTime() {
@@ -61,13 +72,13 @@ export class GUI_LevelUp extends OBT_Component {
     }
 
     private _levelUpTimeout() {
-        const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
+        const cardSlotList: Node[] = this.view("Wrap/Container/StoreWrap/CardWrap").children;
         let node: Node = cardSlotList[getRandomNumber(0, cardSlotList.length - 1)].children[0];
         node.OBT_param2.autoTouch();
     }
 
     private _updateRefCost(cost: number) {
-        this.view("Container/StoreWrap/RefreshBtn/Cost").getComponent(Label).string = `${cost}`;
+        this.view("RefreshBtn/Cost").getComponent(Label).string = `${cost}`;
     }
 
     private _refreshLevelUpList() {

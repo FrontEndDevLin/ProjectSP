@@ -9,7 +9,7 @@ export default class LevelCtrl extends BaseCtrl {
     static instance: LevelCtrl = null;
 
     // 本回合升级次数
-    private _levelUpCnt: number = 0;
+    private _levelUpCnt: number = 1;
     // 当前角色等级
     public level: number = 0;
     // 升1级所需经验

@@ -261,14 +261,14 @@ export default class ProcessManager extends OBT_UIManager {
         switch (this.gameNode) {
             case GAME_NODE.CORE_SELECT: {
                 console.log('进入核心选择流程');
-                // GUI_GamePlayManager.instance.hideGamePlayGUI();
+                GUI_GamePlayManager.instance.hideGamePlayGUI();
                 // TODO: WarCoreManager.instance.initCoreSelectList()
                 GUI_GamePlayManager.instance.showCoreSelectGUI();
                 this._coreSelectDuration = CORE_SELECT_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._levelUpDuration);
             } break;
             case GAME_NODE.LEVEL_UP: {
-                // GUI_GamePlayManager.instance.hideGamePlayGUI();
+                GUI_GamePlayManager.instance.hideGamePlayGUI();
                 CHRManager.instance.propCtx.refreshPreUpgradeList(true);
                 GUI_GamePlayManager.instance.showLevelUpGUI();
                 this._levelUpDuration = LEVEL_UP_TIME;
