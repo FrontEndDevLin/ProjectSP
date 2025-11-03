@@ -34,11 +34,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 96
+        "__id__": 90
       }
     ],
     "_prefab": {
-      "__id__": 98
+      "__id__": 92
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -1869,11 +1869,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 93
+        "__id__": 87
       }
     ],
     "_prefab": {
-      "__id__": 95
+      "__id__": 89
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -1932,7 +1932,7 @@
   },
   {
     "__type__": "cc.PrefabInstance",
-    "fileId": "7bZzz13rhNaoFecCudVD2D",
+    "fileId": "71I/WI4UtEOYn+GHFaWufy",
     "prefabRootNode": {
       "__id__": 1
     },
@@ -1950,15 +1950,6 @@
       },
       {
         "__id__": 86
-      },
-      {
-        "__id__": 87
-      },
-      {
-        "__id__": 89
-      },
-      {
-        "__id__": 91
       }
     ],
     "removedComponents": []
@@ -2026,68 +2017,6 @@
     }
   },
   {
-    "__type__": "CCPropertyOverrideInfo",
-    "targetInfo": {
-      "__id__": 88
-    },
-    "propertyPath": [
-      "_contentSize"
-    ],
-    "value": {
-      "__type__": "cc.Size",
-      "width": 200,
-      "height": 300
-    }
-  },
-  {
-    "__type__": "cc.TargetInfo",
-    "localID": [
-      "d9qru4bJNF64Kt2V8m3G/h"
-    ]
-  },
-  {
-    "__type__": "CCPropertyOverrideInfo",
-    "targetInfo": {
-      "__id__": 90
-    },
-    "propertyPath": [
-      "_lpos"
-    ],
-    "value": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 115,
-      "z": 0
-    }
-  },
-  {
-    "__type__": "cc.TargetInfo",
-    "localID": [
-      "85tNbb3I5MN6rpqaFSzBW3"
-    ]
-  },
-  {
-    "__type__": "CCPropertyOverrideInfo",
-    "targetInfo": {
-      "__id__": 92
-    },
-    "propertyPath": [
-      "_lpos"
-    ],
-    "value": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": -5,
-      "z": 0
-    }
-  },
-  {
-    "__type__": "cc.TargetInfo",
-    "localID": [
-      "73lZH83jpL84ikI6N7WIQj"
-    ]
-  },
-  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -2097,7 +2026,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 94
+      "__id__": 88
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -2138,7 +2067,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 97
+      "__id__": 91
     },
     "_contentSize": {
       "__type__": "cc.Size",

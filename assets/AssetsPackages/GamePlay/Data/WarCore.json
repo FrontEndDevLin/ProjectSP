@@ -9,7 +9,7 @@
     "atk_war_core_def": {
         "BaseAtkWarCore": {
             "id": "BaseAtkWarCore",
-            "name": "无",
+            "name": "基础核心",
             "intro": "基础攻击核心",
             "atk_intro": "基础飞弹攻击",
             "icon_ui": "",

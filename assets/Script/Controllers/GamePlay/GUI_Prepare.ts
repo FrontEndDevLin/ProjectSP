@@ -11,6 +11,7 @@ import ProcessManager from '../../CManager/ProcessManager';
 import ItemsManager from '../../CManager/ItemsManager';
 import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
 import WarCoreManager from '../../CManager/WarCoreManager';
+import { GUI_PropWrap } from './GUI_PropWrap';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -18,16 +19,13 @@ export class GUI_Prepare extends OBT_Component {
     private _backpackWrapNode: Node;
 
     protected onLoad(): void {
-        // this._initCHRAttrCard();
+        this.view("GUI_PropWrap").addComponent("GUI_PropWrap");
+        this.view("SidePropBtn").on(Node.EventType.TOUCH_END, this.showPropGUI, this);
 
-        // this.view("LevelUpIconWrap").addComponent("LevelUpIconWrap");
-
-        // this.view("Container/InfoWrap/GUI_PropWrap").addComponent("GUI_PropWrap");
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_INIT, this._prepareInit, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIME_REDUCE, this._updateCountdownView, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_DEAD_TIME, this._prepareDeadTime, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIMEOUT, this._prepareTimeout, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.STORE.STORE_ITEM_LIST_UPDATE, this._updateStoreItemCard, this);
@@ -37,18 +35,21 @@ export class GUI_Prepare extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE, this._updateAtkWarCoreInfo, this);
 
-        this.view("Container/StoreWrap/RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshStore, this);
-
-        this.view("Bottom/PropTxt").on(Node.EventType.TOUCH_END, this._showPropUI, this);
+        this.view("OperBtns/RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshStore, this);
 
         this._loadItemList();
 
-        this.view("Bottom/NextWave").on(Node.EventType.TOUCH_END, this._nextWave, this);
+        this.view("OperBtns/NextWave").on(Node.EventType.TOUCH_END, this._nextWave, this);
 
-        this.view("Container/InfoWrap/WrapRight/CoreWrap/WarCoreSlot").on(Node.EventType.TOUCH_END, this._showAtkCorePreview, this);
+        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot").on(Node.EventType.TOUCH_END, this._showAtkCorePreview, this);
     }
 
     start() {
+    }
+
+    protected showPropGUI() {
+        const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
+        propWrapCtx.showPropGUI();
     }
 
     private _updateCurrency() {
@@ -56,7 +57,7 @@ export class GUI_Prepare extends OBT_Component {
     }
 
     private _updateStoreItemCard() {
-        const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
+        const cardSlotList: Node[] = this.view("PrepareWrap/StoreWrap/CardWrap").children;
         cardSlotList.forEach((node: Node) => {
             node.removeAllChildren();
         });
@@ -69,10 +70,11 @@ export class GUI_Prepare extends OBT_Component {
     }
 
     private _updateRefCost(cost: number) {
-        this.view("Container/StoreWrap/RefreshBtn/Cost").getComponent(Label).string = `${cost}`;
+        this.view("OperBtns/RefreshBtn/Cost").getComponent(Label).string = `${cost}`;
     }
 
     private _prepareInit(duration) {
+        this._updateCurrency();
         this._updateCountdownView(duration);
         this.view("Header/TitleWrap/Val").getComponent(Label).string = `${ProcessManager.instance.waveRole.wave + 1}`;
     }
@@ -80,14 +82,9 @@ export class GUI_Prepare extends OBT_Component {
         this.view("Countdown").getComponent(Label).string = duration;
     }
 
-    private _prepareDeadTime() {
-        // 如果快超时了还停留在属性界面，切换回升级界面，隐藏“查看属性”入口
-        this._showPrepareUI();
-
-        this.view("Bottom/PropTxt").active = false;
-    }
-
     private _prepareTimeout() {
+        const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
+        propWrapCtx.hidePropGUI();
         this._nextWave();
     }
 
@@ -95,24 +92,9 @@ export class GUI_Prepare extends OBT_Component {
         ItemsManager.instance.refreshStoreList();
     }
 
-    private _showPropUI() {
-        this.hideNodeByPath("Mask");
-        this.hideNodeByPath("Container");
-        this.hideNodeByPath("Bottom");
-        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PROP_UI);
-    }
-    private _showPrepareUI() {
-        if (ProcessManager.instance.gameNode !== GAME_NODE.PREPARE) {
-            return;
-        }
-        this.showNodeByPath("Mask");
-        this.showNodeByPath("Container");
-        this.showNodeByPath("Bottom");
-    }
-
     private _mountItemRectNode(backpackItem: ItemInfo.BackpackItem, index?: number) {
         if (!this._backpackWrapNode) {
-            this._backpackWrapNode = this.view("Container/InfoWrap/WrapLeft/ScrollView/view/content");
+            this._backpackWrapNode = this.view("PrepareWrap/InfoWrap/ItemsWrap/ScrollView/view/content");
             GUI_GamePlayManager.instance.setBackpackWrapNode(this._backpackWrapNode);
         }
         const itemRect: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prepare/ItemRect" });
@@ -156,7 +138,7 @@ export class GUI_Prepare extends OBT_Component {
     private _updateAtkWarCoreInfo() {
         const warCore: WarCoreInfo.AtkWarCoreAttr = WarCoreManager.instance.atkWarCore;
         let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${warCore.icon_ui}`);
-        this.view("Container/InfoWrap/WrapRight/CoreWrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
+        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
     }
 
     private _showAtkCorePreview() {

@@ -19,7 +19,6 @@ export class GUI_Popup extends OBT_Component {
         this.view("ItemPreview").addComponent("ItemPreview");
         this.view("PropIntro").addComponent("PropIntro");
         this.view("AtkCorePreview").addComponent("AtkCorePreview");
-
         this.view("Mask").on(Node.EventType.TOUCH_END, this._hideAll, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PREVIEW_ITEM_UI, this._showItemPreviewPopup, this);
@@ -67,13 +66,12 @@ export class GUI_Popup extends OBT_Component {
         if (!this.atkCorePreviewPopupCtx) {
             this.atkCorePreviewPopupCtx = <AtkCorePreview>this.view("AtkCorePreview").getComponent("AtkCorePreview");
         }
-        // let item: ItemInfo.Item = ItemsManager.instance.getItemById(id);
         this.atkCorePreviewPopupCtx.showPreviewPopup();
         this.showNodeByPath();
     }
     private _hideAtkCorePreviewPopup() {
         if (!this.atkCorePreviewPopupCtx) {
-            this.atkCorePreviewPopupCtx = <AtkCorePreview>this.view("ItemPreview").getComponent("ItemPreview");
+            this.atkCorePreviewPopupCtx = <AtkCorePreview>this.view("AtkCorePreview").getComponent("AtkCorePreview");
         }
         this.atkCorePreviewPopupCtx.hidePreviewPopup();
         this.hideNodeByPath();

@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "676c2613-2ab4-4a45-a117-0809ff58fd7c",
+  "uuid": "2cfa949c-6d60-4454-9875-f720a27d59f7",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "GUI_Prop"
+    "syncNodeName": "SidePropBtn"
   }
 }

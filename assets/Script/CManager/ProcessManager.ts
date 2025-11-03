@@ -99,10 +99,12 @@ export default class ProcessManager extends OBT_UIManager {
         GUI_GamePlayManager.instance.initLevelUpGUI();
         GUI_GamePlayManager.instance.initCoreSelectGUI();
         GUI_GamePlayManager.instance.initGamePlayGUI();
-        // GUI_GamePlayManager.instance.initPrepareGUI();
+        GUI_GamePlayManager.instance.initPrepareGUI();
         // GUI_GamePlayManager.instance.initPropGUI();
         GUI_GamePlayManager.instance.initPopupGUI();
         CHRManager.instance.showCHR();
+
+        OBT.instance.printStructure();
     }
     private _initSave(isNewGame: boolean) {
         if (isNewGame) {
