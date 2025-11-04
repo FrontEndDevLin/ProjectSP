@@ -81,12 +81,16 @@ export default class BulletManager extends OBT_UIManager {
     }
 
     public preloadBullet(configList: GameConfigInfo.BulletPreloadConfig[]) {
+        for (let bulletId in this._nodePoolMap) {
+            this._nodePoolMap[bulletId].clear();
+        }
+        this._nodePoolMap = {};
         configList.forEach(({ bulletId, count }) => {
             const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
             if (!this._nodePoolMap[bulletId]) {
                 this._nodePoolMap[bulletId] = new NodePool();
             }
-            for (let i = this._nodePoolMap[bulletId].size(); i < count; i++) {
+            for (let i = 0; i < count; i++) {
                 const bulletNode: Node = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
                 this._nodePoolMap[bulletId].put(bulletNode);
             }

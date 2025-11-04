@@ -32,7 +32,8 @@ export class EmyParticleCtrl extends BaseCtrl {
     }
 
     public preloadParticle(count: number) {
-        for (let i = this._nodePool.size(); i < count; i++) {
+        this._nodePool.clear();
+        for (let i = 0; i < count; i++) {
             let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/EmyDieParticle" });
             this._nodePool.put(particleNode);
         }

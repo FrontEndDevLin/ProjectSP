@@ -73,7 +73,8 @@ export default class DropItemManager extends OBT_UIManager {
     }
 
     public preloadExpBlock(count: number) {
-        for (let i = this._expNodePool.size(); i < count; i++) {
+        this._expNodePool.clear();
+        for (let i = 0; i < count; i++) {
             let expNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "DropItem/ExpBlock" });
             this._expNodePool.put(expNode);
         }
@@ -83,7 +84,8 @@ export default class DropItemManager extends OBT_UIManager {
         this._expNodePool.put(expNode);
     }
     public preloadTrophyBlock(count: number) {
-        for (let i = this._trophyNodePool.size(); i < count; i++) {
+        this._trophyNodePool.clear();
+        for (let i = 0; i < count; i++) {
             let trophyNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "DropItem/TrophyBlock" });
             this._trophyNodePool.put(trophyNode);
         }

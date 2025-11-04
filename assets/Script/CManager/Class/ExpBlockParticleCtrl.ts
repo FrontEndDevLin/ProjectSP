@@ -32,7 +32,8 @@ export class ExpBlockParticleCtrl extends BaseCtrl {
     }
 
     public preloadParticle(count: number) {
-        for (let i = this._nodePool.size(); i < count; i++) {
+        this._nodePool.clear();
+        for (let i = 0; i < count; i++) {
             let particleNode = OBT.instance.uiManager.loadPrefab({ prefabPath: "Particle/ExpBlockParticle" });
             this._nodePool.put(particleNode);
         }

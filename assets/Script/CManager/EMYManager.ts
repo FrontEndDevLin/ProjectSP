@@ -86,6 +86,11 @@ export default class EMYManager extends OBT_UIManager {
 
     // config -> [{ type: "EMY01", count: 10 }, { type: "PEACE", count: 1 }]
     protected preloadEmyNode(configList: GameConfigInfo.EmyPreloadConfig[]) {
+        for (let emyId in this._emyNodePoolMap) {
+            this._emyNodePoolMap[emyId].clear();
+        }
+        this._emyNodePoolMap = {};
+
         configList.forEach(config => {
             let { emyId, count } = config;
             let enemyProps: EMYInfo.EMYProps = this.enemyData[emyId];
@@ -93,7 +98,7 @@ export default class EMYManager extends OBT_UIManager {
             if (!this._emyNodePoolMap[emyId]) {
                 this._emyNodePoolMap[emyId] = new NodePool();
             }
-            for (let i = this._emyNodePoolMap[emyId].size(); i < count; i++) {
+            for (let i = 0; i < count; i++) {
                 let enemyNode = this.loadPrefab({ prefabPath: `EMY/${emyId}`, scriptName });
                 this._emyNodePoolMap[emyId].put(enemyNode);
             }
@@ -106,7 +111,8 @@ export default class EMYManager extends OBT_UIManager {
     }
 
     protected preloadAlertNode(count: number) {
-        for (let i = this._alertNodePool.size(); i < count; i++) {
+        this._alertNodePool.clear();
+        for (let i = 0; i < count; i++) {
             let alertNode = this.loadPrefab({ prefabPath: `EMY/EmyAlert`, scriptName: "NONE" });
             this._alertNodePool.put(alertNode);
         }
