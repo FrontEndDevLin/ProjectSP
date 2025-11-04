@@ -3,8 +3,11 @@ import OBT_UIManager from '../Manager/OBT_UIManager';
 import { BulletInfo, GamePlayEvent, WarCoreInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
-import { getRandomNumbers } from '../Common/utils';
+import { copyObject, getFloatNumber, getRandomNumbers } from '../Common/utils';
 import ItemsManager from './ItemsManager';
+import BulletManager from './BulletManager';
+import DamageManager from './DamageManager';
+import CHRManager from './CHRManager';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -15,6 +18,8 @@ export default class WarCoreManager extends OBT_UIManager {
     public warCoreData: WarCoreInfo.WarCoreDBData;
 
     public atkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
+    public realAtkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
+    public damage: number = 0;
 
     start() {
         
@@ -29,6 +34,44 @@ export default class WarCoreManager extends OBT_UIManager {
         }
 
         this.warCoreData = DBManager.instance.getDBData("WarCore");
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
+    }
+
+    protected updateRealAtkWarCore() {
+        if (!this.realAtkWarCore) {
+            const warCore: WarCoreInfo.AtkWarCoreAttr = this.atkWarCore;
+            this.realAtkWarCore = copyObject(warCore);
+        }
+        let realAttr: WarCoreInfo.AtkWarCoreDataAttr = this.getWarCoreRealAttr(this.realAtkWarCore.id);
+        this.realAtkWarCore.base_dmg = realAttr.base_dmg;
+        this.realAtkWarCore.dmg = realAttr.dmg;
+        this.realAtkWarCore.ctl = realAttr.ctl;
+        this.realAtkWarCore.cd = realAttr.cd;
+        this.realAtkWarCore.range = realAttr.range;
+    }
+
+    // 获得指定核心的当前属性(结合角色属性计算)
+    public getWarCoreRealAttr(atkWarCoreId): WarCoreInfo.AtkWarCoreDataAttr {
+        const warCore: WarCoreInfo.AtkWarCoreAttr = this.warCoreData.atk_war_core_def[atkWarCoreId];
+        if (!warCore) {
+            return;
+        }
+        let base_dmg = BulletManager.instance.getBulletDamage(warCore.bullet);
+        let dmg = DamageManager.instance.getBulletRealDamage(warCore.bullet);
+        let ctl = CHRManager.instance.propCtx.getPropRealValue("ctl") + warCore.ctl;
+        let cd = getFloatNumber(warCore.cd / CHRManager.instance.propCtx.getPropRealValue("atk_spd"), 3);
+        let range = CHRManager.instance.propCtx.getPropRealValue("range") + warCore.range;
+
+        return {
+            base_dmg,
+            dmg,
+            ctl,
+            ctl_dmg_rate: warCore.ctl_dmg_rate,
+            split: warCore.split,
+            cd,
+            range
+        }
     }
 
     public setWarCoreRootNode(node: Node) {
@@ -39,6 +82,7 @@ export default class WarCoreManager extends OBT_UIManager {
         const warCore: WarCoreInfo.AtkWarCoreAttr = this.warCoreData.atk_war_core_def[atkWarCoreId];
         if (warCore) {
             this.atkWarCore = warCore;
+            this.updateRealAtkWarCore();
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
             this.showPrefab({ prefabPath: `WarCore/${warCore.id}`, parentNode: this.warCoreRootNode, scriptName: warCore.id });
         }
@@ -62,6 +106,7 @@ export default class WarCoreManager extends OBT_UIManager {
     protected unmountAtkWarCore() {
         this.warCoreRootNode.getChildByName(this.atkWarCore.id).destroy();
         this.atkWarCore = null;
+        this.realAtkWarCore = null;
     }
 
     // 预选进攻核心列表
@@ -83,6 +128,10 @@ export default class WarCoreManager extends OBT_UIManager {
         });
 
         return list;
+    }
+
+    protected onDestroy(): void {
+        OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
     }
 
     update(deltaTime: number) {

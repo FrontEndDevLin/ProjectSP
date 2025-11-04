@@ -1,6 +1,6 @@
 import { _decorator, BoxCollider2D, Color, Component, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation, UITransform } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { EMYInfo, FLASH_TIME, GameCollider, PIXEL_UNIT, Point } from '../../../Common/Namespace';
+import { DamageInfo, EMYInfo, FLASH_TIME, GameCollider, PIXEL_UNIT, Point } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
@@ -137,8 +137,9 @@ export class EMYElite extends OBT_Component {
             case GameCollider.GROUP.CHR_BULLET: {
                 // 显示伤害由一个类单独管理
                 let bulletId: string = otherCollider.node.name;
-                let damage: number = DamageManager.instance.calcAttackDamage(bulletId);
-                this.props.hp -= damage;
+                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId);
+                // damageAttr.isCtitical // 暴击
+                this.props.hp -= damageAttr.dmg;
                 if (this.phase === 1 && this.props.hp <= this._maxHp / 2) {
                     this.changePhase();
                 }

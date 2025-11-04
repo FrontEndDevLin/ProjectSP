@@ -4,6 +4,9 @@ import OBT from '../OBT';
 import EMYManager from './EMYManager';
 import BulletManager from './BulletManager';
 import CHRManager from './CHRManager';
+import { DamageInfo } from '../Common/Namespace';
+import WarCoreManager from './WarCoreManager';
+import { getRandomNumber } from '../Common/utils';
 
 /**
  * 伤害管理类
@@ -30,7 +33,7 @@ export default class DamageManager extends OBT_UIManager {
 
     }
 
-    public calcAttackDamage(bulletId: string) {
+    public getBulletRealDamage(bulletId: string) {
         let bulletDamage: number = BulletManager.instance.getBulletDamage(bulletId);
         // TODO: 1. 结合角色属性和核心属性对dmg进行修正
 
@@ -38,6 +41,31 @@ export default class DamageManager extends OBT_UIManager {
         let dmgVal: number = CHRManager.instance.propCtx.getPropRealValue("dmg");
         let finalDamage: number = Math.round(bulletDamage * dmgVal);
         return finalDamage;
+    }
+
+    public calcAttackDamage(bulletId: string): DamageInfo.DamageAttr {
+        let realDamage: number = this.getBulletRealDamage(bulletId);
+        let isCtitical: boolean = false;
+        // 只有核心的bullet才能暴击
+        if (bulletId === WarCoreManager.instance.atkWarCore.bullet) {
+            let ctl: number = WarCoreManager.instance.realAtkWarCore.ctl;
+            if (ctl > 0) {
+                if (ctl >= 100) {
+                    isCtitical = true;
+                } else {
+                    let num: number = getRandomNumber(1, 100);
+                    isCtitical = num <= ctl;
+                }
+                if (isCtitical) {
+                    realDamage = Math.round(realDamage * WarCoreManager.instance.realAtkWarCore.ctl_dmg_rate);
+                }
+            }
+        }
+        // 判断是否触发暴击
+        return {
+            isCtitical,
+            dmg: realDamage
+        }
     }
 
     public calcEnemyDamage(enemyId: string, isSpec: boolean) {

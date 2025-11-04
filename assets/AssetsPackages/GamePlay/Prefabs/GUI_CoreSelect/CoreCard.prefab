@@ -879,7 +879,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 10,
-      "y": 126.36,
+      "y": 140.36,
       "z": 0
     },
     "_lrot": {
@@ -920,7 +920,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 270,
-      "height": 63.279999999999994
+      "height": 35.28
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -946,7 +946,7 @@
       "__id__": 37
     },
     "_lineHeight": 28,
-    "_string": "基础攻击将会分裂<br/>分裂成<color=#67C23A>3</color>个子弹",
+    "_string": "-",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
     "_fontSize": 24,
@@ -986,7 +986,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Attk",
+    "_name": "Attr",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1008,7 +1008,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 10,
-      "y": 35.08,
+      "y": 105.08000000000001,
       "z": 0
     },
     "_lrot": {
@@ -1049,7 +1049,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 270,
-      "height": 119.28
+      "height": 35.28
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1075,7 +1075,7 @@
       "__id__": 43
     },
     "_lineHeight": 28,
-    "_string": "伤害: <color=#67C23A>3</color><br/>暴击: 1.5|1%概率<br/>冷却: 0.3s<br/>范围: <color=#67C23A>200</color>",
+    "_string": "-",
     "_horizontalAlign": 0,
     "_verticalAlign": 0,
     "_fontSize": 24,
@@ -1137,7 +1137,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 10,
-      "y": -70.2,
+      "y": 41.80000000000001,
       "z": 0
     },
     "_lrot": {

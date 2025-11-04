@@ -165,18 +165,27 @@ export namespace GameConfigInfo {
 }
 
 export namespace WarCoreInfo {
-    export interface AtkWarCoreAttr {
+    export interface AtkWarCoreDataAttr {
+        // 分裂
+        split?: number,
+        range: number,
+        // 暴击率
+        ctl: number,
+        // 暴击伤害倍率
+        ctl_dmg_rate: number,
+        cd: number,
+        dmg: number,
+        base_dmg: number
+    }
+
+    export interface AtkWarCoreAttr extends AtkWarCoreDataAttr {
         id: string,
         name: string,
         intro: string,
         atk_intro: string,
         icon_ui: string,
         icon_gaming: string,
-        bullet: string,
-        // 分裂
-        split?: number,
-        range: number,
-        cd: number
+        bullet: string
     }
 
     export interface AtkWarCoreMap {
@@ -463,6 +472,13 @@ export namespace BulletInfo {
         vector: Vec3,
         // 指定enemyId, 是敌人创建的子弹, 伤害计算由GameConfig提供
         enemyId?: string
+    }
+}
+
+export namespace DamageInfo {
+    export interface DamageAttr {
+        isCtitical: boolean,
+        dmg: number
     }
 }
 

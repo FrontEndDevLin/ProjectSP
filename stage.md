@@ -14,6 +14,7 @@
   属性绑定角色
   "range_dmg": 0,
   "melee_dmg": 0,
+  "ctl": 0,
   "def": 0,
   "luck": 0
 

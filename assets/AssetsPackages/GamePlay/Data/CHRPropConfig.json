@@ -45,11 +45,11 @@
         },
         "range": {
             "prop": "range",
-            "txt": "%范围",
+            "txt": "范围",
             "val": 0,
-            "basic_val": 10,
+            "basic_val": 0,
             "forward_val": true,
-            "percent": true,
+            "percent": false,
             "intro": "介绍文本",
             "ico": "HP"
         },
@@ -61,6 +61,16 @@
             "forward_val": true,
             "percent": true,
             "intro": "介绍文本",
+            "ico": "HP"
+        },
+        "ctl": {
+            "prop": "ctl",
+            "txt": "%暴击",
+            "val": 0,
+            "basic_val": 0,
+            "forward_val": true,
+            "percent": true,
+            "intro": "暴击率",
             "ico": "HP"
         },
         "def": {
@@ -123,7 +133,7 @@
         }
     },
     "prop_group": {
-        "major": ["hp", "dmg", "range_dmg", "melee_dmg", "range", "atk_spd", "def", "spd", "avd", "luck"],
+        "major": ["hp", "dmg", "range_dmg", "melee_dmg", "range", "atk_spd", "ctl", "def", "spd", "avd", "luck"],
         "sub": ["exp_eff", "pick_range"],
         "unvisiable": []
     },

@@ -28,7 +28,7 @@ export class BaseAtkWarCore extends OBT_Component {
     protected warCore: WarCoreInfo.AtkWarCoreAttr;
 
     start() {
-        this.warCore = WarCoreManager.instance.atkWarCore;
+        this.warCore = WarCoreManager.instance.realAtkWarCore;
         this._initDomainCollider();
     }
 
@@ -51,7 +51,7 @@ export class BaseAtkWarCore extends OBT_Component {
             collider.on(Contact2DType.END_CONTACT, this._onCHRDomainEndContact, this);
         }
         // let { range, alert } = this.weaponPanel;
-        let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + this.warCore.range;
+        let range: number = this.warCore.range;
         this._attackDomainCollider.radius = range;
         // this._alertDomainCollider.radius = (range + 2) * PIXEL_UNIT;
     }
@@ -163,10 +163,7 @@ export class BaseAtkWarCore extends OBT_Component {
             // this._attacking = true;
 
             // 冷却结合攻击速度修正
-            let cd: number = this.warCore.cd;
-            let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
-            let realCd: number = getFloatNumber(cd / atkSpdVal, 3);
-            this._cd = realCd;
+            this._cd = this.warCore.cd;
         });
     }
 
