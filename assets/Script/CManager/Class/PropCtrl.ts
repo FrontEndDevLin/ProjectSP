@@ -76,8 +76,8 @@ export default class PropCtrl extends BaseCtrl {
         return this._curHP;
     }
 
-    public getPropInfo(propKey: string): CHRInfo.Prop {
-        return this.propMap[propKey];
+    public getPropInfo(propKey: string, attrKey?: string) {
+        return attrKey ? this.propMap[propKey][attrKey] : this.propMap[propKey];
     }
     // new ..
     public getPropBasicValue(propKey: string) {

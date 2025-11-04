@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BulletInfo, GamePlayEvent, WarCoreInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, GamePlayEvent, WarCoreInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { copyObject, getFloatNumber, getRandomNumbers } from '../Common/utils';
@@ -57,11 +57,13 @@ export default class WarCoreManager extends OBT_UIManager {
         if (!warCore) {
             return;
         }
-        let base_dmg = BulletManager.instance.getBulletDamage(warCore.bullet);
-        let dmg = DamageManager.instance.getBulletRealDamage(warCore.bullet);
-        let ctl = CHRManager.instance.propCtx.getPropRealValue("ctl") + warCore.ctl;
-        let cd = getFloatNumber(warCore.cd / CHRManager.instance.propCtx.getPropRealValue("atk_spd"), 3);
-        let range = CHRManager.instance.propCtx.getPropRealValue("range") + warCore.range;
+        let bulletId: string = warCore.bullet;
+        let base_dmg: number = BulletManager.instance.getBulletDamage(bulletId);
+        let dmg: number = DamageManager.instance.getBulletRealDamage(bulletId);
+        let boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");
+        let ctl: number = CHRManager.instance.propCtx.getPropRealValue("ctl") + warCore.ctl;
+        let cd: number = getFloatNumber(warCore.cd / CHRManager.instance.propCtx.getPropRealValue("atk_spd"), 3);
+        let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + warCore.range;
 
         return {
             base_dmg,
@@ -70,7 +72,8 @@ export default class WarCoreManager extends OBT_UIManager {
             ctl_dmg_rate: warCore.ctl_dmg_rate,
             split: warCore.split,
             cd,
-            range
+            range,
+            boost
         }
     }
 

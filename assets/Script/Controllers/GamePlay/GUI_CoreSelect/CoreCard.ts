@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { CHRInfo, COLOR, GAME_NODE, GamePlayEvent, WarCoreInfo } from '../../../Common/Namespace';
+import { BoostConfig, CHRInfo, COLOR, GAME_NODE, GamePlayEvent, WarCoreInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
@@ -47,7 +47,7 @@ export class CoreCard extends OBT_Component {
 
         let realAttr: WarCoreInfo.AtkWarCoreDataAttr = WarCoreManager.instance.getWarCoreRealAttr(props.id);
         let richTxtList: string[] = [
-            this._getDmgRichTxt(realAttr.dmg, realAttr.base_dmg, props.split),
+            this._getDmgRichTxt(realAttr.dmg, realAttr.base_dmg, realAttr.boost, props.split),
             this._getCtlRichTxt(realAttr.ctl, realAttr.ctl_dmg_rate),
             this._getCdRichTxt(realAttr.cd),
             this._getRangeRichTxt(realAttr.range)
@@ -68,13 +68,21 @@ export class CoreCard extends OBT_Component {
     }
 
     // 获取伤害属性富文本
-    private _getDmgRichTxt(dmg: number, baseDmg: number, split?: number): string {
+    private _getDmgRichTxt(dmg: number, baseDmg: number, boost: BoostConfig, split?: number): string {
         let dmgColor: string = dmg >= baseDmg ? COLOR.SUCCESS : COLOR.DANGER;
         let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
         if (split && split > 0) {
             dmgColorTxt += `x<color=${COLOR.SUCCESS}>${split}</color>`;
         }
-        return `伤害: ${dmgColorTxt}|${baseDmg}`;
+        let boostTxt: string = "|";
+        if (boost) {
+            for (let prop in boost) {
+                // TODO: 后续换成图集图标
+                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
+                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
+            }
+        }
+        return `伤害: ${dmgColorTxt}|${baseDmg}${boostTxt}`;
     }
     // 获取暴击属性富文本
     private _getCtlRichTxt(ctl: number, ctlDmgRate: number): string {

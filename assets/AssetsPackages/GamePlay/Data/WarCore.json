@@ -17,7 +17,7 @@
             "bullet": "CHR_Bullet001",
             "range": 200,
             "cd": 0.3,
-            "ctl": 1,
+            "ctl": 50,
             "ctl_dmg_rate": 1.5
         },
         "ScatterAtkWarCore": {

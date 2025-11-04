@@ -25,7 +25,7 @@
             "wave": 1,
             "wave_type": 1,
             "max_emy": 30,
-            "duration": 2,
+            "duration": 20,
             "preload": {
                 "alert": 4,
                 "exp": 10,

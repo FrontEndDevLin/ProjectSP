@@ -82,6 +82,9 @@ export class EMYBase extends OBT_Component {
                 // 显示伤害由一个类单独管理
                 let bulletId: string = otherCollider.node.name;
                 let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId);
+                if (damageAttr.isCtitical) {
+                    console.log('触发暴击，伤害为' + damageAttr.dmg)
+                }
                 // damageAttr.isCtitical // 暴击
                 this.props.hp -= damageAttr.dmg;
                 // DamageManager.instance.showDamageTxt(realDamage, this.node.position);

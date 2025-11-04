@@ -4,7 +4,7 @@ import OBT from '../OBT';
 import EMYManager from './EMYManager';
 import BulletManager from './BulletManager';
 import CHRManager from './CHRManager';
-import { DamageInfo } from '../Common/Namespace';
+import { BoostConfig, DamageInfo } from '../Common/Namespace';
 import WarCoreManager from './WarCoreManager';
 import { getRandomNumber } from '../Common/utils';
 
@@ -35,11 +35,21 @@ export default class DamageManager extends OBT_UIManager {
 
     public getBulletRealDamage(bulletId: string) {
         let bulletDamage: number = BulletManager.instance.getBulletDamage(bulletId);
-        // TODO: 1. 结合角色属性和核心属性对dmg进行修正
+
+        // 1. 结合角色属性和核心属性对dmg进行修正
+        let boostDmg: number = 0;
+        const boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");
+        if (boost) {
+            for (let prop in boost) {
+                let rate: number = boost[prop] || 0;
+                let value: number = CHRManager.instance.propCtx.getPropValue(prop) || 0;
+                boostDmg += value * rate;
+            }
+        }
 
         // 2. 将第一步修正后的伤害与当前伤害百分比做计算
         let dmgVal: number = CHRManager.instance.propCtx.getPropRealValue("dmg");
-        let finalDamage: number = Math.round(bulletDamage * dmgVal);
+        let finalDamage: number = Math.round((bulletDamage + boostDmg) * dmgVal);
         return finalDamage;
     }
 

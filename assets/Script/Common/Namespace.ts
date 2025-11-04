@@ -175,7 +175,8 @@ export namespace WarCoreInfo {
         ctl_dmg_rate: number,
         cd: number,
         dmg: number,
-        base_dmg: number
+        base_dmg: number,
+        boost?: BoostConfig
     }
 
     export interface AtkWarCoreAttr extends AtkWarCoreDataAttr {
@@ -456,7 +457,8 @@ export namespace BulletInfo {
         // 最大飞行距离
         max_dis: number,
         piercing: number,
-        cld: number
+        cld: number,
+        boost?: BoostConfig
     }
 
     export interface BulletDBData {
@@ -480,6 +482,10 @@ export namespace DamageInfo {
         isCtitical: boolean,
         dmg: number
     }
+}
+
+export interface BoostConfig {
+    [prop: string]: number
 }
 
 export const SCREEN_WIDTH = 1280;
