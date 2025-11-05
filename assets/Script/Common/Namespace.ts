@@ -186,7 +186,9 @@ export namespace WarCoreInfo {
         atk_intro: string,
         icon_ui: string,
         icon_gaming: string,
-        bullet: string
+        bullet: string,
+        // 特性列表
+        traits?: string[]
     }
 
     export interface AtkWarCoreMap {

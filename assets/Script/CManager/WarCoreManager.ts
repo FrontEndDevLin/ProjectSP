@@ -8,6 +8,7 @@ import ItemsManager from './ItemsManager';
 import BulletManager from './BulletManager';
 import DamageManager from './DamageManager';
 import CHRManager from './CHRManager';
+import ProcessManager from './ProcessManager';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -86,6 +87,12 @@ export default class WarCoreManager extends OBT_UIManager {
         if (warCore) {
             this.atkWarCore = warCore;
             this.updateRealAtkWarCore();
+            const traits: string[] = warCore.traits;
+            if (traits && Array.isArray(traits)) {
+                traits.forEach((trait: string) => {
+                    ProcessManager.instance.traitCtrl.useTrait(trait);
+                })
+            }
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
             this.showPrefab({ prefabPath: `WarCore/${warCore.id}`, parentNode: this.warCoreRootNode, scriptName: warCore.id });
         }

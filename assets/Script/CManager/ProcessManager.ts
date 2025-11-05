@@ -12,6 +12,7 @@ import DropItemManager from './DropItemManager';
 import SaveCtrl from './Class/SaveCtrl';
 import ItemsManager from './ItemsManager';
 import BulletManager from './BulletManager';
+import TraitCtrl from './Class/TraitCtrl';
 const { ccclass, property } = _decorator;
 
 const CORE_SELECT_TIME: number = 5555;
@@ -37,6 +38,7 @@ export default class ProcessManager extends OBT_UIManager {
     public waveRole: GameConfigInfo.WaveRole;
 
     public saveCtrl: SaveCtrl;
+    public traitCtrl: TraitCtrl;
 
     // 持续时间
     private _duration: number = 0;
@@ -87,6 +89,7 @@ export default class ProcessManager extends OBT_UIManager {
         // 这里将各个管理的根节点挂载，避免层级问题
         this._initMapAndGUI();
         this._initOtherRootNode();
+        this._initTrait();
         this._initSave(isNewGame);
         CHRManager.instance.init(this.saveCtrl.save);
 
@@ -103,6 +106,9 @@ export default class ProcessManager extends OBT_UIManager {
         // GUI_GamePlayManager.instance.initPropGUI();
         GUI_GamePlayManager.instance.initPopupGUI();
         CHRManager.instance.showCHR();
+    }
+    private _initTrait() {
+        this.traitCtrl = new TraitCtrl();
     }
     private _initSave(isNewGame: boolean) {
         if (isNewGame) {

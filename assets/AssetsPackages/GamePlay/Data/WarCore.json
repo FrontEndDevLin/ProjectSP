@@ -4,7 +4,8 @@
         "desc1": "bullet配置由另一文件来配置, 关于bullet分裂等, 通过程序来实现",
         "desc2": "这里面可以定义首角色属性加成的属性",
         "split": "分裂",
-        "pub_atk_war_core": "允许选择的攻击核心"
+        "pub_atk_war_core": "允许选择的攻击核心",
+        "traits": "拥有的特性"
     },
     "atk_war_core_def": {
         "BaseAtkWarCore": {
@@ -32,7 +33,8 @@
             "range": 200,
             "cd": 0.3,
             "ctl": 1,
-            "ctl_dmg_rate": 1.5
+            "ctl_dmg_rate": 1.5,
+            "traits": ["range_dmg_1"]
         }
     },
     "pub_atk_war_core": ["ScatterAtkWarCore"]

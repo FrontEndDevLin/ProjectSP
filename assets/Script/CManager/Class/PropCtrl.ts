@@ -7,6 +7,7 @@ import DBManager from "../DBManager";
 import ProcessManager from "../ProcessManager";
 import { BaseCtrl } from "./BaseCtrl";
 import GUI_GamePlayManager from "../GUI_GamePlayManager";
+import Profit from "./Profit";
 
 /**
  * TODO: 升级逻辑
@@ -53,7 +54,7 @@ export default class PropCtrl extends BaseCtrl {
     }
 
     public initHP() {
-        let maxHP: number = this.propMap["hp"].val;
+        let maxHP: number = this.propMap["hp"].real_val;
         this._curHP = maxHP;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.HP_CHANGE, this._curHP);
     }
@@ -62,7 +63,7 @@ export default class PropCtrl extends BaseCtrl {
             return;
         }
         if (n > 0) {
-            let maxHP: number = this.propMap["hp"].val;
+            let maxHP: number = this.propMap["hp"].real_val;
             if (this._curHP === maxHP) {
                 return;
             }
@@ -84,12 +85,12 @@ export default class PropCtrl extends BaseCtrl {
         return this.propMap[propKey].basic_val;
     }
     public getPropValue(propKey: string) {
-        return this.propMap[propKey].val;
+        return this.propMap[propKey].real_val;
     }
     public getPropRealValue(propKey: string): number {
         let prop: CHRInfo.Prop = this.getPropInfo(propKey);
         let basicVal: number = prop.basic_val;
-        let val: number = prop.val;
+        let val: number = prop.real_val;
         if (basicVal === 0) {
             if (prop.percent) {
                 // 存在百分比类型的属性，但基础值为0(闪避)
@@ -131,6 +132,7 @@ export default class PropCtrl extends BaseCtrl {
         for (let prop in props) {
             if (this.propMap[prop]) {
                 this.propMap[prop].val = props[prop];
+                this.propMap[prop].real_val = props[prop] * (Profit[prop] || 1)
             }
         }
 
@@ -213,6 +215,7 @@ export default class PropCtrl extends BaseCtrl {
         for (let item of this.preUpgradeList) {
             if (item.prop === propKey) {
                 this.propMap[propKey].val += item.value;
+                this.propMap[propKey].real_val = this.propMap[propKey].val * (Profit[propKey] || 1)
                 break;
             }
         }
