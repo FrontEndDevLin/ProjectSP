@@ -1,0 +1,11 @@
+{
+  "desc": "特性定义, 核心特性/道具特性",
+  "trait_def_desc": {
+    "type": "特性类型 全局/事件"
+  },
+  "trait_def": {
+    "range_dmg_1": {
+      "type": "global"
+    }
+  }
+}

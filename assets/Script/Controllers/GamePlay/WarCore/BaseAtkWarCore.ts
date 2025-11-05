@@ -33,7 +33,11 @@ export class BaseAtkWarCore extends OBT_Component {
     }
 
     protected onLoad(): void {
-
+10.27 - 10.31
+测试环境功能测试和问题修复 100% 2人日
+提交CCMS权限控制 100% 1人日
+公众号菜单跳转到数据看板功能 100% 1人日
+投产问题修复 100% 1人日
     }
 
     private _initDomainCollider() {

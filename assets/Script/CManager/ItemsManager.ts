@@ -301,8 +301,6 @@ export default class ItemsManager extends OBT_UIManager {
         this._itemPreviewNode.OBT_param2.updateView(item);
 
         this.showNode(this._itemPreviewNode);
-
-        OBT.instance.printStructure()
     }
 
     // 捡起道具

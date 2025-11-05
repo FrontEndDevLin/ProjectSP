@@ -209,6 +209,8 @@ export namespace CHRInfo {
         prop: string,
         txt: string,
         val: number,
+        // 实际修正后的值
+        real_val: number,
         basic_val: number,
         forward_val: boolean,
         percent: boolean,
