@@ -42,6 +42,8 @@ export default class CHRManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._pickUpExp, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.RECOVER_EXP, this._recoverExp, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this._pickUpTrophy, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.PROFIT.PROFIT_CHANGE, this._reCalcProp, this);
     }
 
     public init(saveDoc: SaveDoc) {
@@ -118,6 +120,11 @@ export default class CHRManager extends OBT_UIManager {
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_UPDATE);
         }
         return res;
+    }
+
+    private _reCalcProp(propKeys: string[]) {
+        this.propCtx.reCalcProps(propKeys);
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PROP_UPDATE);
     }
 
     // 更新角色位置

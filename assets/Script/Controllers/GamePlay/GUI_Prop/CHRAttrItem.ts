@@ -22,7 +22,7 @@ export class CHRAttrItem extends OBT_Component {
     private _updateView() {
         const prop: CHRInfo.Prop = this.node.OBT_param1;
         this.view("LeftWrap/Label").getComponent(Label).string = `${prop.txt}`;
-        this.view("Value").getComponent(Label).string = `${prop.val}`;
+        this.view("Value").getComponent(Label).string = `${prop.real_val}`;
 
         if (prop.ico) {
             let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${prop.ico}`);

@@ -1,3 +1,6 @@
+import { Common, GamePlayEvent } from "../../Common/Namespace";
+import OBT from "../../OBT";
+
 export default class Profit {
     static hp: number = 1;
     static dmg: number = 1;
@@ -10,4 +13,19 @@ export default class Profit {
     static spd: number = 1;
     static avd: number = 1;
     static luck: number = 1;
+
+    static setProfit(options: Common.SimpleObj) {
+        if (options && Object.keys(options).length) {
+            let updateKeys: string[] = [];
+            for (let key in options) {
+                if (typeof Profit[key] === "number") {
+                    Profit[key] = options[key];
+                    updateKeys.push(key);
+                }
+            }
+            if (updateKeys.length) {
+                OBT.instance.eventCenter.emit(GamePlayEvent.PROFIT.PROFIT_CHANGE, updateKeys);
+            }
+        }
+    }
 }

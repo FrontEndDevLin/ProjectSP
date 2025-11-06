@@ -42,7 +42,7 @@ export default class DamageManager extends OBT_UIManager {
         if (boost) {
             for (let prop in boost) {
                 let rate: number = boost[prop] || 0;
-                let value: number = CHRManager.instance.propCtx.getPropValue(prop) || 0;
+                let value: number = CHRManager.instance.propCtx.getPropRealValue(prop) || 0;
                 boostDmg += value * rate;
             }
         }

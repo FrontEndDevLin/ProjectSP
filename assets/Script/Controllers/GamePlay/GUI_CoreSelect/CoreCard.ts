@@ -65,6 +65,18 @@ export class CoreCard extends OBT_Component {
 
         this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
         this.view("Content/Attr").getComponent(RichText).string = attrRichTxt;
+
+        let traits: string[] = props.traits;
+        if (Array.isArray(traits) && traits.length) {
+            let traitRichTxt: string = "";
+            traits.forEach((trait: string, idx: number) => {
+                traitRichTxt += ProcessManager.instance.traitCtrl.getTraitRichTxt(trait);
+                if (idx !== trait.length - 1) {
+                    traitRichTxt += "</br>";
+                }
+            });
+            this.view("Content/Trait").getComponent(RichText).string = traitRichTxt;
+        }
     }
 
     // 获取伤害属性富文本

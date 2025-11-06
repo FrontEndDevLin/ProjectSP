@@ -10,6 +10,12 @@ export enum GAME_NODE {
     PASS_PREPARE // 备战结束
 }
 
+export namespace Common {
+    export interface SimpleObj {
+        [str: string]: number
+    }
+}
+
 export namespace GamePlayEvent {
     export enum COMPASS {
         TOUCH_START = 10,
@@ -74,6 +80,10 @@ export namespace GamePlayEvent {
     export enum CURRENCY {
         CURRENCY_CHANGE = 140,
         STORAGE_CHANGE
+    }
+
+    export enum PROFIT {
+        PROFIT_CHANGE = 150
     }
 }
 
@@ -490,6 +500,20 @@ export namespace DamageInfo {
 
 export interface BoostConfig {
     [prop: string]: number
+}
+
+export namespace TraitInfo {
+    export interface TraitConfig {
+        type: string,
+        prop: string,
+        value: number | string
+    }
+
+    export interface TraitDBData {
+        trait_def: {
+            [traitName: string]: TraitConfig
+        }
+    }
 }
 
 export const SCREEN_WIDTH = 1280;

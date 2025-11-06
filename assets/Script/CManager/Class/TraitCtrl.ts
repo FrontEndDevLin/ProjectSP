@@ -2,6 +2,7 @@ import { BaseCtrl } from "./BaseCtrl";
 import DBManager from "../DBManager";
 import Trait from "../../Trait/Trait";
 import { Trait_def } from "../../Trait/Trait_def";
+import { TraitInfo } from "../../Common/Namespace";
 
 /**
  * 特性控制
@@ -16,13 +17,12 @@ export default class TraitCtrl extends BaseCtrl {
 
     protected traitMap: TraitMap = {};
 
+    protected traitDBData: TraitInfo.TraitDBData = null;
+
     constructor() {
         super();
-        if (!TraitCtrl.instance) {
-            TraitCtrl.instance = this;
-        } else {
-            return TraitCtrl.instance;
-        }
+        
+        this.traitDBData = DBManager.instance.getDBData("Trait");
     }
 
     public useTrait(traitName: string) {
@@ -31,14 +31,21 @@ export default class TraitCtrl extends BaseCtrl {
         } else {
             let className: string = "Trait_" + traitName;
             let traitClass: Trait = Trait_def[className];
+            let traitConfig: TraitInfo.TraitConfig = this.traitDBData.trait_def[traitName];
             if (traitClass) {
-                this.traitMap[traitName] = new Trait_def[className];
+                this.traitMap[traitName] = new Trait_def[className](traitConfig);
                 this.traitMap[traitName].applyTrait();
             }
         }
     }
 
-    public getTraitRichTxt(traitName: string) {
-
+    public getTraitRichTxt(traitName: string): string {
+        let className: string = "Trait_" + traitName;
+        let traitClass: Trait = Trait_def[className];
+        let traitConfig: TraitInfo.TraitConfig = this.traitDBData.trait_def[traitName];
+        if (traitClass) {
+            return traitClass.getRichTxt(traitConfig);
+        }
+        return "";
     }
 }

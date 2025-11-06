@@ -85,6 +85,13 @@ export const getRandomVector = function(): Vec3 {
   return v3(vec[0], vec[1], 0);
 }
 
+export const getSuccessRichTxt = function(txt: string): string {
+  return `<color=${COLOR.SUCCESS}>${txt}</color>`
+}
+export const getDangerRichTxt = function(txt: string): string {
+  return `<color=${COLOR.DANGER}>${txt}</color>`
+}
+
 export const COLOR = {
   NORMAL: "#F5F5F5",
   SUCCESS: "#67C23A",

@@ -107,6 +107,12 @@ export default class PropCtrl extends BaseCtrl {
         }
     }
 
+    public reCalcProps(propKeys: string[]) {
+        propKeys.forEach((propKey: string) => {
+            this.propMap[propKey].real_val = this.propMap[propKey].val * (Profit[propKey] || 1)
+        })
+    }
+
     private _getPropsList(group?: CHRInfo.GroupKeys): CHRInfo.Prop[] {
         const propList: CHRInfo.Prop[] = [];
         const propKeyList: string[] = this.propGroup[group];

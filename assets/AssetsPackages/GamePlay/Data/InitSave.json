@@ -6,7 +6,7 @@
         "desc": "这里存角色的面板数据",
         "hp": 6,
         "dmg": 0,
-        "range_dmg": 2,
+        "range_dmg": 4,
         "melee_dmg": 0,
         "range": 0,
         "atk_spd": 0,
