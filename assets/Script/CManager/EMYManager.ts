@@ -263,6 +263,9 @@ export default class EMYManager extends OBT_UIManager {
                     this._createAnEnemy({ enemyType, spawnPattern, spawnPoint }, (i + 1) * 60);
                 }
             } break;
+            case "group": {
+
+            } break;
         }
     }
     private _createAnEnemy({ enemyType, spawnPattern, spawnPoint }: EMYInfo.CreateAnEnemyParams, delay: number = 0) {
