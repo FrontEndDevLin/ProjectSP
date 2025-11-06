@@ -71,11 +71,23 @@ export class CoreCard extends OBT_Component {
             let traitRichTxt: string = "";
             traits.forEach((trait: string, idx: number) => {
                 traitRichTxt += ProcessManager.instance.traitCtrl.getTraitRichTxt(trait);
-                if (idx !== trait.length - 1) {
-                    traitRichTxt += "</br>";
+                if (idx !== traits.length - 1) {
+                    traitRichTxt += "<br/>";
                 }
             });
             this.view("Content/Trait").getComponent(RichText).string = traitRichTxt;
+        }
+
+        let buffList: CHRInfo.Buff[] = props.buff_list;
+        if (Array.isArray(buffList) && buffList.length) {
+            let buffRichTxt: string = "";
+            buffList.forEach((buff: CHRInfo.Buff, idx: number) => {
+                buffRichTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
+                if (idx !== buffList.length - 1) {
+                    buffRichTxt += "<br/>"
+                }
+            });
+            this.view("Content/Buff").getComponent(RichText).string = buffRichTxt;
         }
     }
 

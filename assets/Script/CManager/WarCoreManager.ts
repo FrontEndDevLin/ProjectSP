@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, GamePlayEvent, WarCoreInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, CHRInfo, GamePlayEvent, WarCoreInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { copyObject, getFloatNumber, getRandomNumbers } from '../Common/utils';
@@ -87,6 +87,12 @@ export default class WarCoreManager extends OBT_UIManager {
         if (warCore) {
             this.atkWarCore = warCore;
             this.updateRealAtkWarCore();
+
+            const buffList: CHRInfo.Buff[] = warCore.buff_list;
+            if (Array.isArray(buffList) && buffList.length) {
+                CHRManager.instance.upgradePropByBuff(buffList);
+            }
+
             const traits: string[] = warCore.traits;
             if (traits && Array.isArray(traits)) {
                 traits.forEach((trait: string) => {

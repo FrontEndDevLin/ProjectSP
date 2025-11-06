@@ -8,6 +8,11 @@
       "type": "profit",
       "prop": "range_dmg",
       "value": 0.5
+    },
+    "pass_boost_spd_1": {
+      "type": "event",
+      "prop": "spd",
+      "value": 1
     }
   }
 }

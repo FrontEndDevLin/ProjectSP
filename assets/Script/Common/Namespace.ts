@@ -198,7 +198,8 @@ export namespace WarCoreInfo {
         icon_gaming: string,
         bullet: string,
         // 特性列表
-        traits?: string[]
+        traits?: string[],
+        buff_list?: CHRInfo.Buff[]
     }
 
     export interface AtkWarCoreMap {
@@ -212,7 +213,6 @@ export namespace WarCoreInfo {
 
 export namespace CHRInfo {
     export interface Buff {
-        type: string,
         prop: string,
         value?: number
     }

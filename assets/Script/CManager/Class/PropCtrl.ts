@@ -240,34 +240,28 @@ export default class PropCtrl extends BaseCtrl {
         }
         buffList.forEach((buff: CHRInfo.Buff) => {
             this.propMap[buff.prop].val += buff.value;
+            this.propMap[buff.prop].real_val = this.propMap[buff.prop].val * (Profit[buff.prop] || 1)
         });
         return true;
     }
 
     // 获取buff文本，如+5生命
     public getBuffTxt(buff: CHRInfo.Buff) {
-        let txt: string = "";
-        let buffType: string = buff.type || "prop";
-        if (buffType === "prop") {
-            let prop: CHRInfo.Prop = this.getPropInfo(buff.prop);
-            let propTxt: string = prop.txt;
-            let oValue: number = buff.value;
-            let value: string = `${oValue}`;
-            if (oValue > 0) {
-                value = `+${oValue}`;
-            }
-            
-            if (prop.percent) {
-                value = `${value}%`;
-                propTxt = propTxt.replace("%", "");
-            }
-            
-            let color: string = this.getBuffTxtColor(buff);
-            txt = `<color=${color}>${value}</color>${propTxt}`;
-        } else if (buffType === "event") {
-            // let scriptName: string = buff.script;
-            // txt = getScriptTypeItems(scriptName).getBuffTxt();
+        let prop: CHRInfo.Prop = this.getPropInfo(buff.prop);
+        let propTxt: string = prop.txt;
+        let oValue: number = buff.value;
+        let value: string = `${oValue}`;
+        if (oValue > 0) {
+            value = `+${oValue}`;
         }
+        
+        if (prop.percent) {
+            value = `${value}%`;
+            propTxt = propTxt.replace("%", "");
+        }
+        
+        let color: string = this.getBuffTxtColor(buff);
+        let txt = `<color=${color}>${value}</color>${propTxt}`;
         return txt;
     }
     public getBuffTxtColor(buff: CHRInfo.Buff): string {

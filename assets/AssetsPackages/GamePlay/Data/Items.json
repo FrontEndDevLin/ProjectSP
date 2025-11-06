@@ -34,12 +34,10 @@
             "group": "normal",
             "buff_list": [
                 {
-                    "type": "prop",
                     "prop": "hp",
                     "value": 3
                 },
                 {
-                    "type": "prop",
                     "prop": "spd",
                     "value": -1
                 }
@@ -56,7 +54,6 @@
             "group": "normal",
             "buff_list": [
                 {
-                    "type": "prop",
                     "prop": "range",
                     "value": 10
                 }
@@ -73,12 +70,10 @@
             "group": "normal",
             "buff_list": [
                 {
-                    "type": "prop",
                     "prop": "atk_spd",
                     "value": 8
                 },
                 {
-                    "type": "prop",
                     "prop": "dmg",
                     "value": -2
                 }
@@ -95,7 +90,6 @@
             "group": "normal",
             "buff_list": [
                 {
-                    "type": "prop",
                     "prop": "exp_eff",
                     "value": 15
                 }
