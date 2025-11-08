@@ -1,8 +1,8 @@
 import { _decorator, Component, find, Game, Node, Prefab, sp, v3, Vec3, Animation, NodePool, AnimationComponent } from 'cc';
 const { ccclass, property } = _decorator;
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT, Point, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
-import { getFloatNumber, getRandomNumber } from '../Common/utils';
+import { EMYInfo, GameConfigInfo, GamePlayEvent, PIXEL_UNIT, Point, SAFE_DISTANCE, SCREEN_HEIGHT, SCREEN_WIDTH } from '../Common/Namespace';
+import { getFloatNumber, getRandomNumber, getSortMatrix } from '../Common/utils';
 import OBT from '../OBT';
 import ProcessManager from './ProcessManager';
 import DBManager from './DBManager';
@@ -126,11 +126,12 @@ export default class EMYManager extends OBT_UIManager {
         this._waveRole = { ...ProcessManager.instance.waveRole };
         // 初始化spawned_count和next_spawn_time
         this._waveRole.spawn_roles.forEach((spawnRole: GameConfigInfo.EMYSpawnRole, i: number) => {
-            spawnRole.spawn_total = spawnRole.spawn_total || 1;
             spawnRole.spawn_once_time = spawnRole.spawn_once_time || 1;
             spawnRole.start_delay = spawnRole.start_delay || 0;
             spawnRole.spawn_duration = spawnRole.spawn_duration || 1;
-            spawnRole.spawn_count = Math.ceil(spawnRole.spawn_total / spawnRole.spawn_once_time);
+            if (spawnRole.spawn_total) {
+                spawnRole.spawn_count = Math.ceil(spawnRole.spawn_total / spawnRole.spawn_once_time);
+            }
             spawnRole.spawned_count = 0;
             spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - spawnRole.start_delay);
 
@@ -153,7 +154,9 @@ export default class EMYManager extends OBT_UIManager {
             if (spawnRole.spwaned) {
                 continue;
             }
-            if (spawnRole.spawned_count >= spawnRole.spawn_count) {
+            let isInfinite: boolean = typeof spawnRole.spawn_count !== "number";
+            // 当没有设置spawn_count时，无限刷
+            if (!isInfinite && spawnRole.spawned_count >= spawnRole.spawn_count) {
                 spawnRole.spwaned = true;
                 continue;
             }
@@ -198,7 +201,7 @@ export default class EMYManager extends OBT_UIManager {
                 }
             }
 
-            if (spawnRole.spawned_count + 1 <= spawnRole.spawn_count) {
+            if (isInfinite || spawnRole.spawned_count + 1 <= spawnRole.spawn_count) {
                 spawnRole.spawned_count++;
                 const { start_delay, spawned_count, spawn_interval } = spawnRole;
                 spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - start_delay - spawned_count * spawn_interval, 1);
@@ -245,26 +248,54 @@ export default class EMYManager extends OBT_UIManager {
     }
 
     /**
-     * 
+     * 创建一波敌人
      * @param type 敌人类型
      * @param count 生成的数量
-     * @param pattern 生成位置模式
+     * @param pattern 生成位置方式
      * @param batchMode 批量生成模式
      */
     public createEnemy({ enemyType, enemyCount, spawnPattern, spawnPoint, batchMode = "normal", relation }: EMYInfo.CreateEMYParams) {
-        // console.log(`生成${enemyCount}个${enemyType}类型的敌人, 生成位置模式为${pattern}, 批量生成模式为${batchMode}`);
+        // console.log(`生成${enemyCount}个${enemyType}类型的敌人, 生成位置方式为${pattern}, 批量生成模式为${batchMode}`);
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return
+        }
 
         switch (batchMode) {
             case "normal": {
-                if (!ProcessManager.instance.isOnPlaying()) {
-                    return
-                }
                 for (let i = 0; i < enemyCount; i++) {
                     this._createAnEnemy({ enemyType, spawnPattern, spawnPoint }, (i + 1) * 60);
                 }
             } break;
             case "group": {
+                if (enemyCount <= 0) {
+                    return;
+                }
+                // 阵型中心 基于该坐标向四周发散
+                let randomLoc: Vec3 = this._createRandomLoc(SAFE_DISTANCE * 1.6);
+                // 阵型排版
+                let sortMatrix: number[] = getSortMatrix(enemyCount);
+                // 单位宽高
+                let unitWidth: number = 40;
+                let unitHalfWidth: number = unitWidth / 2;
+                // 阵型宽高
+                let martrixHalfWidth: number = sortMatrix[0] * unitWidth / 2;
+                let martrixHalfHeight: number = sortMatrix.length * unitWidth / 2;
+                let vecList: Vec3[] = [];
+                // 先以左下角为原点, 减去一半的阵型宽高, 可实现以randomLoc为阵型中心
+                let { x, y } = randomLoc;
+                for (let i = 0; i < sortMatrix.length; i++) {
+                    for (let j = 0; j < sortMatrix[i]; j++) {
+                        vecList.push(v3(x + unitWidth * j - martrixHalfWidth + unitHalfWidth, y + unitWidth * i - martrixHalfHeight + unitHalfWidth));
+                    }
+                }
+                // 阵型坐标随机偏移
+                vecList.forEach((vec: Vec3, i: number) => {
+                    let { x, y } = vec;
+                    vec.x = getRandomNumber(x - 10, x + 10);
+                    vec.y = getRandomNumber(y - 10, y + 10);
 
+                    this._createAnEnemy({ enemyType, spawnPattern: "fixed", spawnPoint: [vec.x, vec.y] }, (i + 1) * 20);
+                });
             } break;
         }
     }
@@ -310,7 +341,7 @@ export default class EMYManager extends OBT_UIManager {
             }
         })
     }
-    private _createEnemyLoc(pattern: string, spawnPoint: Point): Vec3 {
+    private _createEnemyLoc(pattern: string, spawnPoint?: Point): Vec3 {
         let vec: Vec3 = v3(0, 0, 0);
         switch (pattern) {
             case "random": {
@@ -323,7 +354,7 @@ export default class EMYManager extends OBT_UIManager {
         return vec;
     }
 
-    private _createRandomLoc() {
+    private _createRandomLoc(distance?: number) {
         let x = SCREEN_WIDTH / 2;
         let y = SCREEN_HEIGHT / 2;
 
@@ -332,8 +363,9 @@ export default class EMYManager extends OBT_UIManager {
         // let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
         let characterLoc: Vec3 = v3(0, 0);
         let dis = Math.sqrt(Math.pow(locX - characterLoc.x, 2) + Math.pow(locY - characterLoc.y, 2));
-        // 生成一个随机坐标，判断是否与角色距离过近（小于8个单位），如果过近重新生成
-        if (dis < 8 * PIXEL_UNIT) {
+        // 生成一个随机坐标，判断是否与角色距离过近，如果过近重新生成
+        distance = distance || SAFE_DISTANCE;
+        if (dis < distance) {
             return this._createRandomLoc();
         }
         return v3(locX, locY);

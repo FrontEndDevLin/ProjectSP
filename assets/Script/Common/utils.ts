@@ -92,8 +92,44 @@ export const getDangerRichTxt = function(txt: string): string {
   return `<color=${COLOR.DANGER}>${txt}</color>`
 }
 
+// 根据count，生成一个排序矩阵
+// 比如15个排版为4443, 13个排版为4333, 12个排版为3333, 11个排版为3332
+export const getSortMatrix = function(count: number): number[] {
+  let col = Math.ceil(Math.sqrt(count));
+  let res: number[] = []
+  for (let i = 0; i < col; i++) {
+    let cnt;
+    if (count <= col) {
+      cnt = count;
+    } else {
+      cnt = Math.ceil(count / (col - i));
+    }
+    res.push(cnt);
+    count -= cnt;
+  }
+  return res;
+}
+
 export const COLOR = {
   NORMAL: "#F5F5F5",
   SUCCESS: "#67C23A",
   DANGER: "#F56C6C"
+}
+
+function test(obj, sortMatrix) {
+  // 单位宽高
+  let unitWidth = 60;
+  // 阵型宽高
+  let martrixHalfWidth = sortMatrix[0] * unitWidth / 2;
+  let martrixHalfHeight = sortMatrix.length * unitWidth / 2;
+  let vecList = [];
+  // 先以左下角为原点, 减去一半的阵型宽高, 可实现以randomLoc为阵型中心
+  let { x, y } = obj;
+  for (let i = 0; i < sortMatrix.length; i++) {
+      for (let j = 0; j < sortMatrix[i]; j++) {
+          vecList.push({x: x + unitWidth * j - martrixHalfWidth + 30, y: y + unitWidth * i - martrixHalfHeight + 30});
+      }
+  }
+
+  return vecList
 }

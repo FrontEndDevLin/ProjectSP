@@ -14,7 +14,7 @@
         "speed": 480,
         "max_dis": 200,
         "piercing": 1,
-        "damage": 200,
+        "damage": 3,
         "cld": 500
     },
     "CHR_Bullet002": {

@@ -101,7 +101,7 @@ export namespace GameConfigInfo {
         spawn_mode?: string,
         spawn_rate?: number,
         // 总生成数量
-        spawn_total: number,
+        spawn_total?: number,
         // 一次生成的数量
         spawn_once_time: number,
         spawn_interval: number,
@@ -522,6 +522,8 @@ export const SCREEN_HEIGHT = 720;
 export const PIXEL_UNIT = 20;
 
 export const FLASH_TIME: number = 0.06;
+// 生成敌人与角色的最小距离
+export const SAFE_DISTANCE: number = 160;
 
 export const COLOR = {
   NORMAL: "#F5F5F5",
