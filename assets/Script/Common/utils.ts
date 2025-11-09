@@ -115,21 +115,3 @@ export const COLOR = {
   SUCCESS: "#67C23A",
   DANGER: "#F56C6C"
 }
-
-function test(obj, sortMatrix) {
-  // 单位宽高
-  let unitWidth = 60;
-  // 阵型宽高
-  let martrixHalfWidth = sortMatrix[0] * unitWidth / 2;
-  let martrixHalfHeight = sortMatrix.length * unitWidth / 2;
-  let vecList = [];
-  // 先以左下角为原点, 减去一半的阵型宽高, 可实现以randomLoc为阵型中心
-  let { x, y } = obj;
-  for (let i = 0; i < sortMatrix.length; i++) {
-      for (let j = 0; j < sortMatrix[i]; j++) {
-          vecList.push({x: x + unitWidth * j - martrixHalfWidth + 30, y: y + unitWidth * i - martrixHalfHeight + 30});
-      }
-  }
-
-  return vecList
-}

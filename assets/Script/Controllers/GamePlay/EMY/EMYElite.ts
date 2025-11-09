@@ -272,6 +272,9 @@ export class EMYElite extends OBT_Component {
     }
 
     public die() {
+        if (this.phase === 1) {
+            this.aniComps[0].play("EMY01_die");
+        }
         this.view("Elite_HPBar").active = false;
         this.alive = false;
         this.node.getComponent(BoxCollider2D).enabled = false;
@@ -328,7 +331,7 @@ export class EMYElite extends OBT_Component {
             });
 
             this._currentCharge = 0;
-            this._cd = this.props.attack_cd[1];
+            this._cd = this.props.attack_cd;
         }
     }
     // 是否处于攻击前摇

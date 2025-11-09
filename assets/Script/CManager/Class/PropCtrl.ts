@@ -221,7 +221,7 @@ export default class PropCtrl extends BaseCtrl {
         for (let item of this.preUpgradeList) {
             if (item.prop === propKey) {
                 this.propMap[propKey].val += item.value;
-                this.propMap[propKey].real_val = this.propMap[propKey].val * (Profit[propKey] || 1)
+                this.propMap[propKey].real_val = Math.round(this.propMap[propKey].val * (Profit[propKey] || 1))
                 break;
             }
         }

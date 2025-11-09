@@ -1,10 +1,10 @@
 {
     "desc": "存储当前存档数据",
-    "wave": 3,
+    "wave": 1,
     "status": 1,
     "chr_prop": {
         "desc": "这里存角色的面板数据",
-        "hp": 6,
+        "hp": 12,
         "dmg": 0,
         "range_dmg": 4,
         "melee_dmg": 0,

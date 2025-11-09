@@ -121,7 +121,7 @@
         {
             "wave": 3,
             "wave_type": 2,
-            "duration": 5,
+            "duration": 60,
             "max_emy": 30,
             "max_emy_elite_fight": 3,
             "preload": {
@@ -193,16 +193,16 @@
             "wave": 4,
             "wave_type": 1,
             "max_emy": 80,
-            "duration": 15,
+            "duration": 40,
             "preload": {
-                "alert": 4,
-                "exp": 10,
+                "alert": 20,
+                "exp": 20,
                 "exp_particle": 9,
                 "trophy": 2,
-                "emy": [{ "emyId": "EMY02", "count": 30 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
                 "emy_particle": 20,
                 "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
-                "bullet_particle": 4,
+                "bullet_particle": 20,
                 "dmg_txt": 5
             },
             "spawn_roles": [
@@ -215,18 +215,40 @@
                     "spawn_interval": 3,
                     "spawn_pattern": "random",
                     "start_delay": 3,
-                    "spawn_duration": 30,
+                    "spawn_duration": 40,
                     "hp": 15
                 },
                 {
-                    "enemy_type": "EMY02",
-                    "spawn_once_time": 6,
+                    "enemy_type": "EMY01",
+                    "spawn_once_time": 2,
                     "spawn_interval": 1.6,
                     "spawn_pattern": "random",
-                    "batch_mode": "group",
+                    "batch_mode": "normal",
                     "start_delay": 0,
-                    "spawn_duration": 30,
-                    "hp": 1,
+                    "spawn_duration": 20,
+                    "hp": 3,
+                    "dmg": 2
+                },
+                {
+                    "enemy_type": "EMY02",
+                    "spawn_once_time": 4,
+                    "spawn_interval": 3,
+                    "spawn_pattern": "random",
+                    "batch_mode": "group",
+                    "start_delay": 5,
+                    "spawn_duration": 35,
+                    "hp": 3,
+                    "dmg": 2
+                },
+                {
+                    "enemy_type": "EMY03",
+                    "spawn_once_time": 3,
+                    "spawn_interval": 2,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 25,
+                    "spawn_duration": 15,
+                    "hp": 3,
                     "dmg": 2
                 }
             ]

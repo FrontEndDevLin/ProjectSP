@@ -384,7 +384,8 @@ export namespace EMYInfo {
         type: string,
         move: string,
         attack: string,
-        attack_cd: number[],
+        attack_cd: number,
+        attack_range?: number,
         broken_point: Point[] | Point[][],
         pic: string,
         spd: number,
@@ -426,6 +427,12 @@ export namespace EMYInfo {
         enemyCount: number,
         // 批量生成模式
         batchMode: string
+    }
+
+    export enum ATTACK_STAGE {
+        NONE = 1,   // 无
+        BEFORE_ATTACK, // 前摇
+        ATTKING // 攻击中
     }
 }
 
@@ -514,7 +521,7 @@ export namespace TraitInfo {
             [traitName: string]: TraitConfig
         }
     }
-}
+    }
 
 export const SCREEN_WIDTH = 1280;
 export const SCREEN_HEIGHT = 720;

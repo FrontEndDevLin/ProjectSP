@@ -6,6 +6,7 @@
     "broken_point": "死亡时的爆炸点位",
     "attack": "攻击逻辑 none->只有碰撞攻击, remote->远程攻击",
     "attack_cd": "攻击冷却",
+    "attack_range": "攻击冷却",
     "exp_drop_rate": "经验掉率",
     "trophy_drop_rate": "战利品掉率",
     "trophy": "战利品类型 core->核心",
@@ -32,7 +33,7 @@
     "pic": "",
     "spd": 40,
     "exp_drop_rate": 1,
-    "trophy_drop_rate": 0.05,
+    "trophy_drop_rate": 0.02,
     "exp_cnt": 1
   },
   "EMY02": {
@@ -43,7 +44,37 @@
     "pic": "",
     "spd": 60,
     "exp_drop_rate": 1,
-    "trophy_drop_rate": 0.05,
+    "trophy_drop_rate": 0.02,
+    "exp_cnt": 1
+  },
+  "EMY03": {
+    "id": "EMY03",
+    "cld": 102,
+    "type": "normal",
+    "move": "normal",
+    "attack": "none,sprint",
+    "attack_range": 250,
+    "attack_cd": 2,
+    "script": "EMY03",
+    "pic": "",
+    "spd": 60,
+    "exp_drop_rate": 1,
+    "trophy_drop_rate": 0.02,
+    "exp_cnt": 1
+  },
+  "EMY04": {
+    "id": "EMY04",
+    "cld": 102,
+    "type": "normal",
+    "move": "normal",
+    "attack": "none,remote",
+    "attack_range": 250,
+    "attack_cd": 3,
+    "script": "EMY04",
+    "pic": "",
+    "spd": 40,
+    "exp_drop_rate": 1,
+    "trophy_drop_rate": 0.02,
     "exp_cnt": 1
   },
   "Elite_EMY01": {
@@ -53,7 +84,7 @@
     "script": "EMYElite",
     "move": "normal,random",
     "attack": "none,remote",
-    "attack_cd": [1, 2],
+    "attack_cd": 2,
     "broken_point": [
       [[-25, 52], [-8, 52], [8, 52], [25, 52], [-25, -52], [-8, -52], [8, -52], [25, -52], [-52, 25], [-52, 8], [-52, -8], [-52, -25], [52, 25], [52, 8], [52, -8], [52, -25]],
       [

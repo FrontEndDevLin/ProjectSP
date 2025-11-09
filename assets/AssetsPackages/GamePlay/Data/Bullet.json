@@ -40,5 +40,15 @@
         "max_dis": 400,
         "piercing": 1,
         "cld": 520
+    },
+    "EMY_Bullet021": {
+        "id": "EMY_Bullet021",
+        "prefab": "EMY_Bullet021",
+        "type": "EMY_bullet",
+        "script": "Bullet",
+        "speed": 200,
+        "max_dis": 400,
+        "piercing": 1,
+        "cld": 521
     }
 }
