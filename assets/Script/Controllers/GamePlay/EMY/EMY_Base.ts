@@ -198,6 +198,9 @@ export class EMY_Base extends OBT_Component {
                 case "surround": {
                     this.surroundMove();
                 } break;
+                case "drag": {
+                    this.dragMove();
+                } break;
             }
 
             if (this.vector) {
@@ -237,6 +240,25 @@ export class EMY_Base extends OBT_Component {
         } else if (getRandomNumber(1, 1000) <= 4) {
             // 0.4%概率改变方向
             this.vector = this._createVector();
+        }
+    }
+    // 拉扯移动
+    protected dragMove() {
+        /**
+         * 远程敌人移动
+         * 攻击距离>200, 当离角色距离>180, 向主角移动; <180并>150时, 不动;  <150时, 逃离主角
+         */
+        if (this.dis > 180) {
+            let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+            this.vector = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
+        } else {
+            if (this.dis > 150) {
+                this.vector = v3(0, 0, 0);
+            } else {
+                let angle: number = this.getToCHRAngle();
+                let randomAngle: number = getRandomNumber(angle - 30, angle + 30) - 180;
+                this.vector = getVectorByAngle(randomAngle);
+            }
         }
     }
 
