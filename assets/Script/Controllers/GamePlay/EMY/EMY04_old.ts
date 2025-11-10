@@ -10,8 +10,8 @@ import DamageManager from '../../../CManager/DamageManager';
 import BulletManager from '../../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
 
-@ccclass('EMY04')
-export class EMY04 extends OBT_Component {
+@ccclass('EMY04_old')
+export class EMY04_old extends OBT_Component {
     protected alive: boolean = true;
 
     protected collider: BoxCollider2D = null;
