@@ -73,8 +73,8 @@
     "script": "EMY_Range",
     "pic": "",
     "spd": 40,
-    "exp_drop_rate": 1,
-    "trophy_drop_rate": 0.02,
+    "exp_drop_rate": 0.9,
+    "trophy_drop_rate": 0.09,
     "exp_cnt": 1
   },
   "EMY05": {
@@ -88,9 +88,9 @@
     "script": "EMY_Sprint",
     "pic": "",
     "spd": 60,
-    "exp_drop_rate": 1,
+    "exp_drop_rate": 0.8,
     "trophy_drop_rate": 0.02,
-    "exp_cnt": 1
+    "exp_cnt": 3
   },
   "Elite_EMY01": {
     "id": "Elite_EMY01",

@@ -94,9 +94,25 @@
                     "value": 15
                 }
             ]
+        },
+        "item5": {
+            "id": "item5",
+            "item_type": "item",
+            "level": 1,
+            "label": "道具5",
+            "group_label": "道具",
+            "ico": "Star",
+            "price": 10,
+            "group": "normal",
+            "buff_list": [
+                {
+                    "prop": "range_dmg",
+                    "value": 2
+                }
+            ]
         }
     },
     "item_id_list": [
-        "item1", "item2", "item3", "item4"
+        "item1", "item2", "item3", "item4", "item5"
     ]
 }

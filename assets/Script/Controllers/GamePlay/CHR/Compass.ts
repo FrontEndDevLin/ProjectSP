@@ -1,4 +1,4 @@
-import { _decorator, Node, UIOpacity, EventTouch, Vec2, UITransform, v3, Vec3, find } from 'cc';
+import { _decorator, Node, UIOpacity, EventTouch, Vec2, UITransform, v3, Vec3, find, input, Input, EventKeyboard, KeyCode } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import OBT from '../../../OBT';
 import { GamePlayEvent } from '../../../Common/Namespace';
@@ -43,7 +43,65 @@ export class Compass extends OBT_Component {
         this.node.on(Node.EventType.TOUCH_END, this._touchEnd);
         this.node.on(Node.EventType.TOUCH_MOVE, this._touchMove);
 
+        input.on(Input.EventType.KEY_DOWN, this._keyDown, this);
+        input.on(Input.EventType.KEY_UP, this._keyUp, this);
+
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, this._touchEnd, this);
+    }
+
+    private keyQue: number[] = [];
+    private _keyDown = (event: EventKeyboard) => {
+        let c = event.keyCode;
+        let L = KeyCode.ARROW_LEFT;
+        let R = KeyCode.ARROW_RIGHT;
+        let U = KeyCode.ARROW_UP;
+        let D = KeyCode.ARROW_DOWN;
+        if (c === L || c === R || c === U || c === D) {
+            this.keyQue.push(c);
+        }
+        this._touching = true;
+        switch (c) {
+            case KeyCode.ARROW_LEFT: {
+                this.vector = v3(-1, 0, 0);
+            } break;
+            case KeyCode.ARROW_RIGHT: {
+                this.vector = v3(1, 0, 0);
+            } break;
+            case KeyCode.ARROW_UP: {
+                this.vector = v3(0, 1, 0);
+            } break;
+            case KeyCode.ARROW_DOWN: {
+                this.vector = v3(0, -1, 0);
+            } break;
+        }
+        OBT.instance.eventCenter.emit(GamePlayEvent.COMPASS.TOUCH_START);
+        OBT.instance.eventCenter.emit(GamePlayEvent.COMPASS.TOUCH_MOVE, this.vector);
+    }
+    private _keyUp = (event: EventKeyboard) => {
+        this._touching = false;
+        let c = event.keyCode;
+        this.keyQue.splice(this.keyQue.indexOf(c), 1);
+        c = this.keyQue[0];
+        if (c) {
+            switch (c) {
+                case KeyCode.ARROW_LEFT: {
+                    this.vector = v3(-1, 0, 0);
+                } break;
+                case KeyCode.ARROW_RIGHT: {
+                    this.vector = v3(1, 0, 0);
+                } break;
+                case KeyCode.ARROW_UP: {
+                    this.vector = v3(0, 1, 0);
+                } break;
+                case KeyCode.ARROW_DOWN: {
+                    this.vector = v3(0, -1, 0);
+                } break;
+            }
+            OBT.instance.eventCenter.emit(GamePlayEvent.COMPASS.TOUCH_MOVE, this.vector);
+        } else {
+            this.vector = v3(0, 0, 0);
+            OBT.instance.eventCenter.emit(GamePlayEvent.COMPASS.TOUCH_END);
+        }
     }
 
     private _touchStart = (event: EventTouch) => {
