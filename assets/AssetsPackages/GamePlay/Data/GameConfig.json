@@ -23,6 +23,7 @@
     "waves": [
         {
             "wave": 1,
+            "desc": "普通1",
             "wave_type": 1,
             "max_emy": 30,
             "duration": 20,
@@ -65,8 +66,9 @@
         },
         {
             "wave": 2,
+            "desc": "普通1+普通2",
             "wave_type": 1,
-            "max_emy": 30,
+            "max_emy": 25,
             "duration": 20,
             "preload": {
                 "alert": 4,
@@ -120,6 +122,7 @@
         },
         {
             "wave": 3,
+            "desc": "精英怪1-核心获取, 普通1+普通2+精英1",
             "wave_type": 2,
             "duration": 60,
             "max_emy": 30,
@@ -131,7 +134,7 @@
                 "trophy": 2,
                 "emy": [{ "emyId": "EMY01", "count": 10 }, { "emyId": "EMY02", "count": 16 }, { "emyId": "EMY_Peace", "count": 2 }, { "emyId": "Elite_EMY01", "count": 1 }],
                 "emy_particle": 120,
-                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 8 }],
+                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 8 }, { "bulletId": "EMY_Bullet020", "count": 6 }],
                 "bullet_particle": 4,
                 "dmg_txt": 5
             },
@@ -193,16 +196,81 @@
             "wave": 4,
             "wave_type": 1,
             "max_emy": 80,
-            "duration": 40,
+            "duration": 30,
             "preload": {
                 "alert": 20,
                 "exp": 20,
                 "exp_particle": 9,
                 "trophy": 2,
-                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
                 "emy_particle": 20,
                 "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
                 "bullet_particle": 20,
+                "dmg_txt": 5
+            },
+            "spawn_roles": [
+                {
+                    "enemy_type": "EMY_Peace",
+                    "spawn_total": 4,
+                    "spawn_mode": "random",
+                    "spawn_rate": 0.05,
+                    "spawn_once_time": 1,
+                    "spawn_interval": 3,
+                    "spawn_pattern": "random",
+                    "start_delay": 3,
+                    "spawn_duration": 30,
+                    "hp": 15
+                },
+                {
+                    "enemy_type": "EMY02",
+                    "spawn_once_time": 3,
+                    "spawn_interval": 1.6,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 0,
+                    "spawn_duration": 18,
+                    "hp": 3,
+                    "dmg": 2
+                },
+                {
+                    "enemy_type": "EMY02",
+                    "spawn_once_time": 4,
+                    "spawn_interval": 3,
+                    "spawn_pattern": "random",
+                    "batch_mode": "group",
+                    "start_delay": 10,
+                    "spawn_duration": 30,
+                    "hp": 3,
+                    "dmg": 2
+                },
+                {
+                    "enemy_type": "EMY03",
+                    "spawn_once_time": 3,
+                    "spawn_interval": 2,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 18,
+                    "spawn_duration": 12,
+                    "hp": 3,
+                    "dmg": 2
+                }
+            ]
+        },
+        {
+            "wave": 5,
+            "desc": "普通1+普通2+冲锋1",
+            "wave_type": 1,
+            "max_emy": 80,
+            "duration": 35,
+            "preload": {
+                "alert": 20,
+                "exp": 20,
+                "exp_particle": 15,
+                "trophy": 4,
+                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy_particle": 40,
+                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
+                "bullet_particle": 40,
                 "dmg_txt": 5
             },
             "spawn_roles": [
@@ -220,25 +288,25 @@
                 },
                 {
                     "enemy_type": "EMY01",
-                    "spawn_once_time": 2,
+                    "spawn_once_time": 5,
                     "spawn_interval": 1.6,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 0,
-                    "spawn_duration": 20,
-                    "hp": 3,
-                    "dmg": 2
+                    "spawn_duration": 35,
+                    "hp": 9,
+                    "dmg": 4
                 },
                 {
                     "enemy_type": "EMY02",
-                    "spawn_once_time": 4,
-                    "spawn_interval": 3,
+                    "spawn_once_time": 7,
+                    "spawn_interval": 1.2,
                     "spawn_pattern": "random",
-                    "batch_mode": "group",
-                    "start_delay": 5,
+                    "batch_mode": "normal",
+                    "start_delay": 0,
                     "spawn_duration": 35,
-                    "hp": 3,
-                    "dmg": 2
+                    "hp": 6,
+                    "dmg": 4
                 },
                 {
                     "enemy_type": "EMY03",
@@ -246,10 +314,108 @@
                     "spawn_interval": 2,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
-                    "start_delay": 25,
-                    "spawn_duration": 15,
-                    "hp": 3,
-                    "dmg": 2
+                    "start_delay": 15,
+                    "spawn_duration": 20,
+                    "hp": 14,
+                    "dmg": 5
+                }
+            ]
+        },
+        {
+            "wave": 6,
+            "desc": "普通1+普通2+冲锋1+远程1",
+            "wave_type": 1,
+            "max_emy": 80,
+            "duration": 40,
+            "preload": {
+                "alert": 20,
+                "exp": 20,
+                "exp_particle": 15,
+                "trophy": 4,
+                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY04", "count": 10 }, { "emyId": "EMY_Peace", "count": 3 }],
+                "emy_particle": 40,
+                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
+                "bullet_particle": 40,
+                "dmg_txt": 5
+            },
+            "spawn_roles": [
+                {
+                    "enemy_type": "EMY_Peace",
+                    "spawn_total": 4,
+                    "spawn_mode": "random",
+                    "spawn_rate": 0.05,
+                    "spawn_once_time": 1,
+                    "spawn_interval": 3,
+                    "spawn_pattern": "random",
+                    "start_delay": 3,
+                    "spawn_duration": 40,
+                    "hp": 15
+                },
+                {
+                    "enemy_type": "EMY01",
+                    "spawn_once_time": 4,
+                    "spawn_interval": 1.6,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 0,
+                    "spawn_duration": 20,
+                    "hp": 9,
+                    "dmg": 4
+                },
+                {
+                    "enemy_type": "EMY02",
+                    "spawn_once_time": 7,
+                    "spawn_interval": 1.2,
+                    "spawn_pattern": "random",
+                    "batch_mode": "group",
+                    "start_delay": 0,
+                    "spawn_duration": 20,
+                    "hp": 6,
+                    "dmg": 4
+                },
+                {
+                    "enemy_type": "EMY01",
+                    "spawn_once_time": 2,
+                    "spawn_interval": 1.6,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 20,
+                    "spawn_duration": 20,
+                    "hp": 9,
+                    "dmg": 4
+                },
+                {
+                    "enemy_type": "EMY02",
+                    "spawn_once_time": 3,
+                    "spawn_interval": 1.2,
+                    "spawn_pattern": "random",
+                    "batch_mode": "group",
+                    "start_delay": 20,
+                    "spawn_duration": 20,
+                    "hp": 6,
+                    "dmg": 4
+                },
+                {
+                    "enemy_type": "EMY03",
+                    "spawn_once_time": 2,
+                    "spawn_interval": 2.4,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 15,
+                    "spawn_duration": 45,
+                    "hp": 15,
+                    "dmg": 5
+                },
+                {
+                    "enemy_type": "EMY04",
+                    "spawn_once_time": 1,
+                    "spawn_interval": 2,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 8,
+                    "spawn_duration": 45,
+                    "hp": 8,
+                    "dmg": 5
                 }
             ]
         }
