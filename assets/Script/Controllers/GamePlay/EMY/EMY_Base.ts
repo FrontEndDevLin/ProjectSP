@@ -319,6 +319,7 @@ export class EMY_Base extends OBT_Component {
     }
 
     private _playDieAni() {
+        this.node.getComponent(Animation).stop();
         this.node.getComponent(Animation).play("EMY01_die");
     }
     private _remove() {
@@ -339,6 +340,9 @@ export class EMY_Base extends OBT_Component {
 
     update(deltaTime: number) {
         if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
+        if (!this.alive) {
             return;
         }
         this._move(deltaTime);

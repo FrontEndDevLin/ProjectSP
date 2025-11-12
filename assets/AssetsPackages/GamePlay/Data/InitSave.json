@@ -1,6 +1,6 @@
 {
     "desc": "存储当前存档数据",
-    "wave": 1,
+    "wave": 8,
     "status": 1,
     "chr_prop": {
         "desc": "这里存角色的面板数据",
@@ -9,7 +9,7 @@
         "range_dmg": 0,
         "melee_dmg": 0,
         "range": 0,
-        "atk_spd": 1000,
+        "atk_spd": 0,
         "ctl": 0,
         "def": 0,
         "spd": 0,

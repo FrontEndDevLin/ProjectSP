@@ -1,4 +1,4 @@
-import { _decorator, BoxCollider2D, Color, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation } from 'cc';
+import { _decorator, BoxCollider2D, Color, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation, UITransform } from 'cc';
 import { DamageInfo, EMYInfo, FLASH_TIME, GameCollider } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
@@ -16,11 +16,19 @@ export class EMY_Range extends EMY_Base {
 
     private _bulletId: string = "EMY_Bullet020";
 
+    protected initOther(): void {
+        if (this.spNodes[0].getPosition().x !== -1) {
+            this.spNodes[0].setPosition(v3(-1, 0, 0));
+        }
+        if (this.spNodes[1].getPosition().x !== 1) {
+            this.spNodes[1].setPosition(v3(1, 0, 0));
+        }
+    }
+
     // 攻击前摇播放完成
     public beforeAttackAnimationPlayoff() {
         this._finishBeforeAttack();
     }
-
 
     private _finishBeforeAttack() {
         if (this.alive && ProcessManager.instance.isOnPlaying()) {
