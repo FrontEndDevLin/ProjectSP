@@ -49,6 +49,9 @@ export class EMY_Base extends OBT_Component {
     // 移动时是否朝向目标
     protected isFaceToTarget: boolean = false;
 
+    // 减伤率
+    protected dmgReduceRate: number = 0;
+
     start() {
     }
 
@@ -124,7 +127,7 @@ export class EMY_Base extends OBT_Component {
             case GameCollider.GROUP.CHR_BULLET: {
                 // 显示伤害由一个类单独管理
                 let bulletId: string = otherCollider.node.name;
-                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId);
+                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate);
                 // damageAttr.isCtitical // 暴击
                 if (damageAttr.isCtitical) {
                     console.log('触发暴击，伤害为' + damageAttr.dmg)

@@ -32,7 +32,7 @@
                 "exp": 10,
                 "exp_particle": 9,
                 "trophy": 2,
-                "emy": [{ "emyId": "EMY01", "count": 4 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "EMY06", "count": 4 }, { "emyId": "EMY_Peace", "count": 2 }],
                 "emy_particle": 20,
                 "bullet": [{ "bulletId": "CHR_Bullet001", "count": 2 }],
                 "bullet_particle": 4,
@@ -52,14 +52,14 @@
                     "hp": 15
                 },
                 {
-                    "enemy_type": "EMY01",
-                    "spawn_once_time": 2,
-                    "spawn_interval": 2.5,
+                    "enemy_type": "EMY06",
+                    "spawn_once_time": 1,
+                    "spawn_interval": 60,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 0,
                     "spawn_duration": 30,
-                    "hp": 5,
+                    "hp": 20,
                     "dmg": 2
                 }
             ]
@@ -392,7 +392,8 @@
                     "start_delay": 8,
                     "spawn_duration": 45,
                     "hp": 8,
-                    "dmg": 5
+                    "dmg": 2,
+                    "spec_dmg": 5
                 }
             ]
         },
@@ -490,7 +491,8 @@
                     "start_delay": 8,
                     "spawn_duration": 45,
                     "hp": 9,
-                    "dmg": 5
+                    "dmg": 2,
+                    "spec_dmg": 5
                 }
             ]
         },
@@ -577,7 +579,8 @@
                     "start_delay": 1,
                     "spawn_duration": 45,
                     "hp": 10,
-                    "dmg": 6
+                    "dmg": 2,
+                    "spec_dmg": 6
                 }
             ]
         },
@@ -729,7 +732,8 @@
                     "start_delay": 5,
                     "spawn_duration": 20,
                     "hp": 17,
-                    "dmg": 8
+                    "dmg": 3,
+                    "spec_dmg": 8
                 },
                 {
                     "enemy_type": "EMY05",

@@ -92,6 +92,18 @@
     "trophy_drop_rate": 0.02,
     "exp_cnt": 3
   },
+  "EMY06": {
+    "id": "EMY06",
+    "cld": 105,
+    "type": "normal",
+    "move": "normal",
+    "script": "EMY_Tank",
+    "pic": "",
+    "spd": 60,
+    "exp_drop_rate": 0.8,
+    "trophy_drop_rate": 0.01,
+    "exp_cnt": 3
+  },
   "Elite_EMY01": {
     "id": "Elite_EMY01",
     "cld": 120,
