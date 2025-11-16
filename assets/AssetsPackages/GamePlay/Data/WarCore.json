@@ -26,7 +26,7 @@
             "name": "散射",
             "intro": "散射攻击核心",
             "atk_intro": "基础飞弹会分裂成<%split%>个",
-            "icon_ui": "HP",
+            "icon_ui": "scatter",
             "icon_gaming": "...",
             "bullet": "CHR_Bullet002",
             "split": 3,

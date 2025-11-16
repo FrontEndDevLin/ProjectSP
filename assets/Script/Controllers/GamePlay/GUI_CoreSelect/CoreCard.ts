@@ -31,8 +31,8 @@ export class CoreCard extends OBT_Component {
     public updateView(props: WarCoreInfo.AtkWarCoreAttr) {
         this._props = props;
 
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${props.icon_ui}`);
-        this.view("Head/Pic").getComponent(Sprite).spriteFrame = assets;
+        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${props.icon_ui}`);
+        this.view("Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = assets;
         this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.name;
   
         let introRichTxt: string = props.atk_intro;

@@ -9,6 +9,7 @@ import BulletManager from './BulletManager';
 import DamageManager from './DamageManager';
 import CHRManager from './CHRManager';
 import ProcessManager from './ProcessManager';
+import { getSaveCtrl } from './Class/SaveCtrl';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -20,10 +21,11 @@ export default class WarCoreManager extends OBT_UIManager {
 
     public atkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
     public realAtkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
-    public damage: number = 0;
+
+    protected unlockWarCore: boolean = false;
 
     start() {
-        
+
     }
 
     protected onLoad(): void {
@@ -106,6 +108,9 @@ export default class WarCoreManager extends OBT_UIManager {
 
     public initAtkWarCore(atkWarCoreId: string) {
         this._setAtkWarCore(atkWarCoreId);
+        if (getSaveCtrl().save.unlock_war_core) {
+            this.unlockWarCore = true;
+        }
     }
 
     // 仅限核心选择时调用
@@ -116,6 +121,7 @@ export default class WarCoreManager extends OBT_UIManager {
         }
         this._setAtkWarCore(atkWarCoreId);
         ItemsManager.instance.expendTrophy();
+        this.unlockWarCore = true;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_FINISH);
     }
     // 卸载当前核心，卸载时，如当前核心有增益类buff，角色属性等值减去所有增益属性
@@ -144,6 +150,11 @@ export default class WarCoreManager extends OBT_UIManager {
         });
 
         return list;
+    }
+
+    // 获取是否已解锁核心升级
+    getIsUnlockWarCore(): boolean {
+        return this.unlockWarCore;
     }
 
     protected onDestroy(): void {

@@ -90,6 +90,7 @@ export namespace GamePlayEvent {
 export interface SaveDoc {
     wave: number,
     status: number,
+    unlock_war_core: boolean,
     // 和CHRProp.Prop一样
     chr_prop: CHRInfo.PropValMap,
     chr_slot: CHRInfo.CHRSlot

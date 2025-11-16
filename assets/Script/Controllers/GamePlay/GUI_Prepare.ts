@@ -137,7 +137,7 @@ export class GUI_Prepare extends OBT_Component {
 
     private _updateAtkWarCoreInfo() {
         const warCore: WarCoreInfo.AtkWarCoreAttr = WarCoreManager.instance.atkWarCore;
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${warCore.icon_ui}`);
+        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${warCore.icon_ui}`);
         this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
     }
 

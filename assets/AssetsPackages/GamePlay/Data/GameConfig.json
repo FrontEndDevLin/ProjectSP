@@ -32,7 +32,7 @@
                 "exp": 10,
                 "exp_particle": 9,
                 "trophy": 2,
-                "emy": [{ "emyId": "EMY06", "count": 4 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "EMY01", "count": 4 }, { "emyId": "EMY_Peace", "count": 2 }],
                 "emy_particle": 20,
                 "bullet": [{ "bulletId": "CHR_Bullet001", "count": 2 }],
                 "bullet_particle": 4,
@@ -52,14 +52,14 @@
                     "hp": 15
                 },
                 {
-                    "enemy_type": "EMY06",
-                    "spawn_once_time": 1,
-                    "spawn_interval": 60,
+                    "enemy_type": "EMY01",
+                    "spawn_once_time": 2,
+                    "spawn_interval": 2.5,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 0,
                     "spawn_duration": 30,
-                    "hp": 20,
+                    "hp": 5,
                     "dmg": 2
                 }
             ]
@@ -122,7 +122,7 @@
             "wave": 3,
             "desc": "精英怪1-核心获取, 普通1+普通2+精英1",
             "wave_type": 2,
-            "duration": 60,
+            "duration": 4,
             "max_emy": 30,
             "max_emy_elite_fight": 3,
             "preload": {

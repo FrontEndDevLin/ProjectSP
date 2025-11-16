@@ -11,6 +11,7 @@ import { GAME_NODE, GamePlayEvent } from '../../Common/Namespace';
 import DropItemManager from '../../CManager/DropItemManager';
 import { transportWorldPosition } from '../../Common/utils';
 import ProcessManager from '../../CManager/ProcessManager';
+import WarCoreManager from '../../CManager/WarCoreManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_GamePlay')
@@ -39,6 +40,8 @@ export class GUI_GamePlay extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.STORAGE_CHANGE, this._updateStorage, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_FINISH, this._showCoreView, this);
     }
 
     start() {
@@ -50,6 +53,7 @@ export class GUI_GamePlay extends OBT_Component {
         this._updateLevel();
         this._updateCurrency();
         this._updateStorage();
+        this._showCoreView();
 
         this.view("Wave/Val").getComponent(Label).string = `${ProcessManager.instance.waveRole.wave}`;
     }
@@ -84,6 +88,23 @@ export class GUI_GamePlay extends OBT_Component {
     }
     private _updateStorage() {
         this.view("CHRStatus/Collect/Storage/Val").getComponent(Label).string = `${CHRManager.instance.currencyCtrl.getStorage()}`;
+    }
+
+    private _showCoreView() {
+        let isUnlockWarCore: boolean = WarCoreManager.instance.getIsUnlockWarCore();
+        if (isUnlockWarCore) {
+            this.view("CoreInfo").active = true;
+        } else {
+            this.view("CoreInfo").active = false;
+        }
+        return isUnlockWarCore;
+    }
+    private _updateCoreView() {
+        let isUnlockWarCore: boolean = WarCoreManager.instance.getIsUnlockWarCore();
+        if (!isUnlockWarCore) {
+            return;
+        }
+        // TODO: 展示核心信息(图标, 经验进度, 强化次数)
     }
 
     // private _showMask() {
