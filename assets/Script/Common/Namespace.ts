@@ -265,7 +265,9 @@ export namespace CHRInfo {
 
     export interface CHRSlot {
         atk_core: string,
-        level: number
+        level: number,
+        core_level: number,
+        core_exp: number
     }
 
     export interface CHRProps {
@@ -532,6 +534,8 @@ export const PIXEL_UNIT = 20;
 export const FLASH_TIME: number = 0.06;
 // 生成敌人与角色的最小距离
 export const SAFE_DISTANCE: number = 160;
+
+export const MAX_WAR_CORE_LEVEL: number = 3;
 
 export const COLOR = {
   NORMAL: "#F5F5F5",

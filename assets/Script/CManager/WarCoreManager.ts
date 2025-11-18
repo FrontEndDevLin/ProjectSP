@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, CHRInfo, GamePlayEvent, WarCoreInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, CHRInfo, GamePlayEvent, MAX_WAR_CORE_LEVEL, WarCoreInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { copyObject, getFloatNumber, getRandomNumbers } from '../Common/utils';
@@ -23,6 +23,15 @@ export default class WarCoreManager extends OBT_UIManager {
     public realAtkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
 
     protected unlockWarCore: boolean = false;
+
+    // 当前核心等级
+    public coreLevel: number = 0;
+    // 升1级所需经验
+    public expTotal: number = 0;
+    // 当前经验
+    public expCurrent: number = 0;
+
+    protected expList: number[] = [100, 200, 300];
 
     start() {
 
@@ -108,9 +117,12 @@ export default class WarCoreManager extends OBT_UIManager {
 
     public initAtkWarCore(atkWarCoreId: string) {
         this._setAtkWarCore(atkWarCoreId);
-        if (getSaveCtrl().save.unlock_war_core) {
+
+        let save = getSaveCtrl().save;
+        if (save.unlock_war_core) {
             this.unlockWarCore = true;
         }
+        this._initWarCoreLevel(save.chr_slot.core_level, save.chr_slot.core_exp);
     }
 
     // 仅限核心选择时调用
@@ -153,8 +165,50 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     // 获取是否已解锁核心升级
-    getIsUnlockWarCore(): boolean {
+    public getIsUnlockWarCore(): boolean {
         return this.unlockWarCore;
+    }
+
+    private _initWarCoreLevel(lev?: number, expCur?: number) {
+        this.coreLevel = lev || getSaveCtrl().save.chr_slot.core_level;
+        if (this.coreLevel >= MAX_WAR_CORE_LEVEL) {
+            return;
+        }
+        this.expTotal = this.expList[this.coreLevel]
+        this.expCurrent = expCur || 0;
+    }
+
+    public addWarCoreExp(n: number) {
+        if (this.coreLevel >= MAX_WAR_CORE_LEVEL) {
+            return;
+        }
+        if (n <= 0) {
+            return;
+        }
+        // n经过经验获取效率的修正
+        // let expEffVal: number = CHRManager.instance.propCtx.getPropRealValue("exp_eff");
+        let expEffVal: number = 1;
+        let relExp: number = getFloatNumber(n * expEffVal, 2);
+
+        this.expCurrent += relExp;
+        let c: number = this.expCurrent - this.expTotal;
+        if (c >= 0) {
+            this._levelUpWarCore();
+        }
+
+        // OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.EXP_CHANGE, { expCurrent: this.expCurrent, expTotal: this.expTotal });
+    }
+
+    private _levelUpWarCore() {
+        this.coreLevel++;
+        if (this.coreLevel < MAX_WAR_CORE_LEVEL) {
+            // this._levelUpCnt++;
+            let overflowExp: number = this.expCurrent - this.expTotal;
+            this.expCurrent = 0;
+            this.expTotal = this.expList[this.coreLevel];
+            this.addWarCoreExp(overflowExp);
+        }
+        // OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP, this.level);
     }
 
     protected onDestroy(): void {
