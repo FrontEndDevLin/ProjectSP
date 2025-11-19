@@ -36,6 +36,8 @@ export namespace GamePlayEvent {
         CORE_SELECT_TIMEOUT,
         CORE_SELECT_FINISH,
         ATK_CORE_CHANGE,
+        CORE_EXP_CHANGE,
+        CORE_LEVEL_UP,
         LEVEL_UP,
         LEVEL_UP_TIME_INIT,
         LEVEL_UP_TIME_REDUCE,

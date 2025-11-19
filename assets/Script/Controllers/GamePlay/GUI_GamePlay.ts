@@ -2,7 +2,7 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, Component, Label, Node, UITransform, v3, Widget } from 'cc';
+import { _decorator, Component, Label, Node, Sprite, SpriteFrame, UITransform, v3, Widget } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT_UIManager from '../../Manager/OBT_UIManager';
 import OBT from '../../OBT';
@@ -17,6 +17,8 @@ const { ccclass, property } = _decorator;
 @ccclass('GUI_GamePlay')
 export class GUI_GamePlay extends OBT_Component {
     private _hpBarWidth: number = 0;
+
+    private _coreExpBarWidth: number = 0;
 
     protected onLoad(): void {
         this.view("CHRStatus").getComponent(Widget).target = OBT.instance.uiManager.rootNode;
@@ -42,6 +44,11 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.STORAGE_CHANGE, this._updateStorage, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_FINISH, this._showCoreView, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE, this._updateCoreIcon, this);
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_EXP_CHANGE, this.updateCoreExpBar, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_LEVEL_UP, this.coreLevelUp, this);
     }
 
     start() {
@@ -94,18 +101,37 @@ export class GUI_GamePlay extends OBT_Component {
         let isUnlockWarCore: boolean = WarCoreManager.instance.getIsUnlockWarCore();
         if (isUnlockWarCore) {
             this.view("CoreInfo").active = true;
+            this._coreExpBarWidth = this.view("CoreInfo/EXPWrap/BG").getComponent(UITransform).width;
         } else {
             this.view("CoreInfo").active = false;
         }
         return isUnlockWarCore;
     }
-    private _updateCoreView() {
+
+    // 展示核心图标, TODO: 强化次数
+    private _updateCoreIcon() {
         let isUnlockWarCore: boolean = WarCoreManager.instance.getIsUnlockWarCore();
         if (!isUnlockWarCore) {
             return;
         }
-        // TODO: 展示核心信息(图标, 经验进度, 强化次数)
+        let iconUi: string = WarCoreManager.instance.atkWarCore.icon_ui;
+        if (!iconUi) {
+            return;
+        }
+        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${iconUi}`);
+        this.view("CoreInfo/Top/CoreWrap/CorePic").getComponent(Sprite).spriteFrame = assets;
     }
+    
+    // 核心经验进度
+    protected updateCoreExpBar() {
+        let { expCurrent, expTotal } = WarCoreManager.instance;
+        expCurrent = Math.floor(expCurrent);
+        let expBarWidth: number = Math.floor(this._coreExpBarWidth * expCurrent / expTotal);
+
+        this.view("CoreInfo/EXPWrap/EXPProg").getComponent(UITransform).width = expBarWidth;
+    }
+    // 核心升级，右上角图标(新图标, TODO)
+    protected coreLevelUp(){}
 
     // private _showMask() {
     //     let currentGameNode: GAME_NODE = ProcessManager.instance.gameNode;
