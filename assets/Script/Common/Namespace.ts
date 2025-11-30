@@ -4,6 +4,7 @@ export enum GAME_NODE {
     FIGHTING, // 进行中
     PASS_FIGHT, // 通过
     CORE_SELECT, // 核心选择
+    CORE_LEVEL_UP, // 核心升级
     LEVEL_UP, // 升级中
     PASS_LEVEL_UP, // 升级结束
     PREPARE, // 备战中
@@ -363,6 +364,7 @@ export namespace ItemInfo {
         NONE = 0,
         NORMAL = 1,
         CORE = 2,
+        CORE_LEVEL_UP = 3,
         CHEST,
         GREAT_CHEST
     }

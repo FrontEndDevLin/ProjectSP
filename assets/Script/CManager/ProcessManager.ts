@@ -229,6 +229,9 @@ export default class ProcessManager extends OBT_UIManager {
                         case ItemInfo.TROPHY_TYPE.CORE: {
                             this.gameNode = GAME_NODE.CORE_SELECT;
                         } break;
+                        case ItemInfo.TROPHY_TYPE.CORE_LEVEL_UP: {
+                            this.gameNode = GAME_NODE.CORE_LEVEL_UP;
+                        } break;
                     }
                 } else {
                     // TODO: 与下面升级判断同代码，需要优化
@@ -266,12 +269,15 @@ export default class ProcessManager extends OBT_UIManager {
     private _nextStep() {
         switch (this.gameNode) {
             case GAME_NODE.CORE_SELECT: {
-                console.log('进入核心选择流程');
+                // console.log('进入核心选择流程');
                 GUI_GamePlayManager.instance.hideGamePlayGUI();
                 // TODO: WarCoreManager.instance.initCoreSelectList()
                 GUI_GamePlayManager.instance.showCoreSelectGUI();
                 this._coreSelectDuration = CORE_SELECT_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._levelUpDuration);
+            } break;
+            case GAME_NODE.CORE_LEVEL_UP: {
+                console.log('进入核心升级流程');
             } break;
             case GAME_NODE.LEVEL_UP: {
                 GUI_GamePlayManager.instance.hideGamePlayGUI();

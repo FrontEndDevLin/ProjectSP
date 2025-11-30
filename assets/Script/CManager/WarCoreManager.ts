@@ -34,7 +34,7 @@ export default class WarCoreManager extends OBT_UIManager {
     // 本回合是否有升级
     private _hasLevelUp: boolean = false;
 
-    protected expList: number[] = [100, 200, 300];
+    protected expList: number[] = [50, 200, 300];
 
     start() {
 
@@ -236,6 +236,9 @@ export default class WarCoreManager extends OBT_UIManager {
     // TODO: 未用
     public finishLevelUp() {
         this._hasLevelUp = false;
+    }
+    public hasLevelUp() {
+        return this._hasLevelUp;
     }
 
     protected onDestroy(): void {
