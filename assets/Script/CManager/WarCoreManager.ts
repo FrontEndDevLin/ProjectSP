@@ -38,7 +38,7 @@ export default class WarCoreManager extends OBT_UIManager {
 
     // 升级槽
     protected upgradeSlot: string[] = [];
-    public upgradeSlotMap: Common.SimpleObj = { fightWithBothHands: 1 };
+    public upgradeSlotMap: Common.SimpleObj = {};
 
     start() {
 

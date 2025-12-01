@@ -27,6 +27,8 @@ export class ScatterAtkWarCore extends OBT_Component {
 
     protected warCore: WarCoreInfo.AtkWarCoreAttr;
 
+    private _mirrorAttack: boolean = true;
+
     start() {
         this.warCore = WarCoreManager.instance.realAtkWarCore;
         this._initDomainCollider();
@@ -165,14 +167,27 @@ export class ScatterAtkWarCore extends OBT_Component {
                 angleList.push(angle + splitAngle * i);
             }
 
-            // 是否拥有左右开弓
+            // 拥有左右开弓强化包数量
             let fightWithBothHandsPackCnt: number = WarCoreManager.instance.getUpgradePackCnt("fightWithBothHands");
             if (fightWithBothHandsPackCnt) {
-                let mirrorAngleList = []
-                angleList.forEach((angle: number) => {
-                    mirrorAngleList.push(angle + 180)
-                })
-                angleList = angleList.concat(mirrorAngleList);
+                let mirrorAttack: boolean = false;
+                // 如果只有一个强化包, 间隔攻击
+                if (fightWithBothHandsPackCnt === 1) {
+                    if (this._mirrorAttack) {
+                        mirrorAttack = true;
+                    }
+                    this._mirrorAttack = !this._mirrorAttack;
+                } else {
+                    mirrorAttack = true;
+                }
+
+                if (mirrorAttack) {
+                    let mirrorAngleList = []
+                    angleList.forEach((angle: number) => {
+                        mirrorAngleList.push(angle + 180)
+                    })
+                    angleList = angleList.concat(mirrorAngleList);
+                }
             }
 
             angleList.forEach((angle: number) => {

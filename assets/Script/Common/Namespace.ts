@@ -216,6 +216,8 @@ export namespace WarCoreInfo {
         intro: string,
         atk_intro: string,
         icon_ui: string,
+        // 升级包数量
+        max?: number,
         // 特性列表
         traits?: string[],
         buff_list?: CHRInfo.Buff[]
