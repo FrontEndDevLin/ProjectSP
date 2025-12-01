@@ -165,6 +165,16 @@ export class ScatterAtkWarCore extends OBT_Component {
                 angleList.push(angle + splitAngle * i);
             }
 
+            // 是否拥有左右开弓
+            let fightWithBothHandsPackCnt: number = WarCoreManager.instance.getUpgradePackCnt("fightWithBothHands");
+            if (fightWithBothHandsPackCnt) {
+                let mirrorAngleList = []
+                angleList.forEach((angle: number) => {
+                    mirrorAngleList.push(angle + 180)
+                })
+                angleList = angleList.concat(mirrorAngleList);
+            }
+
             angleList.forEach((angle: number) => {
                 let vector = getVectorByAngle(angle);
                 BulletManager.instance.createBullet(this.warCore.bullet, chrLoc, vector);

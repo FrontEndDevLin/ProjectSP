@@ -4,7 +4,7 @@ export enum GAME_NODE {
     FIGHTING, // 进行中
     PASS_FIGHT, // 通过
     CORE_SELECT, // 核心选择
-    CORE_LEVEL_UP, // 核心升级
+    CORE_UPGRADE, // 核心升级
     LEVEL_UP, // 升级中
     PASS_LEVEL_UP, // 升级结束
     PREPARE, // 备战中
@@ -38,7 +38,7 @@ export namespace GamePlayEvent {
         CORE_SELECT_FINISH,
         ATK_CORE_CHANGE,
         CORE_EXP_CHANGE,
-        CORE_LEVEL_UP,
+        CORE_UPGRADE,
         LEVEL_UP,
         LEVEL_UP_TIME_INIT,
         LEVEL_UP_TIME_REDUCE,
@@ -209,9 +209,25 @@ export namespace WarCoreInfo {
     export interface AtkWarCoreMap {
         [atkWarCoreId: string]: AtkWarCoreAttr
     }
+
+    export interface WarCoreUpgradePack {
+        id: string,
+        name: string,
+        intro: string,
+        atk_intro: string,
+        icon_ui: string,
+        // 特性列表
+        traits?: string[],
+        buff_list?: CHRInfo.Buff[]
+    }
+    export interface WarCoreUpgradePackMap {
+        [upgradePackId: string]: WarCoreUpgradePack
+    }
+
     export interface WarCoreDBData {
         atk_war_core_def: AtkWarCoreMap,
-        pub_atk_war_core: string[]
+        pub_atk_war_core: string[],
+        war_core_upgrade_pack_def: WarCoreUpgradePackMap
     }
 }
 
@@ -364,7 +380,7 @@ export namespace ItemInfo {
         NONE = 0,
         NORMAL = 1,
         CORE = 2,
-        CORE_LEVEL_UP = 3,
+        CORE_UPGRADE = 3,
         CHEST,
         GREAT_CHEST
     }

@@ -229,8 +229,8 @@ export default class ProcessManager extends OBT_UIManager {
                         case ItemInfo.TROPHY_TYPE.CORE: {
                             this.gameNode = GAME_NODE.CORE_SELECT;
                         } break;
-                        case ItemInfo.TROPHY_TYPE.CORE_LEVEL_UP: {
-                            this.gameNode = GAME_NODE.CORE_LEVEL_UP;
+                        case ItemInfo.TROPHY_TYPE.CORE_UPGRADE: {
+                            this.gameNode = GAME_NODE.CORE_UPGRADE;
                         } break;
                     }
                 } else {
@@ -276,7 +276,7 @@ export default class ProcessManager extends OBT_UIManager {
                 this._coreSelectDuration = CORE_SELECT_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._levelUpDuration);
             } break;
-            case GAME_NODE.CORE_LEVEL_UP: {
+            case GAME_NODE.CORE_UPGRADE: {
                 console.log('进入核心升级流程');
             } break;
             case GAME_NODE.LEVEL_UP: {

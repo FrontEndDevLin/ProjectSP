@@ -48,7 +48,7 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE, this._updateCoreIcon, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_EXP_CHANGE, this.updateCoreExpBar, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_LEVEL_UP, this.coreLevelUp, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE, this.coreLevelUp, this);
     }
 
     start() {

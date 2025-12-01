@@ -54,7 +54,7 @@ export default class ItemsManager extends OBT_UIManager {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this._pickUpTrophy, this);
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_LEVEL_UP, this.coreLevelUp, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE, this.coreLevelUp, this);
     }
 
     private _initItemData() {
@@ -307,14 +307,14 @@ export default class ItemsManager extends OBT_UIManager {
 
     // 当核心升级时，算作捡起一个升级道具
     protected coreLevelUp() {
-        this._pickUpTrophy(ItemInfo.TROPHY_TYPE.CORE_LEVEL_UP);
+        this._pickUpTrophy(ItemInfo.TROPHY_TYPE.CORE_UPGRADE);
     }
 
     // 捡起道具
     private _pickUpTrophy(trophy: ItemInfo.TROPHY_TYPE) {
         switch (trophy) {
             case ItemInfo.TROPHY_TYPE.CORE:
-            case ItemInfo.TROPHY_TYPE.CORE_LEVEL_UP: {
+            case ItemInfo.TROPHY_TYPE.CORE_UPGRADE: {
                 this._pickUpTrophyList.unshift(trophy);
                 OBT.instance.eventCenter.emit(GamePlayEvent.GUI.UPDATE_TROPHY_ICON);
             } break;

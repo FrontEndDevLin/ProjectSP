@@ -43,5 +43,16 @@
             ]
         }
     },
-    "pub_atk_war_core": ["ScatterAtkWarCore"]
+    "pub_atk_war_core": ["ScatterAtkWarCore"],
+    "war_core_upgrade_pack_def": {
+        "fightWithBothHands": {
+            "id": "fightWithBothHands",
+            "name": "左右开弓",
+            "intro": "核心升级",
+            "atk_intro": "攻击的同时会朝反方向发射",
+            "icon_ui": "scatter",
+            "traits": [],
+            "buff_list": []
+        }
+    }
 }

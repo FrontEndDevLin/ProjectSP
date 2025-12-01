@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, CHRInfo, GamePlayEvent, MAX_WAR_CORE_LEVEL, WarCoreInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, CHRInfo, Common, GamePlayEvent, MAX_WAR_CORE_LEVEL, WarCoreInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { copyObject, getFloatNumber, getRandomNumbers } from '../Common/utils';
@@ -32,9 +32,13 @@ export default class WarCoreManager extends OBT_UIManager {
     public expCurrent: number = 0;
 
     // 本回合是否有升级
-    private _hasLevelUp: boolean = false;
+    private _hasUpgrade: boolean = false;
 
     protected expList: number[] = [50, 200, 300];
+
+    // 升级槽
+    protected upgradeSlot: string[] = [];
+    public upgradeSlotMap: Common.SimpleObj = { fightWithBothHands: 1 };
 
     start() {
 
@@ -214,15 +218,15 @@ export default class WarCoreManager extends OBT_UIManager {
         this.expCurrent += relExp;
         let c: number = this.expCurrent - this.expTotal;
         if (c >= 0) {
-            this._levelUpWarCore();
+            this._upgradeWarCore();
         }
 
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_EXP_CHANGE, { expCurrent: this.expCurrent, expTotal: this.expTotal });
     }
 
-    private _levelUpWarCore() {
+    private _upgradeWarCore() {
         this.coreLevel++;
-        this._hasLevelUp = true;
+        this._hasUpgrade = true;
         if (this.coreLevel < MAX_WAR_CORE_LEVEL) {
             // this._levelUpCnt++;
             let overflowExp: number = this.expCurrent - this.expTotal;
@@ -230,15 +234,37 @@ export default class WarCoreManager extends OBT_UIManager {
             this.expTotal = this.expList[this.coreLevel];
             this.addWarCoreExp(overflowExp);
         }
-        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_LEVEL_UP, this.coreLevel);
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE, this.coreLevel);
+    }
+
+    // 挂载升级包
+    public mountUpgradePack(packId: string) {
+        if (this.upgradeSlot.length >= 3) {
+            return;
+        }
+        const upgradePack: WarCoreInfo.WarCoreUpgradePack = this.warCoreData.war_core_upgrade_pack_def[packId];
+        // TODO: do sth...
+
+        this.upgradeSlot.push(packId);
+        if (this.upgradeSlotMap[packId]) {
+            this.upgradeSlotMap[packId]++;
+        } else {
+            this.upgradeSlotMap[packId] = 1;
+        }
+
+        // TODO: 挂载完后通知
+    }
+
+    public getUpgradePackCnt(packId: string): number {
+        return this.upgradeSlotMap[packId];
     }
 
     // TODO: 未用
     public finishLevelUp() {
-        this._hasLevelUp = false;
+        this._hasUpgrade = false;
     }
     public hasLevelUp() {
-        return this._hasLevelUp;
+        return this._hasUpgrade;
     }
 
     protected onDestroy(): void {
