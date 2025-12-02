@@ -9,6 +9,8 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     private _GUIGamePlayNode: Node;
     // 核心选择界面
     private _GUICoreSelectNode: Node;
+    // 核心升级界面
+    private _GUICoreUpgradeNode: Node;
     // 升级界面
     private _GUILevelUpNode: Node;
     // 备战界面
@@ -50,6 +52,9 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     public initCoreSelectGUI() {
         this._GUICoreSelectNode = this.showPrefab({ prefabPath: "GUI_CoreSelect", parentNode: ProcessManager.instance.uiRootNode });
     }
+    public initCoreUpgradeGUI() {
+        this._GUICoreUpgradeNode = this.showPrefab({ prefabPath: "GUI_CoreUpgrade", parentNode: ProcessManager.instance.uiRootNode })
+    }
 
     public showGamePlayGUI() {
         this.showNode(this._GUIGamePlayNode);
@@ -90,6 +95,13 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
     public hideCoreSelectGUI() {
         this.hideNode(this._GUICoreSelectNode);
+    }
+
+    public showCoreUpgradeGUI() {
+        this.showNode(this._GUICoreUpgradeNode);
+    }
+    public hideCoreUpgradeGUI() {
+        this.hideNode(this._GUICoreUpgradeNode);
     }
 
     public setBackpackWrapNode(node: Node) {

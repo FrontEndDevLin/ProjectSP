@@ -101,6 +101,7 @@ export default class ProcessManager extends OBT_UIManager {
         CHRManager.instance.initCompass();
         GUI_GamePlayManager.instance.initLevelUpGUI();
         GUI_GamePlayManager.instance.initCoreSelectGUI();
+        GUI_GamePlayManager.instance.initCoreUpgradeGUI();
         GUI_GamePlayManager.instance.initGamePlayGUI();
         GUI_GamePlayManager.instance.initPrepareGUI();
         // GUI_GamePlayManager.instance.initPropGUI();
@@ -274,10 +275,13 @@ export default class ProcessManager extends OBT_UIManager {
                 // TODO: WarCoreManager.instance.initCoreSelectList()
                 GUI_GamePlayManager.instance.showCoreSelectGUI();
                 this._coreSelectDuration = CORE_SELECT_TIME;
-                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._levelUpDuration);
+                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._coreSelectDuration);
             } break;
             case GAME_NODE.CORE_UPGRADE: {
                 console.log('进入核心升级流程');
+                GUI_GamePlayManager.instance.hideGamePlayGUI();
+                GUI_GamePlayManager.instance.showCoreUpgradeGUI();
+                // TODO: do sth
             } break;
             case GAME_NODE.LEVEL_UP: {
                 GUI_GamePlayManager.instance.hideGamePlayGUI();
