@@ -6,7 +6,6 @@
         "split": "分裂",
         "pub_atk_war_core": "允许选择的攻击核心",
         "traits": "拥有的特性",
-
         "max": "升级包数量, 默认1"
     },
     "atk_war_core_def": {
@@ -42,7 +41,8 @@
                     "prop": "avd",
                     "value": 5
                 }
-            ]
+            ],
+            "upgrade_pool": ["fightWithBothHands"]
         }
     },
     "pub_atk_war_core": ["ScatterAtkWarCore"],
@@ -52,7 +52,27 @@
             "max": 2,
             "name": "左右开弓",
             "intro": "核心升级",
-            "atk_intro": "攻击的同时会朝反方向发射",
+            "atk_intro": "攻击的同时会朝反方向发射, 但火力会减半",
+            "icon_ui": "scatter",
+            "traits": [],
+            "buff_list": []
+        },
+        "fullPower": {
+            "id": "fullPower",
+            "max": 1,
+            "name": "超负荷",
+            "intro": "核心升级",
+            "atk_intro": "每攻击10次, 会额外发动一次强力攻击, 贯穿沿途敌人并造成xxx伤害",
+            "icon_ui": "scatter",
+            "traits": [],
+            "buff_list": []
+        },
+        "fullPower2": {
+            "id": "fullPower2",
+            "max": 1,
+            "name": "超负荷2",
+            "intro": "核心升级",
+            "atk_intro": "每攻击10次, 会额外发动一次强力攻击, 贯穿沿途敌人并造成xxx伤害",
             "icon_ui": "scatter",
             "traits": [],
             "buff_list": []
