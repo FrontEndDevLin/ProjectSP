@@ -16,6 +16,7 @@ import TraitCtrl from './Class/TraitCtrl';
 const { ccclass, property } = _decorator;
 
 const CORE_SELECT_TIME: number = 5555;
+const CORE_UPGRADE_TIME: number = 5555;
 const LEVEL_UP_TIME: number = 5555;
 const PREPARE_TIME: number = 5555;
 
@@ -47,6 +48,10 @@ export default class ProcessManager extends OBT_UIManager {
     // 核心选择持续时间
     private _coreSelectDuration: number = CORE_SELECT_TIME;
     private _coreSelectSecond: number = 0;
+
+    // 核心升级选择持续时间
+    private _coreUpgradeDuration: number = CORE_UPGRADE_TIME;
+    private _coreUpgradeSecond: number = 0;
 
     // 升级持续时间
     private _levelUpDuration: number = LEVEL_UP_TIME;
@@ -281,6 +286,9 @@ export default class ProcessManager extends OBT_UIManager {
                 console.log('进入核心升级流程');
                 GUI_GamePlayManager.instance.hideGamePlayGUI();
                 GUI_GamePlayManager.instance.showCoreUpgradeGUI();
+
+                this._coreUpgradeDuration = CORE_UPGRADE_TIME;
+                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIME_INIT, this._coreUpgradeDuration);
                 // TODO: do sth
             } break;
             case GAME_NODE.LEVEL_UP: {
@@ -352,6 +360,27 @@ export default class ProcessManager extends OBT_UIManager {
 
                     if (this._coreSelectDuration <= 0) {
                         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIMEOUT);
+                    }
+                }
+            } break;
+            case GAME_NODE.CORE_UPGRADE: {
+                if (this._coreUpgradeDuration <= 0) {
+                    return;
+                }
+
+                this._coreUpgradeSecond += dt;
+                if (this._coreUpgradeSecond >= 1) {
+                    this._coreUpgradeSecond -= 1;
+                    
+                    this._coreUpgradeDuration -= 1;
+                    if (this._coreUpgradeDuration === 5) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_DEAD_TIME);
+                    }
+
+                    OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIME_REDUCE, this._coreUpgradeDuration);
+
+                    if (this._coreUpgradeDuration <= 0) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIMEOUT);
                     }
                 }
             } break;

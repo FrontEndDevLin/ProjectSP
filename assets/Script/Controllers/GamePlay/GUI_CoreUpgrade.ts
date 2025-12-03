@@ -24,9 +24,9 @@ export class GUI_CoreUpgrade extends OBT_Component {
         this.view("SidePropBtn").on(Node.EventType.TOUCH_END, this.showPropGUI, this);
 
         // 核心选择倒计时
-        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._coreSelectTimeInit, this);
-        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_REDUCE, this._updateCountdownView, this);
-        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIMEOUT, this._coreSelectTimeout, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIME_INIT, this._coreUpgradeTimeInit, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIME_REDUCE, this._updateCountdownView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIMEOUT, this._coreUpgradeTimeout, this);
     }
 
     start() {
@@ -57,12 +57,12 @@ export class GUI_CoreUpgrade extends OBT_Component {
         this.view("Countdown").getComponent(Label).string = duration;
     }
 
-    private _coreSelectTimeInit(duration) {
+    private _coreUpgradeTimeInit(duration) {
         // this._initCoreCard();
         // this._updateCountdownView(duration);
     }
 
-    private _coreSelectTimeout() {
+    private _coreUpgradeTimeout() {
         const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
         propWrapCtx.hidePropGUI();
 
