@@ -38,7 +38,7 @@ export default class ItemsManager extends OBT_UIManager {
     private _itemPreviewNode: Node;
 
     // 当前捡起的战利品列表, 不包含普通战利品
-    private _pickUpTrophyList: ItemInfo.TROPHY_TYPE[] = [];
+    private _pickUpTrophyList: ItemInfo.TROPHY_TYPE[] = [ItemInfo.TROPHY_TYPE.CORE_UPGRADE];
 
     protected onLoad(): void {
         if (!ItemsManager.instance) {

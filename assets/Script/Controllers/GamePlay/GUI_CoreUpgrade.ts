@@ -13,6 +13,7 @@ import { getRandomNumber } from '../../Common/utils';
 import WarCoreManager from '../../CManager/WarCoreManager';
 import { CoreCard } from './GUI_CoreSelect/CoreCard';
 import { GUI_PropWrap } from './GUI_PropWrap';
+import { CoreUpgradeCard } from './GUI_CoreSelect/CoreUpgradeCard';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_CoreUpgrade')
@@ -23,7 +24,7 @@ export class GUI_CoreUpgrade extends OBT_Component {
         this.view("GUI_PropWrap").addComponent("GUI_PropWrap");
         this.view("SidePropBtn").on(Node.EventType.TOUCH_END, this.showPropGUI, this);
 
-        // 核心选择倒计时
+        // 核心升级包选择倒计时
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIME_INIT, this._coreUpgradeTimeInit, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIME_REDUCE, this._updateCountdownView, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIMEOUT, this._coreUpgradeTimeout, this);
@@ -40,15 +41,15 @@ export class GUI_CoreUpgrade extends OBT_Component {
     private _initCoreCard() {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
 
-        const atkWarCoreList: WarCoreInfo.AtkWarCoreAttr[] = WarCoreManager.instance.getPreCheckAtkWarCoreList();
-        atkWarCoreList.push(atkWarCoreList[0])
-        atkWarCoreList.push(atkWarCoreList[0])
+        const upgradePackList: WarCoreInfo.WarCoreUpgradePack[] = WarCoreManager.instance.getPreCheckUpgradePackList();
+        // upgradePackList.push(upgradePackList[0])
+        // upgradePackList.push(upgradePackList[0])
 
-        atkWarCoreList.forEach((atkWarCore: WarCoreInfo.AtkWarCoreAttr, i) => {
+        upgradePackList.forEach((upgradePack: WarCoreInfo.WarCoreUpgradePack, i) => {
             cardSlotList[i].removeAllChildren();
-            const coreCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_CoreSelect/CoreCard" });
-            const coreCardCtx: CoreCard = <CoreCard>coreCard.getComponent("CoreCard");
-            coreCardCtx.updateView(atkWarCore);
+            const coreCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_CoreSelect/CoreUpgradeCard" });
+            const coreCardCtx: CoreUpgradeCard = <CoreUpgradeCard>coreCard.getComponent("CoreUpgradeCard");
+            coreCardCtx.updateView(upgradePack);
             OBT.instance.uiManager.mountNode({ node: coreCard, parentNode: cardSlotList[i] });
         })
     }
@@ -58,8 +59,8 @@ export class GUI_CoreUpgrade extends OBT_Component {
     }
 
     private _coreUpgradeTimeInit(duration) {
-        // this._initCoreCard();
-        // this._updateCountdownView(duration);
+        this._initCoreCard();
+        this._updateCountdownView(duration);
     }
 
     private _coreUpgradeTimeout() {

@@ -208,7 +208,9 @@ export namespace WarCoreInfo {
         bullet: string,
         // 特性列表
         traits?: string[],
-        buff_list?: CHRInfo.Buff[]
+        buff_list?: CHRInfo.Buff[],
+        // 升级包池
+        upgrade_pool: string[]
     }
 
     export interface AtkWarCoreMap {

@@ -32,7 +32,8 @@ export default class WarCoreManager extends OBT_UIManager {
     public expCurrent: number = 0;
 
     // 本回合是否有升级
-    private _hasUpgrade: boolean = false;
+    // private _hasUpgrade: boolean = false;
+    private _hasUpgrade: boolean = true;
 
     protected expList: number[] = [50, 200, 300];
 
@@ -176,6 +177,27 @@ export default class WarCoreManager extends OBT_UIManager {
     // 获取是否已解锁核心升级
     public getIsUnlockWarCore(): boolean {
         return this.unlockWarCore;
+    }
+
+    // 预选核心升级包列表
+    public getPreCheckUpgradePackList(): WarCoreInfo.WarCoreUpgradePack[] {
+        let upgradePool: string[] = this.atkWarCore.upgrade_pool;
+        const MAX: number = 3;
+        let list: WarCoreInfo.WarCoreUpgradePack[] = [];
+        let randomIdxList: number[] = [];
+        if (upgradePool.length <= MAX) {
+            upgradePool.forEach((_, idx: number) => {
+                randomIdxList.push(idx);
+            })
+        } else {
+            randomIdxList = getRandomNumbers(0, upgradePool.length - 1, MAX);
+        }
+
+        randomIdxList.forEach((idx: number) => {
+            list.push(this.warCoreData.war_core_upgrade_pack_def[upgradePool[idx]]);
+        });
+
+        return list;
     }
 
     private _initWarCoreLevel(lev?: number, expCur?: number) {

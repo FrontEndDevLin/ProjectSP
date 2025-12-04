@@ -195,7 +195,8 @@
             "desc": "普通2+冲锋1",
             "wave_type": 1,
             "max_emy": 80,
-            "duration": 30,
+            "duration_": 30,
+            "duration": 2,
             "preload": {
                 "alert": 20,
                 "exp": 20,
