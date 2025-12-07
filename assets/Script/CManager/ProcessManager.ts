@@ -85,6 +85,7 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_FINISH, this._finishLevelUp, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_FINISH, this._finishPrepare, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_FINISH, this._finishCoreSelect, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_FINISH, this._finishCoreUpgrade, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._checkGameOver, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.DROP_ITEM_RECOVER_FINISH, this._finishDropItemRecovery, this);
@@ -218,6 +219,14 @@ export default class ProcessManager extends OBT_UIManager {
         this.gameNode = GAME_NODE.PASS_FIGHT;
         this.scheduleOnce(() => {
             GUI_GamePlayManager.instance.hideCoreSelectGUI();
+            this._setGameNode();
+            this._nextStep();
+        }, 0.5)
+    }
+    private _finishCoreUpgrade() {
+        this.gameNode = GAME_NODE.PASS_FIGHT;
+        this.scheduleOnce(() => {
+            GUI_GamePlayManager.instance.hideCoreUpgradeGUI();
             this._setGameNode();
             this._nextStep();
         }, 0.5)

@@ -46,6 +46,7 @@ export class GUI_GamePlay extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_FINISH, this._showCoreView, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE, this._updateCoreIcon, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_FINISH, this._updateCoreIcon, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_EXP_CHANGE, this.updateCoreExpBar, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE, this.coreLevelUp, this);
@@ -120,6 +121,12 @@ export class GUI_GamePlay extends OBT_Component {
         }
         let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${iconUi}`);
         this.view("CoreInfo/Top/CoreWrap/CorePic").getComponent(Sprite).spriteFrame = assets;
+
+        let coreLevel: number = WarCoreManager.instance.coreLevel;
+        if (coreLevel) {
+            this.view("CoreInfo/Top/Reinforce").getComponent(Label).string = `+${coreLevel}`;
+            this.view("CoreInfo/Top/Reinforce").active = true;
+        } 
     }
     
     // 核心经验进度

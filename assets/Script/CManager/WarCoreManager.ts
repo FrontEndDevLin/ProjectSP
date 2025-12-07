@@ -32,13 +32,13 @@ export default class WarCoreManager extends OBT_UIManager {
     public expCurrent: number = 0;
 
     // 本回合是否有升级
-    // private _hasUpgrade: boolean = false;
-    private _hasUpgrade: boolean = true;
+    private _hasUpgrade: boolean = false;
+    // private _hasUpgrade: boolean = true;
 
     protected expList: number[] = [50, 200, 300];
 
     // 升级槽
-    protected upgradeSlot: string[] = [];
+    public upgradeSlot: string[] = [];
     public upgradeSlotMap: Common.SimpleObj = {};
 
     start() {
@@ -264,7 +264,7 @@ export default class WarCoreManager extends OBT_UIManager {
         if (this.upgradeSlot.length >= 3) {
             return;
         }
-        const upgradePack: WarCoreInfo.WarCoreUpgradePack = this.warCoreData.war_core_upgrade_pack_def[packId];
+        const upgradePack: WarCoreInfo.WarCoreUpgradePack = this.getUpgradePackInfo(packId);
         // TODO: do sth...
 
         this.upgradeSlot.push(packId);
@@ -274,11 +274,20 @@ export default class WarCoreManager extends OBT_UIManager {
             this.upgradeSlotMap[packId] = 1;
         }
 
-        // TODO: 挂载完后通知
+        this.coreLevel++;
+        // 挂载完后通知
+        ItemsManager.instance.expendTrophy();
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_FINISH);
+
+        // TODO: 挂载完后，在Prepare界面解锁对应的升级槽，可点击预览
     }
 
     public getUpgradePackCnt(packId: string): number {
         return this.upgradeSlotMap[packId];
+    }
+
+    public getUpgradePackInfo(packId: string): WarCoreInfo.WarCoreUpgradePack {
+        return this.warCoreData.war_core_upgrade_pack_def[packId];
     }
 
     // TODO: 未用
@@ -292,6 +301,23 @@ export default class WarCoreManager extends OBT_UIManager {
     protected onDestroy(): void {
         OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
     }
+
+
+    /**
+     * 黑岩石1200+600
+     * 精致凿1200  
+     * 松煤600  740
+     * 烟罗袋60
+     * 镶金5
+     * 
+     * 风行石
+     * =10黑曜+5黑玛瑙+1烟罗袋
+     * =20黑岩+20精致凿+10黑岩+10松煤
+     * 
+     * 风行石x60
+     * =600黑曜+300黑玛瑙+60烟罗袋
+     * =1200黑岩+1200精致凿+600黑岩+600松煤
+     */
 
     update(deltaTime: number) {
         

@@ -42,8 +42,6 @@ export class GUI_CoreUpgrade extends OBT_Component {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
 
         const upgradePackList: WarCoreInfo.WarCoreUpgradePack[] = WarCoreManager.instance.getPreCheckUpgradePackList();
-        // upgradePackList.push(upgradePackList[0])
-        // upgradePackList.push(upgradePackList[0])
 
         upgradePackList.forEach((upgradePack: WarCoreInfo.WarCoreUpgradePack, i) => {
             cardSlotList[i].removeAllChildren();

@@ -54,7 +54,12 @@
             "atk_intro": "攻击的同时会朝反方向发射, 但火力会减半",
             "icon_ui": "scatter",
             "traits": [],
-            "buff_list": []
+            "buff_list": [
+                {
+                    "prop": "range_dmg",
+                    "value": -5
+                }
+            ]
         },
         "fullPower": {
             "id": "fullPower",

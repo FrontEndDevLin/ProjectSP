@@ -21,9 +21,9 @@
     },
     "chr_slot": {
         "level": 1,
-        "atk_core_": "BaseAtkWarCore",
-        "atk_core": "ScatterAtkWarCore",
+        "atk_core_": "ScatterAtkWarCore",
+        "atk_core": "BaseAtkWarCore",
         "core_level": 0,
-        "core_exp": 0
+        "core_exp": 49
     }
 }

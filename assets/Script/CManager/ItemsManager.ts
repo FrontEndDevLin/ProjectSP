@@ -38,7 +38,8 @@ export default class ItemsManager extends OBT_UIManager {
     private _itemPreviewNode: Node;
 
     // 当前捡起的战利品列表, 不包含普通战利品
-    private _pickUpTrophyList: ItemInfo.TROPHY_TYPE[] = [ItemInfo.TROPHY_TYPE.CORE_UPGRADE];
+    // private _pickUpTrophyList: ItemInfo.TROPHY_TYPE[] = [ItemInfo.TROPHY_TYPE.CORE_UPGRADE];
+    private _pickUpTrophyList: ItemInfo.TROPHY_TYPE[] = [];
 
     protected onLoad(): void {
         if (!ItemsManager.instance) {
@@ -208,6 +209,11 @@ export default class ItemsManager extends OBT_UIManager {
             return "";
         }
         let buffList: CHRInfo.Buff[] = item.buff_list;
+        return this.getItemsPanelRickTxtByBuffList(buffList);
+    }
+
+    // 获取buff列表对应富文本
+    public getItemsPanelRickTxtByBuffList(buffList: CHRInfo.Buff[]) {
         let buffTxt = "";
         buffList.forEach((buff, i) => {
             buffTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
@@ -217,7 +223,7 @@ export default class ItemsManager extends OBT_UIManager {
         });
         return buffTxt;
     }
-    
+
     // 刷新商店
     public refreshStoreList(autoRefresh?: boolean): boolean {
         if (this._getLockStoreItem().length >= STORE_ITEM_COUNT) {

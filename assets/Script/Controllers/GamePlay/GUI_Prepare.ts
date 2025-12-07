@@ -2,7 +2,7 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, EventTouch, Label, Node, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
@@ -33,7 +33,7 @@ export class GUI_Prepare extends OBT_Component {
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ITEM_CHANGE, this._updateItemList, this);
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE, this._updateAtkWarCoreInfo, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE, this.updateAtkWarCoreIcon, this);
 
         this.view("OperBtns/RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshStore, this);
 
@@ -41,7 +41,7 @@ export class GUI_Prepare extends OBT_Component {
 
         this.view("OperBtns/NextWave").on(Node.EventType.TOUCH_END, this._nextWave, this);
 
-        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot").on(Node.EventType.TOUCH_END, this._showAtkCorePreview, this);
+        this.bindWarCoreTouchEvent();
     }
 
     start() {
@@ -76,6 +76,7 @@ export class GUI_Prepare extends OBT_Component {
     private _prepareInit(duration) {
         this._updateCurrency();
         this._updateCountdownView(duration);
+        this.updateWarCoreUpgradeIcon();
         this.view("Header/TitleWrap/Val").getComponent(Label).string = `${ProcessManager.instance.waveRole.wave + 1}`;
     }
     private _updateCountdownView(duration) {
@@ -135,14 +136,47 @@ export class GUI_Prepare extends OBT_Component {
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.PREPARE_FINISH);
     }
 
-    private _updateAtkWarCoreInfo() {
+    // 核心区主核心图标
+    protected updateAtkWarCoreIcon() {
         const warCore: WarCoreInfo.AtkWarCoreAttr = WarCoreManager.instance.atkWarCore;
         let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${warCore.icon_ui}`);
         this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
     }
+    // 核心区升级包图标
+    protected updateWarCoreUpgradeIcon() {
+        const slotList: Node[] = this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/UpgradeWrap").children;
+        slotList.forEach((slotNode: Node, i: number) => {
+            let packId: string = WarCoreManager.instance.upgradeSlot[i];
+            let assets: SpriteFrame;
+            if (packId) {
+                let packInfo: WarCoreInfo.WarCoreUpgradePack = WarCoreManager.instance.getUpgradePackInfo(packId);
+                let icon = packInfo.icon_ui;
+                assets = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${icon}`);
+            } else {
+                assets = OBT.instance.resourceManager.getSpriteFrameAssets(`GamePlay/lock-ico`);
+            }
+            slotNode.OBT_param1 = packId;
+            slotNode.OBT_param2 = i;
+            slotNode.children[0].getComponent(Sprite).spriteFrame = assets;
+        })
+    }
+    protected bindWarCoreTouchEvent() {
+        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot").on(Node.EventType.TOUCH_END, this._showAtkCorePreview, this);
+
+        const slotList: Node[] = this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/UpgradeWrap").children;
+        for (let slotNode of slotList) {
+            slotNode.on(Node.EventType.TOUCH_END, this.warCoreUpgradeIconTouch, this);
+        }
+    }
 
     private _showAtkCorePreview() {
         OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_WAR_CORE_UI);
+    }
+    private warCoreUpgradeIconTouch(e: EventTouch) {
+        const targetNode: Node = e.currentTarget;
+        // e.currentTarget.OBT_param2 idx
+        // TODO: 展示升级包卡片
+        console.log(targetNode.OBT_param1)
     }
 
     protected onDestroy(): void {
