@@ -7,6 +7,7 @@ import { ItemPreview } from './GUI_Popup/ItemPreview';
 import ItemsManager from '../../CManager/ItemsManager';
 import { PropIntro } from './GUI_Popup/PropIntro';
 import { AtkCorePreview } from './GUI_Popup/AtkCorePreview';
+import { UpgradePackPreview } from './GUI_Popup/UpgradePackPreview';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Popup')
@@ -14,16 +15,19 @@ export class GUI_Popup extends OBT_Component {
     protected itemPreviewPopupCtx: ItemPreview;
     protected propIntroCtx: PropIntro;
     protected atkCorePreviewPopupCtx: AtkCorePreview;
+    protected upgradePackPreviewPopupCtx: UpgradePackPreview;
 
     protected onLoad(): void {
         this.view("ItemPreview").addComponent("ItemPreview");
         this.view("PropIntro").addComponent("PropIntro");
         this.view("AtkCorePreview").addComponent("AtkCorePreview");
+        this.view("UpgradePackPreview").addComponent("UpgradePackPreview");
         this.view("Mask").on(Node.EventType.TOUCH_END, this._hideAll, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PREVIEW_ITEM_UI, this._showItemPreviewPopup, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_INTRO_UI, this._showPropIntroPopup, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PREVIEW_WAR_CORE_UI, this._showAtkCorePreviewPopup, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PREVIEW_UPGRADE_PACK_UI, this._showUpgradePackPreviewPopup, this);
     }
 
     start() {
@@ -77,10 +81,26 @@ export class GUI_Popup extends OBT_Component {
         this.hideNodeByPath();
     }
 
+    private _showUpgradePackPreviewPopup() {
+        if (!this.upgradePackPreviewPopupCtx) {
+            this.upgradePackPreviewPopupCtx = <UpgradePackPreview>this.view("UpgradePackPreview").getComponent("UpgradePackPreview");
+        }
+        this.upgradePackPreviewPopupCtx.showPreviewPopup();
+        this.showNodeByPath();
+    }
+    private _hideUpgradePackPreviewPopup() {
+        if (!this.upgradePackPreviewPopupCtx) {
+            this.upgradePackPreviewPopupCtx = <UpgradePackPreview>this.view("upgradePackPreviewPopupCtx").getComponent("upgradePackPreviewPopupCtx");
+        }
+        this.upgradePackPreviewPopupCtx.hidePreviewPopup();
+        this.hideNodeByPath();
+    }
+
     private _hideAll() {
         this._hidePropIntroPopup();
         this._hideItemPreviewPopup();
         this._hideAtkCorePreviewPopup();
+        this._hideUpgradePackPreviewPopup();
     }
 
     private _updateView() {

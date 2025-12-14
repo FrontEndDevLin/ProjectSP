@@ -40,6 +40,8 @@ export default class WarCoreManager extends OBT_UIManager {
     // 升级槽
     public upgradeSlot: string[] = [];
     public upgradeSlotMap: Common.SimpleObj = {};
+    // 当前预览升级核心包
+    protected currentPreviewPackId: string = "";
 
     start() {
 
@@ -296,6 +298,17 @@ export default class WarCoreManager extends OBT_UIManager {
     }
     public hasLevelUp() {
         return this._hasUpgrade;
+    }
+
+    // 备战界面触碰升级包预览
+    public previewUpgradePack(packId) {
+        this.currentPreviewPackId = packId;
+    }
+    public getPreviewUpgradePackInfo(): WarCoreInfo.WarCoreUpgradePack {
+        if (!this.currentPreviewPackId) {
+            return;
+        }
+        return this.getUpgradePackInfo(this.currentPreviewPackId);
     }
 
     protected onDestroy(): void {

@@ -74,7 +74,8 @@ export namespace GamePlayEvent {
         // HIDE_PREVIEW_ITEM_UI,
         SHOW_PROP_INTRO_UI,
         UPDATE_TROPHY_ICON,
-        SHOW_PREVIEW_WAR_CORE_UI
+        SHOW_PREVIEW_WAR_CORE_UI,
+        SHOW_PREVIEW_UPGRADE_PACK_UI
     }
 
     export enum STORE {

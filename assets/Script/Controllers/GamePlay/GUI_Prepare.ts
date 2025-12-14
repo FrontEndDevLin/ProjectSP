@@ -176,7 +176,9 @@ export class GUI_Prepare extends OBT_Component {
         const targetNode: Node = e.currentTarget;
         // e.currentTarget.OBT_param2 idx
         // TODO: 展示升级包卡片
-        console.log(targetNode.OBT_param1)
+        let packId: string = targetNode.OBT_param1;
+        WarCoreManager.instance.previewUpgradePack(packId);
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_UPGRADE_PACK_UI);
     }
 
     protected onDestroy(): void {
