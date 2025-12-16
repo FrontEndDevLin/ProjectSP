@@ -20,6 +20,7 @@
     "CHR_Bullet002": {
         "id": "CHR_Bullet002",
         "prefab": "CHR_Bullet002",
+        "_mark": "散射核心用的子弹",
         "type": "bullet",
         "script": "Bullet",
         "speed": 480,

@@ -65,17 +65,20 @@
             "id": "fullPower",
             "name": "超负荷",
             "intro": "核心升级",
-            "atk_intro": "每攻击10次, 会额外发动一次强力攻击, 贯穿沿途敌人并造成xxx伤害",
+            "atk_intro": "每30次攻击会朝四周发动一次威力更强大的攻击, 贯穿沿途敌人",
+            "bullet": "",
             "icon_ui": "scatter",
             "traits": [],
             "buff_list": []
         },
         "fullPower2": {
             "id": "fullPower2",
-            "name": "超负荷2",
+            "_mark": "这个特性可以做成另一个核心",
+            "name": "荧焰",
             "intro": "核心升级",
-            "atk_intro": "每攻击10次, 会额外发动一次强力攻击, 贯穿沿途敌人并造成xxx伤害",
+            "atk_intro": "子弹命中敌人时会进行分裂",
             "icon_ui": "scatter",
+            "bullet": "",
             "traits": [],
             "buff_list": []
         }
