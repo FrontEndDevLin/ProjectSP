@@ -73,6 +73,43 @@ export class CoreUpgradeCard extends OBT_Component {
         }
     }
 
+    // 获取伤害属性富文本, 如果升级包里有弹头id, 则需要获取伤害
+    private _getDmgRichTxt(dmg: number, baseDmg: number, boost: BoostConfig, split?: number): string {
+        let dmgColor: string = dmg >= baseDmg ? COLOR.SUCCESS : COLOR.DANGER;
+        let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
+        if (split && split > 0) {
+            dmgColorTxt += `x<color=${COLOR.SUCCESS}>${split}</color>`;
+        }
+        let boostTxt: string = "|";
+        if (boost) {
+            for (let prop in boost) {
+                // TODO: 后续换成图集图标
+                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
+                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
+            }
+        }
+        return `伤害: ${dmgColorTxt}|${baseDmg}${boostTxt}`;
+    }
+    // // 获取暴击属性富文本
+    // private _getCtlRichTxt(ctl: number, ctlDmgRate: number): string {
+    //     let color: string = ctl >= this._props.ctl ? COLOR.SUCCESS : COLOR.DANGER;
+    //     let colorTxt: string = `<color=${color}>${ctl}%</color>`;
+    //     return `暴击: ${ctlDmgRate}倍|${colorTxt}概率`;
+    // }
+    // // 获取冷却属性富文本
+    // private _getCdRichTxt(cd: number) {
+    //     let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
+    //     let color: string = cd <= atkSpdVal ? COLOR.SUCCESS : COLOR.DANGER;
+    //     let colorTxt: string = `<color=${color}>${cd}</color>`;
+    //     return `冷却: ${colorTxt}s`;
+    // }
+    // // 获取范围属性富文本
+    // private _getRangeRichTxt(range: number) {
+    //     let color: string = range >= 0 ? COLOR.SUCCESS : COLOR.DANGER;
+    //     let colorTxt: string = `<color=${color}>${range}</color>`;
+    //     return `范围: ${colorTxt}`;
+    // }
+
     private _touchCard() {
         if (!this._props) {
             return;

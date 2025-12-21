@@ -32,6 +32,21 @@
             "range_dmg": 0.4
         }
     },
+    "CHR_Bullet003": {
+        "id": "CHR_Bullet003",
+        "prefab": "CHR_Bullet003",
+        "_mark": "blossom核心升级包用的子弹",
+        "type": "bullet",
+        "script": "Bullet",
+        "speed": 400,
+        "max_dis": 100,
+        "piercing": 1,
+        "damage": 1,
+        "cld": 502,
+        "boost": {
+            "range_dmg": 0.5
+        }
+    },
     "EMY_Bullet020": {
         "id": "EMY_Bullet020",
         "prefab": "EMY_Bullet020",

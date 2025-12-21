@@ -61,6 +61,14 @@
                 }
             ]
         },
+        "blossom": {
+            "id": "blossom",
+            "name": "开花",
+            "intro": "核心升级",
+            "atk_intro": "散射攻击击败敌人时, 会生成3发飞弹往随机方向发射",
+            "icon_ui": "scatter",
+            "bullet": "CHR_Bullet003"
+        },
         "fullPower": {
             "id": "fullPower",
             "name": "超负荷",
