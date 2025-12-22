@@ -46,6 +46,8 @@ export class CoreUpgradeCard extends OBT_Component {
             })
         }
 
+        // TODO: 如果有子弹id, 通过id向WarCoreManager获取基础伤害/加成/伤害等属性, 参考WarCoreManager.instance.getWarCoreRealAttr
+
         this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
 
         let traits: string[] = props.traits;
