@@ -90,6 +90,7 @@ export default class WarCoreManager extends OBT_UIManager {
         let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + warCore.range;
 
         return {
+            bulletId,
             base_dmg,
             dmg,
             ctl,
@@ -97,19 +98,6 @@ export default class WarCoreManager extends OBT_UIManager {
             split: warCore.split,
             cd,
             range,
-            boost
-        }
-    }
-
-    // 获取指定bulletId的属性. TODO: 挪到BulletManager里
-    public getBulletRealAttr(bulletId) {
-        let base_dmg: number = BulletManager.instance.getBulletDamage(bulletId);
-        let dmg: number = DamageManager.instance.getBulletRealDamage(bulletId);
-        let boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");
-
-        return {
-            base_dmg,
-            dmg,
             boost
         }
     }

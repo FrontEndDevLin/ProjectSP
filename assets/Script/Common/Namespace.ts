@@ -185,7 +185,7 @@ export namespace GameConfigInfo {
 }
 
 export namespace WarCoreInfo {
-    export interface AtkWarCoreDataAttr {
+    export interface AtkWarCoreDataAttr extends BulletInfo.BulletRealTimeAttr {
         // 分裂
         split?: number,
         range: number,
@@ -193,10 +193,7 @@ export namespace WarCoreInfo {
         ctl: number,
         // 暴击伤害倍率
         ctl_dmg_rate: number,
-        cd: number,
-        dmg: number,
-        base_dmg: number,
-        boost?: BoostConfig
+        cd: number
     }
 
     export interface AtkWarCoreAttr extends AtkWarCoreDataAttr {
@@ -516,6 +513,14 @@ export namespace BulletInfo {
     export interface BulletDBData {
         [bulletId: string]: BulletAttr
     }
+
+    export interface BulletRealTimeAttr {
+        bulletId: string,
+        base_dmg: number,
+        dmg: number,
+        boost?: BoostConfig
+    }
+
     export interface BulletCldData {
         [cld: string]: BulletAttr
     }

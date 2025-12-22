@@ -1,11 +1,12 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BulletInfo, GameCollider, GameConfigInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, GameCollider, GameConfigInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
 import { Bullet } from '../Controllers/GamePlay/Bullet/Bullet';
 import ProcessManager from './ProcessManager';
+import DamageManager from './DamageManager';
 const { ccclass, property } = _decorator;
 
 interface BulletPoolMap {
@@ -126,6 +127,20 @@ export default class BulletManager extends OBT_UIManager {
     }
     public getBulletTag(bulletId: string) {
         // return bulletDb[bulletId].cld;
+    }
+
+    // 获取指定bulletId的实时属性
+    public getBulletRealTimeAttr(bulletId): BulletInfo.BulletRealTimeAttr {
+        let base_dmg: number = BulletManager.instance.getBulletDamage(bulletId);
+        let dmg: number = DamageManager.instance.getBulletRealDamage(bulletId);
+        let boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");
+
+        return {
+            bulletId,
+            base_dmg,
+            dmg,
+            boost
+        }
     }
 
     public createBullet(bulletId: string, position: Vec3, vector: Vec3, enemyId?: string) {
