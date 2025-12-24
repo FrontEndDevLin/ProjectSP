@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { BoostConfig, CHRInfo, COLOR, GAME_NODE, GamePlayEvent, WarCoreInfo } from '../../../Common/Namespace';
+import { BoostConfig, BulletInfo, CHRInfo, COLOR, GAME_NODE, GamePlayEvent, WarCoreInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
@@ -41,12 +41,16 @@ export class CoreUpgradeCard extends OBT_Component {
         const matches = introRichTxt.match(regex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];
         if (matches.length) {
             matches.forEach((key) => {
-                let val = props[key]
-                introRichTxt = introRichTxt.replace(`<%${key}%>`, `<color=${COLOR.SUCCESS}>${val}</color>`);
+                if (key === 'calcDmg') {
+                    // 如果有子弹id, 通过id向WarCoreManager获取基础伤害/加成/伤害等属性, 参考WarCoreManager.instance.getWarCoreRealAttr
+                    let dmgTxt: string = BulletManager.instance.getBulletRealDmgRichTxt(props.bullet);
+                    introRichTxt = introRichTxt.replace(`<%${key}%>`, dmgTxt);
+                } else {
+                    let val = props[key]
+                    introRichTxt = introRichTxt.replace(`<%${key}%>`, `<color=${COLOR.SUCCESS}>${val}</color>`);
+                }
             })
         }
-
-        // TODO: 如果有子弹id, 通过id向WarCoreManager获取基础伤害/加成/伤害等属性, 参考WarCoreManager.instance.getWarCoreRealAttr
 
         this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
 
@@ -73,6 +77,25 @@ export class CoreUpgradeCard extends OBT_Component {
             });
             this.view("Content/Buff").getComponent(RichText).string = buffRichTxt;
         }
+    }
+
+    // 获取伤害加成文本 实际伤害|[基础伤害+X%属性]
+    private _getRealDmgRichTxt(bulletRealTimeAttr): string {
+        let { dmg, base_dmg, boost } = bulletRealTimeAttr;
+        let dmgColor: string = dmg >= base_dmg ? COLOR.SUCCESS : COLOR.DANGER;
+        let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
+        let boostTxt: string = "";
+        if (boost) {
+            boostTxt += `|[${base_dmg}`;
+            for (let prop in boost) {
+                boostTxt += "+"
+                // TODO: 后续换成图集图标
+                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
+                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
+            }
+            boostTxt += ']'
+        }
+        return `${dmgColorTxt}${boostTxt}`;
     }
 
     // 获取伤害属性富文本, 如果升级包里有弹头id, 则需要获取伤害

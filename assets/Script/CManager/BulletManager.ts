@@ -1,12 +1,13 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, GameCollider, GameConfigInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, COLOR, GameCollider, GameConfigInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
 import { Bullet } from '../Controllers/GamePlay/Bullet/Bullet';
 import ProcessManager from './ProcessManager';
 import DamageManager from './DamageManager';
+import CHRManager from './CHRManager';
 const { ccclass, property } = _decorator;
 
 interface BulletPoolMap {
@@ -129,8 +130,28 @@ export default class BulletManager extends OBT_UIManager {
         // return bulletDb[bulletId].cld;
     }
 
+    // 获取子弹伤害加成文本 实际伤害|[基础伤害+X%属性]
+    public getBulletRealDmgRichTxt(bulletId: string): string {
+        let bulletRealTimeAttr: BulletInfo.BulletRealTimeAttr = this.getBulletRealTimeAttr(bulletId);
+        let { dmg, base_dmg, boost } = bulletRealTimeAttr;
+        let dmgColor: string = dmg >= base_dmg ? COLOR.SUCCESS : COLOR.DANGER;
+        let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
+        let boostTxt: string = "";
+        if (boost) {
+            boostTxt += `|[${base_dmg}`;
+            for (let prop in boost) {
+                boostTxt += "+"
+                // TODO: 后续换成图集图标
+                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
+                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
+            }
+            boostTxt += ']'
+        }
+        return `${dmgColorTxt}${boostTxt}`;
+    }
+
     // 获取指定bulletId的实时属性
-    public getBulletRealTimeAttr(bulletId): BulletInfo.BulletRealTimeAttr {
+    public getBulletRealTimeAttr(bulletId: string): BulletInfo.BulletRealTimeAttr {
         let base_dmg: number = BulletManager.instance.getBulletDamage(bulletId);
         let dmg: number = DamageManager.instance.getBulletRealDamage(bulletId);
         let boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");

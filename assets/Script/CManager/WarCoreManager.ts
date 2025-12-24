@@ -82,23 +82,19 @@ export default class WarCoreManager extends OBT_UIManager {
             return;
         }
         let bulletId: string = warCore.bullet;
-        let base_dmg: number = BulletManager.instance.getBulletDamage(bulletId);
-        let dmg: number = DamageManager.instance.getBulletRealDamage(bulletId);
-        let boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");
+        let bulletRealTimeAttr: BulletInfo.BulletRealTimeAttr = BulletManager.instance.getBulletRealTimeAttr(bulletId);
         let ctl: number = CHRManager.instance.propCtx.getPropRealValue("ctl") + warCore.ctl;
         let cd: number = getFloatNumber(warCore.cd / CHRManager.instance.propCtx.getPropRealValue("atk_spd"), 3);
         let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + warCore.range;
 
         return {
             bulletId,
-            base_dmg,
-            dmg,
             ctl,
             ctl_dmg_rate: warCore.ctl_dmg_rate,
             split: warCore.split,
             cd,
             range,
-            boost
+            ...bulletRealTimeAttr
         }
     }
 

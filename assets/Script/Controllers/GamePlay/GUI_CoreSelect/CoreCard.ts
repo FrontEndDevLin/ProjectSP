@@ -98,7 +98,7 @@ export class CoreCard extends OBT_Component {
         if (split && split > 0) {
             dmgColorTxt += `x<color=${COLOR.SUCCESS}>${split}</color>`;
         }
-        let boostTxt: string = "|";
+        let boostTxt: string = "";
         if (boost) {
             for (let prop in boost) {
                 // TODO: 后续换成图集图标
@@ -106,7 +106,7 @@ export class CoreCard extends OBT_Component {
                 boostTxt += `${boost[prop] * 100}%${attrTxt}`;
             }
         }
-        return `伤害: ${dmgColorTxt}|${baseDmg}${boostTxt}`;
+        return `伤害: ${dmgColorTxt}|${baseDmg}+${boostTxt}`;
     }
     // 获取暴击属性富文本
     private _getCtlRichTxt(ctl: number, ctlDmgRate: number): string {

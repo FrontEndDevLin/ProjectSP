@@ -42,7 +42,8 @@
                     "value": 5
                 }
             ],
-            "upgrade_pool": ["fightWithBothHands", "fightWithBothHands", "fullPower", "fullPower2"]
+            "upgrade_pool_": ["fightWithBothHands", "fightWithBothHands", "fullPower", "fullPower2"],
+            "upgrade_pool": ["blossom", "blossom", "fullPower"]
         }
     },
     "pub_atk_war_core": ["ScatterAtkWarCore"],
@@ -65,7 +66,7 @@
             "id": "blossom",
             "name": "开花",
             "intro": "核心升级",
-            "atk_intro": "散射攻击击败敌人时, 会生成3发飞弹往随机方向发射",
+            "atk_intro": "散射攻击击败敌人时, 会生成3发飞弹, 造成<%calcDmg%>伤害",
             "icon_ui": "scatter",
             "bullet": "CHR_Bullet003"
         },

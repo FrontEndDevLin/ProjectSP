@@ -223,7 +223,8 @@ export namespace WarCoreInfo {
         icon_ui: string,
         // 特性列表
         traits?: string[],
-        buff_list?: CHRInfo.Buff[]
+        buff_list?: CHRInfo.Buff[],
+        bullet?: string
     }
     export interface WarCoreUpgradePackMap {
         [upgradePackId: string]: WarCoreUpgradePack
