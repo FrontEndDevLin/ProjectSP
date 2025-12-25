@@ -12,6 +12,7 @@ import ProcessManager from "../CManager/ProcessManager";
 import DropItemManager from "../CManager/DropItemManager";
 import ItemsManager from "../CManager/ItemsManager";
 import DamageManager from "../CManager/DamageManager";
+import RealTimeEventManager from "../CManager/RealTimeEventManager";
 
 export class GamePlayModule extends OBT_Module {
     public bundleName: string = "GamePlay";
@@ -24,6 +25,7 @@ export class GamePlayModule extends OBT_Module {
     }
     
     public mountManagers() {
+        this.addCustomManager(RealTimeEventManager);
         this.addCustomManager(DBManager);
         this.addCustomManager(MapManager);
         this.addCustomManager(EMYManager);

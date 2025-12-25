@@ -13,6 +13,7 @@ import SaveCtrl from './Class/SaveCtrl';
 import ItemsManager from './ItemsManager';
 import BulletManager from './BulletManager';
 import TraitCtrl from './Class/TraitCtrl';
+import RealTimeEventManager from './RealTimeEventManager';
 const { ccclass, property } = _decorator;
 
 const CORE_SELECT_TIME: number = 5555;
@@ -193,6 +194,7 @@ export default class ProcessManager extends OBT_UIManager {
         this.gameNode = GAME_NODE.PASS_FIGHT;
         CHRManager.instance.hideCompass();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_PASS);
+        RealTimeEventManager.instance.onPassWave();
         EMYManager.instance.removeAllEnemy();
         DropItemManager.instance.resRecovery();
     }

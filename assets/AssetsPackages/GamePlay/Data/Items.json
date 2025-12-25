@@ -110,6 +110,16 @@
                     "value": 2
                 }
             ]
+        },
+        "item6": {
+            "id": "item6",
+            "item_type": "item",
+            "level": 1,
+            "label": "通过波次+3%伤害",
+            "group_label": "道具",
+            "ico": "Star",
+            "price": 10,
+            "group": "normal"
         }
     },
     "item_id_list": [
