@@ -5,14 +5,15 @@ import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
 import ItemsManager from '../../../CManager/ItemsManager';
+import ItemBase from '../../../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('ItemRect')
 export class ItemRect extends OBT_Component {
-    private _backpackItem: ItemInfo.BackpackItem;
+    private _backpackItem: ItemBase;
 
     protected onLoad(): void {
-        const backpackItem: ItemInfo.BackpackItem = this.node.OBT_param1;
+        const backpackItem: ItemBase = this.node.OBT_param1;
 
         this.node.OBT_param2.update = this._updateCount.bind(this);
 

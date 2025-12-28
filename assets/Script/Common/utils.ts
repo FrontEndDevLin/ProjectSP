@@ -85,10 +85,10 @@ export const getRandomVector = function(): Vec3 {
   return v3(vec[0], vec[1], 0);
 }
 
-export const getSuccessRichTxt = function(txt: string): string {
+export const getSuccessRichTxt = function(txt: string | number): string {
   return `<color=${COLOR.SUCCESS}>${txt}</color>`
 }
-export const getDangerRichTxt = function(txt: string): string {
+export const getDangerRichTxt = function(txt: string | number): string {
   return `<color=${COLOR.DANGER}>${txt}</color>`
 }
 

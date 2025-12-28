@@ -341,24 +341,32 @@ export namespace CHRInfo {
 }
 
 export namespace ItemInfo {
+    // 普通道具和特殊道具
+    export enum Type {
+        NORMAL = 1,
+        SPECIAL
+    }
+
     export enum Group {
-        NORMAL = "normal",
-        LIMIT = "limit",
-        SPECIAL = "special"
+        NORMAL = 1,
+        LIMIT,
+        SPECIAL
     }
 
     export interface Item {
         id: string,
-        item_type: string,
+        type: Type,
         level: number,
         label: string,
+        intro?: string,
         group: Group,
-        group_label: string,
         ico: string,
         max: number,
         price: number,
         lock: boolean,
-        buff_list: CHRInfo.Buff[]
+        buff_list: CHRInfo.Buff[],
+        val_1?: number,
+        val_2?: number
     }
 
     export interface ItemMap {
@@ -366,14 +374,13 @@ export namespace ItemInfo {
     }
 
     export interface ItemData {
-        item_def: ItemMap,
-        item_id_list: string[]
+        item_def: ItemMap
     }
 
     export interface GroupMap {
-        normal: string[],
-        limit: string[],
-        special: string[]
+        [Group.NORMAL]: string[],
+        [Group.LIMIT]: string[],
+        [Group.SPECIAL]: string[]
     }
 
     // 背包定义

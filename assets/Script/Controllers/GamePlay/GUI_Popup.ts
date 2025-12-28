@@ -8,6 +8,7 @@ import ItemsManager from '../../CManager/ItemsManager';
 import { PropIntro } from './GUI_Popup/PropIntro';
 import { AtkCorePreview } from './GUI_Popup/AtkCorePreview';
 import { UpgradePackPreview } from './GUI_Popup/UpgradePackPreview';
+import ItemBase from '../../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Popup')
@@ -54,7 +55,7 @@ export class GUI_Popup extends OBT_Component {
         if (!this.itemPreviewPopupCtx) {
             this.itemPreviewPopupCtx = <ItemPreview>this.view("ItemPreview").getComponent("ItemPreview");
         }
-        let item: ItemInfo.Item = ItemsManager.instance.getItemById(id);
+        let item: ItemBase = ItemsManager.instance.getBackpackItemById(id);
         this.itemPreviewPopupCtx.showPreviewPopup(item, index);
         this.showNodeByPath();
     }
@@ -90,7 +91,7 @@ export class GUI_Popup extends OBT_Component {
     }
     private _hideUpgradePackPreviewPopup() {
         if (!this.upgradePackPreviewPopupCtx) {
-            this.upgradePackPreviewPopupCtx = <UpgradePackPreview>this.view("upgradePackPreviewPopupCtx").getComponent("upgradePackPreviewPopupCtx");
+            this.upgradePackPreviewPopupCtx = <UpgradePackPreview>this.view("UpgradePackPreview").getComponent("UpgradePackPreview");
         }
         this.upgradePackPreviewPopupCtx.hidePreviewPopup();
         this.hideNodeByPath();

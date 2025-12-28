@@ -12,6 +12,7 @@ import ItemsManager from '../../CManager/ItemsManager';
 import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
 import WarCoreManager from '../../CManager/WarCoreManager';
 import { GUI_PropWrap } from './GUI_PropWrap';
+import ItemBase from '../../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -61,7 +62,7 @@ export class GUI_Prepare extends OBT_Component {
         cardSlotList.forEach((node: Node) => {
             node.removeAllChildren();
         });
-        const storeItemList: ItemInfo.Item[] = ItemsManager.instance.storeItemList;
+        const storeItemList: ItemBase[] = ItemsManager.instance.storeItemList;
         storeItemList.forEach((item, i) => {
             const storeItemCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prepare/StoreItem" });
             storeItemCard.OBT_param1 = item;
@@ -93,7 +94,7 @@ export class GUI_Prepare extends OBT_Component {
         ItemsManager.instance.refreshStoreList();
     }
 
-    private _mountItemRectNode(backpackItem: ItemInfo.BackpackItem, index?: number) {
+    private _mountItemRectNode(backpackItem: ItemBase, index?: number) {
         if (!this._backpackWrapNode) {
             this._backpackWrapNode = this.view("PrepareWrap/InfoWrap/ItemsWrap/ScrollView/view/content");
             GUI_GamePlayManager.instance.setBackpackWrapNode(this._backpackWrapNode);
@@ -110,12 +111,12 @@ export class GUI_Prepare extends OBT_Component {
         OBT.instance.uiManager.mountNode({ node: itemRect, parentNode: this._backpackWrapNode });
     }
     private _loadItemList() {
-        let backpack: ItemInfo.BackpackItem[] = ItemsManager.instance.backpack;
-        backpack.forEach((backpackItem: ItemInfo.BackpackItem, i: number) => {
+        let backpack: ItemBase[] = ItemsManager.instance.backpack;
+        backpack.forEach((backpackItem: ItemBase, i: number) => {
             this._mountItemRectNode(backpackItem, i);
         })
     }
-    private _updateItemList({ hasItemInBackpack, backpackItem }: { hasItemInBackpack: Boolean, backpackItem: ItemInfo.BackpackItem }) {
+    private _updateItemList({ hasItemInBackpack, backpackItem }: { hasItemInBackpack: Boolean, backpackItem: ItemBase }) {
         if (hasItemInBackpack) {
             // 背包已有该道具，更新数量
             for (let node of this._backpackWrapNode.children) {

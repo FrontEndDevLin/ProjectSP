@@ -1,16 +1,12 @@
 import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { CHRInfo, GAME_NODE, GamePlayEvent, ItemInfo } from '../../../Common/Namespace';
-import CHRManager from '../../../CManager/CHRManager';
-import ProcessManager from '../../../CManager/ProcessManager';
-import OBT from '../../../OBT';
-import ItemsManager from '../../../CManager/ItemsManager';
+import ItemBase from '../../../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('ItemCard')
 export class ItemCard extends OBT_Component {
     protected onLoad(): void {
-        const item: ItemInfo.Item = this.node.OBT_param1;
+        const item: ItemBase = this.node.OBT_param1;
 
         this.node.OBT_param2 = {
             updateView: this._updateView.bind(this)
@@ -25,14 +21,21 @@ export class ItemCard extends OBT_Component {
 
     }
 
-    private _updateView(item) {
+    private _updateView(item: ItemBase) {
         this.view("Head/TitleWrap/ItemName").getComponent(Label).string = item.label;
+        this.view("Head/TitleWrap/ItemGroup").getComponent(Label).string = item.getGroupTxt();
 
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Item/${item.ico}`);
-        this.view("Head/Pic").getComponent(Sprite).spriteFrame = assets;
+        this.view("Head/Pic").getComponent(Sprite).spriteFrame = item.getAssets();
 
-        let buffTxt: string = ItemsManager.instance.getItemsPanelRichTxt(item.id);
-        this.view("Content/RichTxt").getComponent(RichText).string = buffTxt;
+        if (item.intro) {
+            this.view("Content/Intro").active = true;
+            this.view("Content/Intro").getComponent(RichText).string = item.getIntro();
+        }
+
+        let buffTxt: string = item.getBuffTxt();
+        if (buffTxt) {
+            this.view("Content/RichTxt").getComponent(RichText).string = buffTxt;
+        }
     }
 
     update(deltaTime: number) {

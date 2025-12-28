@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } from 'cc';
 import OBT_UIManager from "../Manager/OBT_UIManager";
+import ItemsManager from './ItemsManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -21,5 +22,7 @@ export default class RealTimeEventManager extends OBT_UIManager {
     }
 
     // 通过波次触发
-    public onPassWave() {}
+    public onPassWave() {
+        ItemsManager.instance.onRealTimeEvent('onPassWave')
+    }
 }

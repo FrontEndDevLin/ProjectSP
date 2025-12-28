@@ -6,6 +6,9 @@ import { copyObject, getRandomNumber } from "../Common/utils";
 import ProcessManager from "./ProcessManager";
 import OBT from "../OBT";
 import CHRManager from "./CHRManager";
+import { Item_def } from "../Items/Item_def";
+import ItemBase from "../Items/ItemBase";
+import ItemSpecial from "../Items/ItemSpecial";
 
 interface GetRandomItemConfig {
     quality?: number,
@@ -21,19 +24,22 @@ export default class ItemsManager extends OBT_UIManager {
     public itemData: ItemInfo.ItemData;
     // 按道具的群组来分组
     private  _groupMap: ItemInfo.GroupMap = {
-        normal: [],
-        limit: [],
-        special: []
+        [ItemInfo.Group.NORMAL]: [],
+        [ItemInfo.Group.LIMIT]: [],
+        [ItemInfo.Group.SPECIAL]: []
     };
+
+    // 会出现在商城的道具id列表
+    protected storeItemPool: string[] = [];
 
     // 触发刷新的次数
     private _refreshTime: number = 0;
     // 下次刷新的费用
     private _nextRefreshCost: number = 0;
-    public storeItemList: ItemInfo.Item[] = [];
+    public storeItemList: ItemBase[] = [];
 
     // 当前背包道具
-    public backpack: ItemInfo.BackpackItem[] = [];
+    public backpack: ItemBase[] = [];
 
     private _itemPreviewNode: Node;
 
@@ -58,21 +64,40 @@ export default class ItemsManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE, this.coreLevelUp, this);
     }
 
+    // 波次通过
+    public onRealTimeEvent(eventName: string) {
+        this.backpack.forEach((item: ItemBase) => {
+            switch (eventName) {
+                case 'onPassWave': {
+                    if (item instanceof ItemSpecial) {
+                        if (item.onPassWave) {
+                            item.onPassWave()
+                        }
+                    }
+                } break;
+            }
+        })
+    }
+
     private _initItemData() {
         this.itemData = DBManager.instance.getDBData("Items");
 
-        const { item_def, item_id_list } = this.itemData;
+        const { item_def } = this.itemData;
 
-        for (let id of item_id_list) {
-            let item: ItemInfo.Item = item_def[id];
-            this._groupMap[item.group].push(id);
+        for (let itemId in item_def) {
+            let item: ItemInfo.Item = item_def[itemId];
+            this._groupMap[item.group].push(itemId);
+            
+            // if (item.type === ItemInfo.Type.NORMAL) {
+                this.storeItemPool.push(itemId)
+            // }
         }
     }
 
     // 刷新商店时，获取背包里已达上限/唯一的道具列表，以进行忽略操作
     private _getStoreIgnoreList(): string[] {
         let ignoreList: string[] = [];
-        this.backpack.forEach((backpackItem: ItemInfo.BackpackItem, i: number) => {
+        this.backpack.forEach((backpackItem: ItemBase, i: number) => {
             let itemId: string = backpackItem.id;
             let item: ItemInfo.Item = this.getItemById(itemId);
             switch (item.group) {
@@ -91,30 +116,34 @@ export default class ItemsManager extends OBT_UIManager {
         return ignoreList;
     }
 
-    private _getLockStoreItem(): ItemInfo.Item[] {
+    private _getLockStoreItem(): ItemBase[] {
         return this.storeItemList.filter(item => item.lock === true);
     }
     private _loadStoreList(n: number = STORE_ITEM_COUNT): Boolean {
-        // 筛除已锁定的道具(TODO: 已锁定的道具，不要出现在开箱的物品列表里，避免唯一道具出现多个的情况)
-        let items: ItemInfo.Item[] = this._getLockStoreItem();
+        // 筛除已锁定的道具(已锁定的道具，不要出现在开箱的物品列表里，避免唯一道具出现多个的情况)
+        let items: ItemBase[] = this._getLockStoreItem();
         n = n - items.length;
         if (n <= 0) {
             return false;
         }
         let ignoreList = this._getStoreIgnoreList();
         if (items.length) {
-            items.forEach((item: ItemInfo.Item) => {
+            items.forEach((item: ItemBase) => {
                 ignoreList.push(item.id)
             });
         }
         for (let i = 0; i < n; i++) {
-            let item: ItemInfo.Item = this._getRandomItemByStore({ ignoreKeyList: ignoreList });
-            if (item) {
-                ignoreList.push(item.id);
-                let storeItem: ItemInfo.Item = copyObject(item);
-                // TODO: 计算价格
+            let randomItem: ItemInfo.Item = this._getRandomItemByStore({ ignoreKeyList: ignoreList });
+            if (randomItem) {
+                ignoreList.push(randomItem.id);
+                let storeItem: ItemInfo.Item = copyObject(randomItem);
+                let scriptName: string = storeItem.type === ItemInfo.Type.NORMAL ? "Item_Base" : storeItem.id;
+                // TODO: 价格
                 storeItem.price = 1;
-                items.push(storeItem);
+                if (Item_def[scriptName]) {
+                    let itemCtx = new Item_def[scriptName](storeItem)
+                    items.push(itemCtx);
+                }
             }
         }
         this.storeItemList = items;
@@ -147,7 +176,7 @@ export default class ItemsManager extends OBT_UIManager {
 
     private _getItemsList(ignoreKeyList: string[] = []) {
         let pool: ItemInfo.Item[] = [];
-        for (let id of this.itemData.item_id_list) {
+        for (let id of this.storeItemPool) {
             // 排除已进入当前商店列表/已达上限的项目
             if (ignoreKeyList.indexOf(id) !== -1) {
                 continue;
@@ -159,6 +188,9 @@ export default class ItemsManager extends OBT_UIManager {
 
     public getItemById(id) {
         return this.itemData.item_def[id];
+    }
+    public getBackpackItemById(id) {
+        return this.backpack.find(item => item.id === id);
     }
 
     // private _getRandomItem(quality: number = ItemInfo.TROPHY_TYPE.CHEST): ItemInfo.Item {
@@ -200,29 +232,29 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     // 获取指定道具的富文本属性标签词条
-    public getItemsPanelRichTxt(key: string): string {
-        if (!key) {
-            return "";
-        }
-        let item: ItemInfo.Item = this.getItemById(key);
-        if (!item) {
-            return "";
-        }
-        let buffList: CHRInfo.Buff[] = item.buff_list;
-        return this.getItemsPanelRickTxtByBuffList(buffList);
-    }
+    // public getItemsPanelRichTxt(key: string): string {
+    //     if (!key) {
+    //         return "";
+    //     }
+    //     let item: ItemInfo.Item = this.getItemById(key);
+    //     if (!item) {
+    //         return "";
+    //     }
+    //     let buffList: CHRInfo.Buff[] = item.buff_list;
+    //     return this.getItemsPanelRickTxtByBuffList(buffList);
+    // }
 
-    // 获取buff列表对应富文本
-    public getItemsPanelRickTxtByBuffList(buffList: CHRInfo.Buff[]) {
-        let buffTxt = "";
-        buffList.forEach((buff, i) => {
-            buffTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
-            if (i !== buffList.length - 1) {
-                buffTxt += "<br/>";
-            }
-        });
-        return buffTxt;
-    }
+    // // 获取buff列表对应富文本
+    // public getItemsPanelRickTxtByBuffList(buffList: CHRInfo.Buff[]) {
+    //     let buffTxt = "";
+    //     buffList.forEach((buff, i) => {
+    //         buffTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
+    //         if (i !== buffList.length - 1) {
+    //             buffTxt += "<br/>";
+    //         }
+    //     });
+    //     return buffTxt;
+    // }
 
     // 刷新商店
     public refreshStoreList(autoRefresh?: boolean): boolean {
@@ -255,29 +287,34 @@ export default class ItemsManager extends OBT_UIManager {
     // 获得道具
     public obtainItem(id: string) {
         let hasItemInBackpack:  boolean = false;
-        for (let backpackItem of this.backpack) {
-            if (backpackItem.id === id) {
+        let backpackItem: ItemBase;
+        for (let bItem of this.backpack) {
+            if (bItem.id === id) {
+                backpackItem = bItem;
                 hasItemInBackpack = true;
-                backpackItem.count++;
                 // 道具更新, 数量变化
-                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ITEM_CHANGE, { hasItemInBackpack, backpackItem });
                 break;
             }
         }
+
         if (!hasItemInBackpack) {
-            let backpackItem: ItemInfo.BackpackItem = { id, count: 1 };
+            let item: ItemInfo.Item = this.getItemById(id);
+            let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Base" : item.id;
+            backpackItem = new Item_def[scriptName](item)
+            // let backpackItem: ItemInfo.BackpackItem = { id, count: 1 };
             this.backpack.push(backpackItem);
             // 道具更新, 新增道具
+        }
+
+        let res: boolean = backpackItem.use();
+        if (res) {
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ITEM_CHANGE, { hasItemInBackpack, backpackItem });
         }
-        // TODO: 修改角色属性/插入事件
-        let item: ItemInfo.Item = this.getItemById(id);
-        CHRManager.instance.upgradePropByBuff(item.buff_list);
     }
 
     // 购买道具
     public buyItem(id: string): boolean {
-        let storeItem: ItemInfo.Item = this.storeItemList.find((item: ItemInfo.Item) => item.id === id);
+        let storeItem: ItemBase = this.storeItemList.find((item: ItemBase) => item.id === id);
         if (!storeItem) {
             return false;
         }
@@ -297,7 +334,7 @@ export default class ItemsManager extends OBT_UIManager {
 
     // 锁定，解锁商店
     public toggleLockStoreItem(id: string) {
-        let item: ItemInfo.Item = this.storeItemList.find(item => item.id === id);
+        let item: ItemBase = this.storeItemList.find(item => item.id === id);
         if (item) {
             item.lock = !item.lock;
         }

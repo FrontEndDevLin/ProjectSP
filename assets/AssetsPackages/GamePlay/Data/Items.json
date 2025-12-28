@@ -1,37 +1,20 @@
 {
     "desc": {
-        "group": "limit",
+        "global": "道具全局分组, 1->商店道具 2->核心内置道具 3->核心升级包道具",
+        "type": "道具类型 1->普通buff类 2->特殊类",
+        "group": "道具分组 1->普通 2->限制",
         "max": "当group为limit(限制)时, 该属性生效"
     },
-    "desc_unuse": {
-        "id": "item5",
-        "item_type": "item",
-        "level": 1,
-        "label": "脚本道具5",
-        "group_label": "道具",
-        "group": "normal",
-        "buff_list": [
-            {
-                "type": "event",
-                "script": "item5"
-            },
-            {
-                "type": "prop",
-                "prop": "melee_dmg",
-                "value": -1
-            }
-        ]
-    },
     "item_def": {
-        "item1": {
-            "id": "item1",
-            "item_type": "item",
+        "Item1": {
+            "id": "Item1",
+            "global": 1,
             "level": 1,
             "label": "道具1",
-            "group_label": "道具",
             "ico": "Star",
             "price": 1,
-            "group": "normal",
+            "type": 1,
+            "group": 1,
             "buff_list": [
                 {
                     "prop": "hp",
@@ -43,15 +26,15 @@
                 }
             ]
         },
-        "item2": {
-            "id": "item2",
-            "item_type": "item",
+        "Item2": {
+            "id": "Item2",
+            "global": 1,
             "level": 1,
             "label": "道具2",
-            "group_label": "道具",
             "ico": "Star",
             "price": 1,
-            "group": "normal",
+            "type": 1,
+            "group": 1,
             "buff_list": [
                 {
                     "prop": "range",
@@ -59,15 +42,15 @@
                 }
             ]
         },
-        "item3": {
-            "id": "item3",
-            "item_type": "item",
+        "Item3": {
+            "id": "Item3",
+            "global": 1,
             "level": 1,
             "label": "道具3",
-            "group_label": "道具",
             "ico": "Star",
             "price": 1,
-            "group": "normal",
+            "type": 1,
+            "group": 1,
             "buff_list": [
                 {
                     "prop": "atk_spd",
@@ -79,15 +62,15 @@
                 }
             ]
         },
-        "item4": {
-            "id": "item4",
-            "item_type": "item",
+        "Item4": {
+            "id": "Item4",
+            "global": 1,
             "level": 1,
             "label": "道具4",
-            "group_label": "道具",
             "ico": "Star",
             "price": 1,
-            "group": "normal",
+            "type": 1,
+            "group": 1,
             "buff_list": [
                 {
                     "prop": "exp_eff",
@@ -95,15 +78,15 @@
                 }
             ]
         },
-        "item5": {
-            "id": "item5",
-            "item_type": "item",
+        "Item5": {
+            "id": "Item5",
+            "global": 1,
             "level": 1,
             "label": "道具5",
-            "group_label": "道具",
             "ico": "Star",
-            "price": 10,
-            "group": "normal",
+            "price": 1,
+            "type": 1,
+            "group": 1,
             "buff_list": [
                 {
                     "prop": "range_dmg",
@@ -111,18 +94,38 @@
                 }
             ]
         },
-        "item6": {
-            "id": "item6",
-            "item_type": "item",
+        "Item_YijingRing": {
+            "id": "Item_YijingRing",
+            "global": 1,
             "level": 1,
-            "label": "通过波次+3%伤害",
-            "group_label": "道具",
+            "label": "义警戒指",
+            "intro": "波次结束后<%val_1%><&dmg&>",
             "ico": "Star",
-            "price": 10,
-            "group": "normal"
+            "price": 1,
+            "type": 2,
+            "group": 1,
+            "val_1": 3
+        },
+
+        "Item_ScatterAtkWarCore": {
+            "id": "Item_ScatterAtkWarCore",
+            "global_": 2,
+            "global": 1,
+            "level": 1,
+            "label": "测试",
+            "ico": "Star",
+            "price": 1,
+            "group": 1,
+            "intro": "<~range_dmg,val_1~><br/>波次结束后<%val_2%><&spd&>",
+            "type": 2,
+            "val_1": 0.5,
+            "val_2": 1,
+            "buff_list": [
+                {
+                    "prop": "avd",
+                    "value": 5
+                }
+            ]
         }
-    },
-    "item_id_list": [
-        "item1", "item2", "item3", "item4", "item5"
-    ]
+    }
 }

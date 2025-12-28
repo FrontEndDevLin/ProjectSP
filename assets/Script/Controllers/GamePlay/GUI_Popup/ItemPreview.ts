@@ -3,6 +3,7 @@ import OBT_Component from '../../../OBT_Component';
 import { ItemInfo } from '../../../Common/Namespace';
 import GUI_GamePlayManager from '../../../CManager/GUI_GamePlayManager';
 import { transportWorldPosition } from '../../../Common/utils';
+import ItemBase from '../../../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('ItemPreview')
@@ -15,7 +16,7 @@ export class ItemPreview extends OBT_Component {
 
     }
 
-    public showPreviewPopup(item: ItemInfo.Item, index: number) {
+    public showPreviewPopup(item: ItemBase, index: number) {
         this.view("ItemCard").OBT_param2.updateView(item);
 
         let backpackWrapNode: Node = GUI_GamePlayManager.instance.getBackpackWrapNode();
