@@ -35,8 +35,9 @@
             "cd": 0.3,
             "ctl": 1,
             "ctl_dmg_rate": 1.5,
-            "traits": ["range_dmg_1", "pass_boost_spd_1"],
-            "buff_list": [
+            "item": "Item_ScatterAtkWarCore",
+            "traits_": ["range_dmg_1", "pass_boost_spd_1"],
+            "buff_list_": [
                 {
                     "prop": "avd",
                     "value": 5

@@ -109,12 +109,7 @@
 
         "Item_ScatterAtkWarCore": {
             "id": "Item_ScatterAtkWarCore",
-            "global_": 2,
-            "global": 1,
-            "level": 1,
-            "label": "测试",
-            "ico": "Star",
-            "price": 1,
+            "global": 2,
             "group": 1,
             "intro": "<~range_dmg,val_1~><br/>波次结束后<%val_2%><&spd&>",
             "type": 2,

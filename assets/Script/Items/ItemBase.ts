@@ -22,6 +22,7 @@ export default class ItemBase {
     public price: number;
     public lock: boolean;
     public val_1: number;
+    public val_2: number;
     public buff_list: CHRInfo.Buff[] = [];
 
     constructor(itemData: ItemInfo.Item) {
