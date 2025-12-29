@@ -1,4 +1,5 @@
 import { Vec3 } from "cc"
+import ItemBase from "../Items/ItemBase"
 
 export enum GAME_NODE {
     FIGHTING, // 进行中
@@ -205,6 +206,7 @@ export namespace WarCoreInfo {
         icon_gaming: string,
         bullet: string,
         item?: string,
+        itemCtx?: ItemBase,
         // 特性列表
         traits?: string[],
         buff_list?: CHRInfo.Buff[],

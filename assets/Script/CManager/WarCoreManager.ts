@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, CHRInfo, Common, GamePlayEvent, MAX_WAR_CORE_LEVEL, WarCoreInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, CHRInfo, Common, GamePlayEvent, ItemInfo, MAX_WAR_CORE_LEVEL, WarCoreInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { copyObject, getFloatNumber, getRandomNumbers } from '../Common/utils';
@@ -10,6 +10,7 @@ import DamageManager from './DamageManager';
 import CHRManager from './CHRManager';
 import ProcessManager from './ProcessManager';
 import { getSaveCtrl } from './Class/SaveCtrl';
+import { Item_def } from '../Items/Item_def';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -171,7 +172,13 @@ export default class WarCoreManager extends OBT_UIManager {
         }
 
         randomIdxList.forEach((idx: number) => {
-            list.push(this.warCoreData.atk_war_core_def[pubAtkWarCoreList[idx]]);
+            let warCoreData: WarCoreInfo.AtkWarCoreAttr = copyObject(this.warCoreData.atk_war_core_def[pubAtkWarCoreList[idx]]);
+            const itemId: string = warCoreData.item;
+            if (itemId) {
+                let itemData: ItemInfo.Item = ItemsManager.instance.getItemById(itemId);
+                warCoreData.itemCtx = new Item_def[itemId](itemData);
+            }
+            list.push(warCoreData);
         });
 
         return list;
