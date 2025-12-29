@@ -204,6 +204,7 @@ export namespace WarCoreInfo {
         icon_ui: string,
         icon_gaming: string,
         bullet: string,
+        item?: string,
         // 特性列表
         traits?: string[],
         buff_list?: CHRInfo.Buff[],
@@ -341,6 +342,13 @@ export namespace CHRInfo {
 }
 
 export namespace ItemInfo {
+    // 道具全局分组, 1->商店道具 2->核心内置道具 3->核心升级包道具
+    export enum Global {
+        ITEM = 1,
+        WARCORE_ITEM,
+        CORE_UPGRADE_ITEM
+    }
+
     // 普通道具和特殊道具
     export enum Type {
         NORMAL = 1,
@@ -355,6 +363,7 @@ export namespace ItemInfo {
 
     export interface Item {
         id: string,
+        global: Global,
         type: Type,
         level: number,
         label: string,

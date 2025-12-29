@@ -111,7 +111,7 @@ export class GUI_Prepare extends OBT_Component {
         OBT.instance.uiManager.mountNode({ node: itemRect, parentNode: this._backpackWrapNode });
     }
     private _loadItemList() {
-        let backpack: ItemBase[] = ItemsManager.instance.backpack;
+        let backpack: ItemBase[] = ItemsManager.instance.getBackpack();
         backpack.forEach((backpackItem: ItemBase, i: number) => {
             this._mountItemRectNode(backpackItem, i);
         })

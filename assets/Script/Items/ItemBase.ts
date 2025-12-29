@@ -12,6 +12,7 @@ export default class ItemBase {
     public count: number = 0;
 
     public id: string;
+    public global: ItemInfo.Global;
     public type: ItemInfo.Type;
     public level: number;
     public label: string;

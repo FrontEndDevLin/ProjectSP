@@ -108,17 +108,21 @@ export default class WarCoreManager extends OBT_UIManager {
             this.atkWarCore = warCore;
             this.updateRealAtkWarCore();
 
-            const buffList: CHRInfo.Buff[] = warCore.buff_list;
-            if (Array.isArray(buffList) && buffList.length) {
-                CHRManager.instance.upgradePropByBuff(buffList);
+            if (warCore.item) {
+                ItemsManager.instance.obtainItem(warCore.item)
             }
+            // 251229注释
+            // const buffList: CHRInfo.Buff[] = warCore.buff_list;
+            // if (Array.isArray(buffList) && buffList.length) {
+            //     CHRManager.instance.upgradePropByBuff(buffList);
+            // }
 
-            const traits: string[] = warCore.traits;
-            if (traits && Array.isArray(traits)) {
-                traits.forEach((trait: string) => {
-                    ProcessManager.instance.traitCtrl.useTrait(trait);
-                })
-            }
+            // const traits: string[] = warCore.traits;
+            // if (traits && Array.isArray(traits)) {
+            //     traits.forEach((trait: string) => {
+            //         ProcessManager.instance.traitCtrl.useTrait(trait);
+            //     })
+            // }
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
             this.showPrefab({ prefabPath: `WarCore/${warCore.id}`, parentNode: this.warCoreRootNode, scriptName: warCore.id });
         }

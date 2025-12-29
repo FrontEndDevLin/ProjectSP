@@ -39,7 +39,7 @@ export default class ItemsManager extends OBT_UIManager {
     public storeItemList: ItemBase[] = [];
 
     // 当前背包道具
-    public backpack: ItemBase[] = [];
+    protected backpack: ItemBase[] = [];
 
     private _itemPreviewNode: Node;
 
@@ -62,6 +62,11 @@ export default class ItemsManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this._pickUpTrophy, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE, this.coreLevelUp, this);
+    }
+
+    // 获取背包道具，返回分组为正常道具的道具列表
+    public getBackpack(): ItemBase[] {
+        return this.backpack.filter((item: ItemBase) => item.global === ItemInfo.Global.ITEM);
     }
 
     // 波次通过
@@ -307,7 +312,7 @@ export default class ItemsManager extends OBT_UIManager {
         }
 
         let res: boolean = backpackItem.use();
-        if (res) {
+        if (res && backpackItem.global === ItemInfo.Global.ITEM) {
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ITEM_CHANGE, { hasItemInBackpack, backpackItem });
         }
     }
