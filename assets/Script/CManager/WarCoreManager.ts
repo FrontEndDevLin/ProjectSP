@@ -11,6 +11,7 @@ import CHRManager from './CHRManager';
 import ProcessManager from './ProcessManager';
 import { getSaveCtrl } from './Class/SaveCtrl';
 import { Item_def } from '../Items/Item_def';
+import ItemBase from '../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -22,6 +23,7 @@ export default class WarCoreManager extends OBT_UIManager {
 
     public atkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
     public realAtkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
+    public warCoreItem: ItemBase = null;
 
     protected unlockWarCore: boolean = false;
 
@@ -110,20 +112,11 @@ export default class WarCoreManager extends OBT_UIManager {
             this.updateRealAtkWarCore();
 
             if (warCore.item) {
-                ItemsManager.instance.obtainItem(warCore.item)
+                this.warCoreItem = ItemsManager.instance.getItemCtxById(warCore.item);
+                this.warCoreItem.use();
+                this.atkWarCore.itemCtx = this.warCoreItem;
             }
-            // 251229注释
-            // const buffList: CHRInfo.Buff[] = warCore.buff_list;
-            // if (Array.isArray(buffList) && buffList.length) {
-            //     CHRManager.instance.upgradePropByBuff(buffList);
-            // }
 
-            // const traits: string[] = warCore.traits;
-            // if (traits && Array.isArray(traits)) {
-            //     traits.forEach((trait: string) => {
-            //         ProcessManager.instance.traitCtrl.useTrait(trait);
-            //     })
-            // }
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
             this.showPrefab({ prefabPath: `WarCore/${warCore.id}`, parentNode: this.warCoreRootNode, scriptName: warCore.id });
         }
@@ -175,8 +168,7 @@ export default class WarCoreManager extends OBT_UIManager {
             let warCoreData: WarCoreInfo.AtkWarCoreAttr = copyObject(this.warCoreData.atk_war_core_def[pubAtkWarCoreList[idx]]);
             const itemId: string = warCoreData.item;
             if (itemId) {
-                let itemData: ItemInfo.Item = ItemsManager.instance.getItemById(itemId);
-                warCoreData.itemCtx = new Item_def[itemId](itemData);
+                warCoreData.itemCtx = ItemsManager.instance.getItemCtxById(itemId);
             }
             list.push(warCoreData);
         });

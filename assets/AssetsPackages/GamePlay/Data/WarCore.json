@@ -5,7 +5,6 @@
         "desc2": "这里面可以定义首角色属性加成的属性",
         "split": "分裂",
         "pub_atk_war_core": "允许选择的攻击核心",
-        "traits": "拥有的特性",
         "upgrade_pool": "核心升级包池"
     },
     "atk_war_core_def": {
@@ -36,13 +35,6 @@
             "ctl": 1,
             "ctl_dmg_rate": 1.5,
             "item": "Item_ScatterAtkWarCore",
-            "traits_": ["range_dmg_1", "pass_boost_spd_1"],
-            "buff_list_": [
-                {
-                    "prop": "avd",
-                    "value": 5
-                }
-            ],
             "upgrade_pool_": ["fightWithBothHands", "fightWithBothHands", "fullPower", "fullPower2"],
             "upgrade_pool": ["blossom", "blossom", "fullPower"]
         }
@@ -55,8 +47,7 @@
             "intro": "核心升级",
             "atk_intro": "攻击的同时会朝反方向发射, 但火力会减半",
             "icon_ui": "scatter",
-            "traits": [],
-            "buff_list": [
+            "buff_list_": [
                 {
                     "prop": "range_dmg",
                     "value": -5
@@ -78,8 +69,7 @@
             "atk_intro": "每30次攻击会朝四周发动一次威力更强大的攻击, 贯穿沿途敌人",
             "bullet": "",
             "icon_ui": "scatter",
-            "traits": [],
-            "buff_list": []
+            "buff_list_": []
         },
         "fullPower2": {
             "id": "fullPower2",
@@ -89,8 +79,7 @@
             "atk_intro": "子弹命中敌人时会进行分裂",
             "icon_ui": "scatter",
             "bullet": "",
-            "traits": [],
-            "buff_list": []
+            "buff_list_": []
         }
     }
 }

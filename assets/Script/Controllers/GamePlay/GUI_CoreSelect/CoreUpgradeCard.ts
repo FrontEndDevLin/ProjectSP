@@ -54,17 +54,17 @@ export class CoreUpgradeCard extends OBT_Component {
 
         this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
 
-        let traits: string[] = props.traits;
-        if (Array.isArray(traits) && traits.length) {
-            let traitRichTxt: string = "";
-            traits.forEach((trait: string, idx: number) => {
-                traitRichTxt += ProcessManager.instance.traitCtrl.getTraitRichTxt(trait);
-                if (idx !== traits.length - 1) {
-                    traitRichTxt += "<br/>";
-                }
-            });
-            this.view("Content/Trait").getComponent(RichText).string = traitRichTxt;
-        }
+        // let traits: string[] = props.traits;
+        // if (Array.isArray(traits) && traits.length) {
+        //     let traitRichTxt: string = "";
+        //     traits.forEach((trait: string, idx: number) => {
+        //         // traitRichTxt += ProcessManager.instance.traitCtrl.getTraitRichTxt(trait);
+        //         // if (idx !== traits.length - 1) {
+        //         //     traitRichTxt += "<br/>";
+        //         // }
+        //     });
+        //     this.view("Content/Trait").getComponent(RichText).string = traitRichTxt;
+        // }
 
         let buffList: CHRInfo.Buff[] = props.buff_list;
         if (Array.isArray(buffList) && buffList.length) {

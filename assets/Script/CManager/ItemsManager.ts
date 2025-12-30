@@ -93,12 +93,12 @@ export default class ItemsManager extends OBT_UIManager {
             let item: ItemInfo.Item = item_def[itemId];
             this._groupMap[item.group].push(itemId);
             
-            // if (item.type === ItemInfo.Type.NORMAL) {
+            if (item.global === ItemInfo.Global.ITEM) {
                 this.storeItemPool.push(itemId)
-            // }
+            }
         }
     }
-
+              
     // 刷新商店时，获取背包里已达上限/唯一的道具列表，以进行忽略操作
     private _getStoreIgnoreList(): string[] {
         let ignoreList: string[] = [];
@@ -303,10 +303,7 @@ export default class ItemsManager extends OBT_UIManager {
         }
 
         if (!hasItemInBackpack) {
-            let item: ItemInfo.Item = this.getItemById(id);
-            let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Base" : item.id;
-            backpackItem = new Item_def[scriptName](item)
-            // let backpackItem: ItemInfo.BackpackItem = { id, count: 1 };
+            backpackItem = this.getItemCtxById(id);
             this.backpack.push(backpackItem);
             // 道具更新, 新增道具
         }
@@ -315,6 +312,12 @@ export default class ItemsManager extends OBT_UIManager {
         if (res && backpackItem.global === ItemInfo.Global.ITEM) {
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ITEM_CHANGE, { hasItemInBackpack, backpackItem });
         }
+    }
+
+    public getItemCtxById(id) {
+        let item: ItemInfo.Item = this.getItemById(id);
+        let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Base" : item.id;
+        return new Item_def[scriptName](item);
     }
 
     // 购买道具

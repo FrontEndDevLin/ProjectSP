@@ -207,9 +207,6 @@ export namespace WarCoreInfo {
         bullet: string,
         item?: string,
         itemCtx?: ItemBase,
-        // 特性列表
-        traits?: string[],
-        buff_list?: CHRInfo.Buff[],
         // 升级包池
         upgrade_pool: string[]
     }
@@ -224,8 +221,6 @@ export namespace WarCoreInfo {
         intro: string,
         atk_intro: string,
         icon_ui: string,
-        // 特性列表
-        traits?: string[],
         buff_list?: CHRInfo.Buff[],
         bullet?: string
     }
@@ -563,20 +558,6 @@ export namespace DamageInfo {
 export interface BoostConfig {
     [prop: string]: number
 }
-
-export namespace TraitInfo {
-    export interface TraitConfig {
-        type: string,
-        prop: string,
-        value: number | string
-    }
-
-    export interface TraitDBData {
-        trait_def: {
-            [traitName: string]: TraitConfig
-        }
-    }
-    }
 
 export const SCREEN_WIDTH = 1280;
 export const SCREEN_HEIGHT = 720;
