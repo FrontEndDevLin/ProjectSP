@@ -3,10 +3,10 @@
  */
 
 import { SpriteFrame } from "cc";
-import CHRManager from "../CManager/CHRManager";
-import { CHRInfo, ItemInfo } from "../Common/Namespace";
-import { getDangerRichTxt, getSuccessRichTxt } from "../Common/utils";
-import OBT from "../OBT";
+import CHRManager from "../../../CManager/CHRManager";
+import { CHRInfo, ItemInfo } from "../../../Common/Namespace";
+import { getDangerRichTxt, getSuccessRichTxt } from "../../../Common/utils";
+import OBT from "../../../OBT";
 
 export default class ItemBase {
     public count: number = 0;

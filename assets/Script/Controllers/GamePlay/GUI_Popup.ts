@@ -8,7 +8,7 @@ import ItemsManager from '../../CManager/ItemsManager';
 import { PropIntro } from './GUI_Popup/PropIntro';
 import { AtkCorePreview } from './GUI_Popup/AtkCorePreview';
 import { UpgradePackPreview } from './GUI_Popup/UpgradePackPreview';
-import ItemBase from '../../Items/ItemBase';
+import ItemBase from './Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Popup')

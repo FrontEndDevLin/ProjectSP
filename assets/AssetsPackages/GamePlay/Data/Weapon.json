@@ -1,0 +1,27 @@
+{
+    "desc": {
+        "mark": "武器定义, 核心,道具等拥有攻击/治疗手段的系统可以引入武器"
+    },
+    "weapon_def": {
+        "Weapon_BaseAtkWarCore": {
+            "id": "Weapon_BaseAtkWarCore",
+            "intro": "基础飞弹攻击",
+            "bullet": "CHR_Bullet001",
+            "range": 200,
+            "cd": 0.4,
+            "ctl": 10,
+            "ctl_dmg_rate": 1.5
+        },
+        "Weapon_ScatterAtkWarCore": {
+            "id": "Weapon_BaseAtkWarCore",
+            "intro": "基础飞弹会分裂成<%split%>个",
+            "bullet": "CHR_Bullet002",
+            "split": 3,
+            "range": 200,
+            "cd": 0.3,
+            "ctl": 1,
+            "ctl_dmg_rate": 1.5
+        },
+        "Weapon_": {}
+    }
+}

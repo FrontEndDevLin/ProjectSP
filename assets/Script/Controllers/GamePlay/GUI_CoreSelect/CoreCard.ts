@@ -34,37 +34,9 @@ export class CoreCard extends OBT_Component {
         let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${props.icon_ui}`);
         this.view("Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = assets;
         this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.name;
-  
-        let introRichTxt: string = props.atk_intro;
-        const regex = /<%([^%]+)%>/g;
-        const matches = introRichTxt.match(regex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];
-        if (matches.length) {
-            matches.forEach((key) => {
-                let val = props[key]
-                introRichTxt = introRichTxt.replace(`<%${key}%>`, `<color=${COLOR.SUCCESS}>${val}</color>`);
-            })
-        }
 
-        let realAttr: WarCoreInfo.AtkWarCoreDataAttr = WarCoreManager.instance.getWarCoreRealAttr(props.id);
-        let richTxtList: string[] = [
-            this._getDmgRichTxt(realAttr.dmg, realAttr.base_dmg, realAttr.boost, props.split),
-            this._getCtlRichTxt(realAttr.ctl, realAttr.ctl_dmg_rate),
-            this._getCdRichTxt(realAttr.cd),
-            this._getRangeRichTxt(realAttr.range)
-        ];
-
-        let attrRichTxt = "";
-        richTxtList.forEach((richTxt: string, idx: number) => {
-            if (richTxt) {
-                if (idx > 0) {
-                    attrRichTxt += "<br/>";
-                }
-                attrRichTxt += richTxt;
-            }
-        });
-
-        this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
-        this.view("Content/Attr").getComponent(RichText).string = attrRichTxt;
+        this.view("Content/Intro").getComponent(RichText).string = props.weaponCtx.getIntroRichTxt();
+        this.view("Content/Attr").getComponent(RichText).string = props.weaponCtx.getPanelRichTxt();
 
         if (props.itemCtx && props.itemCtx.intro) {
             this.view("Content/Trait").active = true;
@@ -76,43 +48,6 @@ export class CoreCard extends OBT_Component {
         if (props.itemCtx.buff_list && props.itemCtx.buff_list.length) {
             this.view("Content/Buff").getComponent(RichText).string = props.itemCtx.getBuffTxt();
         }
-    }
-
-    // 获取伤害属性富文本
-    private _getDmgRichTxt(dmg: number, baseDmg: number, boost: BoostConfig, split?: number): string {
-        let dmgColor: string = dmg >= baseDmg ? COLOR.SUCCESS : COLOR.DANGER;
-        let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
-        if (split && split > 0) {
-            dmgColorTxt += `x<color=${COLOR.SUCCESS}>${split}</color>`;
-        }
-        let boostTxt: string = "";
-        if (boost) {
-            for (let prop in boost) {
-                // TODO: 后续换成图集图标
-                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
-                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
-            }
-        }
-        return `伤害: ${dmgColorTxt}|${baseDmg}+${boostTxt}`;
-    }
-    // 获取暴击属性富文本
-    private _getCtlRichTxt(ctl: number, ctlDmgRate: number): string {
-        let color: string = ctl >= this._props.ctl ? COLOR.SUCCESS : COLOR.DANGER;
-        let colorTxt: string = `<color=${color}>${ctl}%</color>`;
-        return `暴击: ${ctlDmgRate}倍|${colorTxt}概率`;
-    }
-    // 获取冷却属性富文本
-    private _getCdRichTxt(cd: number) {
-        let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
-        let color: string = cd <= atkSpdVal ? COLOR.SUCCESS : COLOR.DANGER;
-        let colorTxt: string = `<color=${color}>${cd}</color>`;
-        return `冷却: ${colorTxt}s`;
-    }
-    // 获取范围属性富文本
-    private _getRangeRichTxt(range: number) {
-        let color: string = range >= 0 ? COLOR.SUCCESS : COLOR.DANGER;
-        let colorTxt: string = `<color=${color}>${range}</color>`;
-        return `范围: ${colorTxt}`;
     }
 
     private _touchCard() {

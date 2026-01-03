@@ -1,7 +1,7 @@
-import CHRManager from "../CManager/CHRManager";
-import Profit from "../CManager/Class/Profit";
-import { CHRInfo } from "../Common/Namespace";
-import { getFloatNumber } from "../Common/utils";
+import CHRManager from "../../../CManager/CHRManager";
+import Profit from "../../../CManager/Class/Profit";
+import { CHRInfo } from "../../../Common/Namespace";
+import { getFloatNumber } from "../../../Common/utils";
 import ItemSpecial from "./ItemSpecial";
 
 export default class ItemScatterAtkWarCore extends ItemSpecial {

@@ -1,5 +1,6 @@
 import { Vec3 } from "cc"
-import ItemBase from "../Items/ItemBase"
+import ItemBase from "../Controllers/GamePlay/Items/ItemBase"
+import WeaponBase from "../Controllers/GamePlay/Weapons/WeaponBase"
 
 export enum GAME_NODE {
     FIGHTING, // 进行中
@@ -186,27 +187,18 @@ export namespace GameConfigInfo {
 }
 
 export namespace WarCoreInfo {
-    export interface AtkWarCoreDataAttr extends BulletInfo.BulletRealTimeAttr {
-        // 分裂
-        split?: number,
-        range: number,
-        // 暴击率
-        ctl: number,
-        // 暴击伤害倍率
-        ctl_dmg_rate: number,
-        cd: number
-    }
-
-    export interface AtkWarCoreAttr extends AtkWarCoreDataAttr {
+    export interface AtkWarCoreAttr {
         id: string,
         name: string,
         intro: string,
-        atk_intro: string,
         icon_ui: string,
         icon_gaming: string,
         bullet: string,
         item?: string,
         itemCtx?: ItemBase,
+
+        weapon: string,
+        weaponCtx: WeaponBase,
         // 升级包池
         upgrade_pool: string[]
     }
@@ -224,14 +216,10 @@ export namespace WarCoreInfo {
         buff_list?: CHRInfo.Buff[],
         bullet?: string
     }
-    export interface WarCoreUpgradePackMap {
-        [upgradePackId: string]: WarCoreUpgradePack
-    }
 
     export interface WarCoreDBData {
         atk_war_core_def: AtkWarCoreMap,
-        pub_atk_war_core: string[],
-        war_core_upgrade_pack_def: WarCoreUpgradePackMap
+        pub_atk_war_core: string[]
     }
 }
 
@@ -402,6 +390,27 @@ export namespace ItemInfo {
         CORE_UPGRADE = 3,
         CHEST,
         GREAT_CHEST
+    }
+}
+
+export namespace WeaponInfo {
+    export interface WeaponDBData {
+        weapon_def: WeaponMap
+    }
+
+    export interface WeaponMap {
+        [WeaponId: string]: Weapon
+    }
+
+    export interface Weapon {
+        id: string,
+        intro?: string,
+        bullet: string,
+        split?: number, // 分裂
+        range?: number,
+        cd?: number,
+        ctl?: number, // 暴击率
+        ctl_dmg_rate?: number // 暴击倍率
     }
 }
 

@@ -3,7 +3,7 @@ import OBT_Component from '../../../OBT_Component';
 import { ItemInfo } from '../../../Common/Namespace';
 import GUI_GamePlayManager from '../../../CManager/GUI_GamePlayManager';
 import { transportWorldPosition } from '../../../Common/utils';
-import ItemBase from '../../../Items/ItemBase';
+import ItemBase from '../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('ItemPreview')

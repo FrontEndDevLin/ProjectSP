@@ -10,8 +10,11 @@ import DamageManager from './DamageManager';
 import CHRManager from './CHRManager';
 import ProcessManager from './ProcessManager';
 import { getSaveCtrl } from './Class/SaveCtrl';
-import { Item_def } from '../Items/Item_def';
-import ItemBase from '../Items/ItemBase';
+import { Item_def } from '../Controllers/GamePlay/Items/Item_def';
+import ItemBase from '../Controllers/GamePlay/Items/ItemBase';
+import WeaponBase from '../Controllers/GamePlay/Weapons/WeaponBase';
+import { Weapon_def } from '../Controllers/GamePlay/Weapons/Weapon_def';
+import WeaponManager from './WeaponManager';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -24,6 +27,7 @@ export default class WarCoreManager extends OBT_UIManager {
     public atkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
     public realAtkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
     public warCoreItem: ItemBase = null;
+    public warCoreWeapon: WeaponBase = null;
 
     protected unlockWarCore: boolean = false;
 
@@ -65,40 +69,12 @@ export default class WarCoreManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this.onPickupTrophy, this);
     }
 
+    /**
+     * 结合角色当前属性, 更新当前核心的面板属性
+     * 实际就是更新当前武器的面板
+     */
     protected updateRealAtkWarCore() {
-        if (!this.realAtkWarCore) {
-            const warCore: WarCoreInfo.AtkWarCoreAttr = this.atkWarCore;
-            this.realAtkWarCore = copyObject(warCore);
-        }
-        let realAttr: WarCoreInfo.AtkWarCoreDataAttr = this.getWarCoreRealAttr(this.realAtkWarCore.id);
-        this.realAtkWarCore.base_dmg = realAttr.base_dmg;
-        this.realAtkWarCore.dmg = realAttr.dmg;
-        this.realAtkWarCore.ctl = realAttr.ctl;
-        this.realAtkWarCore.cd = realAttr.cd;
-        this.realAtkWarCore.range = realAttr.range;
-    }
-
-    // 获得指定核心的当前属性(结合角色属性计算)
-    public getWarCoreRealAttr(atkWarCoreId): WarCoreInfo.AtkWarCoreDataAttr {
-        const warCore: WarCoreInfo.AtkWarCoreAttr = this.warCoreData.atk_war_core_def[atkWarCoreId];
-        if (!warCore) {
-            return;
-        }
-        let bulletId: string = warCore.bullet;
-        let bulletRealTimeAttr: BulletInfo.BulletRealTimeAttr = BulletManager.instance.getBulletRealTimeAttr(bulletId);
-        let ctl: number = CHRManager.instance.propCtx.getPropRealValue("ctl") + warCore.ctl;
-        let cd: number = getFloatNumber(warCore.cd / CHRManager.instance.propCtx.getPropRealValue("atk_spd"), 3);
-        let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + warCore.range;
-
-        return {
-            bulletId,
-            ctl,
-            ctl_dmg_rate: warCore.ctl_dmg_rate,
-            split: warCore.split,
-            cd,
-            range,
-            ...bulletRealTimeAttr
-        }
+        this.warCoreWeapon.updatePanel();
     }
 
     public setWarCoreRootNode(node: Node) {
@@ -108,9 +84,14 @@ export default class WarCoreManager extends OBT_UIManager {
     private _setAtkWarCore(atkWarCoreId: string) {
         const warCore: WarCoreInfo.AtkWarCoreAttr = this.warCoreData.atk_war_core_def[atkWarCoreId];
         if (warCore) {
+            // return console.log(warCore.weapon)
             this.atkWarCore = warCore;
-            this.updateRealAtkWarCore();
-
+            if (warCore.weapon) {
+                this.warCoreWeapon = WeaponManager.instance.getWeaponCtxById(warCore.weapon);
+                this.atkWarCore.weaponCtx = this.warCoreWeapon;
+                // console.log(this.warCoreWeapon)
+                this.updateRealAtkWarCore();
+            }
             if (warCore.item) {
                 this.warCoreItem = ItemsManager.instance.getItemCtxById(warCore.item);
                 this.warCoreItem.use();
@@ -167,6 +148,7 @@ export default class WarCoreManager extends OBT_UIManager {
         randomIdxList.forEach((idx: number) => {
             let warCoreData: WarCoreInfo.AtkWarCoreAttr = copyObject(this.warCoreData.atk_war_core_def[pubAtkWarCoreList[idx]]);
             const itemId: string = warCoreData.item;
+            warCoreData.weaponCtx = WeaponManager.instance.getWeaponCtxById(warCoreData.weapon);
             if (itemId) {
                 warCoreData.itemCtx = ItemsManager.instance.getItemCtxById(itemId);
             }
@@ -182,10 +164,10 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     // 预选核心升级包列表
-    public getPreCheckUpgradePackList(): WarCoreInfo.WarCoreUpgradePack[] {
+    public getPreCheckUpgradePackList(): ItemBase[] {
         let upgradePool: string[] = this.atkWarCore.upgrade_pool;
         const MAX: number = 3;
-        let list: WarCoreInfo.WarCoreUpgradePack[] = [];
+        let list: ItemBase[] = [];
         let randomIdxList: number[] = [];
         if (upgradePool.length <= MAX) {
             upgradePool.forEach((_, idx: number) => {
@@ -196,7 +178,7 @@ export default class WarCoreManager extends OBT_UIManager {
         }
 
         randomIdxList.forEach((idx: number) => {
-            list.push(this.warCoreData.war_core_upgrade_pack_def[upgradePool[idx]]);
+            list.push(ItemsManager.instance.getItemCtxById(upgradePool[idx]));
         });
 
         return list;
@@ -289,7 +271,8 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     public getUpgradePackInfo(packId: string): WarCoreInfo.WarCoreUpgradePack {
-        return this.warCoreData.war_core_upgrade_pack_def[packId];
+        // return this.warCoreData.war_core_upgrade_pack_def[packId];
+        return null;
     }
 
     // TODO: 未用

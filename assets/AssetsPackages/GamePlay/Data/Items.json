@@ -2,7 +2,7 @@
     "desc": {
         "global": "道具全局分组, 1->商店道具 2->核心内置道具 3->核心升级包道具",
         "type": "道具类型 1->普通buff类 2->特殊类",
-        "group": "道具分组 1->普通 2->限制",
+        "group": "道具分组 1->普通 2->限制 3->核心升级",
         "max": "当group为limit(限制)时, 该属性生效"
     },
     "item_def": {
@@ -121,6 +121,32 @@
                     "value": 5
                 }
             ]
+        },
+
+        "Item_FightWithBothHands": {
+            "id": "Item_FightWithBothHands",
+            "global": 3,
+            "group": 1,
+            "label": "左右开弓",
+            "intro": "攻击的同时会朝反方向发射, 但火力会减半",
+            "type": 2,
+            "ico": "scatter",
+            "buff_list": [
+                {
+                    "prop": "range_dmg",
+                    "value": -5
+                }
+            ]
+        },
+        "Item_Blossom": {
+            "id": "Item_Blossom",
+            "global": 3,
+            "group": 1,
+            "label": "开花",
+            "intro": "散射攻击击败敌人时, 会生成3发飞弹, 造成<%calcDmg%>伤害",
+            "type": 2,
+            "ico": "scatter",
+            "bullet_": "CHR_Bullet003"
         }
     }
 }

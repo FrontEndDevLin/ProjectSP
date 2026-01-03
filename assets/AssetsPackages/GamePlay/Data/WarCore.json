@@ -11,32 +11,19 @@
         "BaseAtkWarCore": {
             "id": "BaseAtkWarCore",
             "name": "基础核心",
-            "intro": "基础攻击核心",
-            "atk_intro": "基础飞弹攻击",
             "icon_ui": "",
             "icon_gaming": "...",
-            "bullet": "CHR_Bullet001",
-            "range": 200,
-            "cd": 0.4,
-            "ctl": 10,
-            "ctl_dmg_rate": 1.5
+            "weapon": "Weapon_BaseAtkWarCore"
         },
         "ScatterAtkWarCore": {
             "id": "ScatterAtkWarCore",
             "name": "散射",
-            "intro": "散射攻击核心",
-            "atk_intro": "基础飞弹会分裂成<%split%>个",
             "icon_ui": "scatter",
             "icon_gaming": "...",
-            "bullet": "CHR_Bullet002",
-            "split": 3,
-            "range": 200,
-            "cd": 0.3,
-            "ctl": 1,
-            "ctl_dmg_rate": 1.5,
+            "weapon": "Weapon_ScatterAtkWarCore",
             "item": "Item_ScatterAtkWarCore",
             "upgrade_pool_": ["fightWithBothHands", "fightWithBothHands", "fullPower", "fullPower2"],
-            "upgrade_pool": ["blossom", "blossom", "fullPower"]
+            "upgrade_pool": ["Item_FightWithBothHands", "Item_FightWithBothHands", "Item_FightWithBothHands"]
         }
     },
     "pub_atk_war_core": ["ScatterAtkWarCore"],

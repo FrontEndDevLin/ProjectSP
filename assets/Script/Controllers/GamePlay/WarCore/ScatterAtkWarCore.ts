@@ -30,9 +30,8 @@ export class ScatterAtkWarCore extends OBT_Component {
     private _mirrorAttack: boolean = true;
 
     start() {
-        this.warCore = WarCoreManager.instance.realAtkWarCore;
+        this.warCore = WarCoreManager.instance.atkWarCore;
         this._initDomainCollider();
-        console.log(this.warCore)
     }
 
     protected onLoad(): void {
@@ -54,7 +53,7 @@ export class ScatterAtkWarCore extends OBT_Component {
             collider.on(Contact2DType.END_CONTACT, this._onCHRDomainEndContact, this);
         }
         // let { range, alert } = this.weaponPanel;
-        let range: number = this.warCore.range;
+        let range: number = this.warCore.weaponCtx.range;
         this._attackDomainCollider.radius = range;
         // this._alertDomainCollider.radius = (range + 2) * PIXEL_UNIT;
     }
@@ -159,7 +158,7 @@ export class ScatterAtkWarCore extends OBT_Component {
             }
 
             let angleList: number[] = [];
-            let split: number = this.warCore.split;
+            let split: number = this.warCore.weaponCtx.split;
             let splitAngle: number = 15;
             let min = -Math.floor(split / 2);
             let max = min + split;
@@ -192,7 +191,7 @@ export class ScatterAtkWarCore extends OBT_Component {
 
             angleList.forEach((angle: number) => {
                 let vector = getVectorByAngle(angle);
-                BulletManager.instance.createBullet(this.warCore.bullet, chrLoc, vector);
+                BulletManager.instance.createBullet(this.warCore.weaponCtx.bullet, chrLoc, vector);
             });
 
             // console.log(Vec3.angle(v3(1,0,0), {x: vecX, y: vecY, z: 0}));
@@ -201,7 +200,7 @@ export class ScatterAtkWarCore extends OBT_Component {
             // this._attacking = true;
 
             // 冷却结合攻击速度修正
-            this._cd = this.warCore.cd;
+            this._cd = this.warCore.weaponCtx.cd;
         });
     }
 

@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import ItemBase from '../../../Items/ItemBase';
+import ItemBase from '../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('ItemCard')

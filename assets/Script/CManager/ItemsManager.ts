@@ -6,9 +6,9 @@ import { copyObject, getRandomNumber } from "../Common/utils";
 import ProcessManager from "./ProcessManager";
 import OBT from "../OBT";
 import CHRManager from "./CHRManager";
-import { Item_def } from "../Items/Item_def";
-import ItemBase from "../Items/ItemBase";
-import ItemSpecial from "../Items/ItemSpecial";
+import { Item_def } from "../Controllers/GamePlay/Items/Item_def";
+import ItemBase from "../Controllers/GamePlay/Items/ItemBase";
+import ItemSpecial from "../Controllers/GamePlay/Items/ItemSpecial";
 
 interface GetRandomItemConfig {
     quality?: number,
@@ -314,7 +314,7 @@ export default class ItemsManager extends OBT_UIManager {
         }
     }
 
-    public getItemCtxById(id) {
+    public getItemCtxById(id): ItemBase {
         let item: ItemInfo.Item = this.getItemById(id);
         let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Base" : item.id;
         return new Item_def[scriptName](item);

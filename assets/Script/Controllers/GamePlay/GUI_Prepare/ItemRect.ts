@@ -5,7 +5,7 @@ import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
 import ItemsManager from '../../../CManager/ItemsManager';
-import ItemBase from '../../../Items/ItemBase';
+import ItemBase from '../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('ItemRect')

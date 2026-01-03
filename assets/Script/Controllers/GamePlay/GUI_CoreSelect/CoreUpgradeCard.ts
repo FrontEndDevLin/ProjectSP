@@ -9,11 +9,12 @@ import DamageManager from '../../../CManager/DamageManager';
 import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber } from '../../../Common/utils';
 import ItemsManager from '../../../CManager/ItemsManager';
+import ItemBase from '../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('CoreUpgradeCard')
 export class CoreUpgradeCard extends OBT_Component {
-    private _props: WarCoreInfo.WarCoreUpgradePack;
+    private _props: ItemBase;
 
     protected showProps: string[] = ["ctl", "cd", "range"];
 
@@ -29,54 +30,44 @@ export class CoreUpgradeCard extends OBT_Component {
 
     }
 
-    public updateView(props: WarCoreInfo.WarCoreUpgradePack) {
+    public updateView(props: ItemBase) {
         this._props = props;
 
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${props.icon_ui}`);
+        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${props.ico}`);
         this.view("Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = assets;
-        this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.name;
-  
-        let introRichTxt: string = props.atk_intro;
-        const regex = /<%([^%]+)%>/g;
-        const matches = introRichTxt.match(regex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];
-        if (matches.length) {
-            matches.forEach((key) => {
-                if (key === 'calcDmg') {
-                    // 如果有子弹id, 通过id向WarCoreManager获取基础伤害/加成/伤害等属性, 参考WarCoreManager.instance.getWarCoreRealAttr
-                    let dmgTxt: string = BulletManager.instance.getBulletRealDmgRichTxt(props.bullet);
-                    introRichTxt = introRichTxt.replace(`<%${key}%>`, dmgTxt);
-                } else {
-                    let val = props[key]
-                    introRichTxt = introRichTxt.replace(`<%${key}%>`, `<color=${COLOR.SUCCESS}>${val}</color>`);
-                }
-            })
-        }
-
-        this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
-
-        // let traits: string[] = props.traits;
-        // if (Array.isArray(traits) && traits.length) {
-        //     let traitRichTxt: string = "";
-        //     traits.forEach((trait: string, idx: number) => {
-        //         // traitRichTxt += ProcessManager.instance.traitCtrl.getTraitRichTxt(trait);
-        //         // if (idx !== traits.length - 1) {
-        //         //     traitRichTxt += "<br/>";
-        //         // }
-        //     });
-        //     this.view("Content/Trait").getComponent(RichText).string = traitRichTxt;
+        this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.label;
+        
+        // TODO: 2026.1.3
+        return;
+        // let introRichTxt: string = props.intro;
+        // const regex = /<%([^%]+)%>/g;
+        // const matches = introRichTxt.match(regex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];
+        // if (matches.length) {
+        //     matches.forEach((key) => {
+        //         if (key === 'calcDmg') {
+        //             // 如果有子弹id, 通过id向WarCoreManager获取基础伤害/加成/伤害等属性
+        //             let dmgTxt: string = BulletManager.instance.getBulletRealDmgRichTxt(props.bullet);
+        //             introRichTxt = introRichTxt.replace(`<%${key}%>`, dmgTxt);
+        //         } else {
+        //             let val = props[key]
+        //             introRichTxt = introRichTxt.replace(`<%${key}%>`, `<color=${COLOR.SUCCESS}>${val}</color>`);
+        //         }
+        //     })
         // }
 
-        let buffList: CHRInfo.Buff[] = props.buff_list;
-        if (Array.isArray(buffList) && buffList.length) {
-            let buffRichTxt: string = "";
-            buffList.forEach((buff: CHRInfo.Buff, idx: number) => {
-                buffRichTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
-                if (idx !== buffList.length - 1) {
-                    buffRichTxt += "<br/>"
-                }
-            });
-            this.view("Content/Buff").getComponent(RichText).string = buffRichTxt;
-        }
+        // this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
+
+        // let buffList: CHRInfo.Buff[] = props.buff_list;
+        // if (Array.isArray(buffList) && buffList.length) {
+        //     let buffRichTxt: string = "";
+        //     buffList.forEach((buff: CHRInfo.Buff, idx: number) => {
+        //         buffRichTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
+        //         if (idx !== buffList.length - 1) {
+        //             buffRichTxt += "<br/>"
+        //         }
+        //     });
+        //     this.view("Content/Buff").getComponent(RichText).string = buffRichTxt;
+        // }
     }
 
     // 获取伤害加成文本 实际伤害|[基础伤害+X%属性]

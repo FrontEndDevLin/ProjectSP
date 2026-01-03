@@ -14,6 +14,7 @@ import WarCoreManager from '../../CManager/WarCoreManager';
 import { CoreCard } from './GUI_CoreSelect/CoreCard';
 import { GUI_PropWrap } from './GUI_PropWrap';
 import { CoreUpgradeCard } from './GUI_CoreSelect/CoreUpgradeCard';
+import ItemBase from './Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_CoreUpgrade')
@@ -41,9 +42,8 @@ export class GUI_CoreUpgrade extends OBT_Component {
     private _initCoreCard() {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
 
-        const upgradePackList: WarCoreInfo.WarCoreUpgradePack[] = WarCoreManager.instance.getPreCheckUpgradePackList();
-
-        upgradePackList.forEach((upgradePack: WarCoreInfo.WarCoreUpgradePack, i) => {
+        const upgradePackList: ItemBase[] = WarCoreManager.instance.getPreCheckUpgradePackList();
+        upgradePackList.forEach((upgradePack: ItemBase, i) => {
             cardSlotList[i].removeAllChildren();
             const coreCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_CoreSelect/CoreUpgradeCard" });
             const coreCardCtx: CoreUpgradeCard = <CoreUpgradeCard>coreCard.getComponent("CoreUpgradeCard");

@@ -12,7 +12,7 @@ import ItemsManager from '../../CManager/ItemsManager';
 import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
 import WarCoreManager from '../../CManager/WarCoreManager';
 import { GUI_PropWrap } from './GUI_PropWrap';
-import ItemBase from '../../Items/ItemBase';
+import ItemBase from './Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -145,21 +145,22 @@ export class GUI_Prepare extends OBT_Component {
     }
     // 核心区升级包图标
     protected updateWarCoreUpgradeIcon() {
-        const slotList: Node[] = this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/UpgradeWrap").children;
-        slotList.forEach((slotNode: Node, i: number) => {
-            let packId: string = WarCoreManager.instance.upgradeSlot[i];
-            let assets: SpriteFrame;
-            if (packId) {
-                let packInfo: WarCoreInfo.WarCoreUpgradePack = WarCoreManager.instance.getUpgradePackInfo(packId);
-                let icon = packInfo.icon_ui;
-                assets = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${icon}`);
-            } else {
-                assets = OBT.instance.resourceManager.getSpriteFrameAssets(`GamePlay/lock-ico`);
-            }
-            slotNode.OBT_param1 = packId;
-            slotNode.OBT_param2 = i;
-            slotNode.children[0].getComponent(Sprite).spriteFrame = assets;
-        })
+        // TODO: 2026.1.3
+        // const slotList: Node[] = this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/UpgradeWrap").children;
+        // slotList.forEach((slotNode: Node, i: number) => {
+        //     let packId: string = WarCoreManager.instance.upgradeSlot[i];
+        //     let assets: SpriteFrame;
+        //     if (packId) {
+        //         let packInfo: WarCoreInfo.WarCoreUpgradePack = WarCoreManager.instance.getUpgradePackInfo(packId);
+        //         let icon = packInfo.icon_ui;
+        //         assets = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${icon}`);
+        //     } else {
+        //         assets = OBT.instance.resourceManager.getSpriteFrameAssets(`GamePlay/lock-ico`);
+        //     }
+        //     slotNode.OBT_param1 = packId;
+        //     slotNode.OBT_param2 = i;
+        //     slotNode.children[0].getComponent(Sprite).spriteFrame = assets;
+        // })
     }
     protected bindWarCoreTouchEvent() {
         this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot").on(Node.EventType.TOUCH_END, this._showAtkCorePreview, this);

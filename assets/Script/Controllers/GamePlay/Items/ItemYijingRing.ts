@@ -1,5 +1,5 @@
-import CHRManager from "../CManager/CHRManager";
-import { CHRInfo } from "../Common/Namespace";
+import CHRManager from "../../../CManager/CHRManager";
+import { CHRInfo } from "../../../Common/Namespace";
 import ItemSpecial from "./ItemSpecial";
 
 export default class ItemYijingRing extends ItemSpecial {
