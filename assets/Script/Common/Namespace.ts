@@ -193,7 +193,6 @@ export namespace WarCoreInfo {
         intro: string,
         icon_ui: string,
         icon_gaming: string,
-        bullet: string,
         item?: string,
         itemCtx?: ItemBase,
 
@@ -360,7 +359,8 @@ export namespace ItemInfo {
         lock: boolean,
         buff_list: CHRInfo.Buff[],
         val_1?: number,
-        val_2?: number
+        val_2?: number,
+        weapon?: string
     }
 
     export interface ItemMap {

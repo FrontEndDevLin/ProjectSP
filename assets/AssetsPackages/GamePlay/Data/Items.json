@@ -127,6 +127,7 @@
             "id": "Item_FightWithBothHands",
             "global": 3,
             "group": 1,
+            "weapon": "Weapon_ScatterAtkWarCore",
             "label": "左右开弓",
             "intro": "攻击的同时会朝反方向发射, 但火力会减半",
             "type": 2,

@@ -33,12 +33,22 @@ export class CoreUpgradeCard extends OBT_Component {
     public updateView(props: ItemBase) {
         this._props = props;
 
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${props.ico}`);
-        this.view("Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = assets;
+        this.view("Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = props.getAssets();
+
         this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.label;
         
         // TODO: 2026.1.3
-        return;
+
+        if (props.intro) {
+            this.view("Content/Intro").active = true;
+            this.view("Content/Intro").getComponent(RichText).string = props.getIntro();
+        }
+
+        let buffTxt: string = props.getBuffTxt();
+        if (buffTxt) {
+            this.view("Content/Buff").getComponent(RichText).string = buffTxt;
+        }
+        console.log(props)
         // let introRichTxt: string = props.intro;
         // const regex = /<%([^%]+)%>/g;
         // const matches = introRichTxt.match(regex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];

@@ -7,6 +7,8 @@ import CHRManager from "../../../CManager/CHRManager";
 import { CHRInfo, ItemInfo } from "../../../Common/Namespace";
 import { getDangerRichTxt, getSuccessRichTxt } from "../../../Common/utils";
 import OBT from "../../../OBT";
+import WeaponBase from "../Weapons/WeaponBase";
+import WeaponManager from "../../../CManager/WeaponManager";
 
 export default class ItemBase {
     public count: number = 0;
@@ -25,9 +27,14 @@ export default class ItemBase {
     public val_1: number;
     public val_2: number;
     public buff_list: CHRInfo.Buff[] = [];
+    public weapon: string;
+    public weaponCxt: WeaponBase;
 
     constructor(itemData: ItemInfo.Item) {
         Object.assign(this, itemData)
+        if (itemData.weapon) {
+            this.weaponCxt = WeaponManager.instance.getWeaponCtxById(itemData.weapon);
+        }
     }
 
     public getGroupTxt(): string {
