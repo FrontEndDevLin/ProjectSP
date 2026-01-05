@@ -57,8 +57,8 @@ export default class DamageManager extends OBT_UIManager {
         let realDamage: number = this.getBulletRealDamage(bulletId);
         let isCtitical: boolean = false;
         // 只有核心的bullet才能暴击
-        if (bulletId === WarCoreManager.instance.atkWarCore.bullet) {
-            let ctl: number = WarCoreManager.instance.realAtkWarCore.ctl;
+        if (bulletId === WarCoreManager.instance.warCore.weaponCtx.bullet) {
+            let ctl: number = WarCoreManager.instance.warCore.weaponCtx.ctl;
             if (ctl > 0) {
                 if (ctl >= 100) {
                     isCtitical = true;
@@ -67,7 +67,7 @@ export default class DamageManager extends OBT_UIManager {
                     isCtitical = num <= ctl;
                 }
                 if (isCtitical) {
-                    realDamage = realDamage * WarCoreManager.instance.realAtkWarCore.ctl_dmg_rate;
+                    realDamage = realDamage * WarCoreManager.instance.warCore.weaponCtx.ctl_dmg_rate;
                 }
             }
         }

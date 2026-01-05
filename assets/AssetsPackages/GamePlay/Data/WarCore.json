@@ -10,18 +10,33 @@
     "atk_war_core_def": {
         "BaseAtkWarCore": {
             "id": "BaseAtkWarCore",
-            "name": "基础核心",
-            "icon_ui": "",
-            "icon_gaming": "...",
+            "label": "基础核心",
+            "ico": "",
+            "ico_gaming": "...",
+            "global": 2,
+            "group": 1,
+            "intro": "发射基础飞弹进行攻击",
+            "type": 2,
             "weapon": "Weapon_BaseAtkWarCore"
         },
         "ScatterAtkWarCore": {
             "id": "ScatterAtkWarCore",
-            "name": "散射",
-            "icon_ui": "scatter",
-            "icon_gaming": "...",
+            "label": "散射",
+            "ico": "scatter",
+            "ico_gaming": "...",
+            "global": 2,
+            "group": 1,
+            "intro": "<~range_dmg,val_1~><br/>波次结束后<%val_2%><&spd&>",
+            "type": 2,
+            "val_1": 0.5,
+            "val_2": 1,
+            "buff_list": [
+                {
+                    "prop": "avd",
+                    "value": 5
+                }
+            ],
             "weapon": "Weapon_ScatterAtkWarCore",
-            "item": "Item_ScatterAtkWarCore",
             "upgrade_pool_": ["fightWithBothHands", "fightWithBothHands", "fullPower", "fullPower2"],
             "upgrade_pool": ["Item_FightWithBothHands", "Item_FightWithBothHands", "Item_FightWithBothHands"]
         }

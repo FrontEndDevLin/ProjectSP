@@ -28,12 +28,14 @@ export default class ItemBase {
     public val_2: number;
     public buff_list: CHRInfo.Buff[] = [];
     public weapon: string;
-    public weaponCxt: WeaponBase;
+    public weaponCtx: WeaponBase;
 
     constructor(itemData: ItemInfo.Item) {
-        Object.assign(this, itemData)
-        if (itemData.weapon) {
-            this.weaponCxt = WeaponManager.instance.getWeaponCtxById(itemData.weapon);
+        if (itemData) {
+            Object.assign(this, itemData)
+            if (itemData.weapon) {
+                this.weaponCtx = WeaponManager.instance.getWeaponCtxById(itemData.weapon);
+            }
         }
     }
 

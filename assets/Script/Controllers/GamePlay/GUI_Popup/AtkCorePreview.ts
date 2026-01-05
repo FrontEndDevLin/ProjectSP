@@ -1,10 +1,8 @@
 import { _decorator, Component, Label, Node, RichText } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { ItemInfo, WarCoreInfo } from '../../../Common/Namespace';
-import GUI_GamePlayManager from '../../../CManager/GUI_GamePlayManager';
-import { transportWorldPosition } from '../../../Common/utils';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import { CoreCard } from '../GUI_CoreSelect/CoreCard';
+import ItemWarCore from '../Items/ItemWarCore';
 const { ccclass, property } = _decorator;
 
 @ccclass('AtkCorePreview')
@@ -18,7 +16,7 @@ export class AtkCorePreview extends OBT_Component {
     }
 
     public showPreviewPopup() {
-        const warCore: WarCoreInfo.AtkWarCoreAttr = WarCoreManager.instance.atkWarCore;
+        const warCore: ItemWarCore = WarCoreManager.instance.warCore;
         const coreCardCtx: CoreCard = <CoreCard>this.view("CoreCard").getComponent("CoreCard");
         coreCardCtx.updateView(warCore);
 

@@ -8,11 +8,12 @@ import WarCoreManager from '../../../CManager/WarCoreManager';
 import DamageManager from '../../../CManager/DamageManager';
 import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber } from '../../../Common/utils';
+import ItemWarCore from '../Items/ItemWarCore';
 const { ccclass, property } = _decorator;
 
 @ccclass('CoreCard')
 export class CoreCard extends OBT_Component {
-    private _props: WarCoreInfo.AtkWarCoreAttr;
+    private _props: ItemWarCore;
 
     protected showProps: string[] = ["ctl", "cd", "range"];
 
@@ -28,25 +29,24 @@ export class CoreCard extends OBT_Component {
 
     }
 
-    public updateView(props: WarCoreInfo.AtkWarCoreAttr) {
+    public updateView(props: ItemWarCore) {
         this._props = props;
 
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${props.icon_ui}`);
-        this.view("Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = assets;
-        this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.name;
+        this.view("Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = props.getAssets();
+        this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.label;
 
         this.view("Content/Intro").getComponent(RichText).string = props.weaponCtx.getIntroRichTxt();
         this.view("Content/Attr").getComponent(RichText).string = props.weaponCtx.getPanelRichTxt();
 
-        if (props.itemCtx && props.itemCtx.intro) {
+        if (props.intro) {
             this.view("Content/Trait").active = true;
-            this.view("Content/Trait").getComponent(RichText).string = props.itemCtx.getIntro();
+            this.view("Content/Trait").getComponent(RichText).string = props.getIntro();
         } else {
             this.view("Content/Trait").active = false;
         }
 
-        if (props.itemCtx.buff_list && props.itemCtx.buff_list.length) {
-            this.view("Content/Buff").getComponent(RichText).string = props.itemCtx.getBuffTxt();
+        if (props.buff_list && props.buff_list.length) {
+            this.view("Content/Buff").getComponent(RichText).string = props.getBuffTxt();
         }
     }
 

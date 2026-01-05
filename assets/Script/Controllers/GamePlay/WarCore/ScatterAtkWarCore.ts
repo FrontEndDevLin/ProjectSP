@@ -7,6 +7,7 @@ import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber, getVectorByAngle } from '../../../Common/utils';
 import ProcessManager from '../../../CManager/ProcessManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
+import ItemWarCore from '../Items/ItemWarCore';
 const { ccclass, property } = _decorator;
 
 /**
@@ -25,12 +26,12 @@ export class ScatterAtkWarCore extends OBT_Component {
 
     private _cd: number = 0;
 
-    protected warCore: WarCoreInfo.AtkWarCoreAttr;
+    protected warCore: ItemWarCore;
 
     private _mirrorAttack: boolean = true;
 
     start() {
-        this.warCore = WarCoreManager.instance.atkWarCore;
+        this.warCore = WarCoreManager.instance.warCore;
         this._initDomainCollider();
     }
 

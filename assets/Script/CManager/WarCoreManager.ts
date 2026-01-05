@@ -15,6 +15,7 @@ import ItemBase from '../Controllers/GamePlay/Items/ItemBase';
 import WeaponBase from '../Controllers/GamePlay/Weapons/WeaponBase';
 import { Weapon_def } from '../Controllers/GamePlay/Weapons/Weapon_def';
 import WeaponManager from './WeaponManager';
+import ItemWarCore from '../Controllers/GamePlay/Items/ItemWarCore';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -24,6 +25,7 @@ export default class WarCoreManager extends OBT_UIManager {
 
     public warCoreData: WarCoreInfo.WarCoreDBData;
 
+    public warCore: ItemWarCore = null;
     public atkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
     public realAtkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
     public warCoreItem: ItemBase = null;
@@ -82,21 +84,20 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     private _setAtkWarCore(atkWarCoreId: string) {
-        const warCore: WarCoreInfo.AtkWarCoreAttr = this.warCoreData.atk_war_core_def[atkWarCoreId];
+        const warCore: WarCoreInfo.WarCore = this.warCoreData.atk_war_core_def[atkWarCoreId];
         if (warCore) {
-            // return console.log(warCore.weapon)
-            this.atkWarCore = warCore;
+            this.warCore = new ItemWarCore(warCore)
             if (warCore.weapon) {
-                this.warCoreWeapon = WeaponManager.instance.getWeaponCtxById(warCore.weapon);
-                this.atkWarCore.weaponCtx = this.warCoreWeapon;
+                // this.warCoreWeapon = WeaponManager.instance.getWeaponCtxById(warCore.weapon);
+                // this.atkWarCore.weaponCtx = this.warCoreWeapon;
                 // console.log(this.warCoreWeapon)
+                this.warCoreWeapon = this.warCore.weaponCtx;
                 this.updateRealAtkWarCore();
             }
-            if (warCore.item) {
-                this.warCoreItem = ItemsManager.instance.getItemCtxById(warCore.item);
-                this.warCoreItem.use();
-                this.atkWarCore.itemCtx = this.warCoreItem;
-            }
+            this.warCore.use();
+            // this.warCoreItem = ItemsManager.instance.getItemCtxById(warCore.item);
+            // this.warCoreItem.use();
+            // this.atkWarCore.itemCtx = this.warCoreItem;
 
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
             this.showPrefab({ prefabPath: `WarCore/${warCore.id}`, parentNode: this.warCoreRootNode, scriptName: warCore.id });
@@ -132,10 +133,10 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     // 预选进攻核心列表
-    public getPreCheckAtkWarCoreList(): WarCoreInfo.AtkWarCoreAttr[] {
+    public getPreCheckAtkWarCoreList(): ItemWarCore[] {
         let pubAtkWarCoreList: string[] = this.warCoreData.pub_atk_war_core;
         const MAX: number = 3;
-        let list: WarCoreInfo.AtkWarCoreAttr[] = [];
+        let list: ItemWarCore[] = [];
         let randomIdxList = [];
         if (pubAtkWarCoreList.length <= MAX) {
             pubAtkWarCoreList.forEach((_, idx: number) => {
@@ -146,13 +147,14 @@ export default class WarCoreManager extends OBT_UIManager {
         }
 
         randomIdxList.forEach((idx: number) => {
-            let warCoreData: WarCoreInfo.AtkWarCoreAttr = copyObject(this.warCoreData.atk_war_core_def[pubAtkWarCoreList[idx]]);
-            const itemId: string = warCoreData.item;
-            warCoreData.weaponCtx = WeaponManager.instance.getWeaponCtxById(warCoreData.weapon);
-            if (itemId) {
-                warCoreData.itemCtx = ItemsManager.instance.getItemCtxById(itemId);
-            }
-            list.push(warCoreData);
+            let warCoreData: WarCoreInfo.WarCore = copyObject(this.warCoreData.atk_war_core_def[pubAtkWarCoreList[idx]]);
+            let warCoreCtx: ItemWarCore = new ItemWarCore(warCoreData);
+            // const itemId: string = warCoreData.item;
+            // warCoreData.weaponCtx = WeaponManager.instance.getWeaponCtxById(warCoreData.weapon);
+            // if (itemId) {
+            //     warCoreData.itemCtx = ItemsManager.instance.getItemCtxById(itemId);
+            // }
+            list.push(warCoreCtx);
         });
 
         return list;
@@ -165,7 +167,7 @@ export default class WarCoreManager extends OBT_UIManager {
 
     // 预选核心升级包列表
     public getPreCheckUpgradePackList(): ItemBase[] {
-        let upgradePool: string[] = this.atkWarCore.upgrade_pool;
+        let upgradePool: string[] = this.warCore.upgrade_pool;
         const MAX: number = 3;
         let list: ItemBase[] = [];
         let randomIdxList: number[] = [];

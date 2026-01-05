@@ -13,6 +13,7 @@ import { getRandomNumber } from '../../Common/utils';
 import WarCoreManager from '../../CManager/WarCoreManager';
 import { CoreCard } from './GUI_CoreSelect/CoreCard';
 import { GUI_PropWrap } from './GUI_PropWrap';
+import ItemWarCore from './Items/ItemWarCore';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_CoreSelect')
@@ -40,15 +41,15 @@ export class GUI_CoreSelect extends OBT_Component {
     private _initCoreCard() {
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
 
-        const atkWarCoreList: WarCoreInfo.AtkWarCoreAttr[] = WarCoreManager.instance.getPreCheckAtkWarCoreList();
-        atkWarCoreList.push(atkWarCoreList[0])
-        atkWarCoreList.push(atkWarCoreList[0])
+        const warCoreList: ItemWarCore[] = WarCoreManager.instance.getPreCheckAtkWarCoreList();
+        warCoreList.push(warCoreList[0])
+        warCoreList.push(warCoreList[0])
 
-        atkWarCoreList.forEach((atkWarCore: WarCoreInfo.AtkWarCoreAttr, i) => {
+        warCoreList.forEach((itemWarCore: ItemWarCore, i) => {
             cardSlotList[i].removeAllChildren();
             const coreCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_CoreSelect/CoreCard" });
             const coreCardCtx: CoreCard = <CoreCard>coreCard.getComponent("CoreCard");
-            coreCardCtx.updateView(atkWarCore);
+            coreCardCtx.updateView(itemWarCore);
             OBT.instance.uiManager.mountNode({ node: coreCard, parentNode: cardSlotList[i] });
         })
     }

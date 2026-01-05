@@ -13,6 +13,7 @@ import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
 import WarCoreManager from '../../CManager/WarCoreManager';
 import { GUI_PropWrap } from './GUI_PropWrap';
 import ItemBase from './Items/ItemBase';
+import ItemWarCore from './Items/ItemWarCore';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -139,9 +140,13 @@ export class GUI_Prepare extends OBT_Component {
 
     // 核心区主核心图标
     protected updateAtkWarCoreIcon() {
-        const warCore: WarCoreInfo.AtkWarCoreAttr = WarCoreManager.instance.atkWarCore;
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${warCore.icon_ui}`);
+        const warCore: ItemWarCore = WarCoreManager.instance.warCore;
+        let assets: SpriteFrame = warCore.getAssets();
         this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
+
+        // const warCore: WarCoreInfo.AtkWarCoreAttr = WarCoreManager.instance.atkWarCore;
+        // let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${warCore.icon_ui}`);
+        // this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
     }
     // 核心区升级包图标
     protected updateWarCoreUpgradeIcon() {

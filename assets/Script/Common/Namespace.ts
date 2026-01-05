@@ -187,6 +187,14 @@ export namespace GameConfigInfo {
 }
 
 export namespace WarCoreInfo {
+    export interface WarCore extends ItemInfo.Item {
+        ico_gaming: string,
+        upgrade_pool: string[]
+    }
+    export interface WarCoreMap {
+        [warCoreId: string]: WarCore
+    }
+
     export interface AtkWarCoreAttr {
         id: string,
         name: string,
@@ -217,7 +225,7 @@ export namespace WarCoreInfo {
     }
 
     export interface WarCoreDBData {
-        atk_war_core_def: AtkWarCoreMap,
+        atk_war_core_def: WarCoreMap,
         pub_atk_war_core: string[]
     }
 }
