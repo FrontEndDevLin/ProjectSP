@@ -148,7 +148,9 @@ export default class WarCoreManager extends OBT_UIManager {
 
         randomIdxList.forEach((idx: number) => {
             let warCoreData: WarCoreInfo.WarCore = copyObject(this.warCoreData.atk_war_core_def[pubAtkWarCoreList[idx]]);
-            let warCoreCtx: ItemWarCore = new ItemWarCore(warCoreData);
+
+            let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? 'ItemWarCore' : warCoreData.id;
+            let warCoreCtx: ItemWarCore = new Item_def[warScriptName](warCoreData);
             // const itemId: string = warCoreData.item;
             // warCoreData.weaponCtx = WeaponManager.instance.getWeaponCtxById(warCoreData.weapon);
             // if (itemId) {

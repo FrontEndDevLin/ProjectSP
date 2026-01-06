@@ -16,7 +16,7 @@
             "global": 2,
             "group": 1,
             "intro": "发射基础飞弹进行攻击",
-            "type": 2,
+            "type": 1,
             "weapon": "Weapon_BaseAtkWarCore"
         },
         "ScatterAtkWarCore": {
