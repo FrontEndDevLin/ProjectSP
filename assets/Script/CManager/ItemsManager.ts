@@ -69,11 +69,11 @@ export default class ItemsManager extends OBT_UIManager {
         return this.backpack.filter((item: ItemBase) => item.global === ItemInfo.Global.ITEM);
     }
 
-    // 波次通过
+    // 实时事件触发道具效果
     public onRealTimeEvent(eventName: string) {
         this.backpack.forEach((item: ItemBase) => {
             switch (eventName) {
-                case 'onPassWave': {
+                case "onPassWave": {
                     if (item instanceof ItemSpecial) {
                         if (item.onPassWave) {
                             item.onPassWave()

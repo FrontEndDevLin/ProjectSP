@@ -150,7 +150,7 @@ export default class ItemBase {
         this.count++;
         // 将道具中的buff应用上
         if (this.buff_list.length) {
-            return CHRManager.instance.upgradePropByBuff(this.buff_list);
+            CHRManager.instance.upgradePropByBuff(this.buff_list);
         }
 
         this.onUse();

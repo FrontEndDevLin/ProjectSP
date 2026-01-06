@@ -28,7 +28,10 @@ export class ScatterAtkWarCore extends OBT_Component {
 
     protected warCore: ItemWarCore;
 
+    // TODO: 作废
     private _mirrorAttack: boolean = true;
+    // 新增, 在装备"左右开弓"时, 提升该属性的概率
+    private _mirrorAttackRate: number = 0;
 
     start() {
         this.warCore = WarCoreManager.instance.warCore;
@@ -188,6 +191,11 @@ export class ScatterAtkWarCore extends OBT_Component {
                     })
                     angleList = angleList.concat(mirrorAngleList);
                 }
+            }
+
+            // 新增
+            if (this._mirrorAttackRate > 0) {
+
             }
 
             angleList.forEach((angle: number) => {

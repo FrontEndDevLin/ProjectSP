@@ -26,8 +26,6 @@ export default class WarCoreManager extends OBT_UIManager {
     public warCoreData: WarCoreInfo.WarCoreDBData;
 
     public warCore: ItemWarCore = null;
-    public atkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
-    public realAtkWarCore: WarCoreInfo.AtkWarCoreAttr = null;
     public warCoreItem: ItemBase = null;
     public warCoreWeapon: WeaponBase = null;
 
@@ -71,6 +69,17 @@ export default class WarCoreManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this.onPickupTrophy, this);
     }
 
+    // 实时事件触发道具效果
+    public onRealTimeEvent(eventName: string) {
+        switch (eventName) {
+            case "onPassWave": {
+                if (this.warCore.onPassWave) {
+                    this.warCore.onPassWave()
+                }
+            } break;
+        }
+    }
+
     /**
      * 结合角色当前属性, 更新当前核心的面板属性
      * 实际就是更新当前武器的面板
@@ -84,10 +93,10 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     private _setAtkWarCore(atkWarCoreId: string) {
-        const warCore: WarCoreInfo.WarCore = this.warCoreData.atk_war_core_def[atkWarCoreId];
-        if (warCore) {
-            this.warCore = new ItemWarCore(warCore)
-            if (warCore.weapon) {
+        const warCoreData: WarCoreInfo.WarCore = this.warCoreData.atk_war_core_def[atkWarCoreId];
+        if (warCoreData) {
+            this.warCore = this.getWarCoreCtxById(warCoreData.id);
+            if (this.warCore.weapon) {
                 // this.warCoreWeapon = WeaponManager.instance.getWeaponCtxById(warCore.weapon);
                 // this.atkWarCore.weaponCtx = this.warCoreWeapon;
                 // console.log(this.warCoreWeapon)
@@ -100,7 +109,7 @@ export default class WarCoreManager extends OBT_UIManager {
             // this.atkWarCore.itemCtx = this.warCoreItem;
 
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
-            this.showPrefab({ prefabPath: `WarCore/${warCore.id}`, parentNode: this.warCoreRootNode, scriptName: warCore.id });
+            this.showPrefab({ prefabPath: `WarCore/${this.warCore.id}`, parentNode: this.warCoreRootNode, scriptName: this.warCore.id });
         }
     }
 
@@ -116,7 +125,7 @@ export default class WarCoreManager extends OBT_UIManager {
 
     // 仅限核心选择时调用
     public mountAtkWarCore(atkWarCoreId: string) {
-        if (this.atkWarCore) {
+        if (this.warCore) {
             console.log('当前已有挂载攻击核心，需要先卸载');
             this.unmountAtkWarCore();
         }
@@ -127,9 +136,8 @@ export default class WarCoreManager extends OBT_UIManager {
     }
     // 卸载当前核心，卸载时，如当前核心有增益类buff，角色属性等值减去所有增益属性
     protected unmountAtkWarCore() {
-        this.warCoreRootNode.getChildByName(this.atkWarCore.id).destroy();
-        this.atkWarCore = null;
-        this.realAtkWarCore = null;
+        this.warCoreRootNode.getChildByName(this.warCore.id).destroy();
+        this.warCore = null;
     }
 
     // 预选进攻核心列表
@@ -147,10 +155,9 @@ export default class WarCoreManager extends OBT_UIManager {
         }
 
         randomIdxList.forEach((idx: number) => {
-            let warCoreData: WarCoreInfo.WarCore = copyObject(this.warCoreData.atk_war_core_def[pubAtkWarCoreList[idx]]);
+            let warCoreId: string = pubAtkWarCoreList[idx];
 
-            let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? 'ItemWarCore' : warCoreData.id;
-            let warCoreCtx: ItemWarCore = new Item_def[warScriptName](warCoreData);
+            let warCoreCtx: ItemWarCore = this.getWarCoreCtxById(warCoreId);
             // const itemId: string = warCoreData.item;
             // warCoreData.weaponCtx = WeaponManager.instance.getWeaponCtxById(warCoreData.weapon);
             // if (itemId) {
@@ -160,6 +167,12 @@ export default class WarCoreManager extends OBT_UIManager {
         });
 
         return list;
+    }
+
+    public getWarCoreCtxById(warCoreId: string): ItemWarCore {
+        let warCoreData: WarCoreInfo.WarCore = this.warCoreData.atk_war_core_def[warCoreId];
+        let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? "Item_WarCore" : "Item_" + warCoreData.id;
+        return new Item_def[warScriptName](warCoreData);
     }
 
     // 获取是否已解锁核心升级
