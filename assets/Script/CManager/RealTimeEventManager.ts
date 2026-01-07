@@ -27,4 +27,9 @@ export default class RealTimeEventManager extends OBT_UIManager {
         ItemsManager.instance.onRealTimeEvent('onPassWave')
         WarCoreManager.instance.onRealTimeEvent('onPassWave')
     }
+
+    // 敌人死亡触发
+    public onEnemyDie() {
+        
+    }
 }

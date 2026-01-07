@@ -1,13 +1,14 @@
 import { _decorator, BoxCollider2D, CircleCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { EMYInfo, GameCollider, WarCoreInfo  } from '../../../Common/Namespace';
+import { EMYInfo, GameCollider, GamePlayEvent, WarCoreInfo  } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import BulletManager from '../../../CManager/BulletManager';
-import { getFloatNumber, getVectorByAngle } from '../../../Common/utils';
+import { getFloatNumber, getRandomNumber, getVectorByAngle } from '../../../Common/utils';
 import ProcessManager from '../../../CManager/ProcessManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import ItemWarCore from '../Items/ItemWarCore';
+import OBT from '../../../OBT';
 const { ccclass, property } = _decorator;
 
 /**
@@ -170,20 +171,19 @@ export class ScatterAtkWarCore extends OBT_Component {
                 angleList.push(angle + splitAngle * i);
             }
 
-            // 拥有左右开弓强化包数量
-            let fightWithBothHandsPackCnt: number = WarCoreManager.instance.getUpgradePackCnt("fightWithBothHands");
-            if (fightWithBothHandsPackCnt) {
+            // 左右开弓概率攻击
+            let mirrorAttackRate: number = WarCoreManager.instance.warCore.getProp("mirrorAttackRate");
+            if (mirrorAttackRate && mirrorAttackRate > 0) {
+                let mirrorAttackRateNum = mirrorAttackRate * 100;
                 let mirrorAttack: boolean = false;
-                // 如果只有一个强化包, 间隔攻击
-                if (fightWithBothHandsPackCnt === 1) {
-                    if (this._mirrorAttack) {
+                if (mirrorAttackRateNum >= 100) {
+                    mirrorAttack = true;
+                } else {
+                    let randomNum: number = getRandomNumber(1, 100);
+                    if (randomNum <= mirrorAttackRateNum) {
                         mirrorAttack = true;
                     }
-                    this._mirrorAttack = !this._mirrorAttack;
-                } else {
-                    mirrorAttack = true;
                 }
-
                 if (mirrorAttack) {
                     let mirrorAngleList = []
                     angleList.forEach((angle: number) => {
@@ -191,11 +191,6 @@ export class ScatterAtkWarCore extends OBT_Component {
                     })
                     angleList = angleList.concat(mirrorAngleList);
                 }
-            }
-
-            // 新增
-            if (this._mirrorAttackRate > 0) {
-
             }
 
             angleList.forEach((angle: number) => {

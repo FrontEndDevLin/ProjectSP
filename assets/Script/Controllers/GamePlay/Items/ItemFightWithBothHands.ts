@@ -1,18 +1,13 @@
-import CHRManager from "../../../CManager/CHRManager";
-import Profit from "../../../CManager/Class/Profit";
-import { CHRInfo } from "../../../Common/Namespace";
-import { getFloatNumber } from "../../../Common/utils";
+import WarCoreManager from "../../../CManager/WarCoreManager";
 import ItemSpecial from "./ItemSpecial";
 
+/**
+ * "左右开弓"核心升级包
+ */
 export default class ItemFightWithBothHands extends ItemSpecial {
-    public onPassWave(): void {
-        // console.log('敌袭结束 +1%移动速度')
-    }
-
     public onUse() {
-        // console.log
-        // let value: number = this.val_1;
-        // let newValue: number = getFloatNumber(Profit.range_dmg + value, 2);
-        // Profit.setProfit({ range_dmg: newValue });
+        let rate = WarCoreManager.instance.warCore.getProp("mirrorAttackRate");
+        let newRate = rate ? rate + this.val_1 : this.val_1;
+        WarCoreManager.instance.warCore.setProp("mirrorAttackRate", newRate);
     }
 }

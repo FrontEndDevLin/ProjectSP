@@ -107,31 +107,15 @@
             "val_1": 3
         },
 
-        "Item_ScatterAtkWarCore": {
-            "id": "Item_ScatterAtkWarCore",
-            "global": 2,
-            "group": 1,
-            "intro": "<~range_dmg,val_1~><br/>波次结束后<%val_2%><&spd&>",
-            "type": 2,
-            "val_1": 0.5,
-            "val_2": 1,
-            "buff_list": [
-                {
-                    "prop": "avd",
-                    "value": 5
-                }
-            ]
-        },
-
         "Item_FightWithBothHands": {
             "id": "Item_FightWithBothHands",
             "global": 3,
             "group": 1,
-            "weapon": "Weapon_ScatterAtkWarCore",
             "label": "左右开弓",
-            "intro": "攻击的同时会朝反方向发射, 但火力会减半",
+            "intro": "有<%val_1%>%概率朝相反方向发射飞弹",
             "type": 2,
             "ico": "scatter",
+            "val_1": 50,
             "buff_list": [
                 {
                     "prop": "range_dmg",

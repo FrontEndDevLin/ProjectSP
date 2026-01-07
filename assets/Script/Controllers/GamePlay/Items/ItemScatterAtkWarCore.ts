@@ -3,6 +3,8 @@ import { getFloatNumber } from "../../../Common/utils";
 import ItemWarCore from "./ItemWarCore";
 
 export default class ItemScatterAtkWarCore extends ItemWarCore {
+    public mirrorAttackRate: number = 0;
+
     public onPassWave(): void {
         console.log('敌袭结束 +1%移动速度')
     }

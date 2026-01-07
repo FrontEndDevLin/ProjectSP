@@ -59,6 +59,16 @@ export default class ItemBase {
         return OBT.instance.resourceManager.getSpriteFrameAssets(`Item/${this.ico}`);
     }
 
+    public getProp(propKey: string): any {
+        return this[propKey];
+    }
+
+    public setProp(propKey: string, value: any) {
+        if (this[propKey]) {
+            this[propKey] = value;
+        }
+    }
+
     // 道具介绍
     public getIntro() {
         let intro = this.intro;

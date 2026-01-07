@@ -96,6 +96,10 @@ export namespace GamePlayEvent {
     export enum PROFIT {
         PROFIT_CHANGE = 150
     }
+
+    export enum ITEM_EVENT {
+        UPGRADE_MIRROR_ATK_RATE
+    }
 }
 
 export interface SaveDoc {

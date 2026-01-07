@@ -7,6 +7,7 @@ import ProcessManager from '../../../CManager/ProcessManager';
 import { copyObject, getAngleByVector, getRandomNumber, getVectorByAngle } from '../../../Common/utils';
 import DropItemManager from '../../../CManager/DropItemManager';
 import DamageManager from '../../../CManager/DamageManager';
+import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EMY_Base')
@@ -132,11 +133,18 @@ export class EMY_Base extends OBT_Component {
                 if (damageAttr.isCtitical) {
                     console.log('触发暴击，伤害为' + damageAttr.dmg)
                 }
+                if (damageAttr.dmg <= 0) {
+                    return;
+                }
                 this.props.hp -= damageAttr.dmg;
 
                 this.onHpReduce();
 
                 // DamageManager.instance.showDamageTxt(realDamage, this.node.position);
+                /**
+                 * 敌人被击杀, 应当把击杀子弹, 子弹方向, 受到伤害等属性记录返回
+                 */
+
                 if (this.props.hp <= 0) {
                     this.die();
                 } else {
@@ -147,7 +155,7 @@ export class EMY_Base extends OBT_Component {
             // case GP_GROUP.CHARACTER: {
             //     console.log('击中角色')
             // } break;
-        } 
+        }
     }
 
     // 闪烁图形, 可以重写
@@ -298,7 +306,13 @@ export class EMY_Base extends OBT_Component {
         EMYManager.instance.updateEnemy(this.id, { alive: 1, dis, x, y });
     }
 
-    protected onDie() {}
+    protected onDie(bulletId?: string) {
+        // RealTimeEventManager.instance.
+    }
+
+    protected onDieEvent() {
+
+    }
 
     public die() {
         this.alive = false;
