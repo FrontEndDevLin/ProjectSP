@@ -327,7 +327,8 @@
             "desc": "普通2+冲锋1+远程1",
             "wave_type": 1,
             "max_emy": 80,
-            "duration": 40,
+            "duration_": 40,
+            "duration": 4,
             "preload": {
                 "alert": 20,
                 "exp": 20,

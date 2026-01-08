@@ -115,18 +115,14 @@ export class GUI_GamePlay extends OBT_Component {
         if (!isUnlockWarCore) {
             return;
         }
-        let iconUi: string = WarCoreManager.instance.atkWarCore.icon_ui;
-        if (!iconUi) {
-            return;
-        }
-        let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${iconUi}`);
+        let assets: SpriteFrame = WarCoreManager.instance.warCore.getAssets();
         this.view("CoreInfo/Top/CoreWrap/CorePic").getComponent(Sprite).spriteFrame = assets;
 
         let coreLevel: number = WarCoreManager.instance.coreLevel;
         if (coreLevel) {
             this.view("CoreInfo/Top/Reinforce").getComponent(Label).string = `+${coreLevel}`;
             this.view("CoreInfo/Top/Reinforce").active = true;
-        } 
+        }
     }
     
     // 核心经验进度

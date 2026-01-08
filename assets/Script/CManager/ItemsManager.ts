@@ -70,16 +70,10 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     // 实时事件触发道具效果
-    public onRealTimeEvent(eventName: string) {
+    public onRealTimeEvent(eventName: string, params?: any) {
         this.backpack.forEach((item: ItemBase) => {
-            switch (eventName) {
-                case "onPassWave": {
-                    if (item instanceof ItemSpecial) {
-                        if (item.onPassWave) {
-                            item.onPassWave()
-                        }
-                    }
-                } break;
+            if (item[eventName] && typeof item[eventName] === "function") {
+                item[eventName](params);
             }
         })
     }

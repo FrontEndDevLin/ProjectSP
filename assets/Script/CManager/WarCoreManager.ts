@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, CHRInfo, Common, GamePlayEvent, ItemInfo, MAX_WAR_CORE_LEVEL, WarCoreInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, CHRInfo, Common, GamePlayEvent, GamePlayEventOptions, ItemInfo, MAX_WAR_CORE_LEVEL, WarCoreInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { copyObject, getFloatNumber, getRandomNumbers } from '../Common/utils';
@@ -16,6 +16,7 @@ import WeaponBase from '../Controllers/GamePlay/Weapons/WeaponBase';
 import { Weapon_def } from '../Controllers/GamePlay/Weapons/Weapon_def';
 import WeaponManager from './WeaponManager';
 import ItemWarCore from '../Controllers/GamePlay/Items/ItemWarCore';
+import ItemSpecial from '../Controllers/GamePlay/Items/ItemSpecial';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -46,6 +47,7 @@ export default class WarCoreManager extends OBT_UIManager {
 
     // 升级槽
     public upgradeSlot: string[] = [];
+    public upgradeBackpack: ItemBase[] = [];
     public upgradeSlotMap: Common.SimpleObj = {};
     // 当前预览升级核心包
     protected currentPreviewPackId: string = "";
@@ -69,15 +71,17 @@ export default class WarCoreManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this.onPickupTrophy, this);
     }
 
-    // 实时事件触发道具效果
-    public onRealTimeEvent(eventName: string) {
-        switch (eventName) {
-            case "onPassWave": {
-                if (this.warCore.onPassWave) {
-                    this.warCore.onPassWave()
-                }
-            } break;
+    // 实时事件触发核心/道具效果
+    public onRealTimeEvent(eventName: string, params?) {
+        if (this.warCore[eventName] && typeof this.warCore[eventName] === "function") {
+            this.warCore[eventName](params);
         }
+
+        this.upgradeBackpack.forEach((upgradeItem: ItemBase) => {
+            if (upgradeItem[eventName] && typeof upgradeItem[eventName] === "function") {
+                upgradeItem[eventName](params);
+            }
+        })
     }
 
     /**
@@ -158,11 +162,6 @@ export default class WarCoreManager extends OBT_UIManager {
             let warCoreId: string = pubAtkWarCoreList[idx];
 
             let warCoreCtx: ItemWarCore = this.getWarCoreCtxById(warCoreId);
-            // const itemId: string = warCoreData.item;
-            // warCoreData.weaponCtx = WeaponManager.instance.getWeaponCtxById(warCoreData.weapon);
-            // if (itemId) {
-            //     warCoreData.itemCtx = ItemsManager.instance.getItemCtxById(itemId);
-            // }
             list.push(warCoreCtx);
         });
 
@@ -265,17 +264,22 @@ export default class WarCoreManager extends OBT_UIManager {
         if (this.upgradeSlot.length >= 3) {
             return;
         }
-        const upgradePack: WarCoreInfo.WarCoreUpgradePack = this.getUpgradePackInfo(packId);
+        // const upgradePack: WarCoreInfo.WarCoreUpgradePack = this.getUpgradePackInfo(packId);
         // TODO: do sth...
-
-        this.upgradeSlot.push(packId);
-        if (this.upgradeSlotMap[packId]) {
-            this.upgradeSlotMap[packId]++;
-        } else {
-            this.upgradeSlotMap[packId] = 1;
+        const upgradePack: ItemBase = ItemsManager.instance.getItemCtxById(packId);
+        if (upgradePack) {
+            this.upgradeSlot.push(packId);
+            upgradePack.use();
+            this.upgradeBackpack.push(upgradePack);
+            if (this.upgradeSlotMap[packId]) {
+                this.upgradeSlotMap[packId]++;
+            } else {
+                this.upgradeSlotMap[packId] = 1;
+            }
+    
+            this.coreLevel++;
         }
 
-        this.coreLevel++;
         // 挂载完后通知
         ItemsManager.instance.expendTrophy();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_FINISH);

@@ -61,6 +61,10 @@ export class Bullet extends OBT_Component {
         if (attr.type === "EMY_bullet" && enemyId) {
             this.node.OBT_param1 = enemyId;
         }
+
+        this.node.OBT_param2 = {
+            vector
+        }
     }
 
     private _die() {

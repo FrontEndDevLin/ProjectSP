@@ -97,8 +97,16 @@ export namespace GamePlayEvent {
         PROFIT_CHANGE = 150
     }
 
-    export enum ITEM_EVENT {
-        UPGRADE_MIRROR_ATK_RATE
+    // export enum ITEM_EVENT {
+    //     UPGRADE_MIRROR_ATK_RATE
+    // }
+}
+
+export namespace GamePlayEventOptions {
+    export interface EnemyDieParams {
+        vector: Vec3,
+        bullet: string,
+        dmg: number
     }
 }
 

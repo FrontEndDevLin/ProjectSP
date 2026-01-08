@@ -2,7 +2,7 @@
  * 核心道具类
  */
 import WeaponManager from "../../../CManager/WeaponManager";
-import { WarCoreInfo } from "../../../Common/Namespace";
+import { GamePlayEventOptions, WarCoreInfo } from "../../../Common/Namespace";
 import ItemSpecial from "./ItemSpecial";
 
 export default class ItemWarCore extends ItemSpecial {
@@ -19,5 +19,5 @@ export default class ItemWarCore extends ItemSpecial {
 
     public onPassWave() {};
 
-    public onEmenyDie() {};
+    public onEmenyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
 }

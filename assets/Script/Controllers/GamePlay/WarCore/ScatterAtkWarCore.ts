@@ -174,13 +174,12 @@ export class ScatterAtkWarCore extends OBT_Component {
             // 左右开弓概率攻击
             let mirrorAttackRate: number = WarCoreManager.instance.warCore.getProp("mirrorAttackRate");
             if (mirrorAttackRate && mirrorAttackRate > 0) {
-                let mirrorAttackRateNum = mirrorAttackRate * 100;
                 let mirrorAttack: boolean = false;
-                if (mirrorAttackRateNum >= 100) {
+                if (mirrorAttackRate >= 100) {
                     mirrorAttack = true;
                 } else {
                     let randomNum: number = getRandomNumber(1, 100);
-                    if (randomNum <= mirrorAttackRateNum) {
+                    if (randomNum <= mirrorAttackRate) {
                         mirrorAttack = true;
                     }
                 }

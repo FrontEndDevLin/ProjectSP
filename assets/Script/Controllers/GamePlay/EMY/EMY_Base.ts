@@ -1,6 +1,6 @@
 import { _decorator, BoxCollider2D, Color, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { DamageInfo, EMYInfo, FLASH_TIME, GameCollider } from '../../../Common/Namespace';
+import { DamageInfo, EMYInfo, FLASH_TIME, GameCollider, GamePlayEventOptions } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
@@ -130,13 +130,14 @@ export class EMY_Base extends OBT_Component {
                 let bulletId: string = otherCollider.node.name;
                 let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate);
                 // damageAttr.isCtitical // 暴击
+                let dmg = damageAttr.dmg;
                 if (damageAttr.isCtitical) {
-                    console.log('触发暴击，伤害为' + damageAttr.dmg)
+                    console.log('触发暴击，伤害为' + dmg)
                 }
-                if (damageAttr.dmg <= 0) {
+                if (dmg <= 0) {
                     return;
                 }
-                this.props.hp -= damageAttr.dmg;
+                this.props.hp -= dmg;
 
                 this.onHpReduce();
 
@@ -144,6 +145,9 @@ export class EMY_Base extends OBT_Component {
                 /**
                  * 敌人被击杀, 应当把击杀子弹, 子弹方向, 受到伤害等属性记录返回
                  */
+                let vector: Vec3 = otherCollider.node.OBT_param2.vector;
+                const dieParams: GamePlayEventOptions.EnemyDieParams = { vector, dmg, bullet: bulletId };
+                RealTimeEventManager.instance.onEnemyDie(dieParams);
 
                 if (this.props.hp <= 0) {
                     this.die();

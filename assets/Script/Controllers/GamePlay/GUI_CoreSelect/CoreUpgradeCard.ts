@@ -48,7 +48,7 @@ export class CoreUpgradeCard extends OBT_Component {
         if (buffTxt) {
             this.view("Content/Buff").getComponent(RichText).string = buffTxt;
         }
-        console.log(props)
+        // console.log(props)
         // let introRichTxt: string = props.intro;
         // const regex = /<%([^%]+)%>/g;
         // const matches = introRichTxt.match(regex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];

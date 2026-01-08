@@ -2,6 +2,7 @@ import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } 
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import ItemsManager from './ItemsManager';
 import WarCoreManager from './WarCoreManager';
+import { GamePlayEventOptions } from '../Common/Namespace';
 const { ccclass, property } = _decorator;
 
 /**
@@ -29,7 +30,7 @@ export default class RealTimeEventManager extends OBT_UIManager {
     }
 
     // 敌人死亡触发
-    public onEnemyDie() {
-        
+    public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {
+        WarCoreManager.instance.onRealTimeEvent('onEnemyDie', dieParams)
     }
 }

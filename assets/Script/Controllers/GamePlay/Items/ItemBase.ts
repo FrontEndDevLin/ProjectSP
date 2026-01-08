@@ -64,7 +64,7 @@ export default class ItemBase {
     }
 
     public setProp(propKey: string, value: any) {
-        if (this[propKey]) {
+        if (this[propKey] !== undefined) {
             this[propKey] = value;
         }
     }
@@ -101,6 +101,16 @@ export default class ItemBase {
                     let propTxtRichTxt: string = getSuccessRichTxt(propTxt);
                     intro = intro.replace(`<&${key}&>`, propTxtRichTxt);
                 }
+            })
+        }
+
+        // 对模板的 <sXXs> 进行处理
+        const sColorRegex = /<s([^s]+)s>/g;
+        const sColorMatches = intro.match(sColorRegex)?.map(m => m.replace(/^<s|s>$/g, '')) || [];
+        if (sColorMatches.length) {
+            sColorMatches.forEach((txt) => {
+                let sColorTxtRichTxt: string = getSuccessRichTxt(txt);
+                intro = intro.replace(`<s${txt}s>`, sColorTxtRichTxt);
             })
         }
 

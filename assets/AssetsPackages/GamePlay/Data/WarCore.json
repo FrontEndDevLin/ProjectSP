@@ -42,7 +42,7 @@
         }
     },
     "pub_atk_war_core": ["ScatterAtkWarCore"],
-    "war_core_upgrade_pack_def": {
+    "war_core_upgrade_pack_def_": {
         "fightWithBothHands": {
             "id": "fightWithBothHands",
             "name": "左右开弓",

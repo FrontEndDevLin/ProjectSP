@@ -6,7 +6,7 @@ export default class ItemScatterAtkWarCore extends ItemWarCore {
     public mirrorAttackRate: number = 0;
 
     public onPassWave(): void {
-        console.log('敌袭结束 +1%移动速度')
+        // console.log('敌袭结束 +1%移动速度')
     }
 
     public onUse() {

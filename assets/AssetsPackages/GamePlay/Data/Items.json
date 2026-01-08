@@ -112,7 +112,7 @@
             "global": 3,
             "group": 1,
             "label": "左右开弓",
-            "intro": "有<%val_1%>%概率朝相反方向发射飞弹",
+            "intro": "有<%val_1%><s%s>概率朝相反方向发射飞弹",
             "type": 2,
             "ico": "scatter",
             "val_1": 50,
