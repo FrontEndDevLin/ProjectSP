@@ -128,10 +128,15 @@
             "global": 3,
             "group": 1,
             "label": "开花",
-            "intro": "散射攻击击败敌人时, 会生成3发飞弹, 造成<%calcDmg%>伤害",
+            "intro": "散射攻击击败敌人时, 会生成<%val_1%>发飞弹",
             "type": 2,
             "ico": "scatter",
-            "bullet_": "CHR_Bullet003"
+            "val_1": 3,
+            "weapon": "Weapon_Blossom",
+            "val_prefix": {
+                "val_1": "",
+                "val_2": ""
+            }
         }
     }
 }

@@ -142,14 +142,14 @@ export class EMY_Base extends OBT_Component {
                 this.onHpReduce();
 
                 // DamageManager.instance.showDamageTxt(realDamage, this.node.position);
-                /**
-                 * 敌人被击杀, 应当把击杀子弹, 子弹方向, 受到伤害等属性记录返回
-                 */
-                let vector: Vec3 = otherCollider.node.OBT_param2.vector;
-                const dieParams: GamePlayEventOptions.EnemyDieParams = { vector, dmg, bullet: bulletId };
-                RealTimeEventManager.instance.onEnemyDie(dieParams);
-
+                
                 if (this.props.hp <= 0) {
+                    /**
+                     * 敌人被击杀, 应当把击杀子弹, 子弹方向, 受到伤害等属性记录返回
+                     */
+                    let vector: Vec3 = otherCollider.node.OBT_param2.vector;
+                    const dieParams: GamePlayEventOptions.EnemyDieParams = { vector, dmg, bullet: bulletId };
+                    RealTimeEventManager.instance.onEnemyDie(dieParams);
                     this.die();
                 } else {
                     // 受击效果

@@ -49,8 +49,7 @@ export default class WeaponBase {
     }
 
     public getIntroRichTxt(): string {
-        let introRichTxt: string = this.intro;
-        console.log(introRichTxt);
+        let introRichTxt: string = this.intro || "";
         const regex = /<%([^%]+)%>/g;
         const matches = introRichTxt.match(regex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];
         if (matches.length) {
@@ -64,11 +63,20 @@ export default class WeaponBase {
 
     public getPanelRichTxt(): string {
         let richTxtList: string[] = [
-            this.getDmgRichTxt(),
-            this.getCtlRichTxt(),
-            this.getCdRichTxt(),
-            this.getRangeRichTxt()
+            this.getDmgRichTxt()
         ];
+        let ctlRichTxt: string = this.getCtlRichTxt();
+        let cdRichTxt: string = this.getCdRichTxt();
+        let rangeRichTxt: string = this.getRangeRichTxt();
+        if (ctlRichTxt) {
+            richTxtList.push(ctlRichTxt);
+        }
+        if (cdRichTxt) {
+            richTxtList.push(cdRichTxt);
+        }
+        if (rangeRichTxt) {
+            richTxtList.push(rangeRichTxt);
+        }
 
         let panelRichTxt = richTxtList.join("<br/>");
 
@@ -96,24 +104,33 @@ export default class WeaponBase {
     // 获取暴击属性富文本
     protected getCtlRichTxt(): string {
         const { ctl, ctl_dmg_rate } = this;
-        let color: string = ctl >= this.ctl ? COLOR.SUCCESS : COLOR.DANGER;
-        let colorTxt: string = `<color=${color}>${ctl}%</color>`;
-        return `暴击: ${ctl_dmg_rate}倍|${colorTxt}概率`;
+        if (ctl && ctl_dmg_rate) {
+            let color: string = ctl >= this.ctl ? COLOR.SUCCESS : COLOR.DANGER;
+            let colorTxt: string = `<color=${color}>${ctl}%</color>`;
+            return `暴击: ${ctl_dmg_rate}倍|${colorTxt}概率`;
+        }
+        return "";
     }
     // 获取冷却属性富文本
     protected getCdRichTxt() {
         const { cd } = this;
-        let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
-        let color: string = cd <= atkSpdVal ? COLOR.SUCCESS : COLOR.DANGER;
-        let colorTxt: string = `<color=${color}>${cd}</color>`;
-        return `冷却: ${colorTxt}s`;
+        if (cd) {
+            let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
+            let color: string = cd <= atkSpdVal ? COLOR.SUCCESS : COLOR.DANGER;
+            let colorTxt: string = `<color=${color}>${cd}</color>`;
+            return `冷却: ${colorTxt}s`;
+        }
+        return "";
     }
     // 获取范围属性富文本
     protected getRangeRichTxt() {
         const { range } = this;
-        let color: string = range >= 0 ? COLOR.SUCCESS : COLOR.DANGER;
-        let colorTxt: string = `<color=${color}>${range}</color>`;
-        return `范围: ${colorTxt}`;
+        if (range) {
+            let color: string = range >= 0 ? COLOR.SUCCESS : COLOR.DANGER;
+            let colorTxt: string = `<color=${color}>${range}</color>`;
+            return `范围: ${colorTxt}`;
+        }
+        return "";
     }
 
     public getIntro(): string {

@@ -380,6 +380,7 @@ export namespace ItemInfo {
         buff_list: CHRInfo.Buff[],
         val_1?: number,
         val_2?: number,
+        val_prefix?: ItemValPrefix,
         weapon?: string
     }
 
@@ -389,6 +390,11 @@ export namespace ItemInfo {
 
     export interface ItemData {
         item_def: ItemMap
+    }
+
+    export interface ItemValPrefix {
+        val_1?: string,
+        val_2?: string
     }
 
     export interface GroupMap {
