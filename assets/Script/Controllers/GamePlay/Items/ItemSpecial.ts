@@ -8,5 +8,5 @@ import ItemBase from "./ItemBase";
 export default abstract class ItemSpecial extends ItemBase {
     public onPassWave() {};
 
-    public onEmenyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
+    public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
 }

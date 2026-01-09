@@ -19,5 +19,5 @@ export default class ItemWarCore extends ItemSpecial {
 
     public onPassWave() {};
 
-    public onEmenyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
+    public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
 }

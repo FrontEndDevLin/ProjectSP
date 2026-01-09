@@ -30,6 +30,11 @@ export default class ItemBase {
     public weapon: string;
     public weaponCtx: WeaponBase;
 
+    public val_prefix: ItemInfo.ItemValPrefix = {
+        val_1: "+-",
+        val_2: "+-"
+    }
+
     constructor(itemData: ItemInfo.Item) {
         if (itemData) {
             Object.assign(this, itemData)
@@ -81,10 +86,18 @@ export default class ItemBase {
                 let val: number = this[key];
                 if (val) {
                     let valRichTxt: string;
-                    if (val >= 0) {
-                        valRichTxt = getSuccessRichTxt(`+${val}`);
+                    let prefix: string = "";
+                    let valPrefix: string = this.val_prefix[key];
+                    if (valPrefix === "+-") {
+                        prefix = val >= 0 ? "+" : "-";
                     } else {
-                        valRichTxt = getDangerRichTxt(`-${val}`);
+                        prefix = valPrefix;
+                    }
+                    let richVal: string = `${prefix}${val}`;
+                    if (val >= 0) {
+                        valRichTxt = getSuccessRichTxt(richVal);
+                    } else {
+                        valRichTxt = getDangerRichTxt(richVal);
                     }
                     intro = intro.replace(`<%${key}%>`, valRichTxt);
                 }
