@@ -327,8 +327,8 @@
             "desc": "普通2+冲锋1+远程1",
             "wave_type": 1,
             "max_emy": 80,
-            "duration_": 40,
-            "duration": 4,
+            "duration": 40,
+            "duration_": 4,
             "preload": {
                 "alert": 20,
                 "exp": 20,
@@ -336,7 +336,7 @@
                 "trophy": 4,
                 "emy": [{ "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY04", "count": 10 }, { "emyId": "EMY_Peace", "count": 3 }],
                 "emy_particle": 40,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
+                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }, { "bulletId": "CHR_Bullet003", "count": 50 }],
                 "bullet_particle": 40,
                 "dmg_txt": 5
             },
@@ -413,7 +413,7 @@
                 "trophy": 4,
                 "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY04", "count": 10 }, { "emyId": "EMY_Peace", "count": 3 }],
                 "emy_particle": 40,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
+                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }, { "bulletId": "CHR_Bullet003", "count": 50 }],
                 "bullet_particle": 40,
                 "dmg_txt": 5
             },

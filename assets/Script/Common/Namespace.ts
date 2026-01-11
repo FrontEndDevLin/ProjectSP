@@ -105,8 +105,11 @@ export namespace GamePlayEvent {
 export namespace GamePlayEventOptions {
     export interface EnemyDieParams {
         vector: Vec3,
+        // 死亡坐标
+        loc: Vec3,
         bullet: string,
-        dmg: number
+        dmg: number,
+        id: string
     }
 }
 
@@ -579,7 +582,9 @@ export namespace BulletInfo {
         attr: BulletAttr,
         vector: Vec3,
         // 指定enemyId, 是敌人创建的子弹, 伤害计算由GameConfig提供
-        enemyId?: string
+        enemyId?: string,
+        // 忽略打击目标, 设置这个将不会对忽略的目标造成伤害, 存入目标的uuid
+        ignoreList?: string[]
     }
 }
 

@@ -164,7 +164,7 @@ export default class BulletManager extends OBT_UIManager {
         }
     }
 
-    public createBullet(bulletId: string, position: Vec3, vector: Vec3, enemyId?: string) {
+    public createBullet(bulletId: string, position: Vec3, vector: Vec3, enemyId?: string, ignoreList?: string[]) {
         // console.log(`创建子弹${bulletId}`)
         const bulletAttr = this.bulletData[bulletId];
         const nodePool = this._nodePoolMap[bulletId];
@@ -188,7 +188,7 @@ export default class BulletManager extends OBT_UIManager {
         
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: Bullet = <Bullet>bulletNode.getComponent(bulletAttr.script);
-        scriptComp.init({ attr: bulletAttr, vector, enemyId });
+        scriptComp.init({ attr: bulletAttr, vector, enemyId, ignoreList });
         this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
     }
 

@@ -151,21 +151,21 @@ export class GUI_Prepare extends OBT_Component {
     // 核心区升级包图标
     protected updateWarCoreUpgradeIcon() {
         // TODO: 2026.1.3
-        // const slotList: Node[] = this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/UpgradeWrap").children;
-        // slotList.forEach((slotNode: Node, i: number) => {
-        //     let packId: string = WarCoreManager.instance.upgradeSlot[i];
-        //     let assets: SpriteFrame;
-        //     if (packId) {
-        //         let packInfo: WarCoreInfo.WarCoreUpgradePack = WarCoreManager.instance.getUpgradePackInfo(packId);
-        //         let icon = packInfo.icon_ui;
-        //         assets = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${icon}`);
-        //     } else {
-        //         assets = OBT.instance.resourceManager.getSpriteFrameAssets(`GamePlay/lock-ico`);
-        //     }
-        //     slotNode.OBT_param1 = packId;
-        //     slotNode.OBT_param2 = i;
-        //     slotNode.children[0].getComponent(Sprite).spriteFrame = assets;
-        // })
+        const slotList: Node[] = this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/UpgradeWrap").children;
+        slotList.forEach((slotNode: Node, i: number) => {
+            let packId: string = WarCoreManager.instance.upgradeSlot[i];
+            let assets: SpriteFrame;
+            if (packId) {
+                let packInfo: ItemBase = WarCoreManager.instance.getUpgradePackInfo(packId);
+                let icon = packInfo.ico;
+                assets = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${icon}`);
+            } else {
+                assets = OBT.instance.resourceManager.getSpriteFrameAssets(`GamePlay/lock-ico`);
+            }
+            slotNode.OBT_param1 = packId;
+            slotNode.OBT_param2 = i;
+            slotNode.children[0].getComponent(Sprite).spriteFrame = assets;
+        })
     }
     protected bindWarCoreTouchEvent() {
         this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot").on(Node.EventType.TOUCH_END, this._showAtkCorePreview, this);

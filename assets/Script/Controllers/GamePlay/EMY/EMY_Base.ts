@@ -126,6 +126,10 @@ export class EMY_Base extends OBT_Component {
         }
         switch (otherCollider.group) {
             case GameCollider.GROUP.CHR_BULLET: {
+                if (otherCollider.node.OBT_param2 && otherCollider.node.OBT_param2.ignoreList.indexOf(this.id) !== -1) {
+                    console.log(`enemy触发忽略`);
+                    return;
+                }
                 // 显示伤害由一个类单独管理
                 let bulletId: string = otherCollider.node.name;
                 let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate);
@@ -148,7 +152,8 @@ export class EMY_Base extends OBT_Component {
                      * 敌人被击杀, 应当把击杀子弹, 子弹方向, 受到伤害等属性记录返回
                      */
                     let vector: Vec3 = otherCollider.node.OBT_param2.vector;
-                    const dieParams: GamePlayEventOptions.EnemyDieParams = { vector, dmg, bullet: bulletId };
+                    const { x, y } = this.node.position;
+                    const dieParams: GamePlayEventOptions.EnemyDieParams = { vector, dmg, bullet: bulletId, id: this.id, loc: v3(x, y) };
                     RealTimeEventManager.instance.onEnemyDie(dieParams);
                     this.die();
                 } else {

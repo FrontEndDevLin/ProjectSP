@@ -291,9 +291,8 @@ export default class WarCoreManager extends OBT_UIManager {
         return this.upgradeSlotMap[packId];
     }
 
-    public getUpgradePackInfo(packId: string): WarCoreInfo.WarCoreUpgradePack {
-        // return this.warCoreData.war_core_upgrade_pack_def[packId];
-        return null;
+    public getUpgradePackInfo(packId: string): ItemBase {
+        return ItemsManager.instance.getItemCtxById(packId);
     }
 
     // TODO: 未用
@@ -308,7 +307,7 @@ export default class WarCoreManager extends OBT_UIManager {
     public previewUpgradePack(packId) {
         this.currentPreviewPackId = packId;
     }
-    public getPreviewUpgradePackInfo(): WarCoreInfo.WarCoreUpgradePack {
+    public getPreviewUpgradePackInfo(): ItemBase {
         if (!this.currentPreviewPackId) {
             return;
         }

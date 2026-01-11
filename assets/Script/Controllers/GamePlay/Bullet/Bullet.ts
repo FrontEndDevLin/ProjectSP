@@ -26,6 +26,8 @@ export class Bullet extends OBT_Component {
 
     private _type: string = "";
 
+    protected ignoreList: string[] = [];
+
     // 起点位置（相对）
     private _startRlt: Vec3 = null;
 
@@ -42,7 +44,7 @@ export class Bullet extends OBT_Component {
     start() {
     }
 
-    public init({ attr, vector, enemyId }: BulletInfo.BulletInitParams) {
+    public init({ attr, vector, enemyId, ignoreList = [] }: BulletInfo.BulletInitParams) {
         this._collider = this.node.getComponent(BoxCollider2D);
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
@@ -60,10 +62,14 @@ export class Bullet extends OBT_Component {
         // 敌人发射的子弹
         if (attr.type === "EMY_bullet" && enemyId) {
             this.node.OBT_param1 = enemyId;
+        } else if (attr.type === "bullet") {
+            // 友方子弹
+            this.ignoreList = ignoreList;
         }
 
         this.node.OBT_param2 = {
-            vector
+            vector,
+            ignoreList: this.ignoreList
         }
     }
 
@@ -78,6 +84,10 @@ export class Bullet extends OBT_Component {
 
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+            if (otherCollider.node.OBT_param2 && this.ignoreList.indexOf(otherCollider.node.OBT_param2.id) !== -1) {
+                console.log(`bullet触发忽略`);
+                return;
+            }
             if (this._attr.type === "EMY_bullet") {
                 return;
             }
