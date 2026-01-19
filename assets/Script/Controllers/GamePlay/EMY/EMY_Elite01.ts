@@ -111,7 +111,7 @@ export class EMY_Elite01 extends EMY_Base {
             const angleList: number[] = [angle - 20, angle, angle + 20];
             angleList.forEach((ang: number) => {
                 let vector = getVectorByAngle(ang);
-                BulletManager.instance.createBullet(this._bulletId, this.node.position, vector, this.props.id);
+                BulletManager.instance.createBullet({ bulletId: this._bulletId, position: this.node.position, vector, enemyId: this.props.id });
             });
 
             this._currentCharge = 0;

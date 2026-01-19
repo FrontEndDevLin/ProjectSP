@@ -1,6 +1,6 @@
 import { _decorator, BoxCollider2D, Color, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { DamageInfo, EMYInfo, FLASH_TIME, GameCollider, GamePlayEventOptions } from '../../../Common/Namespace';
+import { Common, DamageInfo, EMYInfo, FLASH_TIME, GameCollider, GamePlayEventOptions } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
@@ -52,6 +52,9 @@ export class EMY_Base extends OBT_Component {
 
     // 减伤率
     protected dmgReduceRate: number = 0;
+
+    // 被同一批次子弹击中map
+    protected groupBulletMap: Common.SimpleObj = {};
 
     start() {
     }
@@ -130,9 +133,22 @@ export class EMY_Base extends OBT_Component {
                     console.log(`enemy触发忽略`);
                     return;
                 }
+
+                // 被同一批次子弹击中伤害衰减处理
+                let bulletGroupId: number = otherCollider.node.OBT_param2.groupId;
+                let isGroupReduce = false;
+                if (bulletGroupId) {
+                    if (this.groupBulletMap[bulletGroupId]) {
+                        console.log('TODO: 伤害衰减处理');
+                        isGroupReduce = true;
+                    } else {
+                        this.groupBulletMap[bulletGroupId] = 1;
+                    }
+                }
+
                 // 显示伤害由一个类单独管理
                 let bulletId: string = otherCollider.node.name;
-                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate);
+                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate, isGroupReduce);
                 // damageAttr.isCtitical // 暴击
                 let dmg = damageAttr.dmg;
                 if (damageAttr.isCtitical) {
@@ -141,6 +157,7 @@ export class EMY_Base extends OBT_Component {
                 if (dmg <= 0) {
                     return;
                 }
+
                 this.props.hp -= dmg;
 
                 this.onHpReduce();
@@ -326,6 +343,7 @@ export class EMY_Base extends OBT_Component {
     public die() {
         this.alive = false;
         this.collider.enabled = false;
+        this.groupBulletMap = {};
         this.onDie();
         EMYManager.instance.removeEnemy(this.id);
         this._playDieAni();
@@ -336,6 +354,7 @@ export class EMY_Base extends OBT_Component {
     protected runAway() {
         this.alive = false;
         this.collider.enabled = false;
+        this.groupBulletMap = {};
         EMYManager.instance.removeEnemy(this.id);
         this._playDieAni();
         // 如果是核心精英, 掉落核心

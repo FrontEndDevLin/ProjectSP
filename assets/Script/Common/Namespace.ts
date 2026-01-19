@@ -15,7 +15,7 @@ export enum GAME_NODE {
 
 export namespace Common {
     export interface SimpleObj {
-        [str: string]: number
+        [str: string]: number | number
     }
 }
 
@@ -436,6 +436,8 @@ export namespace WeaponInfo {
         intro?: string,
         bullet: string,
         split?: number, // 分裂
+        penetrate?: number, // 穿透数
+        split_dmg_rate?: number, // 目标被一次攻击的多个子弹击中的伤害比例
         range?: number,
         cd?: number,
         ctl?: number, // 暴击率
@@ -584,7 +586,18 @@ export namespace BulletInfo {
         // 指定enemyId, 是敌人创建的子弹, 伤害计算由GameConfig提供
         enemyId?: string,
         // 忽略打击目标, 设置这个将不会对忽略的目标造成伤害, 存入目标的uuid
-        ignoreList?: string[]
+        ignoreList?: string[],
+        // 子弹群组id, 当被同一群组子弹多次击中时, 可设置伤害缩减
+        groupId?: number
+    }
+
+    export interface CreateBulletParams {
+        bulletId: string,
+        position: Vec3,
+        vector: Vec3,
+        enemyId?: string,
+        ignoreList?: string[],
+        groupId?: number
     }
 }
 

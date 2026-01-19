@@ -65,7 +65,7 @@ export class EMY_Range extends EMY_Base {
     private _remoteAttack() {
         let angle: number = this.getToCHRAngle();
         let vector: Vec3 = getVectorByAngle(angle);
-        BulletManager.instance.createBullet(this._bulletId, this.node.position, vector, this.props.id);
+        BulletManager.instance.createBullet({ bulletId: this._bulletId, position: this.node.position, vector, enemyId: this.props.id });
 
         this.cd = this.props.attack_cd;
         this.attackStage = EMYInfo.ATTACK_STAGE.NONE;

@@ -26,7 +26,7 @@ export default class ItemBlossom extends ItemSpecial {
 
             angleList.forEach((angle: number) => {
                 let vector = getVectorByAngle(angle);
-                BulletManager.instance.createBullet(this.weaponCtx.bullet, dieParams.loc, vector, null, [dieParams.id]);
+                BulletManager.instance.createBullet({ bulletId: this.weaponCtx.bullet, position: dieParams.loc, vector, ignoreList: [dieParams.id] });
             });
         }
     }

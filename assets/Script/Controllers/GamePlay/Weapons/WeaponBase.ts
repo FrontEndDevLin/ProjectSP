@@ -4,7 +4,7 @@
 
 import { SpriteFrame } from "cc";
 import CHRManager from "../../../CManager/CHRManager";
-import { BoostConfig, BulletInfo, COLOR, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
+import { BoostConfig, BulletInfo, COLOR, Common, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
 import { copyObject, getDangerRichTxt, getFloatNumber, getSuccessRichTxt } from "../../../Common/utils";
 import OBT from "../../../OBT";
 import BulletManager from "../../../CManager/BulletManager";
@@ -14,7 +14,9 @@ export default class WeaponBase {
     public id: string;
     public intro: string;
     public bullet: string;
+    public penetrate: number; // 穿透数
     public split: number; // 分裂
+    public split_dmg_rate: number; // 目标被一次攻击的多个子弹击中的伤害比例
     public range: number;
     public cd: number;
     public ctl: number; // 暴击率
@@ -27,9 +29,21 @@ export default class WeaponBase {
 
     public originData: WeaponInfo.Weapon;
 
+    // 可以被setProps更新的属性白名单
+    protected propsUpdateWhiteList: string[] = ["penetrate", "split", "split_dmg_rate"];
+
     constructor(weaponData: WeaponInfo.Weapon) {
         Object.assign(this, weaponData)
         this.originData = copyObject(weaponData);
+    }
+
+    // TODO: 可能需要通知更新?
+    public setProps(setPropsMap: Common.SimpleObj) {
+        for (let prop in setPropsMap) {
+            if (this.propsUpdateWhiteList.indexOf(prop) !== -1) {
+                this[prop] = setPropsMap[prop];
+            }
+        }
     }
 
     public updatePanel() {
@@ -68,6 +82,7 @@ export default class WeaponBase {
         let ctlRichTxt: string = this.getCtlRichTxt();
         let cdRichTxt: string = this.getCdRichTxt();
         let rangeRichTxt: string = this.getRangeRichTxt();
+        let splitDmgRateRichTxt: string = this.getSplitDmgRateRichTxt();
         if (ctlRichTxt) {
             richTxtList.push(ctlRichTxt);
         }
@@ -76,6 +91,9 @@ export default class WeaponBase {
         }
         if (rangeRichTxt) {
             richTxtList.push(rangeRichTxt);
+        }
+        if (splitDmgRateRichTxt) {
+            richTxtList.push(splitDmgRateRichTxt);
         }
 
         let panelRichTxt = richTxtList.join("<br/>");
@@ -129,6 +147,20 @@ export default class WeaponBase {
             let color: string = range >= 0 ? COLOR.SUCCESS : COLOR.DANGER;
             let colorTxt: string = `<color=${color}>${range}</color>`;
             return `范围: ${colorTxt}`;
+        }
+        return "";
+    }
+    // 获取分裂击中同一目标的伤害衰减
+    protected getSplitDmgRateRichTxt(): string {
+        const { split_dmg_rate } = this;
+        if (split_dmg_rate) {
+            let rateStr: string = split_dmg_rate * 100 + "%";
+            if (split_dmg_rate >= 1) {
+                rateStr = getSuccessRichTxt(rateStr);
+            } else {
+                rateStr = getDangerRichTxt(rateStr);
+            }
+            return `对相同目标伤害: ${ rateStr }`
         }
         return "";
     }

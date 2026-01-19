@@ -29,10 +29,7 @@ export class ScatterAtkWarCore extends OBT_Component {
 
     protected warCore: ItemWarCore;
 
-    // TODO: 作废
-    private _mirrorAttack: boolean = true;
-    // 新增, 在装备"左右开弓"时, 提升该属性的概率
-    private _mirrorAttackRate: number = 0;
+    protected bulletGroupId: number = 1;
 
     start() {
         this.warCore = WarCoreManager.instance.warCore;
@@ -192,10 +189,13 @@ export class ScatterAtkWarCore extends OBT_Component {
                 }
             }
 
+            // 同一批次的子弹, groupId一致
+            let groupId: number = this.bulletGroupId;
             angleList.forEach((angle: number) => {
                 let vector = getVectorByAngle(angle);
-                BulletManager.instance.createBullet(this.warCore.weaponCtx.bullet, chrLoc, vector);
+                BulletManager.instance.createBullet({ bulletId: this.warCore.weaponCtx.bullet, position: chrLoc, vector, groupId });
             });
+            this.bulletGroupId++;
 
             // console.log(Vec3.angle(v3(1,0,0), {x: vecX, y: vecY, z: 0}));
             // console.log(Number((Math.atan(vecY / vecX)).toFixed(2)));

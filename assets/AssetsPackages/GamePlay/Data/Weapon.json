@@ -1,6 +1,8 @@
 {
     "desc": {
-        "mark": "武器定义, 核心,道具等拥有攻击/治疗手段的系统可以引入武器"
+        "mark": "武器定义, 核心,道具等拥有攻击/治疗手段的系统可以引入武器",
+        "split": "分裂数",
+        "split_dmg_rate": "目标被一次攻击的多个子弹击中的伤害比例"
     },
     "weapon_def": {
         "Weapon_BaseAtkWarCore": {
@@ -17,6 +19,7 @@
             "intro": "基础飞弹会分裂成<%split%>个",
             "bullet": "CHR_Bullet002",
             "split": 3,
+            "split_dmg_rate": 0.4,
             "range": 200,
             "cd": 0.3,
             "ctl": 1,
