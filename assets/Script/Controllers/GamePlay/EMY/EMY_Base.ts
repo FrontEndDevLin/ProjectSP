@@ -139,7 +139,6 @@ export class EMY_Base extends OBT_Component {
                 let isGroupReduce = false;
                 if (bulletGroupId) {
                     if (this.groupBulletMap[bulletGroupId]) {
-                        console.log('TODO: 伤害衰减处理');
                         isGroupReduce = true;
                     } else {
                         this.groupBulletMap[bulletGroupId] = 1;

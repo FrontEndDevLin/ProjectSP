@@ -1,7 +1,8 @@
 {
     "desc": "存储当前存档数据",
-    "wave": 5,
+    "wave": 4,
     "status": 1,
+    "unlock_war_core_": false,
     "unlock_war_core": true,
     "chr_prop": {
         "desc": "这里存角色的面板数据",

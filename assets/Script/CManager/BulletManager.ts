@@ -164,7 +164,6 @@ export default class BulletManager extends OBT_UIManager {
         }
     }
 
-    // TODO: 参数重做
     public createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId }: BulletInfo.CreateBulletParams ) {
         // console.log(`创建子弹${bulletId}`)
         const bulletAttr = this.bulletData[bulletId];
