@@ -15,6 +15,7 @@ export default class WeaponBase {
     public intro: string;
     public bullet: string;
     public penetrate: number; // 穿透数
+    public pen_dmg: number; // 穿透伤害
     public split: number; // 分裂
     public split_dmg_rate: number; // 目标被一次攻击的多个子弹击中的伤害比例
     public range: number;
@@ -80,11 +81,15 @@ export default class WeaponBase {
             this.getDmgRichTxt()
         ];
         let ctlRichTxt: string = this.getCtlRichTxt();
+        let penRichTxt: string = this.getPenetrateRichTxt();
         let cdRichTxt: string = this.getCdRichTxt();
         let rangeRichTxt: string = this.getRangeRichTxt();
         let splitDmgRateRichTxt: string = this.getSplitDmgRateRichTxt();
         if (ctlRichTxt) {
             richTxtList.push(ctlRichTxt);
+        }
+        if (penRichTxt) {
+            richTxtList.push(penRichTxt);
         }
         if (cdRichTxt) {
             richTxtList.push(cdRichTxt);
@@ -118,6 +123,14 @@ export default class WeaponBase {
             }
         }
         return `伤害: ${dmgColorTxt}|${base_dmg}+${boostTxt}`;
+    }
+    // 获取穿透属性文本
+    protected getPenetrateRichTxt(): string {
+        const { penetrate} = this
+        if (penetrate && penetrate > 0) {
+            return `穿透: ${ getSuccessRichTxt(penetrate) }`;
+        }
+        return "";
     }
     // 获取暴击属性富文本
     protected getCtlRichTxt(): string {

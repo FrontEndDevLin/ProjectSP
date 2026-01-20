@@ -314,6 +314,7 @@ export namespace CHRInfo {
         spd: number,
         avd: number,
         exp_eff: number,
+        pen_dmg: number,
         pick_range: number
     }
     export interface CHRPropsAttr {

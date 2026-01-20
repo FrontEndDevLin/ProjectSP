@@ -18,6 +18,7 @@
         "avd": 0,
         "luck": 0,
         "exp_eff": 0,
+        "pen_dmg": 0,
         "pick_range": 0
     },
     "chr_slot": {

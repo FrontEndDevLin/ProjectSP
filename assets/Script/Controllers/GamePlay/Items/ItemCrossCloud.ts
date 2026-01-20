@@ -18,6 +18,6 @@ export default class ItemCrossCloud extends ItemSpecial {
     }
 
     public onUse() {
-        
+        WarCoreManager.instance.warCore.weaponCtx.setProps({ penetrate: this.val_1 });
     }
 }

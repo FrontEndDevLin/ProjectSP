@@ -122,6 +122,15 @@
             "percent": true,
             "intro": "介绍文本"
         },
+        "pen_dmg": {
+            "prop": "pen_dmg",
+            "txt": "%穿透伤害",
+            "val": 0,
+            "basic_val": 1,
+            "forward_val": true,
+            "percent": true,
+            "intro": "介绍文本"
+        },
         "pick_range": {
             "prop": "pick_range",
             "txt": "拾取范围",
@@ -134,7 +143,7 @@
     },
     "prop_group": {
         "major": ["hp", "dmg", "range_dmg", "melee_dmg", "range", "atk_spd", "ctl", "def", "spd", "avd", "luck"],
-        "sub": ["exp_eff", "pick_range"],
+        "sub": ["exp_eff", "pen_dmg", "pick_range"],
         "unvisiable": []
     },
     "quality_config": {
