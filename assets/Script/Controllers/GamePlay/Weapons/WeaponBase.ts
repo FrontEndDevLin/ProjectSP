@@ -124,11 +124,11 @@ export default class WeaponBase {
         }
         return `伤害: ${dmgColorTxt}|${base_dmg}+${boostTxt}`;
     }
-    // 获取穿透属性文本
+    // 获取贯穿属性文本
     protected getPenetrateRichTxt(): string {
-        const { penetrate} = this
-        if (penetrate && penetrate > 0) {
-            return `穿透: ${ getSuccessRichTxt(penetrate) }`;
+        const { penetrate, pen_dmg } = this;
+        if (penetrate && penetrate > 0 && pen_dmg && pen_dmg > 0) {
+            return `贯穿: ${ getSuccessRichTxt(penetrate) }|${ pen_dmg * 100 }%伤害`;
         }
         return "";
     }

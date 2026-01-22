@@ -437,7 +437,8 @@ export namespace WeaponInfo {
         intro?: string,
         bullet: string,
         split?: number, // 分裂
-        penetrate?: number, // 穿透数
+        penetrate?: number, // 贯穿数
+        pen_dmg?: number, // 贯穿伤害百分比
         split_dmg_rate?: number, // 目标被一次攻击的多个子弹击中的伤害比例
         range?: number,
         cd?: number,
