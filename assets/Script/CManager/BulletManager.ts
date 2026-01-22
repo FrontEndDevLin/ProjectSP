@@ -38,6 +38,14 @@ export default class BulletManager extends OBT_UIManager {
 
     public bulletData: BulletInfo.BulletDBData = {};
 
+    /**
+     * 穿透/穿透伤害定义在weapon.json里
+     * 当挂载/修改武器属性时, 调用本类中一个方法将穿透数据更新到bulletPachData里
+     * 在创建子弹的时候, 检测bulletPachData里有没有对应子弹的修正属性
+     * 如有则将修正属性覆盖到对应子弹的bulletAttr里
+     */
+    protected bulletPachData: any = {};
+
     // 存储当前装备的武器的弹头数据
     // private _bulletCldMap: BulletInfo.BulletCldData = {};
 

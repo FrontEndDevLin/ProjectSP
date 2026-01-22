@@ -561,7 +561,8 @@ export namespace BulletInfo {
         speed: number,
         // 最大飞行距离
         max_dis: number,
-        piercing: number,
+        penetrate: number,
+        pen_dmg: number,
         cld: number,
         boost?: BoostConfig
     }

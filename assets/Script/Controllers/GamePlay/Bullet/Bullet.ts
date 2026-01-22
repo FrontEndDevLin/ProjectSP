@@ -22,7 +22,7 @@ export class Bullet extends OBT_Component {
     // private _curDisPx: number = 0;
     private _vector: Vec3 = null;
 
-    private _piercing: number = 0;
+    private _penetrate: number = 0;
 
     private _type: string = "";
 
@@ -51,7 +51,7 @@ export class Bullet extends OBT_Component {
         this._attr = attr;
         this._vector = vector;
         this._maxDisPx = attr.max_dis;
-        this._piercing = attr.piercing;
+        this._penetrate = attr.penetrate;
         // 子弹运动
         this._init = true;
         this._alive = true;
@@ -92,8 +92,8 @@ export class Bullet extends OBT_Component {
             if (this._attr.type === "EMY_bullet") {
                 return;
             }
-            this._piercing--;
-            if (this._piercing <= 0) {
+            this._penetrate--;
+            if (this._penetrate <= 0) {
                 BulletManager.instance.particleCtrl.createDieParticle(this.node.position, this._vector, this._attr.speed, 2);
                 this._die();
             }
@@ -102,8 +102,8 @@ export class Bullet extends OBT_Component {
             if (this._attr.type !== "EMY_bullet") {
                 return;
             }
-            this._piercing--;
-            if (this._piercing <= 0) {
+            this._penetrate--;
+            if (this._penetrate <= 0) {
                 this._die();
             }
         }
