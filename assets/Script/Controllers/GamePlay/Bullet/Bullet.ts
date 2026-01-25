@@ -17,12 +17,8 @@ export class Bullet extends OBT_Component {
     private _collider: BoxCollider2D;
 
     private _attr: BulletInfo.BulletAttr = null;
-    // 最大距离
-    private _maxDisPx: number = null;
     // private _curDisPx: number = 0;
     private _vector: Vec3 = null;
-
-    private _penetrate: number = 0;
 
     private _type: string = "";
 
@@ -50,8 +46,6 @@ export class Bullet extends OBT_Component {
 
         this._attr = attr;
         this._vector = vector;
-        this._maxDisPx = attr.max_dis;
-        this._penetrate = attr.penetrate;
         // 子弹运动
         this._init = true;
         this._alive = true;
@@ -67,10 +61,18 @@ export class Bullet extends OBT_Component {
             this.ignoreList = ignoreList;
         }
 
-        this.node.OBT_param2 = {
-            vector,
-            ignoreList: this.ignoreList,
-            groupId
+        if (this.node.OBT_param2) {
+            Object.assign(this.node.OBT_param2, {
+                vector,
+                ignoreList: this.ignoreList,
+                groupId
+            })
+        } else {
+            this.node.OBT_param2 = {
+                vector,
+                ignoreList: this.ignoreList,
+                groupId
+            }
         }
     }
 
@@ -92,19 +94,23 @@ export class Bullet extends OBT_Component {
             if (this._attr.type === "EMY_bullet") {
                 return;
             }
-            this._penetrate--;
-            if (this._penetrate <= 0) {
+            if (this._attr.penetrate <= 0) {
                 BulletManager.instance.particleCtrl.createDieParticle(this.node.position, this._vector, this._attr.speed, 2);
                 this._die();
+            } else {
+                this._attr.penetrate--;
+                // TODO: 看看修改this._attr会不会修改OBT_param2上的属性
+                console.log(this.node.OBT_param2.attr.penetrate);
             }
         }
         if (otherCollider.group === GameCollider.GROUP.CHR) {
             if (this._attr.type !== "EMY_bullet") {
                 return;
             }
-            this._penetrate--;
-            if (this._penetrate <= 0) {
+            if (this._attr.penetrate <= 0) {
                 this._die();
+            } else {
+                this._attr.penetrate--;
             }
         }
     }
@@ -118,7 +124,7 @@ export class Bullet extends OBT_Component {
         let { x, y } = this.node.position;
         let newLoc = v3(x + ax, y + ay);
         // 如果两点之间距离超过_maxDisPx，销毁
-        if (getDistance(this._startRlt, newLoc) < this._maxDisPx) {
+        if (getDistance(this._startRlt, newLoc) < this._attr.max_dis) {
             this.node.setPosition(newLoc);
         } else {
             this._die();

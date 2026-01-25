@@ -196,6 +196,7 @@ export default class BulletManager extends OBT_UIManager {
         
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: Bullet = <Bullet>bulletNode.getComponent(bulletAttr.script);
+        bulletNode.OBT_param2 = { attr: bulletAttr };
         scriptComp.init({ attr: bulletAttr, vector, enemyId, ignoreList, groupId });
         this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
     }

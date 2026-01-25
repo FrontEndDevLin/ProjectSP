@@ -561,7 +561,8 @@ export namespace BulletInfo {
         speed: number,
         // 最大飞行距离
         max_dis: number,
-        penetrate: number,
+        // 贯穿/穿透属性, 子弹配置不配置这些属性, 由weapon决定
+        penetrate: number,  // 默认为0
         pen_dmg: number,
         cld: number,
         boost?: BoostConfig

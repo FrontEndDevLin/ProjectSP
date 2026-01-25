@@ -13,7 +13,6 @@
         "script": "Bullet",
         "speed": 480,
         "max_dis": 200,
-        "penetrate": 1,
         "damage": 3,
         "cld": 500
     },
@@ -25,7 +24,6 @@
         "script": "Bullet",
         "speed": 480,
         "max_dis": 220,
-        "penetrate": 1,
         "damage": 2,
         "cld": 501,
         "boost": {
@@ -40,7 +38,6 @@
         "script": "Bullet",
         "speed": 300,
         "max_dis": 120,
-        "penetrate": 1,
         "damage": 1,
         "cld": 502,
         "boost": {
@@ -54,7 +51,6 @@
         "script": "Bullet",
         "speed": 200,
         "max_dis": 500,
-        "penetrate": 1,
         "cld": 520
     }
 }
