@@ -42,7 +42,11 @@ export default class WeaponBase {
     public setProps(setPropsMap: Common.SimpleObj) {
         for (let prop in setPropsMap) {
             if (this.propsUpdateWhiteList.indexOf(prop) !== -1) {
-                this[prop] = setPropsMap[prop];
+                let val = setPropsMap[prop];
+                this[prop] = val;
+                if (prop === 'penetrate') {
+                    BulletManager.instance.setPachData({ penetrate: val })
+                }
             }
         }
     }

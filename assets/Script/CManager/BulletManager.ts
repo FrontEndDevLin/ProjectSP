@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, COLOR, GameCollider, GameConfigInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, COLOR, Common, GameCollider, GameConfigInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
@@ -8,6 +8,7 @@ import { Bullet } from '../Controllers/GamePlay/Bullet/Bullet';
 import ProcessManager from './ProcessManager';
 import DamageManager from './DamageManager';
 import CHRManager from './CHRManager';
+import { copyObject } from '../Common/utils';
 const { ccclass, property } = _decorator;
 
 interface BulletPoolMap {
@@ -44,7 +45,7 @@ export default class BulletManager extends OBT_UIManager {
      * 在创建子弹的时候, 检测bulletPachData里有没有对应子弹的修正属性
      * 如有则将修正属性覆盖到对应子弹的bulletAttr里
      */
-    protected bulletPachData: any = {};
+    protected bulletPachData: Common.SimpleObj = {};
 
     // 存储当前装备的武器的弹头数据
     // private _bulletCldMap: BulletInfo.BulletCldData = {};
@@ -174,7 +175,8 @@ export default class BulletManager extends OBT_UIManager {
 
     public createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId }: BulletInfo.CreateBulletParams ) {
         // console.log(`创建子弹${bulletId}`)
-        const bulletAttr = this.bulletData[bulletId];
+        const bulletAttr: BulletInfo.BulletAttr = copyObject(this.bulletData[bulletId]);
+        bulletAttr.penetrate = 0;
         const nodePool = this._nodePoolMap[bulletId];
         let bulletNode: Node = nodePool ? nodePool.get() : null;
         if (!bulletNode) {
@@ -194,11 +196,20 @@ export default class BulletManager extends OBT_UIManager {
         sfNode.angle = angle;
         sfNode.setScale(v3(scaleX, 1));
         
+        for (let k in this.bulletPachData) {
+            bulletAttr[k] = this.bulletPachData[k];
+        }
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: Bullet = <Bullet>bulletNode.getComponent(bulletAttr.script);
         bulletNode.OBT_param2 = { attr: bulletAttr };
         scriptComp.init({ attr: bulletAttr, vector, enemyId, ignoreList, groupId });
         this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
+    }
+
+    public setPachData(pachData: Common.SimpleObj) {
+        for (let k in pachData) {
+            this.bulletPachData[k] = pachData[k];
+        }
     }
 
     update(deltaTime: number) {
