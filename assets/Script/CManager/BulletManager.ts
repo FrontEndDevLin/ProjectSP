@@ -45,7 +45,7 @@ export default class BulletManager extends OBT_UIManager {
      * 在创建子弹的时候, 检测bulletPachData里有没有对应子弹的修正属性
      * 如有则将修正属性覆盖到对应子弹的bulletAttr里
      */
-    protected bulletPachData: Common.SimpleObj = {};
+    protected bulletPachData: BulletInfo.BulletPachMap = {};
 
     // 存储当前装备的武器的弹头数据
     // private _bulletCldMap: BulletInfo.BulletCldData = {};
@@ -129,7 +129,7 @@ export default class BulletManager extends OBT_UIManager {
     public setBulletDamage(bulletId: string, damage: number) {
         this.bulletData[bulletId].damage = damage;
     }
-    public getBulletDamage(bulletId): number {
+    public getBulletDamage(bulletId: string): number {
         return this.getBulletInfo(bulletId, "damage");
     }
     public getBulletInfo(bulletId: string, prop?: string) {
@@ -196,8 +196,10 @@ export default class BulletManager extends OBT_UIManager {
         sfNode.angle = angle;
         sfNode.setScale(v3(scaleX, 1));
         
-        for (let k in this.bulletPachData) {
-            bulletAttr[k] = this.bulletPachData[k];
+        if (this.bulletPachData[bulletId]) {
+            for (let k in this.bulletPachData[bulletId]) {
+                bulletAttr[k] = this.bulletPachData[bulletId][k];
+            }
         }
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: Bullet = <Bullet>bulletNode.getComponent(bulletAttr.script);
@@ -206,10 +208,14 @@ export default class BulletManager extends OBT_UIManager {
         this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
     }
 
-    public setPachData(pachData: Common.SimpleObj) {
-        for (let k in pachData) {
-            this.bulletPachData[k] = pachData[k];
+    public setPachData(bulletId: string, pachData: Common.SimpleObj) {
+        if (!this.bulletPachData[bulletId]) {
+            this.bulletPachData[bulletId] = {};
         }
+        for (let k in pachData) {
+            this.bulletPachData[bulletId][k] = pachData[k];
+        }
+        console.log(this.bulletPachData)
     }
 
     update(deltaTime: number) {

@@ -99,10 +99,10 @@ export class Bullet extends OBT_Component {
                 this._die();
             } else {
                 this._attr.penetrate--;
+                this._attr.is_penetrate = true;
                 // 修改this._attr会修改OBT_param2上的属性
                 // TODO: 如何做伤害衰减?
                 // 拟定: 在bulletAttr上增加一个属性isReduce初始为false, 在穿透后置为true, 伤害计算根据这个来
-                console.log(this._attr.penetrate, this.node.OBT_param2.attr.penetrate);
             }
         }
         if (otherCollider.group === GameCollider.GROUP.CHR) {

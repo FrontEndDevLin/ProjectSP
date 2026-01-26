@@ -564,8 +564,17 @@ export namespace BulletInfo {
         // 贯穿/穿透属性, 子弹配置不配置这些属性, 由weapon决定
         penetrate: number,  // 默认为0
         pen_dmg: number,
+        is_penetrate: boolean,  // 是否已经贯穿过
         cld: number,
         boost?: BoostConfig
+    }
+
+    export interface BulletPachData {
+        penetrate?: number,
+        pen_dmg?: number
+    }
+    export interface BulletPachMap {
+        [bulletId: string]: BulletPachData
     }
 
     export interface BulletDBData {

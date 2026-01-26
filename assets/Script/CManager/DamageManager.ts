@@ -33,8 +33,8 @@ export default class DamageManager extends OBT_UIManager {
 
     }
 
-    public getBulletRealDamage(bulletId: string) {
-        let bulletDamage: number = BulletManager.instance.getBulletDamage(bulletId);
+    public getBulletRealDamage(bulletId: string, isPenetrate: boolean = false) {
+        let bulletDamage: number = BulletManager.instance.getBulletDamage(bulletId, isPenetrate);
 
         // 1. 结合角色属性和核心属性对dmg进行修正
         let boostDmg: number = 0;
@@ -50,11 +50,13 @@ export default class DamageManager extends OBT_UIManager {
         // 2. 将第一步修正后的伤害与当前伤害百分比做计算
         let dmgVal: number = CHRManager.instance.propCtx.getPropRealValue("dmg");
         let finalDamage: number = Math.round((bulletDamage + boostDmg) * dmgVal);
+
+        console.log('造成伤害: ' + finalDamage)
         return finalDamage;
     }
 
-    public calcAttackDamage(bulletId: string, reduceRate: number, isGroupReduce: boolean): DamageInfo.DamageAttr {
-        let realDamage: number = this.getBulletRealDamage(bulletId);
+    public calcAttackDamage(bulletId: string, reduceRate: number, isGroupReduce: boolean, isPenetrate: boolean): DamageInfo.DamageAttr {
+        let realDamage: number = this.getBulletRealDamage(bulletId, isPenetrate);
         let isCtitical: boolean = false;
         // 只有核心的bullet才能暴击
         if (bulletId === WarCoreManager.instance.warCore.weaponCtx.bullet) {

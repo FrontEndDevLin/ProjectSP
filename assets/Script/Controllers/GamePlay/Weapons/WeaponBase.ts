@@ -45,7 +45,7 @@ export default class WeaponBase {
                 let val = setPropsMap[prop];
                 this[prop] = val;
                 if (prop === 'penetrate') {
-                    BulletManager.instance.setPachData({ penetrate: val })
+                    BulletManager.instance.setPachData(this.bullet, { penetrate: val, pen_dmg: this.pen_dmg })
                 }
             }
         }

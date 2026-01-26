@@ -147,7 +147,8 @@ export class EMY_Base extends OBT_Component {
 
                 // 显示伤害由一个类单独管理
                 let bulletId: string = otherCollider.node.name;
-                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate, isGroupReduce);
+                let isPenetrate: boolean = otherCollider.node.OBT_param2.attr.is_penetrate;
+                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate, isGroupReduce, isPenetrate);
                 // damageAttr.isCtitical // 暴击
                 let dmg = damageAttr.dmg;
                 if (damageAttr.isCtitical) {
