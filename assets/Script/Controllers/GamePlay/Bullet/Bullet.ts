@@ -102,8 +102,11 @@ export class Bullet extends OBT_Component {
                     BulletManager.instance.particleCtrl.createDieParticle(this.node.position, this._vector, this._attr.speed, 2);
                     this._die();
                 } else {
-                    this._attr.penetrate--;
-                    this._attr.is_penetrate = true;
+                    // 由于节点堆叠顺序导致碰撞的回调触发顺序不同, 会先触发bullet的onBeginContact方法再触发emy的onBeginContact方法
+                    setTimeout(() => {
+                        this._attr.penetrate--;
+                        this._attr.is_penetrate = true;
+                    })
                     // 修改this._attr会修改OBT_param2上的属性
                     // TODO: 如何做伤害衰减?
                     // 拟定: 在bulletAttr上增加一个属性isReduce初始为false, 在穿透后置为true, 伤害计算根据这个来

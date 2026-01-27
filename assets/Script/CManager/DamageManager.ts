@@ -51,6 +51,11 @@ export default class DamageManager extends OBT_UIManager {
         let dmgVal: number = CHRManager.instance.propCtx.getPropRealValue("dmg");
         let finalDamage: number = Math.round((bulletDamage + boostDmg) * dmgVal);
 
+        // 最低伤害不可小于1
+        if (finalDamage < 1) {
+            finalDamage = 1;
+        }
+
         return finalDamage;
     }
 

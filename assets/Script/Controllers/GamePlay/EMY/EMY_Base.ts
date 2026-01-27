@@ -158,11 +158,6 @@ export class EMY_Base extends OBT_Component {
                 if (damageAttr.isCtitical) {
                     console.log('触发暴击，伤害为' + dmg)
                 }
-                if (isPenetrate) {
-                    console.log('穿透伤害' + damageAttr.dmg)
-                } else {
-                    console.log('正常伤害' + damageAttr.dmg)
-                }
                 if (dmg <= 0) {
                     return;
                 }
