@@ -191,9 +191,10 @@ export class ScatterAtkWarCore extends OBT_Component {
 
             // 同一批次的子弹, groupId一致
             let groupId: number = this.bulletGroupId;
+            let { bullet, penetrate, pen_dmg } = this.warCore.weaponCtx;
             angleList.forEach((angle: number) => {
                 let vector = getVectorByAngle(angle);
-                BulletManager.instance.createBullet({ bulletId: this.warCore.weaponCtx.bullet, position: chrLoc, vector, groupId });
+                BulletManager.instance.createBullet({ bulletId: bullet, position: chrLoc, vector, groupId, penetrate, pen_dmg });
             });
             this.bulletGroupId++;
 

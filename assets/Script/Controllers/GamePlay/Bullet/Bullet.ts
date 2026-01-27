@@ -94,15 +94,20 @@ export class Bullet extends OBT_Component {
             if (this._attr.type === "EMY_bullet") {
                 return;
             }
-            if (this._attr.penetrate <= 0) {
+            if (typeof this._attr.penetrate !== 'number') {
                 BulletManager.instance.particleCtrl.createDieParticle(this.node.position, this._vector, this._attr.speed, 2);
                 this._die();
             } else {
-                this._attr.penetrate--;
-                this._attr.is_penetrate = true;
-                // 修改this._attr会修改OBT_param2上的属性
-                // TODO: 如何做伤害衰减?
-                // 拟定: 在bulletAttr上增加一个属性isReduce初始为false, 在穿透后置为true, 伤害计算根据这个来
+                if (this._attr.penetrate <= 0) {
+                    BulletManager.instance.particleCtrl.createDieParticle(this.node.position, this._vector, this._attr.speed, 2);
+                    this._die();
+                } else {
+                    this._attr.penetrate--;
+                    this._attr.is_penetrate = true;
+                    // 修改this._attr会修改OBT_param2上的属性
+                    // TODO: 如何做伤害衰减?
+                    // 拟定: 在bulletAttr上增加一个属性isReduce初始为false, 在穿透后置为true, 伤害计算根据这个来
+                }
             }
         }
         if (otherCollider.group === GameCollider.GROUP.CHR) {

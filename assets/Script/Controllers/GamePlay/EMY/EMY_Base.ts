@@ -148,11 +148,20 @@ export class EMY_Base extends OBT_Component {
                 // 显示伤害由一个类单独管理
                 let bulletId: string = otherCollider.node.name;
                 let isPenetrate: boolean = otherCollider.node.OBT_param2.attr.is_penetrate;
-                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate, isGroupReduce, isPenetrate);
+                let penDmg: number = 1;
+                if (isPenetrate) {
+                    penDmg = otherCollider.node.OBT_param2.attr.pen_dmg;
+                }
+                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate, isGroupReduce, penDmg);
                 // damageAttr.isCtitical // 暴击
                 let dmg = damageAttr.dmg;
                 if (damageAttr.isCtitical) {
                     console.log('触发暴击，伤害为' + dmg)
+                }
+                if (isPenetrate) {
+                    console.log('穿透伤害' + damageAttr.dmg)
+                } else {
+                    console.log('正常伤害' + damageAttr.dmg)
                 }
                 if (dmg <= 0) {
                     return;

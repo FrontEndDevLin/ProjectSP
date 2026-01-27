@@ -610,7 +610,9 @@ export namespace BulletInfo {
         vector: Vec3,
         enemyId?: string,
         ignoreList?: string[],
-        groupId?: number
+        groupId?: number,
+        penetrate?: number,
+        pen_dmg?: number
     }
 }
 

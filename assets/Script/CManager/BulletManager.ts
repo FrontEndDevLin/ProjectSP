@@ -39,14 +39,6 @@ export default class BulletManager extends OBT_UIManager {
 
     public bulletData: BulletInfo.BulletDBData = {};
 
-    /**
-     * 穿透/穿透伤害定义在weapon.json里
-     * 当挂载/修改武器属性时, 调用本类中一个方法将穿透数据更新到bulletPachData里
-     * 在创建子弹的时候, 检测bulletPachData里有没有对应子弹的修正属性
-     * 如有则将修正属性覆盖到对应子弹的bulletAttr里
-     */
-    protected bulletPachData: BulletInfo.BulletPachMap = {};
-
     // 存储当前装备的武器的弹头数据
     // private _bulletCldMap: BulletInfo.BulletCldData = {};
 
@@ -173,10 +165,9 @@ export default class BulletManager extends OBT_UIManager {
         }
     }
 
-    public createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId }: BulletInfo.CreateBulletParams ) {
+    public createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId, penetrate, pen_dmg }: BulletInfo.CreateBulletParams ) {
         // console.log(`创建子弹${bulletId}`)
         const bulletAttr: BulletInfo.BulletAttr = copyObject(this.bulletData[bulletId]);
-        bulletAttr.penetrate = 0;
         const nodePool = this._nodePoolMap[bulletId];
         let bulletNode: Node = nodePool ? nodePool.get() : null;
         if (!bulletNode) {
@@ -196,26 +187,13 @@ export default class BulletManager extends OBT_UIManager {
         sfNode.angle = angle;
         sfNode.setScale(v3(scaleX, 1));
         
-        if (this.bulletPachData[bulletId]) {
-            for (let k in this.bulletPachData[bulletId]) {
-                bulletAttr[k] = this.bulletPachData[bulletId][k];
-            }
-        }
+        bulletAttr.penetrate = penetrate || 0;
+        bulletAttr.pen_dmg = pen_dmg || 1;
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: Bullet = <Bullet>bulletNode.getComponent(bulletAttr.script);
         bulletNode.OBT_param2 = { attr: bulletAttr };
         scriptComp.init({ attr: bulletAttr, vector, enemyId, ignoreList, groupId });
         this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
-    }
-
-    public setPachData(bulletId: string, pachData: Common.SimpleObj) {
-        if (!this.bulletPachData[bulletId]) {
-            this.bulletPachData[bulletId] = {};
-        }
-        for (let k in pachData) {
-            this.bulletPachData[bulletId][k] = pachData[k];
-        }
-        console.log(this.bulletPachData)
     }
 
     update(deltaTime: number) {
