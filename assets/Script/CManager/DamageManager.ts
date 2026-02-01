@@ -102,6 +102,10 @@ export default class DamageManager extends OBT_UIManager {
         return dmg;
     }
 
+    public showDamageTxt(options: DamageInfo.ShowDamageTxtOptions): void {
+        
+    }
+
     update(deltaTime: number) {
         
     }

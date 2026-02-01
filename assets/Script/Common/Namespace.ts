@@ -621,6 +621,13 @@ export namespace DamageInfo {
         isCtitical: boolean,
         dmg: number
     }
+
+    export interface ShowDamageTxtOptions extends DamageAttr {
+        position: Vec3,
+        isEnemy?: boolean
+        // 是否是回血类型, 只有在isEnemy为false时生效
+        isHealth?: boolean,
+    }
 }
 
 export interface BoostConfig {
