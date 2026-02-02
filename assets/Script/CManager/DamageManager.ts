@@ -7,6 +7,8 @@ import CHRManager from './CHRManager';
 import { BoostConfig, DamageInfo } from '../Common/Namespace';
 import WarCoreManager from './WarCoreManager';
 import { getRandomNumber } from '../Common/utils';
+import { DamageTxt } from '../Controllers/GamePlay/Common/DamageTxt';
+import ProcessManager from './ProcessManager';
 
 /**
  * 伤害管理类
@@ -21,6 +23,7 @@ import { getRandomNumber } from '../Common/utils';
 
 export default class DamageManager extends OBT_UIManager {
     static instance: DamageManager = null;
+    public damageTxtRootNode: Node = null;
 
     protected onLoad(): void {
         if (!DamageManager.instance) {
@@ -32,7 +35,12 @@ export default class DamageManager extends OBT_UIManager {
     }
 
     start() {
+        // TODO: 临时，在实现对象池后不在这里调用
+        this.initRootNode();
+    }
 
+    public initRootNode() {
+        this.damageTxtRootNode = this.mountEmptyNode({ nodeName: "DamageTxtBox", parentNode: ProcessManager.instance.unitRootNode });
     }
 
     public getBulletRealDamage(bulletId: string) {
@@ -104,8 +112,11 @@ export default class DamageManager extends OBT_UIManager {
         return dmg;
     }
 
-    public showDamageTxt(options: DamageInfo.ShowDamageTxtOptions): void {
-        
+     public showDamageTxt(options: DamageInfo.ShowDamageTxtOptions): void {
+        const dmgTxtNode: Node = this.loadPrefab({ prefabPath: `Common/DamageTxt` });
+        const dmgTxtCxt: DamageTxt = <DamageTxt>dmgTxtNode.getComponent("DamageTxt");
+        dmgTxtCxt.init(options);
+        this.mountNode({ node: dmgTxtNode, parentNode: this.damageTxtRootNode });
     }
 
     update(deltaTime: number) {
