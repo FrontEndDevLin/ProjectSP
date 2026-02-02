@@ -15,6 +15,8 @@ import { getRandomNumber } from '../Common/utils';
  *  角色受击伤害
  *  显示伤害数字
  * 伤害计算需要结合角色属性、敌人属性、核心属性
+ * 
+ * 伤害数字预制件-脚本-动画tween
  */
 
 export default class DamageManager extends OBT_UIManager {
