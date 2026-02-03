@@ -1,6 +1,7 @@
 import { _decorator, Color, Component, Label, Node, tween, UIOpacity, UITransform, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import { DamageInfo } from '../../../Common/Namespace';
+import DamageManager from '../../../CManager/DamageManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('DamageTxt')
@@ -26,6 +27,7 @@ export class DamageTxt extends OBT_Component {
     public init(options: DamageInfo.ShowDamageTxtOptions) {
         const { position, isCtitical, isEnemy, isHealth, dmg } = options;
 
+        this.node.getComponent(UIOpacity).opacity = 255;
         this.node.setPosition(position);
         this.node.getComponent(Label).string = `${dmg}`;
 
@@ -71,7 +73,7 @@ export class DamageTxt extends OBT_Component {
         
         // 动画结束后销毁
         this.scheduleOnce(() => {
-            this.node.destroy();
+            DamageManager.instance.recoverDamageTxtNode(this.node);
         }, this.DURATION + 0.2);
     }
     

@@ -13,6 +13,7 @@ import SaveCtrl from './Class/SaveCtrl';
 import ItemsManager from './ItemsManager';
 import BulletManager from './BulletManager';
 import RealTimeEventManager from './RealTimeEventManager';
+import DamageManager from './DamageManager';
 const { ccclass, property } = _decorator;
 
 const CORE_SELECT_TIME: number = 5555;
@@ -127,6 +128,7 @@ export default class ProcessManager extends OBT_UIManager {
         EMYManager.instance.initRootNode();
         BulletManager.instance.initRootNode();
         DropItemManager.instance.initRootNode();
+        DamageManager.instance.initRootNode();
     }
 
     // 最开始

@@ -1,4 +1,4 @@
-import { _decorator, JsonAsset, Node } from 'cc';
+import { _decorator, JsonAsset, Node, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
 import OBT from '../OBT';
 import EMYManager from './EMYManager';
@@ -25,6 +25,8 @@ export default class DamageManager extends OBT_UIManager {
     static instance: DamageManager = null;
     public damageTxtRootNode: Node = null;
 
+    public damageTxtNodePool: NodePool = null;
+
     protected onLoad(): void {
         if (!DamageManager.instance) {
             DamageManager.instance = this;
@@ -32,15 +34,23 @@ export default class DamageManager extends OBT_UIManager {
             this.destroy();
             return;
         }
+
+        this.damageTxtNodePool = new NodePool();
     }
 
     start() {
-        // TODO: 临时，在实现对象池后不在这里调用
-        this.initRootNode();
     }
 
     public initRootNode() {
         this.damageTxtRootNode = this.mountEmptyNode({ nodeName: "DamageTxtBox", parentNode: ProcessManager.instance.unitRootNode });
+    }
+
+    protected preloadDamageTxtNodePool() {
+        this.damageTxtNodePool.clear();
+        for (let i = 0; i < 60; i++) {
+            let dmgTxtNode: Node = this.loadPrefab({ prefabPath: `Common/DamageTxt` });
+            this.damageTxtNodePool.put(dmgTxtNode);
+        }
     }
 
     public getBulletRealDamage(bulletId: string) {
@@ -112,11 +122,20 @@ export default class DamageManager extends OBT_UIManager {
         return dmg;
     }
 
-     public showDamageTxt(options: DamageInfo.ShowDamageTxtOptions): void {
-        const dmgTxtNode: Node = this.loadPrefab({ prefabPath: `Common/DamageTxt` });
+    public showDamageTxt(options: DamageInfo.ShowDamageTxtOptions): void {
+        let dmgTxtNode: Node = this.damageTxtNodePool.get();
+        if (!dmgTxtNode) {
+            dmgTxtNode = this.loadPrefab({ prefabPath: `Common/DamageTxt` });
+        }
         const dmgTxtCxt: DamageTxt = <DamageTxt>dmgTxtNode.getComponent("DamageTxt");
         dmgTxtCxt.init(options);
         this.mountNode({ node: dmgTxtNode, parentNode: this.damageTxtRootNode });
+    }
+
+    public recoverDamageTxtNode(node: Node) {
+        console.log('伤害数字节点回收')
+        this.damageTxtRootNode.removeChild(node);
+        this.damageTxtNodePool.put(node);
     }
 
     update(deltaTime: number) {
