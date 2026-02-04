@@ -3,6 +3,7 @@ import OBT_UIManager from "../Manager/OBT_UIManager";
 import ItemsManager from './ItemsManager';
 import WarCoreManager from './WarCoreManager';
 import { GamePlayEventOptions } from '../Common/Namespace';
+import MapManager from './MapManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -25,12 +26,18 @@ export default class RealTimeEventManager extends OBT_UIManager {
 
     // 通过波次触发
     public onPassWave() {
-        ItemsManager.instance.onRealTimeEvent('onPassWave')
-        WarCoreManager.instance.onRealTimeEvent('onPassWave')
+        ItemsManager.instance.onRealTimeEvent('onPassWave');
+        WarCoreManager.instance.onRealTimeEvent('onPassWave');
     }
 
     // 敌人死亡触发
     public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {
-        WarCoreManager.instance.onRealTimeEvent('onEnemyDie', dieParams)
+        WarCoreManager.instance.onRealTimeEvent('onEnemyDie', dieParams);
+    }
+
+    // 暴击触发
+    public onCtiticalAttack() {
+        // MapManager.instance.onRealTimeEvent("onCtiticalAttack");
+        MapManager.instance.shakeMap();
     }
 }

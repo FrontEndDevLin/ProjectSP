@@ -133,7 +133,6 @@ export default class DamageManager extends OBT_UIManager {
     }
 
     public recoverDamageTxtNode(node: Node) {
-        console.log('伤害数字节点回收')
         this.damageTxtRootNode.removeChild(node);
         this.damageTxtNodePool.put(node);
     }

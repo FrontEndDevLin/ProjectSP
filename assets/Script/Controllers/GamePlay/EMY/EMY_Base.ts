@@ -156,7 +156,8 @@ export class EMY_Base extends OBT_Component {
                 // damageAttr.isCtitical // 暴击
                 let dmg = damageAttr.dmg;
                 if (damageAttr.isCtitical) {
-                    console.log('触发暴击，伤害为' + dmg)
+                    console.log('触发暴击，伤害为' + dmg);
+                    RealTimeEventManager.instance.onCtiticalAttack();
                 }
                 if (dmg <= 0) {
                     return;
