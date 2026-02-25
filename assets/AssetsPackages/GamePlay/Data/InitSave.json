@@ -12,7 +12,7 @@
         "melee_dmg": 0,
         "range": 0,
         "atk_spd": 0,
-        "ctl": 50,
+        "ctl": 0,
         "def": 0,
         "spd": 0,
         "avd": 0,

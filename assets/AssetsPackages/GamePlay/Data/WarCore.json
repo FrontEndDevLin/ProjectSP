@@ -37,8 +37,8 @@
                 }
             ],
             "weapon": "Weapon_ScatterAtkWarCore",
-            "upgrade_pool_": ["fightWithBothHands", "fightWithBothHands", "fullPower", "fullPower2"],
-            "upgrade_pool": ["Item_FightWithBothHands", "Item_Blossom", "Item_CrossCloud"]
+            "upgrade_pool_": ["Item_FightWithBothHands", "Item_Blossom", "Item_CrossCloud", "Item_GatheringStorm"],
+            "upgrade_pool": ["Item_FightWithBothHands", "Item_Blossom", "Item_GatheringStorm"]
         }
     },
     "pub_atk_war_core": ["ScatterAtkWarCore"],

@@ -5,6 +5,7 @@ import ItemFightWithBothHands from "./ItemFightWithBothHands";
 import ItemScatterAtkWarCore from "./ItemScatterAtkWarCore";
 import ItemWarCore from "./ItemWarCore";
 import ItemYijingRing from "./ItemYijingRing";
+import ItemGatheringStorm from "./ItemGatheringStorm";
 
 export namespace Item_def {
     export const Item_Base = ItemBase;
@@ -14,4 +15,5 @@ export namespace Item_def {
     export const Item_ScatterAtkWarCore = ItemScatterAtkWarCore;
     export const Item_Blossom = ItemBlossom;
     export const Item_CrossCloud = ItemCrossCloud;
+    export const Item_GatheringStorm = ItemGatheringStorm;
 }

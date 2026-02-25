@@ -26,6 +26,8 @@ export default class ItemBase {
     public lock: boolean;
     public val_1: number;
     public val_2: number;
+    public val_3: number;
+    public val_4: number;
     public buff_list: CHRInfo.Buff[] = [];
     public weapon: string;
     public weaponCtx: WeaponBase;
