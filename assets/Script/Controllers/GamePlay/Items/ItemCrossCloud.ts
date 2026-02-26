@@ -1,9 +1,6 @@
-import { v3 } from "cc";
-import BulletManager from "../../../CManager/BulletManager";
 import WarCoreManager from "../../../CManager/WarCoreManager";
 import { GamePlayEventOptions } from "../../../Common/Namespace";
 import ItemSpecial from "./ItemSpecial";
-import { getAngleByVector, getRandomNumber, getVectorByAngle } from "../../../Common/utils";
 
 /**
  * "穿云"核心升级包

@@ -1,9 +1,7 @@
-import { v3 } from "cc";
-import BulletManager from "../../../CManager/BulletManager";
 import WarCoreManager from "../../../CManager/WarCoreManager";
-import { GamePlayEventOptions } from "../../../Common/Namespace";
+import { CHRInfo, GamePlayEventOptions } from "../../../Common/Namespace";
 import ItemSpecial from "./ItemSpecial";
-import { getAngleByVector, getRandomNumber, getVectorByAngle } from "../../../Common/utils";
+import CHRManager from "../../../CManager/CHRManager";
 
 /**
  * "风暴聚集"核心升级包
@@ -24,13 +22,22 @@ export default class ItemGatheringStorm extends ItemSpecial {
                 return;
             }
             this._counter++;
-            if (this._counter >= 20) {
+            if (this._counter >= this.val_1) {
                 this._currentCtlRate++;
-                // TODO: 修改角色属性的暴击几率
+                // 修改角色属性的暴击几率
+                let buffList: CHRInfo.Buff[] = [{ prop: "ctl", value: this.val_2 }];
+                CHRManager.instance.upgradePropByBuff(buffList);
 
                 if (this._currentCtlRate >= maxCtlRate) {
-                    // TODO: 修改分裂数
+                    // 修改分裂数
+                    let split: number = WarCoreManager.instance.warCore.weaponCtx.split;
+                    let newSplit: number = split ? split + this.val_4 : 0;
+                    if (newSplit) {
+                        WarCoreManager.instance.warCore.weaponCtx.setProps({ split: newSplit });
+                    }
                 }
+
+                this._counter -= 20;
             }
         }
     }
