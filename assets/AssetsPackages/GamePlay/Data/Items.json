@@ -148,6 +148,12 @@
             "type": 2,
             "ico": "scatter",
             "val_1": 2,
+            "buff_list": [
+                {
+                    "prop": "pen_dmg",
+                    "value": 30
+                }
+            ],
             "val_prefix": {
                 "val_1": ""
             }

@@ -38,7 +38,7 @@
             ],
             "weapon": "Weapon_ScatterAtkWarCore",
             "upgrade_pool_": ["Item_FightWithBothHands", "Item_Blossom", "Item_CrossCloud", "Item_GatheringStorm"],
-            "upgrade_pool": ["Item_FightWithBothHands", "Item_Blossom", "Item_GatheringStorm"]
+            "upgrade_pool": ["Item_FightWithBothHands", "Item_CrossCloud", "Item_GatheringStorm"]
         }
     },
     "pub_atk_war_core": ["ScatterAtkWarCore"],
