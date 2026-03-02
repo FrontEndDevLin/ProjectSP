@@ -163,7 +163,7 @@
             "global": 3,
             "group": 1,
             "label": "风暴聚集",
-            "intro": "持有散射核心时, 每击败<%val_1%>个敌人, 永久<%val_2%><&ctl&>, 上限为<%val_3%><&ctl&>。当达到上限时，获得<%val_4%>分裂",
+            "intro": "每击败<%val_1%>个敌人, 永久<%val_2%><&ctl&>, 上限为<%val_3%><&ctl&>。当达到上限时，获得<%val_4%>分裂",
             "type": 2,
             "ico": "scatter",
             "val_1": 20,
@@ -175,6 +175,19 @@
                 "val_2": "+-",
                 "val_3": "+-",
                 "val_4": "+-"
+            }
+        },
+        "Item_MoreScatter": {
+            "id": "Item_MoreScatter",
+            "global": 3,
+            "group": 1,
+            "label": "饱和散射",
+            "intro": "获得<%val_1%>分裂",
+            "type": 2,
+            "ico": "scatter",
+            "val_1": 4,
+            "val_prefix": {
+                "val_1": "+-"
             }
         }
     }
