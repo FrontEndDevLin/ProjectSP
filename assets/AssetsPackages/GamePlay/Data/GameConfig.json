@@ -289,8 +289,8 @@
                 },
                 {
                     "enemy_type": "EMY01",
-                    "spawn_once_time": 3,
-                    "spawn_interval": 2,
+                    "spawn_once_time": 2,
+                    "spawn_interval": 4,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 0,
@@ -300,8 +300,8 @@
                 },
                 {
                     "enemy_type": "EMY02",
-                    "spawn_once_time": 5,
-                    "spawn_interval": 4,
+                    "spawn_once_time": 4,
+                    "spawn_interval": 7,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 0,
@@ -311,8 +311,8 @@
                 },
                 {
                     "enemy_type": "EMY03",
-                    "spawn_once_time": 3,
-                    "spawn_interval": 2,
+                    "spawn_once_time": 2,
+                    "spawn_interval": 4,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 15,

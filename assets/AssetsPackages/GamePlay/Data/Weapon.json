@@ -22,7 +22,7 @@
             "split_dmg_rate": 0.4,
             "pen_dmg": 0.6,
             "range": 200,
-            "cd": 0.3,
+            "cd": 0.8,
             "ctl": 1,
             "ctl_dmg_rate": 1.5
         },

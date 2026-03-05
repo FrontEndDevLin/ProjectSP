@@ -188,6 +188,25 @@
             "val_1": 4,
             "val_prefix": {
                 "val_1": "+-"
+             }
+        },
+        "Item_FastScatter": {
+            "id": "Item_FastScatter",
+            "global": 3,
+            "group": 1,
+            "label": "急速散射",
+            "intro": "在<%val_1%>次攻击过后, 接下来的<%val_2%>次攻击附带<%val_3%><&atk_spd&>和<%val_4%><&ctl&>",
+            "type": 2,
+            "ico": "scatter",
+            "val_1": 3,
+            "val_2": 5,
+            "val_3": 80,
+            "val_4": 30,
+            "val_prefix": {
+                "val_1": "",
+                "val_2": "",
+                "val_3": "+-",
+                "val_4": "+-"
             }
         }
     }

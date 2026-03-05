@@ -9,6 +9,7 @@ import ProcessManager from '../../../CManager/ProcessManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import ItemWarCore from '../Items/ItemWarCore';
 import OBT from '../../../OBT';
+import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -202,7 +203,7 @@ export class ScatterAtkWarCore extends OBT_Component {
             // console.log(Number((Math.atan(vecY / vecX)).toFixed(2)));
             // 向量要根据贴图的旋转角度计算
             // this._attacking = true;
-
+            RealTimeEventManager.instance.onWarCoreAttack();
             // 冷却结合攻击速度修正
             this._cd = this.warCore.weaponCtx.cd;
         });

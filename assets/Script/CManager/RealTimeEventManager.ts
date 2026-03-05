@@ -30,6 +30,12 @@ export default class RealTimeEventManager extends OBT_UIManager {
         WarCoreManager.instance.onRealTimeEvent('onPassWave');
     }
 
+    // 核心攻击触发
+    public onWarCoreAttack() {
+        ItemsManager.instance.onRealTimeEvent('onWarCoreAttack');
+        WarCoreManager.instance.onRealTimeEvent('onWarCoreAttack');
+    }
+
     // 敌人死亡触发
     public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {
         WarCoreManager.instance.onRealTimeEvent('onEnemyDie', dieParams);

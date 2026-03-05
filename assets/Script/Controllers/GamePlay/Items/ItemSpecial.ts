@@ -8,5 +8,7 @@ import ItemBase from "./ItemBase";
 export default abstract class ItemSpecial extends ItemBase {
     public onPassWave() {};
 
+    public onWarCoreAttack() {};
+
     public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
 }

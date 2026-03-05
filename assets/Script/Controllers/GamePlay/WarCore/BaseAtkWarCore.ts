@@ -8,6 +8,7 @@ import { getFloatNumber, getVectorByAngle } from '../../../Common/utils';
 import ProcessManager from '../../../CManager/ProcessManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import ItemWarCore from '../Items/ItemWarCore';
+import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -160,7 +161,7 @@ export class BaseAtkWarCore extends OBT_Component {
             // 向量要根据贴图的旋转角度计算
             BulletManager.instance.createBullet({ bulletId: this.warCore.weaponCtx.bullet, position: chrLoc, vector });
             // this._attacking = true;
-
+            RealTimeEventManager.instance.onWarCoreAttack();
             // 冷却结合攻击速度修正
             this._cd = this.warCore.weaponCtx.cd;
         });
