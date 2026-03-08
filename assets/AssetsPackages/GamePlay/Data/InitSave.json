@@ -1,9 +1,9 @@
 {
     "desc": "存储当前存档数据",
-    "wave": 4,
+    "wave": 3,
     "status": 1,
-    "unlock_war_core_": false,
-    "unlock_war_core": true,
+    "unlock_war_core": false,
+    "unlock_war_core_": true,
     "chr_prop": {
         "desc": "这里存角色的面板数据",
         "hp": 10,
@@ -23,8 +23,8 @@
     },
     "chr_slot": {
         "level": 1,
-        "atk_core": "ScatterAtkWarCore",
-        "atk_core_": "BaseAtkWarCore",
+        "atk_core_": "ScatterAtkWarCore",
+        "atk_core": "BaseAtkWarCore",
         "core_level": 0,
         "core_exp": 49
     }

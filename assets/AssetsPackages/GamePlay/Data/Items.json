@@ -1,9 +1,11 @@
 {
     "desc": {
-        "global": "道具全局分组, 1->商店道具 2->核心内置道具 3->核心升级包道具",
+        "global": "道具全局分组, 1->商店道具 3->核心升级包道具",
         "type": "道具类型 1->普通buff类 2->特殊类",
-        "group": "道具分组 1->普通 2->限制 3->核心升级",
-        "max": "当group为limit(限制)时, 该属性生效",
+        "level": "道具级别 1->白色 2->蓝色 3-紫色 4-红色",
+        "group": "道具分组 1->普通 2->限制 3->独特的",
+        "max": "当group为2 limit(限制)时, 该属性生效",
+        "exc": "属于指定核心的专属道具",
         "Item_LargePlumbum": {}
     },
     "item_def": {
@@ -95,10 +97,39 @@
                 }
             ]
         },
+        "Item51": {
+            "id": "Item51",
+            "global": 1,
+            "level": 2,
+            "label": "测试蓝色道具",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "def",
+                    "value": 3
+                }
+            ]
+        },
+        "Item6": {
+            "id": "Item6",
+            "global": 1,
+            "level": 4,
+            "label": "左右开弓-全功率",
+            "intro": "左右开弓的概率提升至100%",
+            "ico": "Star",
+            "price": 1,
+            "type_": 2,
+            "type": 1,
+            "group": 3,
+            "exc": "ScatterAtkWarCore"
+        },
         "Item_YijingRing": {
             "id": "Item_YijingRing",
             "global": 1,
-            "level": 1,
+            "level": 3,
             "label": "义警戒指",
             "intro": "波次结束后<%val_1%><&dmg&>",
             "ico": "Star",
@@ -210,4 +241,4 @@
             }
         }
     }
-}
+} 

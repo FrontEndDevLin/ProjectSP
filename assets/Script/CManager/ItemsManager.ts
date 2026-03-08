@@ -9,6 +9,7 @@ import CHRManager from "./CHRManager";
 import { Item_def } from "../Controllers/GamePlay/Items/Item_def";
 import ItemBase from "../Controllers/GamePlay/Items/ItemBase";
 import ItemSpecial from "../Controllers/GamePlay/Items/ItemSpecial";
+import WarCoreManager from "./WarCoreManager";
 
 interface GetRandomItemConfig {
     quality?: number,
@@ -88,11 +89,34 @@ export default class ItemsManager extends OBT_UIManager {
             this._groupMap[item.group].push(itemId);
             
             if (item.global === ItemInfo.Global.ITEM) {
+                if (item.exc) {
+                    continue;
+                }
                 this.storeItemPool.push(itemId)
             }
         }
     }
-              
+
+    /**
+     * 核心解锁后，调用该方法，可将核心专属道具更新到商店列表里
+     */
+    public addWarCoreExcItems() {
+        console.log('更新核心专属道具，当前核心：' + WarCoreManager.instance.warCore.id);
+        const { item_def } = this.itemData;
+        for (let itemId in item_def) {
+            let item: ItemInfo.Item = item_def[itemId];
+            if (item.global === ItemInfo.Global.ITEM) {
+                let excWarCore: string = item.exc;
+                if (!excWarCore) {
+                    continue;
+                }
+                if (excWarCore === WarCoreManager.instance.warCore.id) {
+                    this.storeItemPool.push(itemId)
+                }
+            }
+        }
+    }
+
     // 刷新商店时，获取背包里已达上限/唯一的道具列表，以进行忽略操作
     private _getStoreIgnoreList(): string[] {
         let ignoreList: string[] = [];
