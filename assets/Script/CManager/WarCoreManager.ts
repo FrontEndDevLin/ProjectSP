@@ -111,7 +111,6 @@ export default class WarCoreManager extends OBT_UIManager {
             // this.warCoreItem = ItemsManager.instance.getItemCtxById(warCore.item);
             // this.warCoreItem.use();
             // this.atkWarCore.itemCtx = this.warCoreItem;
-            ItemsManager.instance.addWarCoreExcItems();
 
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
             this.showPrefab({ prefabPath: `WarCore/${this.warCore.id}`, parentNode: this.warCoreRootNode, scriptName: this.warCore.id });

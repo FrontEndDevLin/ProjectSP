@@ -5,7 +5,8 @@
         "level": "道具级别 1->白色 2->蓝色 3-紫色 4-红色",
         "group": "道具分组 1->普通 2->限制 3->独特的",
         "max": "当group为2 limit(限制)时, 该属性生效",
-        "exc": "属于指定核心的专属道具",
+        "lock": "是否锁定在商店, 刷新不会丢失",
+        "not_open": "是否未开放, 未开放的道具不会进入商店列表, 需要调用ItemsManager中的开放方法来激活",
         "Item_LargePlumbum": {}
     },
     "item_def": {
@@ -124,7 +125,7 @@
             "type_": 2,
             "type": 1,
             "group": 3,
-            "exc": "ScatterAtkWarCore"
+            "not_open": true
         },
         "Item_YijingRing": {
             "id": "Item_YijingRing",

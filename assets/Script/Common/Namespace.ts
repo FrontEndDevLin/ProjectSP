@@ -386,7 +386,7 @@ export namespace ItemInfo {
         val_2?: number,
         val_prefix?: ItemValPrefix,
         weapon?: string,
-        exc?: string
+        not_open?: boolean
     }
 
     export interface ItemMap {

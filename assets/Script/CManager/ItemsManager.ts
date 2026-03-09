@@ -89,32 +89,30 @@ export default class ItemsManager extends OBT_UIManager {
             this._groupMap[item.group].push(itemId);
             
             if (item.global === ItemInfo.Global.ITEM) {
-                if (item.exc) {
+                if (item.not_open) {
                     continue;
                 }
+
                 this.storeItemPool.push(itemId)
             }
         }
     }
 
     /**
-     * 核心解锁后，调用该方法，可将核心专属道具更新到商店列表里
+     * 激活未开放的道具，使之进入商店列表
      */
-    public addWarCoreExcItems() {
-        console.log('更新核心专属道具，当前核心：' + WarCoreManager.instance.warCore.id);
+    public activeItems(itemIdList: string[]) {
+        console.log('激活未开放道具：', itemIdList);
         const { item_def } = this.itemData;
-        for (let itemId in item_def) {
-            let item: ItemInfo.Item = item_def[itemId];
-            if (item.global === ItemInfo.Global.ITEM) {
-                let excWarCore: string = item.exc;
-                if (!excWarCore) {
-                    continue;
-                }
-                if (excWarCore === WarCoreManager.instance.warCore.id) {
-                    this.storeItemPool.push(itemId)
+
+        itemIdList.forEach((itemId: string) => {
+            if (this.storeItemPool.indexOf(itemId) === -1) {
+                let item: ItemInfo.Item = item_def[itemId];
+                if (item.global === ItemInfo.Global.ITEM) {
+                    this.storeItemPool.push(itemId);
                 }
             }
-        }
+        })
     }
 
     // 刷新商店时，获取背包里已达上限/唯一的道具列表，以进行忽略操作

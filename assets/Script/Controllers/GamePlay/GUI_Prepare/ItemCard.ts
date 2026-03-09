@@ -22,19 +22,19 @@ export class ItemCard extends OBT_Component {
     }
 
     private _updateView(item: ItemBase) {
-        this.view("Head/TitleWrap/ItemName").getComponent(Label).string = item.label;
-        this.view("Head/TitleWrap/ItemGroup").getComponent(Label).string = item.getGroupTxt();
+        this.view("Container/Head/TitleWrap/ItemName").getComponent(Label).string = item.label;
+        this.view("Container/Head/TitleWrap/ItemGroup").getComponent(Label).string = item.getGroupTxt();
 
-        this.view("Head/Pic").getComponent(Sprite).spriteFrame = item.getAssets();
+        this.view("Container/Head/Pic").getComponent(Sprite).spriteFrame = item.getAssets();
 
         if (item.intro) {
-            this.view("Content/Intro").active = true;
-            this.view("Content/Intro").getComponent(RichText).string = item.getIntro();
+            this.view("Container/Content/Intro").active = true;
+            this.view("Container/Content/Intro").getComponent(RichText).string = item.getIntro();
         }
 
         let buffTxt: string = item.getBuffTxt();
         if (buffTxt) {
-            this.view("Content/RichTxt").getComponent(RichText).string = buffTxt;
+            this.view("Container/Content/RichTxt").getComponent(RichText).string = buffTxt;
         }
     }
 
