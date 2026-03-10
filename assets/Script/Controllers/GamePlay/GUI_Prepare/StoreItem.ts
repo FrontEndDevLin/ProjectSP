@@ -17,12 +17,12 @@ export class StoreItem extends OBT_Component {
         this._item = item;
         this.view("ItemCard").OBT_param1 = item;
         this.view("ItemCard").addComponent("ItemCard");
-        this.view("OperBar/BuyBtn/Price/Cost").getComponent(Label).string = `${item.price}`;
+        this.view("ItemCard/Container/OperBar/BuyBtn/Price/Cost").getComponent(Label).string = `${item.price}`;
 
-        this.view("OperBar/BuyBtn").once(Node.EventType.TOUCH_END, this._buyItem, this);
+        this.view("ItemCard/Container/OperBar/BuyBtn").once(Node.EventType.TOUCH_END, this._buyItem, this);
 
         // 244,164,96锁定颜色
-        this.view("OperBar/LockBtn").on(Node.EventType.TOUCH_END, this._toggleLock, this);
+        this.view("ItemCard/Container/OperBar/LockBtn").on(Node.EventType.TOUCH_END, this._toggleLock, this);
 
         this._changeLockBtn();
     }
@@ -48,7 +48,7 @@ export class StoreItem extends OBT_Component {
         if (this._item.lock) {
             color = new Color(244, 164, 96);
         }
-        this.view("OperBar/LockBtn").getComponent(Sprite).color = color;
+        this.view("ItemCard/Container/OperBar/LockBtn").getComponent(Sprite).color = color;
     }
 
     protected onDestroy(): void {
