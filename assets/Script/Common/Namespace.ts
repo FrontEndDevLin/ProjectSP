@@ -1,4 +1,4 @@
-import { Vec3 } from "cc"
+import { Color, Vec3 } from "cc"
 import ItemBase from "../Controllers/GamePlay/Items/ItemBase"
 import WeaponBase from "../Controllers/GamePlay/Weapons/WeaponBase"
 
@@ -422,6 +422,15 @@ export namespace ItemInfo {
         CHEST,
         GREAT_CHEST
     }
+
+    export interface CardUIConfig {
+        border: string,
+        color: Color
+    }
+
+    export interface CardUIConfigMap {
+        [level: string]: CardUIConfig
+    }
 }
 
 export namespace WeaponInfo {
@@ -645,6 +654,25 @@ export const FLASH_TIME: number = 0.06;
 export const SAFE_DISTANCE: number = 160;
 
 export const MAX_WAR_CORE_LEVEL: number = 3;
+
+export const ItemCardUIConfigMap: ItemInfo.CardUIConfigMap = {
+    "1": {
+        border: "border-lv1",
+        color: new Color(255, 255, 255)
+    },
+    "2": {
+        border: "border-lv2",
+        color: new Color(91, 144, 180)
+    },
+    "3": {
+        border: "border-lv3",
+        color: new Color(149, 117, 205)
+    },
+    "4": {
+        border: "border-lv4",
+        color: new Color(255, 213, 79)
+    }
+}
 
 export const COLOR = {
   NORMAL: "#F5F5F5",

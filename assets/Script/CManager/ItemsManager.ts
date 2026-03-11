@@ -1,6 +1,6 @@
 import { find, Node } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
-import { CHRInfo, GamePlayEvent, ItemInfo } from "../Common/Namespace";
+import { CHRInfo, GamePlayEvent, ItemCardUIConfigMap, ItemInfo } from "../Common/Namespace";
 import DBManager from "./DBManager";
 import { copyObject, getRandomNumber } from "../Common/utils";
 import ProcessManager from "./ProcessManager";
@@ -16,7 +16,7 @@ interface GetRandomItemConfig {
     ignoreKeyList?: string[]
 }
 
-const STORE_ITEM_COUNT: number = 3;
+const STORE_ITEM_COUNT: number = 4;
 
 export default class ItemsManager extends OBT_UIManager {
     static instance: ItemsManager;
@@ -47,6 +47,8 @@ export default class ItemsManager extends OBT_UIManager {
     // 当前捡起的战利品列表, 不包含普通战利品
     // private _pickUpTrophyList: ItemInfo.TROPHY_TYPE[] = [ItemInfo.TROPHY_TYPE.CORE_UPGRADE];
     private _pickUpTrophyList: ItemInfo.TROPHY_TYPE[] = [];
+
+    public itemCardUIConfigMap: ItemInfo.CardUIConfigMap = ItemCardUIConfigMap;
 
     protected onLoad(): void {
         if (!ItemsManager.instance) {
