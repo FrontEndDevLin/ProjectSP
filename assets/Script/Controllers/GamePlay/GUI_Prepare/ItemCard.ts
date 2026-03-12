@@ -29,12 +29,14 @@ export class ItemCard extends OBT_Component {
         let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[level];
         let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
         this.view("Border").getComponent(Sprite).spriteFrame = borderAssets;
+
+        this.view("Background").getComponent(Sprite).color = uiConfg.background;
         this.view("Container/Head/TitleWrap/ItemName").getComponent(Label).color = uiConfg.color;
 
         this.view("Container/Head/TitleWrap/ItemName").getComponent(Label).string = item.label;
         this.view("Container/Head/TitleWrap/ItemGroup").getComponent(Label).string = item.getGroupTxt();
 
-        this.view("Container/Head/Pic").getComponent(Sprite).spriteFrame = item.getAssets();
+        this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = item.getAssets();
 
         if (item.intro) {
             this.view("Container/Content/Intro").active = true;

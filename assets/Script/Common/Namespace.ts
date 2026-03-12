@@ -425,7 +425,9 @@ export namespace ItemInfo {
 
     export interface CardUIConfig {
         border: string,
-        color: Color
+        color: Color,
+        background: Color,
+        darkBackground: Color
     }
 
     export interface CardUIConfigMap {
@@ -658,19 +660,27 @@ export const MAX_WAR_CORE_LEVEL: number = 3;
 export const ItemCardUIConfigMap: ItemInfo.CardUIConfigMap = {
     "1": {
         border: "border-lv1",
-        color: new Color(255, 255, 255)
+        color: new Color(255, 255, 255),
+        background: new Color(26, 26, 26, 200),
+        darkBackground: new Color(58, 58, 58)
     },
     "2": {
         border: "border-lv2",
-        color: new Color(91, 144, 180)
+        color: new Color(87, 184, 247),
+        background: new Color(20, 35, 42, 200),
+        darkBackground: new Color(59, 84, 100)
     },
     "3": {
         border: "border-lv3",
-        color: new Color(149, 117, 205)
+        color: new Color(149, 117, 205),
+        background: new Color(20, 14, 30, 200),
+        darkBackground: new Color(75, 67, 89)
     },
     "4": {
         border: "border-lv4",
-        color: new Color(255, 213, 79)
+        color: new Color(255, 213, 79),
+        background: new Color(35, 30, 15, 200),
+        darkBackground: new Color(102, 91, 57)
     }
 }
 
