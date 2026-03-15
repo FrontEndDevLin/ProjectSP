@@ -119,8 +119,9 @@ export default class WeaponBase {
         if (boost) {
             for (let prop in boost) {
                 // TODO: 后续换成图集图标
-                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
-                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
+                let ico: string = CHRManager.instance.propCtx.getPropInfo(prop, "ico");
+                console.log(ico)
+                boostTxt += `${boost[prop] * 100}%<img src='${ico}' />`;
             }
         }
         return `伤害: ${dmgColorTxt}|${base_dmg}+${boostTxt}`;

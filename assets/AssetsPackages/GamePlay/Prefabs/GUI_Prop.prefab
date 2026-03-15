@@ -411,7 +411,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 235,
+      "y": 238,
       "z": 0
     },
     "_lrot": {
@@ -556,7 +556,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 145,
-      "height": 46
+      "height": 42
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -691,8 +691,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 112,
-      "height": 35.28
+      "width": 96,
+      "height": 30.240000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -730,10 +730,10 @@
     "_string": "主要属性",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 28,
-    "_fontSize": 28,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
     "_fontFamily": "Arial",
-    "_lineHeight": 28,
+    "_lineHeight": 24,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": null,
@@ -946,7 +946,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 145,
-      "height": 46
+      "height": 42
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1081,8 +1081,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 112,
-      "height": 35.28
+      "width": 96,
+      "height": 30.240000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1120,10 +1120,10 @@
     "_string": "次要属性",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 28,
-    "_fontSize": 28,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
     "_fontFamily": "Arial",
-    "_lineHeight": 28,
+    "_lineHeight": 24,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": null,
@@ -1232,7 +1232,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 290,
-      "height": 50
+      "height": 44
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1366,7 +1366,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 200,
+      "y": 206,
       "z": 0
     },
     "_lrot": {
@@ -1888,6 +1888,7 @@
       "__id__": 0
     },
     "fileId": "7afRdsnXdFy4MbJU1dZOFP",
+    "instance": null,
     "targetOverrides": null
   }
 ]

@@ -1088,7 +1088,7 @@
     "_lineHeight": 28,
     "_string": "-",
     "_horizontalAlign": 0,
-    "_verticalAlign": 0,
+    "_verticalAlign": 1,
     "_fontSize": 24,
     "_fontColor": {
       "__type__": "cc.Color",
@@ -1217,7 +1217,7 @@
     "_lineHeight": 28,
     "_string": "-",
     "_horizontalAlign": 0,
-    "_verticalAlign": 0,
+    "_verticalAlign": 1,
     "_fontSize": 24,
     "_fontColor": {
       "__type__": "cc.Color",
@@ -1232,7 +1232,10 @@
     "_isSystemFontUsed": true,
     "_userDefinedFont": null,
     "_cacheMode": 0,
-    "_imageAtlas": null,
+    "_imageAtlas": {
+      "__uuid__": "11d8844e-81f8-46b5-bc9e-95e6055efed5",
+      "__expectedType__": "cc.SpriteAtlas"
+    },
     "_handleTouchEvent": true,
     "_id": ""
   },
@@ -1346,7 +1349,7 @@
     "_lineHeight": 28,
     "_string": "",
     "_horizontalAlign": 0,
-    "_verticalAlign": 0,
+    "_verticalAlign": 1,
     "_fontSize": 24,
     "_fontColor": {
       "__type__": "cc.Color",
@@ -1475,7 +1478,7 @@
     "_lineHeight": 28,
     "_string": "",
     "_horizontalAlign": 0,
-    "_verticalAlign": 0,
+    "_verticalAlign": 1,
     "_fontSize": 24,
     "_fontColor": {
       "__type__": "cc.Color",

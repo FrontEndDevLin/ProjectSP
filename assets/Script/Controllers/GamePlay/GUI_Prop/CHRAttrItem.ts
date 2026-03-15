@@ -25,7 +25,7 @@ export class CHRAttrItem extends OBT_Component {
         this.view("Value").getComponent(Label).string = `${prop.real_val}`;
 
         if (prop.ico) {
-            let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Prop/${prop.ico}`);
+            let assets: SpriteFrame = this.view("LeftWrap/Ico").getComponent(Sprite).spriteAtlas.getSpriteFrame(prop.ico);
             this.view("LeftWrap/Ico").getComponent(Sprite).spriteFrame = assets;
             this.view("LeftWrap/Ico").active = true;
         }
