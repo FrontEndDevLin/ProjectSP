@@ -120,7 +120,6 @@ export default class WeaponBase {
             for (let prop in boost) {
                 // TODO: 后续换成图集图标
                 let ico: string = CHRManager.instance.propCtx.getPropInfo(prop, "ico");
-                console.log(ico)
                 boostTxt += `${boost[prop] * 100}%<img src='${ico}' />`;
             }
         }

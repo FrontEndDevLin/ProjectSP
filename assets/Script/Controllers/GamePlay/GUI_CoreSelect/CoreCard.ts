@@ -32,21 +32,21 @@ export class CoreCard extends OBT_Component {
     public updateView(props: ItemWarCore) {
         this._props = props;
 
-        this.view("Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = props.getAssets();
-        this.view("Head/TitleWrap/CoreName").getComponent(Label).string = props.label;
+        this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = props.getAssets();
+        this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).string = props.label;
 
-        this.view("Content/Intro").getComponent(RichText).string = props.weaponCtx.getIntroRichTxt();
-        this.view("Content/Attr").getComponent(RichText).string = props.weaponCtx.getPanelRichTxt();
+        this.view("Container/Content/Intro").getComponent(RichText).string = props.weaponCtx.getIntroRichTxt();
+        this.view("Container/Content/Attr").getComponent(RichText).string = props.weaponCtx.getPanelRichTxt();
 
         if (props.intro) {
-            this.view("Content/Trait").active = true;
-            this.view("Content/Trait").getComponent(RichText).string = props.getIntro();
+            this.view("Container/Content/Trait").active = true;
+            this.view("Container/Content/Trait").getComponent(RichText).string = props.getIntro();
         } else {
-            this.view("Content/Trait").active = false;
+            this.view("Container/Content/Trait").active = false;
         }
 
         if (props.buff_list && props.buff_list.length) {
-            this.view("Content/Buff").getComponent(RichText).string = props.getBuffTxt();
+            this.view("Container/Content/Buff").getComponent(RichText).string = props.getBuffTxt();
         }
     }
 
