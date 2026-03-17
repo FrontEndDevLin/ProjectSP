@@ -1199,7 +1199,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 206,
+      "width": 202,
       "height": 50
     },
     "_anchorPoint": {
@@ -1233,7 +1233,7 @@
       "height": 40
     },
     "_startAxis": 0,
-    "_paddingLeft": 10,
+    "_paddingLeft": 8,
     "_paddingRight": 0,
     "_paddingTop": 0,
     "_paddingBottom": 0,
