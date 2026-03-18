@@ -104,6 +104,9 @@ export default class CHRManager extends OBT_UIManager {
     public getLevelUpCnt(): number {
         return this._levelCtrl.getLevelUpCnt();
     }
+    public getCurrentUpgradeLevel(): number {
+        return this._levelCtrl.getCurrentUpgradeLevel();
+    }
 
     public upgradeProp(propKey: string) {
         let res: boolean = this.propCtx.upgradeProp(propKey);

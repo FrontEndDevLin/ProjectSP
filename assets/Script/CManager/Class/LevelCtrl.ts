@@ -68,6 +68,12 @@ export default class LevelCtrl extends BaseCtrl {
     public getLevelUpCnt() {
         return this._levelUpCnt;
     }
+    // 获取当前升级等级
+    public getCurrentUpgradeLevel(): number {
+        console.log('当前升级等级 ' + (this.level - this._levelUpCnt + 1))
+        return this.level - this._levelUpCnt + 1;
+    }
+
     // 完成一次升级
     public finishOnceTimeLevelUp() {
         this._levelUpCnt--;

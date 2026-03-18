@@ -186,6 +186,7 @@ export default class PropCtrl extends BaseCtrl {
 
         let props: string[] = this._getPreUpgradeProps();
         const list: CHRInfo.upgradeProp[] = [];
+        let upgradeLevel: number = CHRManager.instance.getCurrentUpgradeLevel();
         // TODO: level结合当前等级计算
         let level = 1;
         // TODO: 每一个主要属性设计一个图标，在这里可以返回，UI界面可以显示
