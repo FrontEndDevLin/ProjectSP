@@ -85,4 +85,9 @@ export default class LevelCtrl extends BaseCtrl {
         // OO_UIManager.instance.removeUI("LevelUpIconWrap");
         // this._levelUpIconUINode = null;
     }
+
+    // 获取当前升级等级的品质
+    public getUpgradeQuality(level: number) {
+        
+    }
 }
