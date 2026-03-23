@@ -26,7 +26,8 @@
             "desc": "普通1",
             "wave_type": 1,
             "max_emy": 30,
-            "duration": 20,
+            "duration_": 20,
+            "duration": 3,
             "preload": {
                 "alert": 4,
                 "exp": 10,

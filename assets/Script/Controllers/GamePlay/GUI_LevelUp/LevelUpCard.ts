@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { CHRInfo, GAME_NODE, GamePlayEvent } from '../../../Common/Namespace';
+import { CHRInfo, GAME_NODE, GamePlayEvent, ITEM_QUALITY, ItemCardUIConfigMap, ItemInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
@@ -18,6 +18,12 @@ export class LevelUpCard extends OBT_Component {
 
         const props: CHRInfo.upgradeProp = this.node.OBT_param1;
         this._props = props;
+
+        let quality: ITEM_QUALITY = props.quality;
+        let uiConfg: ItemInfo.CardUIConfig = ItemCardUIConfigMap[quality];
+        let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
+        this.view("Border").getComponent(Sprite).spriteFrame = borderAssets;
+        this.view("Background").getComponent(Sprite).color = uiConfg.background;
 
         let assets: SpriteFrame = this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteAtlas.getSpriteFrame(props.ico);
         this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = assets;

@@ -1,7 +1,8 @@
-import { GamePlayEvent } from "../../Common/Namespace";
+import { GamePlayEvent, ITEM_QUALITY } from "../../Common/Namespace";
 import { getFloatNumber } from "../../Common/utils";
 import OBT from "../../OBT";
 import CHRManager from "../CHRManager";
+import RateConfigManager from "../RateConfigManager";
 import { BaseCtrl } from "./BaseCtrl";
 import { getSaveCtrl } from "./SaveCtrl";
 
@@ -87,7 +88,34 @@ export default class LevelCtrl extends BaseCtrl {
     }
 
     // 获取当前升级等级的品质
-    public getUpgradeQuality(level: number) {
-        
+    public getUpgradeQuality(level: number): ITEM_QUALITY {
+        let m: number = level / 5;
+        let quality: ITEM_QUALITY;
+        // 如果level是5的倍数
+        if (m % 1 === 0) {
+            switch (m) {
+                case 1: {
+                    // 当前5级
+                    quality = ITEM_QUALITY.LV2
+                } break;
+                case 2: {
+                    // 当前10级
+                    quality = ITEM_QUALITY.LV3
+                } break;
+                case 3: {
+                    // 当前15级
+                    quality = ITEM_QUALITY.LV3
+                } break;
+                default: {
+                    // 20/25/30...
+                    quality = ITEM_QUALITY.LV4
+                } break;
+            }
+        } else {
+            // level不是5的倍数, 走随机流程
+            quality = RateConfigManager.instance.getUpgradeQuality(level);
+        }
+
+        return quality || ITEM_QUALITY.LV1;
     }
 }

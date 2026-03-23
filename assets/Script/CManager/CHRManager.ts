@@ -1,7 +1,7 @@
 import { find, Vec3, Node, v3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import DBManager from "./DBManager";
-import { CHRInfo, GamePlayEvent, SaveDoc } from "../Common/Namespace";
+import { CHRInfo, GamePlayEvent, ITEM_QUALITY, SaveDoc } from "../Common/Namespace";
 import LevelCtrl from "./Class/LevelCtrl";
 import OBT from "../OBT";
 import PropCtrl from "./Class/PropCtrl";
@@ -137,6 +137,11 @@ export default class CHRManager extends OBT_UIManager {
     // 获取角色位置
     public getCHRLoc(): Vec3 {
         return this._CHRLoc;
+    }
+
+    // 获取当前升级等级的品质
+    public getUpgradeQuality(level: number): ITEM_QUALITY {
+        return this._levelCtrl.getUpgradeQuality(level);
     }
 
     protected onDestroy(): void {

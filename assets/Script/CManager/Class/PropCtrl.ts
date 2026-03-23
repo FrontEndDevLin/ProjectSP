@@ -187,18 +187,17 @@ export default class PropCtrl extends BaseCtrl {
         let props: string[] = this._getPreUpgradeProps();
         const list: CHRInfo.upgradeProp[] = [];
         let upgradeLevel: number = CHRManager.instance.getCurrentUpgradeLevel();
-        // TODO: level结合当前等级计算
-        let level = 1;
-        // TODO: 每一个主要属性设计一个图标，在这里可以返回，UI界面可以显示
         props.forEach(prop => {
+            // 获取升级卡片的品质
+            let quality = CHRManager.instance.getUpgradeQuality(upgradeLevel);
             let propInfo: CHRInfo.Prop = this.getPropInfo(prop);
             list.push({
                 prop,
                 propTxt: propInfo.txt,
                 ico: propInfo.ico,
-                level,   // 品质
-                // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
-                value: this.qualityConfig[prop][0],
+                // 品质
+                quality,
+                value: this.qualityConfig[prop][quality - 1]
                 // pos: true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
                 // percent: propInfo.percent
             })

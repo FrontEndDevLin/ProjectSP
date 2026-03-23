@@ -16,7 +16,7 @@ export default class ItemBase {
     public id: string;
     public global: ItemInfo.Global;
     public type: ItemInfo.Type;
-    public level: number;
+    public quality: number;
     public label: string;
     public intro: string;
     public group: ItemInfo.Group;

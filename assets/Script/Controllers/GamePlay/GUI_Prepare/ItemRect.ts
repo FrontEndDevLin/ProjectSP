@@ -23,7 +23,7 @@ export class ItemRect extends OBT_Component {
 
         let item: ItemInfo.Item = ItemsManager.instance.getItemById(backpackItem.id);
 
-        let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[item.level];
+        let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[item.quality];
         this.node.getComponent(Sprite).color = uiConfg.darkBackground;
 
         let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Item/${item.ico}`);

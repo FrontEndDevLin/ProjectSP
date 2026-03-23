@@ -1,6 +1,6 @@
 import { find, Node } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
-import { CHRInfo, GamePlayEvent, ItemCardUIConfigMap, ItemInfo } from "../Common/Namespace";
+import { CHRInfo, GamePlayEvent, ITEM_QUALITY, ItemCardUIConfigMap, ItemInfo } from "../Common/Namespace";
 import DBManager from "./DBManager";
 import { copyObject, getRandomNumber } from "../Common/utils";
 import ProcessManager from "./ProcessManager";
@@ -10,9 +10,9 @@ import { Item_def } from "../Controllers/GamePlay/Items/Item_def";
 import ItemBase from "../Controllers/GamePlay/Items/ItemBase";
 import ItemSpecial from "../Controllers/GamePlay/Items/ItemSpecial";
 import WarCoreManager from "./WarCoreManager";
+import RateConfigManager from "./RateConfigManager";
 
 interface GetRandomItemConfig {
-    quality?: number,
     ignoreKeyList?: string[]
 }
 
@@ -31,7 +31,12 @@ export default class ItemsManager extends OBT_UIManager {
     };
 
     // 会出现在商城的道具id列表
-    protected storeItemPool: string[] = [];
+    protected storeItemPool: ItemInfo.StoreItemPool = {
+        [ITEM_QUALITY.LV1]: [],
+        [ITEM_QUALITY.LV2]: [],
+        [ITEM_QUALITY.LV3]: [],
+        [ITEM_QUALITY.LV4]: []
+    };
 
     // 触发刷新的次数
     private _refreshTime: number = 0;
@@ -95,7 +100,8 @@ export default class ItemsManager extends OBT_UIManager {
                     continue;
                 }
 
-                this.storeItemPool.push(itemId)
+                let quality: ITEM_QUALITY = item.quality;
+                this.storeItemPool[quality].push(itemId)
             }
         }
     }
@@ -106,12 +112,13 @@ export default class ItemsManager extends OBT_UIManager {
     public activeItems(itemIdList: string[]) {
         console.log('激活未开放道具：', itemIdList);
         const { item_def } = this.itemData;
-
+        
         itemIdList.forEach((itemId: string) => {
-            if (this.storeItemPool.indexOf(itemId) === -1) {
-                let item: ItemInfo.Item = item_def[itemId];
+            let item: ItemInfo.Item = item_def[itemId];
+            let quality: ITEM_QUALITY = item.quality || ITEM_QUALITY.LV1;
+            if (this.storeItemPool[quality].indexOf(itemId) === -1) {
                 if (item.global === ItemInfo.Global.ITEM) {
-                    this.storeItemPool.push(itemId);
+                    this.storeItemPool[quality].push(itemId);
                 }
             }
         })
@@ -176,30 +183,26 @@ export default class ItemsManager extends OBT_UIManager {
 
     // 获取一个符合当前阶段的道具，刷新商店用
     private _getRandomItemByStore(options: GetRandomItemConfig = {}): ItemInfo.Item {
-        let currentWave: number = ProcessManager.instance.waveRole.wave;
+        let nextWave: number = ProcessManager.instance.waveRole.wave + 1;
         // 物品质量根据当前波次决定，低级物品概率大
-        let quality = options.quality || 1;
+        let quality = RateConfigManager.instance.getItemQuality(nextWave);
         let ignoreList = options.ignoreKeyList;
 
         let item: ItemInfo.Item = null;
-        switch (quality) {
-            case 1: {
-                let itemPool: ItemInfo.Item[] = this._getItemsList(ignoreList);
-                if (itemPool.length) {
-                    let idx: number = getRandomNumber(0, itemPool.length - 1);
-                    item = itemPool[idx];
-                }
-            } break;
-            case ItemInfo.TROPHY_TYPE.GREAT_CHEST: {
 
-            } break;
+        // 可选道具列表
+        let itemPool: ItemInfo.Item[] = this._getItemsList(quality, ignoreList);
+        if (itemPool.length) {
+            let idx: number = getRandomNumber(0, itemPool.length - 1);
+            item = itemPool[idx];
         }
+
         return item;
     }
 
-    private _getItemsList(ignoreKeyList: string[] = []) {
+    private _getItemsList(quality: ITEM_QUALITY, ignoreKeyList: string[] = []) {
         let pool: ItemInfo.Item[] = [];
-        for (let id of this.storeItemPool) {
+        for (let id of this.storeItemPool[quality]) {
             // 排除已进入当前商店列表/已达上限的项目
             if (ignoreKeyList.indexOf(id) !== -1) {
                 continue;

@@ -2,7 +2,7 @@
     "desc": {
         "global": "道具全局分组, 1->商店道具 3->核心升级包道具",
         "type": "道具类型 1->普通buff类 2->特殊类",
-        "level": "道具级别 1->白色 2->蓝色 3-紫色 4-红色",
+        "quality": "道具级别 1->白色 2->蓝色 3-紫色 4-金色",
         "group": "道具分组 1->普通 2->限制 3->独特的",
         "max": "当group为2 limit(限制)时, 该属性生效",
         "lock": "是否锁定在商店, 刷新不会丢失",
@@ -13,7 +13,7 @@
         "Item1": {
             "id": "Item1",
             "global": 1,
-            "level": 1,
+            "quality": 1,
             "label": "道具1",
             "ico": "Star",
             "price": 1,
@@ -33,7 +33,7 @@
         "Item2": {
             "id": "Item2",
             "global": 1,
-            "level": 1,
+            "quality": 1,
             "label": "道具2",
             "ico": "Star",
             "price": 1,
@@ -49,7 +49,7 @@
         "Item3": {
             "id": "Item3",
             "global": 1,
-            "level": 1,
+            "quality": 1,
             "label": "道具3",
             "ico": "Star",
             "price": 1,
@@ -69,7 +69,7 @@
         "Item4": {
             "id": "Item4",
             "global": 1,
-            "level": 1,
+            "quality": 1,
             "label": "道具4",
             "ico": "Star",
             "price": 1,
@@ -85,7 +85,7 @@
         "Item5": {
             "id": "Item5",
             "global": 1,
-            "level": 1,
+            "quality": 1,
             "label": "道具5",
             "ico": "Star",
             "price": 1,
@@ -101,8 +101,8 @@
         "Item51": {
             "id": "Item51",
             "global": 1,
-            "level": 2,
-            "label": "测试蓝色道具",
+            "quality": 2,
+            "label": "测试蓝色道具51",
             "ico": "Star",
             "price": 1,
             "type": 1,
@@ -114,10 +114,218 @@
                 }
             ]
         },
+        "Item52": {
+            "id": "Item52",
+            "global": 1,
+            "quality": 2,
+            "label": "测试蓝色道具52",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "melee_dmg",
+                    "value": 6
+                },
+                {
+                    "prop": "range_dmg",
+                    "value": -3
+                }
+            ]
+        },
+        "Item53": {
+            "id": "Item53",
+            "global": 1,
+            "quality": 2,
+            "label": "测试蓝色道具53",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "ctl",
+                    "value": 8
+                },
+                {
+                    "prop": "range_dmg",
+                    "value": -1
+                }
+            ]
+        },
+        "Item54": {
+            "id": "Item54",
+            "global": 1,
+            "quality": 2,
+            "label": "测试蓝色道具54",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "hp",
+                    "value": 6
+                },
+                {
+                    "prop": "def",
+                    "value": -2
+                }
+            ]
+        },
+        "Item61": {
+            "id": "Item61",
+            "global": 1,
+            "quality": 3,
+            "label": "测试紫色道具61",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "exp_eff",
+                    "value": 20
+                }
+            ]
+        },
+        "Item62": {
+            "id": "Item62",
+            "global": 1,
+            "quality": 3,
+            "label": "测试紫色道具62",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "melee_dmg",
+                    "value": 10
+                }
+            ]
+        },
+        "Item63": {
+            "id": "Item63",
+            "global": 1,
+            "quality": 3,
+            "label": "测试紫色道具63",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "dmg",
+                    "value": 20
+                }
+            ]
+        },
+        "Item71": {
+            "id": "Item71",
+            "global": 1,
+            "quality": 4,
+            "label": "测试金色道具71",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "hp",
+                    "value": 3
+                },
+                {
+                    "prop": "dmg",
+                    "value": 3
+                },
+                {
+                    "prop": "range_dmg",
+                    "value": 3
+                },
+                {
+                    "prop": "melee_dmg",
+                    "value": 3
+                },
+                {
+                    "prop": "atk_spd",
+                    "value": 5
+                },
+                {
+                    "prop": "ctl",
+                    "value": 5
+                }
+            ]
+        },
+        "Item72": {
+            "id": "Item72",
+            "global": 1,
+            "quality": 4,
+            "label": "测试金色道具72",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "hp",
+                    "value": 20
+                }
+            ]
+        },
+        "Item73": {
+            "id": "Item73",
+            "global": 1,
+            "quality": 4,
+            "label": "测试金色道具73",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "spd",
+                    "value": 10
+                },
+                {
+                    "prop": "avd",
+                    "value": 15
+                }
+            ]
+        },
+        "Item74": {
+            "id": "Item74",
+            "global": 1,
+            "quality": 4,
+            "label": "测试金色道具74",
+            "ico": "Star",
+            "price": 1,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "dmg",
+                    "value": 30
+                }
+            ]
+        },
+        "Item_YijingRing": {
+            "id": "Item_YijingRing",
+            "global": 1,
+            "quality": 3,
+            "label": "义警戒指",
+            "intro": "波次结束后<%val_1%><&dmg&>",
+            "ico": "Star",
+            "price": 1,
+            "type": 2,
+            "group": 1,
+            "val_1": 3
+        },
         "Item6": {
             "id": "Item6",
             "global": 1,
-            "level": 4,
+            "quality": 4,
             "label": "左右开弓-全功率",
             "intro": "左右开弓的概率提升至100%",
             "ico": "Star",
@@ -126,18 +334,6 @@
             "type": 1,
             "group": 3,
             "not_open": true
-        },
-        "Item_YijingRing": {
-            "id": "Item_YijingRing",
-            "global": 1,
-            "level": 3,
-            "label": "义警戒指",
-            "intro": "波次结束后<%val_1%><&dmg&>",
-            "ico": "Star",
-            "price": 1,
-            "type": 2,
-            "group": 1,
-            "val_1": 3
         },
 
         "Item_FightWithBothHands": {

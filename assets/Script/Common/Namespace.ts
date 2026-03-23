@@ -343,7 +343,7 @@ export namespace CHRInfo {
         prop: string,
         propTxt: string,
         ico: string,
-        level: number,   // 品质
+        quality: number,   // 品质
         // TODO: 需要根据当前角色等级，调整刷出 低级/中级/高级 升级属性的概率
         value: number
     }
@@ -373,7 +373,7 @@ export namespace ItemInfo {
         id: string,
         global: Global,
         type: Type,
-        level: number,
+        quality: ITEM_QUALITY,
         label: string,
         intro?: string,
         group: Group,
@@ -391,6 +391,13 @@ export namespace ItemInfo {
 
     export interface ItemMap {
         [itemId: string]: Item
+    }
+
+    export interface StoreItemPool {
+        [ITEM_QUALITY.LV1]: string[],
+        [ITEM_QUALITY.LV2]: string[],
+        [ITEM_QUALITY.LV3]: string[],
+        [ITEM_QUALITY.LV4]: string[]
     }
 
     export interface ItemData {
@@ -646,6 +653,24 @@ export interface BoostConfig {
     [prop: string]: number
 }
 
+// 刷新概率配置相关
+export namespace RateConfig {
+    export interface StoreConfigItem {
+        [ITEM_QUALITY.LV1]: number,
+        [ITEM_QUALITY.LV2]: number,
+        [ITEM_QUALITY.LV3]: number,
+        [ITEM_QUALITY.LV4]: number
+    }
+    export interface StoreConfig {
+        [levelRange: string]: StoreConfigItem
+    }
+
+    export interface RateConfigDBData {
+        upgrade_store_rate_config: StoreConfig,
+        item_store_rate_config: StoreConfig
+    }
+}
+
 export const SCREEN_WIDTH = 1280;
 export const SCREEN_HEIGHT = 720;
 // 速度1，实际等于 1*PIXEL_UNIT = 20px/s
@@ -657,26 +682,33 @@ export const SAFE_DISTANCE: number = 160;
 
 export const MAX_WAR_CORE_LEVEL: number = 3;
 
+export enum ITEM_QUALITY {
+    LV1 = 1,
+    LV2 = 2,
+    LV3 = 3,
+    LV4 = 4
+}
+
 export const ItemCardUIConfigMap: ItemInfo.CardUIConfigMap = {
-    "1": {
+    [ITEM_QUALITY.LV1]: {
         border: "border-lv1",
         color: new Color(255, 255, 255),
         background: new Color(26, 26, 26, 200),
         darkBackground: new Color(58, 58, 58)
     },
-    "2": {
+    [ITEM_QUALITY.LV2]: {
         border: "border-lv2",
         color: new Color(87, 184, 247),
         background: new Color(20, 35, 42, 200),
         darkBackground: new Color(59, 84, 100)
     },
-    "3": {
+    [ITEM_QUALITY.LV3]: {
         border: "border-lv3",
         color: new Color(149, 117, 205),
         background: new Color(20, 14, 30, 200),
         darkBackground: new Color(75, 67, 89)
     },
-    "4": {
+    [ITEM_QUALITY.LV4]: {
         border: "border-lv4",
         color: new Color(255, 213, 79),
         background: new Color(35, 30, 15, 200),

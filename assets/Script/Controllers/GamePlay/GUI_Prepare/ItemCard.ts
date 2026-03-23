@@ -1,7 +1,7 @@
 import { _decorator, Color, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import ItemBase from '../Items/ItemBase';
-import { ItemInfo } from '../../../Common/Namespace';
+import { ITEM_QUALITY, ItemInfo } from '../../../Common/Namespace';
 import ItemsManager from '../../../CManager/ItemsManager';
 import OBT from '../../../OBT';
 const { ccclass, property } = _decorator;
@@ -25,7 +25,7 @@ export class ItemCard extends OBT_Component {
     }
 
     private _updateView(item: ItemBase) {
-        let level = item.level || 1;
+        let level = item.quality || ITEM_QUALITY.LV1;
         let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[level];
         let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
         this.view("Border").getComponent(Sprite).spriteFrame = borderAssets;
