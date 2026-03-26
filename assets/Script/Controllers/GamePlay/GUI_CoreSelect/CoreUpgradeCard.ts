@@ -48,30 +48,15 @@ export class CoreUpgradeCard extends OBT_Component {
         if (buffTxt) {
             this.view("Content/Buff").getComponent(RichText).string = buffTxt;
         }
-        if (props.id === 'Item_Blossom') {
-            console.log(props.getIntro())
-            console.log(props.weaponCtx.getIntroRichTxt())
-        }
+        // if (props.id === 'Item_Blossom') {
+        //     console.log(props.getIntro())
+        //     console.log(props.weaponCtx.getIntroRichTxt())
+        // }
 
         if (props.weapon) {
             this.view("Content/Attr").active = true;
             this.view("Content/Attr").getComponent(RichText).string = props.weaponCtx.getPanelRichTxt();
         }
-        // let introRichTxt: string = props.intro;
-        // const regex = /<%([^%]+)%>/g;
-        // const matches = introRichTxt.match(regex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];
-        // if (matches.length) {
-        //     matches.forEach((key) => {
-        //         if (key === 'calcDmg') {
-        //             // 如果有子弹id, 通过id向WarCoreManager获取基础伤害/加成/伤害等属性
-        //             let dmgTxt: string = BulletManager.instance.getBulletRealDmgRichTxt(props.bullet);
-        //             introRichTxt = introRichTxt.replace(`<%${key}%>`, dmgTxt);
-        //         } else {
-        //             let val = props[key]
-        //             introRichTxt = introRichTxt.replace(`<%${key}%>`, `<color=${COLOR.SUCCESS}>${val}</color>`);
-        //         }
-        //     })
-        // }
 
         // this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
 
@@ -89,41 +74,41 @@ export class CoreUpgradeCard extends OBT_Component {
     }
 
     // 获取伤害加成文本 实际伤害|[基础伤害+X%属性]
-    private _getRealDmgRichTxt(bulletRealTimeAttr): string {
-        let { dmg, base_dmg, boost } = bulletRealTimeAttr;
-        let dmgColor: string = dmg >= base_dmg ? COLOR.SUCCESS : COLOR.DANGER;
-        let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
-        let boostTxt: string = "";
-        if (boost) {
-            boostTxt += `|[${base_dmg}`;
-            for (let prop in boost) {
-                boostTxt += "+"
-                // TODO: 后续换成图集图标
-                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
-                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
-            }
-            boostTxt += ']'
-        }
-        return `${dmgColorTxt}${boostTxt}`;
-    }
+    // private _getRealDmgRichTxt(bulletRealTimeAttr): string {
+    //     let { dmg, base_dmg, boost } = bulletRealTimeAttr;
+    //     let dmgColor: string = dmg >= base_dmg ? COLOR.SUCCESS : COLOR.DANGER;
+    //     let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
+    //     let boostTxt: string = "";
+    //     if (boost) {
+    //         boostTxt += `|[${base_dmg}`;
+    //         for (let prop in boost) {
+    //             boostTxt += "+"
+    //             // TODO: 后续换成图集图标
+    //             let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
+    //             boostTxt += `${boost[prop] * 100}%${attrTxt}`;
+    //         }
+    //         boostTxt += ']'
+    //     }
+    //     return `${dmgColorTxt}${boostTxt}`;
+    // }
 
     // 获取伤害属性富文本, 如果升级包里有弹头id, 则需要获取伤害
-    private _getDmgRichTxt(dmg: number, baseDmg: number, boost: BoostConfig, split?: number): string {
-        let dmgColor: string = dmg >= baseDmg ? COLOR.SUCCESS : COLOR.DANGER;
-        let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
-        if (split && split > 0) {
-            dmgColorTxt += `x<color=${COLOR.SUCCESS}>${split}</color>`;
-        }
-        let boostTxt: string = "|";
-        if (boost) {
-            for (let prop in boost) {
-                // TODO: 后续换成图集图标
-                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
-                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
-            }
-        }
-        return `伤害: ${dmgColorTxt}|${baseDmg}${boostTxt}`;
-    }
+    // private _getDmgRichTxt(dmg: number, baseDmg: number, boost: BoostConfig, split?: number): string {
+    //     let dmgColor: string = dmg >= baseDmg ? COLOR.SUCCESS : COLOR.DANGER;
+    //     let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
+    //     if (split && split > 0) {
+    //         dmgColorTxt += `x<color=${COLOR.SUCCESS}>${split}</color>`;
+    //     }
+    //     let boostTxt: string = "|";
+    //     if (boost) {
+    //         for (let prop in boost) {
+    //             // TODO: 后续换成图集图标
+    //             let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
+    //             boostTxt += `${boost[prop] * 100}%${attrTxt}`;
+    //         }
+    //     }
+    //     return `伤害: ${dmgColorTxt}|${baseDmg}${boostTxt}`;
+    // }
     // // 获取暴击属性富文本
     // private _getCtlRichTxt(ctl: number, ctlDmgRate: number): string {
     //     let color: string = ctl >= this._props.ctl ? COLOR.SUCCESS : COLOR.DANGER;

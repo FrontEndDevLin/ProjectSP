@@ -10,8 +10,8 @@
             "intro": "基础飞弹攻击",
             "bullet": "CHR_Bullet001",
             "range": 200,
-            "cd": 0.4,
-            "ctl": 10,
+            "cd": [0.4, 0.38, 0.35, 0.3],
+            "ctl": [10, 12, 16, 24],
             "ctl_dmg_rate": 1.5
         },
         "Weapon_ScatterAtkWarCore": {
@@ -22,8 +22,8 @@
             "split_dmg_rate": 0.4,
             "pen_dmg": 0.6,
             "range": 200,
-            "cd": 0.8,
-            "ctl": 1,
+            "cd": [0.8, 0.74, 0.68, 0.6],
+            "ctl": [1, 2, 4, 6],
             "ctl_dmg_rate": 1.5
         },
         "Weapon_Blossom": {

@@ -205,7 +205,7 @@ export class ScatterAtkWarCore extends OBT_Component {
             // this._attacking = true;
             RealTimeEventManager.instance.onWarCoreAttack();
             // 冷却结合攻击速度修正
-            this._cd = this.warCore.weaponCtx.cd;
+            this._cd = this.warCore.weaponCtx.realCd;
         });
     }
 

@@ -4,7 +4,7 @@
 
 import { SpriteFrame } from "cc";
 import CHRManager from "../../../CManager/CHRManager";
-import { BoostConfig, BulletInfo, COLOR, Common, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
+import { BoostConfig, BulletInfo, COLOR, Common, ITEM_QUALITY, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
 import { copyObject, getDangerRichTxt, getFloatNumber, getSuccessRichTxt } from "../../../Common/utils";
 import OBT from "../../../OBT";
 import BulletManager from "../../../CManager/BulletManager";
@@ -19,8 +19,10 @@ export default class WeaponBase {
     public split: number; // 分裂
     public split_dmg_rate: number; // 目标被一次攻击的多个子弹击中的伤害比例
     public range: number;
-    public cd: number;
-    public ctl: number; // 暴击率
+    public cd: number[];
+    public realCd: number;
+    public ctl: number[]; // 暴击率
+    public realCtl: number;
     public ctl_dmg_rate: number; // 暴击倍率
 
     // 子弹相应属性
@@ -52,13 +54,15 @@ export default class WeaponBase {
         if (!this.id || !this.originData) {
             return;
         }
-        let bulletRealTimeAttr: BulletInfo.BulletRealTimeAttr = BulletManager.instance.getBulletRealTimeAttr(this.bullet);
-        let ctl: number = CHRManager.instance.propCtx.getPropRealValue("ctl") + this.originData.ctl;
-        let cd: number = getFloatNumber(this.originData.cd / CHRManager.instance.propCtx.getPropRealValue("atk_spd"), 3);
+        let isCurrentWarCoreBullet: boolean = true;
+        let bulletRealTimeAttr: BulletInfo.BulletRealTimeAttr = BulletManager.instance.getBulletRealTimeAttr(this.bullet, isCurrentWarCoreBullet);
+        let quality: ITEM_QUALITY = WarCoreManager.instance.warCore.quality || 1;
+        let ctl: number = CHRManager.instance.propCtx.getPropRealValue("ctl") + this.originData.ctl[quality - 1];
+        let cd: number = getFloatNumber(this.originData.cd[quality - 1] / CHRManager.instance.propCtx.getPropRealValue("atk_spd"), 3);
         let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + this.originData.range;
 
-        this.ctl = ctl;
-        this.cd = cd;
+        this.realCtl = ctl;
+        this.realCd = cd;
         this.range = range;
         this.base_dmg = bulletRealTimeAttr.base_dmg;
         this.dmg = bulletRealTimeAttr.dmg;
@@ -117,10 +121,10 @@ export default class WeaponBase {
         }
         let boostTxt: string = "";
         if (boost) {
+            let quality: ITEM_QUALITY = WarCoreManager.instance.warCore.quality || 1;
             for (let prop in boost) {
-                // TODO: 后续换成图集图标
                 let ico: string = CHRManager.instance.propCtx.getPropInfo(prop, "ico");
-                boostTxt += `${boost[prop] * 100}%<img src='${ico}' />`;
+                boostTxt += `${(boost[prop][quality - 1] * 100).toFixed()}%<img src='${ico}' />`;
             }
         }
         return `伤害: ${dmgColorTxt}|${base_dmg}+${boostTxt}`;
@@ -135,24 +139,27 @@ export default class WeaponBase {
     }
     // 获取暴击属性富文本
     protected getCtlRichTxt(): string {
-        const { ctl, ctl_dmg_rate } = this;
-        if (ctl && ctl_dmg_rate) {
-            let color: string = ctl >= this.ctl ? COLOR.SUCCESS : COLOR.DANGER;
-            let colorTxt: string = `<color=${color}>${ctl}%</color>`;
+        let { realCtl, ctl_dmg_rate } = this;
+        if (!realCtl) {
+            realCtl = this.ctl[WarCoreManager.instance.warCore.quality - 1];
+        }
+        if (ctl_dmg_rate) {
+            let color: string = realCtl >= this.ctl[WarCoreManager.instance.warCore.quality - 1] ? COLOR.SUCCESS : COLOR.DANGER;
+            let colorTxt: string = `<color=${color}>${realCtl}%</color>`;
             return `暴击: ${ctl_dmg_rate}倍|${colorTxt}概率`;
         }
         return "";
     }
     // 获取冷却属性富文本
     protected getCdRichTxt() {
-        const { cd } = this;
-        if (cd) {
-            let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
-            let color: string = cd <= atkSpdVal ? COLOR.SUCCESS : COLOR.DANGER;
-            let colorTxt: string = `<color=${color}>${cd}</color>`;
-            return `冷却: ${colorTxt}s`;
+        let { realCd } = this;
+        if (!realCd) {
+            realCd = this.cd[WarCoreManager.instance.warCore.quality - 1];
         }
-        return "";
+        let atkSpdVal: number = CHRManager.instance.propCtx.getPropRealValue("atk_spd");
+        let color: string = realCd <= atkSpdVal ? COLOR.SUCCESS : COLOR.DANGER;
+        let colorTxt: string = `<color=${color}>${realCd}</color>`;
+        return `冷却: ${colorTxt}s`;
     }
     // 获取范围属性富文本
     protected getRangeRichTxt() {

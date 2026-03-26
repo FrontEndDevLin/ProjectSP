@@ -460,9 +460,13 @@ export namespace WeaponInfo {
         pen_dmg?: number, // 贯穿伤害百分比
         split_dmg_rate?: number, // 目标被一次攻击的多个子弹击中的伤害比例
         range?: number,
-        cd?: number,
-        ctl?: number, // 暴击率
-        ctl_dmg_rate?: number // 暴击倍率
+        cd?: number[],
+        ctl?: number[], // 暴击率
+        ctl_dmg_rate?: number, // 暴击倍率
+
+        base_dmg: number,
+        dmg: number,
+        boost: BoostConfig
     }
 }
 
@@ -576,7 +580,7 @@ export namespace BulletInfo {
         prefab: string,
         type: string,
         script: string,
-        damage?: number,
+        damage?: [number],
         speed: number,
         // 最大飞行距离
         max_dis: number,
@@ -650,7 +654,7 @@ export namespace DamageInfo {
 }
 
 export interface BoostConfig {
-    [prop: string]: number
+    [prop: string]: number[]
 }
 
 // 刷新概率配置相关

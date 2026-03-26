@@ -4,7 +4,7 @@
 
 import { SpriteFrame } from "cc";
 import CHRManager from "../../../CManager/CHRManager";
-import { CHRInfo, ItemInfo } from "../../../Common/Namespace";
+import { CHRInfo, ITEM_QUALITY, ItemInfo } from "../../../Common/Namespace";
 import { getDangerRichTxt, getSuccessRichTxt } from "../../../Common/utils";
 import OBT from "../../../OBT";
 import WeaponBase from "../Weapons/WeaponBase";
@@ -16,7 +16,7 @@ export default class ItemBase {
     public id: string;
     public global: ItemInfo.Global;
     public type: ItemInfo.Type;
-    public quality: number;
+    public quality: ITEM_QUALITY;
     public label: string;
     public intro: string;
     public group: ItemInfo.Group;

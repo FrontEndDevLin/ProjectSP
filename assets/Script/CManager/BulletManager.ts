@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, COLOR, Common, GameCollider, GameConfigInfo } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, COLOR, Common, GameCollider, GameConfigInfo, ITEM_QUALITY } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
@@ -9,6 +9,7 @@ import ProcessManager from './ProcessManager';
 import DamageManager from './DamageManager';
 import CHRManager from './CHRManager';
 import { copyObject } from '../Common/utils';
+import WarCoreManager from './WarCoreManager';
 const { ccclass, property } = _decorator;
 
 interface BulletPoolMap {
@@ -107,22 +108,17 @@ export default class BulletManager extends OBT_UIManager {
         this._nodePoolMap[bulletId].put(node);
     }
 
-    public updateBulletList() {
-        // let weaponList: any[] = WeaponManager.instance.weaponList;
-        // // 根据该列表，生成新的列表格式为 { 弹头Tag: { 弹头数据 } }，弹头数据需要结合角色面板进行计算
-        // for (let data of weaponList) {
-        //     let weaponKey: string = data.key;
-        //     let bulletId = data.bullet;
-        //     let bData = bulletDb[bulletId];
-        //     bData.damage = WeaponManager.instance.getWeaponDamage(weaponKey);
-        //     this._bulletCldMap[bData.cld] = bData;
-        // }
-    }
-    public setBulletDamage(bulletId: string, damage: number) {
-        this.bulletData[bulletId].damage = damage;
-    }
-    public getBulletDamage(bulletId: string): number {
-        return this.getBulletInfo(bulletId, "damage");
+    // 获取子弹基础伤害, 如果是当前核心的武器子弹, 返回对应核心品质的子弹伤害
+    public getBulletDamage(bulletId: string, isCurrentWarCoreBullet?: boolean): number {
+        let damageAry: number[] = this.getBulletInfo(bulletId, "damage");
+        let damage: number;
+        if (isCurrentWarCoreBullet) {
+            let quality: ITEM_QUALITY = WarCoreManager.instance.warCore.quality || 1;
+            damage = damageAry[quality - 1] || damageAry[0];
+        } else {
+            damage = damageAry[0];
+        }
+        return damage;
     }
     public getBulletInfo(bulletId: string, prop?: string) {
         return prop ? this.bulletData[bulletId][prop] : this.bulletData[bulletId];
@@ -131,31 +127,11 @@ export default class BulletManager extends OBT_UIManager {
         // return bulletDb[bulletId].cld;
     }
 
-    // 获取子弹伤害加成文本 实际伤害|[基础伤害+X%属性]
-    public getBulletRealDmgRichTxt(bulletId: string): string {
-        let bulletRealTimeAttr: BulletInfo.BulletRealTimeAttr = this.getBulletRealTimeAttr(bulletId);
-        let { dmg, base_dmg, boost } = bulletRealTimeAttr;
-        let dmgColor: string = dmg >= base_dmg ? COLOR.SUCCESS : COLOR.DANGER;
-        let dmgColorTxt: string = `<color=${dmgColor}>${dmg}</color>`;
-        let boostTxt: string = "";
-        if (boost) {
-            boostTxt += `|[${base_dmg}`;
-            for (let prop in boost) {
-                boostTxt += "+"
-                // TODO: 后续换成图集图标
-                let attrTxt: string = CHRManager.instance.propCtx.getPropInfo(prop, "txt");
-                boostTxt += `${boost[prop] * 100}%${attrTxt}`;
-            }
-            boostTxt += ']'
-        }
-        return `${dmgColorTxt}${boostTxt}`;
-    }
-
     // 获取指定bulletId的实时属性
-    public getBulletRealTimeAttr(bulletId: string): BulletInfo.BulletRealTimeAttr {
-        let base_dmg: number = BulletManager.instance.getBulletDamage(bulletId);
-        let dmg: number = DamageManager.instance.getBulletRealDamage(bulletId);
-        let boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");
+    public getBulletRealTimeAttr(bulletId: string, isCurrentWarCoreBullet?: boolean): BulletInfo.BulletRealTimeAttr {
+        let base_dmg: number = this.getBulletDamage(bulletId, isCurrentWarCoreBullet);
+        let dmg: number = DamageManager.instance.getBulletRealDamage(bulletId, isCurrentWarCoreBullet);
+        let boost: BoostConfig = this.getBulletInfo(bulletId, "boost");
 
         return {
             bulletId,

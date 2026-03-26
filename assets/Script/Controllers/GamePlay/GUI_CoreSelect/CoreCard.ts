@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { BoostConfig, CHRInfo, COLOR, GAME_NODE, GamePlayEvent, WarCoreInfo } from '../../../Common/Namespace';
+import { BoostConfig, CHRInfo, COLOR, GAME_NODE, GamePlayEvent, ITEM_QUALITY, ItemInfo, WarCoreInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
@@ -9,6 +9,7 @@ import DamageManager from '../../../CManager/DamageManager';
 import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber } from '../../../Common/utils';
 import ItemWarCore from '../Items/ItemWarCore';
+import ItemsManager from '../../../CManager/ItemsManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CoreCard')
@@ -31,6 +32,15 @@ export class CoreCard extends OBT_Component {
 
     public updateView(props: ItemWarCore) {
         this._props = props;
+
+        // console.log('预览核心, 当前核心品质:' + props.quality);
+        let quality = props.quality || ITEM_QUALITY.LV1;
+        let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
+        let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
+        this.view("Border").getComponent(Sprite).spriteFrame = borderAssets;
+
+        this.view("Background").getComponent(Sprite).color = uiConfg.background;
+        this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).color = uiConfg.color;
 
         this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = props.getAssets();
         this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).string = props.label;

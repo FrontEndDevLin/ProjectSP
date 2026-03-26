@@ -6,7 +6,7 @@ import { _decorator, EventTouch, Label, Node, Sprite, SpriteFrame } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
-import { GAME_NODE, GamePlayEvent, ItemInfo, WarCoreInfo } from '../../Common/Namespace';
+import { GAME_NODE, GamePlayEvent, ITEM_QUALITY, ItemInfo, WarCoreInfo } from '../../Common/Namespace';
 import ProcessManager from '../../CManager/ProcessManager';
 import ItemsManager from '../../CManager/ItemsManager';
 import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
@@ -78,6 +78,7 @@ export class GUI_Prepare extends OBT_Component {
     private _prepareInit(duration) {
         this._updateCurrency();
         this._updateCountdownView(duration);
+        this.updateAtkWarCoreIcon();
         this.updateWarCoreUpgradeIcon();
         this.view("Header/TitleWrap/Val").getComponent(Label).string = `${ProcessManager.instance.waveRole.wave + 1}`;
     }
@@ -142,7 +143,13 @@ export class GUI_Prepare extends OBT_Component {
     protected updateAtkWarCoreIcon() {
         const warCore: ItemWarCore = WarCoreManager.instance.warCore;
         let assets: SpriteFrame = warCore.getAssets();
+        let quality: ITEM_QUALITY = warCore.quality || ITEM_QUALITY.LV1;
         this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
+
+        let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
+        let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
+        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/Border").getComponent(Sprite).spriteFrame = borderAssets;
+        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/BG").getComponent(Sprite).color = uiConfg.background;
 
         // const warCore: WarCoreInfo.AtkWarCoreAttr = WarCoreManager.instance.atkWarCore;
         // let assets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${warCore.icon_ui}`);

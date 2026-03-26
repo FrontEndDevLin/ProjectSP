@@ -4,7 +4,7 @@ import OBT from '../OBT';
 import EMYManager from './EMYManager';
 import BulletManager from './BulletManager';
 import CHRManager from './CHRManager';
-import { BoostConfig, DamageInfo } from '../Common/Namespace';
+import { BoostConfig, DamageInfo, ITEM_QUALITY } from '../Common/Namespace';
 import WarCoreManager from './WarCoreManager';
 import { getRandomNumber } from '../Common/utils';
 import { DamageTxt } from '../Controllers/GamePlay/Common/DamageTxt';
@@ -51,15 +51,16 @@ export default class DamageManager extends OBT_UIManager {
         }
     }
 
-    public getBulletRealDamage(bulletId: string) {
-        let bulletDamage: number = BulletManager.instance.getBulletDamage(bulletId);
+    public getBulletRealDamage(bulletId: string, isCurrentWarCoreBullet?: boolean) {
+        let bulletDamage: number = BulletManager.instance.getBulletDamage(bulletId, isCurrentWarCoreBullet);
 
         // 1. 结合角色属性和核心属性对dmg进行修正
         let boostDmg: number = 0;
         const boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");
         if (boost) {
+            let quality: ITEM_QUALITY = isCurrentWarCoreBullet ? WarCoreManager.instance.warCore.quality : ITEM_QUALITY.LV1;
             for (let prop in boost) {
-                let rate: number = boost[prop] || 0;
+                let rate: number = boost[prop][quality - 1] || 0;
                 let value: number = CHRManager.instance.propCtx.getPropRealValue(prop) || 0;
                 boostDmg += value * rate;
             }
@@ -82,7 +83,7 @@ export default class DamageManager extends OBT_UIManager {
         let isCtitical: boolean = false;
         // 只有核心的bullet才能暴击
         if (bulletId === WarCoreManager.instance.warCore.weaponCtx.bullet) {
-            let ctl: number = WarCoreManager.instance.warCore.weaponCtx.ctl;
+            let ctl: number = WarCoreManager.instance.warCore.weaponCtx.realCtl;
             if (ctl > 0) {
                 if (ctl >= 100) {
                     isCtitical = true;

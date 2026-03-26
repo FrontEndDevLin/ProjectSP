@@ -4,6 +4,7 @@
         "max_dis": "最大飞行距离",
         "cld": "碰撞体id",
         "type": "当type为EMY_bullet时, 为敌人发射的子弹, 伤害由SpawnRole决定",
+        "damage": "基础伤害",
         "boost": "受到的属性加成, 值为百分比"
     },
     "CHR_Bullet001": {
@@ -13,7 +14,7 @@
         "script": "Bullet",
         "speed": 480,
         "max_dis": 200,
-        "damage": 3,
+        "damage": [3, 5, 7, 10],
         "cld": 500
     },
     "CHR_Bullet002": {
@@ -24,10 +25,10 @@
         "script": "Bullet",
         "speed": 480,
         "max_dis": 220,
-        "damage": 2,
+        "damage": [2, 4, 6, 10],
         "cld": 501,
         "boost": {
-            "range_dmg": 0.4
+            "range_dmg": [0.4, 0.44, 0.5, 0.58]
         }
     },
     "CHR_Bullet003": {
@@ -38,10 +39,10 @@
         "script": "Bullet",
         "speed": 300,
         "max_dis": 120,
-        "damage": 1,
+        "damage": [1],
         "cld": 502,
         "boost": {
-            "range_dmg": 0.5
+            "range_dmg": [0.5]
         }
     },
     "EMY_Bullet020": {

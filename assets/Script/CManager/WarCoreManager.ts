@@ -278,13 +278,18 @@ export default class WarCoreManager extends OBT_UIManager {
             }
     
             this.coreLevel++;
+
+            /**
+             * 升级核心后核心品质升级
+             * 同时需要修正核心数值
+             */
+            this.warCore.quality++;
+            this.warCore.weaponCtx.updatePanel();
         }
 
         // 挂载完后通知
         ItemsManager.instance.expendTrophy();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_FINISH);
-
-        // TODO: 挂载完后，在Prepare界面解锁对应的升级槽，可点击预览
     }
 
     public getUpgradePackCnt(packId: string): number {
