@@ -166,12 +166,17 @@ export class GUI_Prepare extends OBT_Component {
                 let packInfo: ItemBase = WarCoreManager.instance.getUpgradePackInfo(packId);
                 let icon = packInfo.ico;
                 assets = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${icon}`);
+                let quality: ITEM_QUALITY = packInfo.quality || ITEM_QUALITY.LV1;
+                let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
+                let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
+                slotNode.children[0].getComponent(Sprite).color = uiConfg.background;
+                slotNode.children[1].getComponent(Sprite).spriteFrame = borderAssets;
             } else {
                 assets = OBT.instance.resourceManager.getSpriteFrameAssets(`GamePlay/lock-ico`);
             }
             slotNode.OBT_param1 = packId;
             slotNode.OBT_param2 = i;
-            slotNode.children[0].getComponent(Sprite).spriteFrame = assets;
+            slotNode.children[2].getComponent(Sprite).spriteFrame = assets;
         })
     }
     protected bindWarCoreTouchEvent() {

@@ -25,7 +25,7 @@
             "label": "散射",
             "ico": "scatter",
             "ico_gaming": "...",
-            "quality": 3,
+            "quality": 1,
             "global": 2,
             "group": 1,
             "intro": "<~range_dmg,val_1~><br/>波次结束后<%val_2%><&spd&>",
