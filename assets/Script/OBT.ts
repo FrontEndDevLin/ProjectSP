@@ -47,7 +47,7 @@ export default class OBT extends Component {
         const output = {};
         const rootNode = find("Canvas");
         this._getStructure(rootNode, output);
-        console.log(output);
+        console.log(JSON.stringify(output));
     }
 
     private _getStructure(node: Node, obj) {

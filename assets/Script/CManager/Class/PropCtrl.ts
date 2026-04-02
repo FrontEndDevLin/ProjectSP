@@ -286,4 +286,10 @@ export default class PropCtrl extends BaseCtrl {
         }
         return color;
     }
+
+    // 获取当前防御减伤
+    public getDefReduceRate(): number {
+        let def: number = this.getPropRealValue("def");
+        return 1 - 1 / (def / 15 + 1);
+    }
 }

@@ -80,7 +80,7 @@
             "basic_val": 0,
             "forward_val": true,
             "percent": false,
-            "intro": "介绍文本",
+            "intro": "受到的伤害减少",
             "ico": "def"
         },
         "spd": {

@@ -3,6 +3,7 @@ import OBT_Component from '../../../OBT_Component';
 import { CHRInfo, GamePlayEvent } from '../../../Common/Namespace';
 import OBT from '../../../OBT';
 import CHRManager from '../../../CManager/CHRManager';
+import GUI_PopupManager from '../../../CManager/GUI_PopupManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHRAttrItem')
@@ -35,7 +36,8 @@ export class CHRAttrItem extends OBT_Component {
         const prop: CHRInfo.Prop = this.node.OBT_param1;
         let index = this.node.OBT_param2 ? this.node.OBT_param2.index : 0;
         let propKey = prop.prop;
-        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PROP_INTRO_UI, propKey, index)
+        GUI_PopupManager.instance.showPropIntroPopup(propKey);
+        // OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PROP_INTRO_UI, propKey, index)
     }
 
     protected onDestroy(): void {

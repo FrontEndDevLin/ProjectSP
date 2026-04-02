@@ -15,6 +15,7 @@ import DamageManager from "../CManager/DamageManager";
 import RealTimeEventManager from "../CManager/RealTimeEventManager";
 import WeaponManager from "../CManager/WeaponManager";
 import RateConfigManager from "../CManager/RateConfigManager";
+import GUI_PopupManager from "../CManager/GUI_PopupManager";
 
 export class GamePlayModule extends OBT_Module {
     public bundleName: string = "GamePlay";
@@ -38,6 +39,7 @@ export class GamePlayModule extends OBT_Module {
         this.addCustomManager(DamageManager);
         this.addCustomManager(ProcessManager);
         this.addCustomManager(GUI_GamePlayManager);
+        this.addCustomManager(GUI_PopupManager);
         this.addCustomManager(ItemsManager);
         this.addCustomManager(WeaponManager);
         this.addCustomManager(RateConfigManager);

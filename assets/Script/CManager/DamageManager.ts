@@ -117,7 +117,8 @@ export default class DamageManager extends OBT_UIManager {
 
     public calcEnemyDamage(enemyId: string, isSpec: boolean) {
         let dmg: number = EMYManager.instance.getEnemyDamage(enemyId, isSpec);
-        // TODO: 结合角色属性和核心属性对dmg进行修正
+        let defReduceRate: number = CHRManager.instance.propCtx.getDefReduceRate();
+        dmg = Math.round(dmg * (1 - defReduceRate));
         return dmg;
     }
 
