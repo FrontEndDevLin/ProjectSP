@@ -6,6 +6,7 @@ import { PropIntro_Popup } from "../Controllers/GamePlay/GUI_Popup/PropIntro_Pop
 import CHRManager from "./CHRManager";
 import { CHRInfo } from "../Common/Namespace";
 import OBT from "../OBT";
+import { transportWorldPosition } from "../Common/utils";
 
 /**
  * 全局弹窗管理
@@ -46,19 +47,23 @@ export default class GUI_PopupManager extends OBT_UIManager {
         this._popupRootNode = this.mountEmptyNode({ nodeName: "GUI_PopupWrap", parentNode: ProcessManager.instance.uiRootNode });
     }
 
-    public showPropIntroPopup(propKey: string) {
+    /**
+     * 角色属性详情
+     */
+    public showPropIntroPopup(propKey: string, node: Node) {
         this.showMask();
 
+        let position: Vec3 = transportWorldPosition(node.worldPosition);
+        this._propIntroNode.setPosition(position);
+        
         let item: CHRInfo.Prop = CHRManager.instance.propCtx.getPropInfo(propKey);
         this._propIntroCtx.updateView(item);
         this._popupRootNode.addChild(this._propIntroNode);
-        // OBT.instance.printStructure();
     }
 
     /**
      * showMask方法, 决定当前mask是否可见, 点击是否隐藏, 点击是否穿透
      */
-    
     private showMask() {
         this._maskNode.getComponent(UIOpacity).opacity = 0;
         this._popupRootNode.addChild(this._maskNode);
