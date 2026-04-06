@@ -10,8 +10,8 @@ const { ccclass, property } = _decorator;
 export class CHRAttrItem extends OBT_Component {
     protected onLoad(): void {
         this._updateView();
-
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, this._updateView, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GUI.UPDATE_PROP_ITEM_ACTIVE, this._activePropItem, this);
 
         this.node.on(Node.EventType.TOUCH_END, this._showPropInfo, this);
     }
@@ -37,7 +37,19 @@ export class CHRAttrItem extends OBT_Component {
         let index = this.node.OBT_param2 ? this.node.OBT_param2.index : 0;
         let propKey = prop.prop;
         GUI_PopupManager.instance.showPropIntroPopup(propKey, this.node);
-        // OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PROP_INTRO_UI, propKey, index)
+
+        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.UPDATE_PROP_ITEM_ACTIVE, propKey, index)
+    }
+
+    private _activePropItem(propKey: string, index: number) {
+        const prop: CHRInfo.Prop = this.node.OBT_param1;
+        let currentIndex: number = this.node.OBT_param2 ? this.node.OBT_param2.index : 0;
+        // console.log(prop.prop, currentIndex)
+        if (prop.prop === propKey && currentIndex === index) {
+            this.view("Border").getComponent(Sprite).enabled = true;
+        } else {
+            this.view("Border").getComponent(Sprite).enabled = false;
+        }
     }
 
     protected onDestroy(): void {

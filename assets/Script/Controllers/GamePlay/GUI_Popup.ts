@@ -26,7 +26,7 @@ export class GUI_Popup extends OBT_Component {
         this.view("Mask").on(Node.EventType.TOUCH_END, this._hideAll, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PREVIEW_ITEM_UI, this._showItemPreviewPopup, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PROP_INTRO_UI, this._showPropIntroPopup, this);
+        // OBT.instance.eventCenter.on(GamePlayEvent.GUI.UPDATE_PROP_ITEM_ACTIVE, this._showPropIntroPopup, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PREVIEW_WAR_CORE_UI, this._showAtkCorePreviewPopup, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GUI.SHOW_PREVIEW_UPGRADE_PACK_UI, this._showUpgradePackPreviewPopup, this);
     }

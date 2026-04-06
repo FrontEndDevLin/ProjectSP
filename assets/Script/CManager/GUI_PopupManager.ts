@@ -1,4 +1,4 @@
-import { EventTouch, find, Node, tween, UIOpacity, v3, Vec3 } from "cc";
+import { EventTouch, find, Node, tween, UIOpacity, UITransform, v3, Vec3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import ProcessManager from "./ProcessManager";
 import { NodePool } from "cc";
@@ -54,7 +54,9 @@ export default class GUI_PopupManager extends OBT_UIManager {
         this.showMask();
 
         let position: Vec3 = transportWorldPosition(node.worldPosition);
-        this._propIntroNode.setPosition(position);
+        let targetUITransform: UITransform = node.getComponent(UITransform);
+        let popupUITransform: UITransform = this._propIntroNode.getComponent(UITransform);
+        this._propIntroNode.setPosition(v3(position.x + targetUITransform.width / 2 + popupUITransform.width / 2 + 20, position.y + targetUITransform.height / 2 - popupUITransform.height / 2, position.z));
         
         let item: CHRInfo.Prop = CHRManager.instance.propCtx.getPropInfo(propKey);
         this._propIntroCtx.updateView(item);

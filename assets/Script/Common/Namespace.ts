@@ -74,7 +74,7 @@ export namespace GamePlayEvent {
         SHOW_PROP_UI,
         SHOW_PREVIEW_ITEM_UI,
         // HIDE_PREVIEW_ITEM_UI,
-        SHOW_PROP_INTRO_UI,
+        UPDATE_PROP_ITEM_ACTIVE,
         UPDATE_TROPHY_ICON,
         SHOW_PREVIEW_WAR_CORE_UI,
         SHOW_PREVIEW_UPGRADE_PACK_UI
