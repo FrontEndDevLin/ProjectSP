@@ -15,6 +15,7 @@ import BulletManager from './BulletManager';
 import RealTimeEventManager from './RealTimeEventManager';
 import DamageManager from './DamageManager';
 import GUI_PopupManager from './GUI_PopupManager';
+import GUI_TooltipsManager from './GUI_TooltipsManager';
 const { ccclass, property } = _decorator;
 
 const CORE_SELECT_TIME: number = 5555;
@@ -112,7 +113,8 @@ export default class ProcessManager extends OBT_UIManager {
         GUI_GamePlayManager.instance.initPrepareGUI();
         // GUI_GamePlayManager.instance.initPropGUI();
         GUI_GamePlayManager.instance.initPopupGUI();
-        GUI_PopupManager.instance.initRootNode();
+        // GUI_PopupManager.instance.initRootNode();
+        GUI_TooltipsManager.instance.initRootNode();
         CHRManager.instance.showCHR();
     }
     private _initSave(isNewGame: boolean) {

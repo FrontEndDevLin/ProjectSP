@@ -16,13 +16,13 @@ import RealTimeEventManager from "../CManager/RealTimeEventManager";
 import WeaponManager from "../CManager/WeaponManager";
 import RateConfigManager from "../CManager/RateConfigManager";
 import GUI_PopupManager from "../CManager/GUI_PopupManager";
+import GUI_TooltipsManager from "../CManager/GUI_TooltipsManager";
 
 export class GamePlayModule extends OBT_Module {
     public bundleName: string = "GamePlay";
 
     public async enter(): Promise<void> {
         // this.resourceManager
-        console.log('显示GamePlay')
         OBT.instance.uiManager.showPrefab({ prefabPath: "GamePlay", parentNode: this.rootNode });
         this.mountManagers();
     }
@@ -40,6 +40,7 @@ export class GamePlayModule extends OBT_Module {
         this.addCustomManager(ProcessManager);
         this.addCustomManager(GUI_GamePlayManager);
         this.addCustomManager(GUI_PopupManager);
+        this.addCustomManager(GUI_TooltipsManager);
         this.addCustomManager(ItemsManager);
         this.addCustomManager(WeaponManager);
         this.addCustomManager(RateConfigManager);

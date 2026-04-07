@@ -14,7 +14,7 @@
       "id": "91333",
       "name": "range_dmg",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -60,7 +60,7 @@
       "id": "2b953",
       "name": "atk_spd",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -106,7 +106,7 @@
       "id": "0cfbc",
       "name": "avd",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -152,7 +152,7 @@
       "id": "605a3",
       "name": "ctl",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -198,7 +198,7 @@
       "id": "47c2d",
       "name": "def",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -244,7 +244,7 @@
       "id": "a6d42",
       "name": "dmg",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -290,7 +290,7 @@
       "id": "d1d45",
       "name": "hp",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -336,7 +336,7 @@
       "id": "83f2a",
       "name": "luck",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -382,7 +382,7 @@
       "id": "7e209",
       "name": "melee_dmg",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -428,7 +428,7 @@
       "id": "316bd",
       "name": "range",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
@@ -474,7 +474,7 @@
       "id": "12e13",
       "name": "spd",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,

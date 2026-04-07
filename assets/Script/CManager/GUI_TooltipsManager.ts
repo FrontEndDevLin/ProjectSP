@@ -1,40 +1,38 @@
 import { EventTouch, find, Node, tween, UIOpacity, UITransform, v3, Vec3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import ProcessManager from "./ProcessManager";
-import { NodePool } from "cc";
-import { PropIntro_Popup } from "../Controllers/GamePlay/GUI_Tooltips/PropIntro_Tooltips";
+import { PropIntro_Tooltips } from "../Controllers/GamePlay/GUI_Tooltips/PropIntro_Tooltips";
 import CHRManager from "./CHRManager";
 import { CHRInfo } from "../Common/Namespace";
 import OBT from "../OBT";
 import { transportWorldPosition } from "../Common/utils";
 
 /**
- * 全局弹窗管理-暂时作废
- * 弹窗分为
- *  局部弹窗
- *  全局弹窗
+ * 全局轻提示管理
+ * 用于角色属性说明
+ * 交互Tooltips等
  */
-export default class GUI_PopupManager extends OBT_UIManager {
-    static instance: GUI_PopupManager;
+export default class GUI_TooltipsManager extends OBT_UIManager {
+    static instance: GUI_TooltipsManager;
 
-    private _popupRootNode: Node;
+    private _tooltipsRootNode: Node;
     private _maskNode: Node;
 
     private _propIntroNode: Node;
-    private _propIntroCtx: PropIntro_Popup;
+    private _propIntroCtx: PropIntro_Tooltips;
 
     protected onLoad(): void {
-        if (!GUI_PopupManager.instance) {
-            GUI_PopupManager.instance = this
+        if (!GUI_TooltipsManager.instance) {
+            GUI_TooltipsManager.instance = this
         } else {
             this.destroy();
             return;
         }
 
-        this.initPopupNode();
+        this.initMaskNode();
     }
 
-    public initPopupNode() {
+    private initMaskNode() {
         this._maskNode = this.loadPrefab({ prefabPath: "Common/Mask", scriptName: "NONE" });
         this._maskNode.setPosition(v3(0, 0, 0));
         this._maskNode.on(Node.EventType.TOUCH_START, this.preventSwallow, this);
@@ -42,16 +40,16 @@ export default class GUI_PopupManager extends OBT_UIManager {
     }
 
     public initRootNode() {
-        this._popupRootNode = this.mountEmptyNode({ nodeName: "GUI_PopupWrap", parentNode: ProcessManager.instance.uiRootNode });
+        this._tooltipsRootNode = this.mountEmptyNode({ nodeName: "GUI_TooltipsWrap", parentNode: ProcessManager.instance.uiRootNode });
     }
 
     /**
      * 角色属性详情
      */
-    public showPropIntroPopup(propKey: string, node: Node) {
-        if (this._propIntroNode) {
-            this._propIntroNode = this.loadPrefab({ prefabPath: "GUI_Popup/PropIntro_Popup" });
-            this._propIntroCtx = this._propIntroNode.getComponent(PropIntro_Popup);
+    public showPropIntroTooltips(propKey: string, node: Node) {
+        if (!this._propIntroNode) {
+            this._propIntroNode = this.loadPrefab({ prefabPath: "GUI_Tooltips/PropIntro_Tooltips" });
+            this._propIntroCtx = this._propIntroNode.getComponent(PropIntro_Tooltips);
         }
 
         this.showMask();
@@ -63,7 +61,7 @@ export default class GUI_PopupManager extends OBT_UIManager {
         
         let item: CHRInfo.Prop = CHRManager.instance.propCtx.getPropInfo(propKey);
         this._propIntroCtx.updateView(item);
-        this._popupRootNode.addChild(this._propIntroNode);
+        this._tooltipsRootNode.addChild(this._propIntroNode);
     }
 
     /**
@@ -71,19 +69,19 @@ export default class GUI_PopupManager extends OBT_UIManager {
      */
     private showMask() {
         this._maskNode.getComponent(UIOpacity).opacity = 0;
-        this._popupRootNode.addChild(this._maskNode);
+        this._tooltipsRootNode.addChild(this._maskNode);
     }
 
     private touchMask(event: EventTouch) {
         event.preventSwallow = true;
-        this._popupRootNode.removeChild(this._propIntroNode);
-        this._popupRootNode.removeChild(this._maskNode);
+        this._tooltipsRootNode.removeChild(this._propIntroNode);
+        this._tooltipsRootNode.removeChild(this._maskNode);
     }
     private preventSwallow(event: EventTouch) {
         event.preventSwallow = true;
     }
 
     protected onDestroy(): void {
-        GUI_PopupManager.instance = null;
+        GUI_TooltipsManager.instance = null;
     }
 }

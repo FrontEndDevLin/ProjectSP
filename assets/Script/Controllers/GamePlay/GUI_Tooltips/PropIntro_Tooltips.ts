@@ -5,8 +5,8 @@ import CHRManager from '../../../CManager/CHRManager';
 import { getSuccessRichTxt } from '../../../Common/utils';
 const { ccclass, property } = _decorator;
 
-@ccclass('PropIntro_Popup')
-export class PropIntro_Popup extends OBT_Component {
+@ccclass('PropIntro_Tooltips')
+export class PropIntro_Tooltips extends OBT_Component {
     start() {
 
     }
