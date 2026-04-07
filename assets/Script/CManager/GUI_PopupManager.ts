@@ -2,11 +2,11 @@ import { EventTouch, find, Node, tween, UIOpacity, UITransform, v3, Vec3 } from 
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import ProcessManager from "./ProcessManager";
 import { NodePool } from "cc";
-import { PropIntro_Popup } from "../Controllers/GamePlay/GUI_Tooltips/PropIntro_Tooltips";
 import CHRManager from "./CHRManager";
-import { CHRInfo } from "../Common/Namespace";
+import { CHRInfo, SCREEN_WIDTH } from "../Common/Namespace";
 import OBT from "../OBT";
 import { transportWorldPosition } from "../Common/utils";
+import { PropBoard_Popup } from "../Controllers/GamePlay/GUI_Popup/PropBoard_Popup";
 
 /**
  * 全局弹窗管理-暂时作废
@@ -20,8 +20,8 @@ export default class GUI_PopupManager extends OBT_UIManager {
     private _popupRootNode: Node;
     private _maskNode: Node;
 
-    private _propIntroNode: Node;
-    private _propIntroCtx: PropIntro_Popup;
+    private _propBoardNode: Node;
+    private _propBoardCtx: PropBoard_Popup;
 
     protected onLoad(): void {
         if (!GUI_PopupManager.instance) {
@@ -46,41 +46,37 @@ export default class GUI_PopupManager extends OBT_UIManager {
     }
 
     /**
-     * 角色属性详情
+     * 角色属性面板弹窗
      */
-    public showPropIntroPopup(propKey: string, node: Node) {
-        if (this._propIntroNode) {
-            this._propIntroNode = this.loadPrefab({ prefabPath: "GUI_Popup/PropIntro_Popup" });
-            this._propIntroCtx = this._propIntroNode.getComponent(PropIntro_Popup);
+    public showPropBoardPopup() {
+        if (!this._propBoardNode) {
+            this._propBoardNode = this.loadPrefab({ prefabPath: "GUI_Popup/PropBoard_Popup" });
+            this._propBoardCtx = this._propBoardNode.getComponent(PropBoard_Popup);
+            this._propBoardCtx.initBoard();
         }
 
         this.showMask();
+        let position: Vec3 = transportWorldPosition(v3(-SCREEN_WIDTH / 2, 0, 0));
+        let popupUITransform: UITransform = this._propBoardNode.getComponent(UITransform);
+        // this._propBoardNode.setPosition(v3(position.x + popupUITransform.width / 2, position.y, 0));
+        this._propBoardNode.setPosition(v3(0, 0, 0));
 
-        let position: Vec3 = transportWorldPosition(node.worldPosition);
-        let targetUITransform: UITransform = node.getComponent(UITransform);
-        let popupUITransform: UITransform = this._propIntroNode.getComponent(UITransform);
-        this._propIntroNode.setPosition(v3(position.x + targetUITransform.width / 2 + popupUITransform.width / 2 + 20, position.y + targetUITransform.height / 2 - popupUITransform.height / 2, position.z));
-        
-        let item: CHRInfo.Prop = CHRManager.instance.propCtx.getPropInfo(propKey);
-        this._propIntroCtx.updateView(item);
-        this._popupRootNode.addChild(this._propIntroNode);
+        this._popupRootNode.addChild(this._propBoardNode);
     }
 
     /**
      * showMask方法, 决定当前mask是否可见, 点击是否隐藏, 点击是否穿透
      */
     private showMask() {
-        this._maskNode.getComponent(UIOpacity).opacity = 0;
+        this._maskNode.getComponent(UIOpacity).opacity = 100;
         this._popupRootNode.addChild(this._maskNode);
     }
 
     private touchMask(event: EventTouch) {
-        event.preventSwallow = true;
-        this._popupRootNode.removeChild(this._propIntroNode);
-        this._popupRootNode.removeChild(this._maskNode);
+        // event.preventSwallow = true;
     }
     private preventSwallow(event: EventTouch) {
-        event.preventSwallow = true;
+        // event.preventSwallow = true;
     }
 
     protected onDestroy(): void {

@@ -14,6 +14,7 @@ import WarCoreManager from '../../CManager/WarCoreManager';
 import { CoreCard } from './GUI_CoreSelect/CoreCard';
 import { GUI_PropWrap } from './GUI_PropWrap';
 import ItemWarCore from './Items/ItemWarCore';
+import GUI_PopupManager from '../../CManager/GUI_PopupManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_CoreSelect')
@@ -34,8 +35,9 @@ export class GUI_CoreSelect extends OBT_Component {
     }
 
     protected showPropGUI() {
-        const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
-        propWrapCtx.showPropGUI();
+        GUI_PopupManager.instance.showPropBoardPopup();
+        // const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
+        // propWrapCtx.showPropGUI();
     }
 
     private _initCoreCard() {

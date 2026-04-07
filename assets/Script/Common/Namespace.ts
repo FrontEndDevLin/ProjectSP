@@ -1,4 +1,4 @@
-import { Color, Vec3 } from "cc"
+import { Color, Size, Vec3, view } from "cc"
 import ItemBase from "../Controllers/GamePlay/Items/ItemBase"
 import WeaponBase from "../Controllers/GamePlay/Weapons/WeaponBase"
 
@@ -675,8 +675,9 @@ export namespace RateConfig {
     }
 }
 
-export const SCREEN_WIDTH = 1280;
-export const SCREEN_HEIGHT = 720;
+const windowSize: Size = view.getVisibleSize();
+export const SCREEN_WIDTH = windowSize.width;
+export const SCREEN_HEIGHT = windowSize.height;
 // 速度1，实际等于 1*PIXEL_UNIT = 20px/s
 export const PIXEL_UNIT = 20;
 

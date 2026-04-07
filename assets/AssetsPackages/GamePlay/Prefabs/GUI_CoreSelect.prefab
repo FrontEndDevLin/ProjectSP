@@ -40,11 +40,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 102
+        "__id__": 103
       }
     ],
     "_prefab": {
-      "__id__": 104
+      "__id__": 105
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -1726,6 +1726,9 @@
       },
       {
         "__id__": 101
+      },
+      {
+        "__id__": 102
       }
     ],
     "removedComponents": []
@@ -1793,6 +1796,16 @@
     }
   },
   {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 98
+    },
+    "propertyPath": [
+      "_active"
+    ],
+    "value": false
+  },
+  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -1802,7 +1815,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 103
+      "__id__": 104
     },
     "_contentSize": {
       "__type__": "cc.Size",

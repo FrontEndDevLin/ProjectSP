@@ -16,7 +16,7 @@ export class GUI_Prop extends OBT_Component {
             tabNode.on(Node.EventType.TOUCH_END, (e: EventTouch) => { this._touchAttrTab(i) });
         });
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_INIT, this._initCHRAttrCard, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_INIT, this.initCHRAttrCard, this);
 
         // this.view("Mask").on(Node.EventType.TOUCH_END, this._touchMask, this);
 
@@ -57,7 +57,7 @@ export class GUI_Prop extends OBT_Component {
         GUI_GamePlayManager.instance.setPropWrapNode(this.view(showPath));
     }
 
-    private _initCHRAttrCard() {
+    public initCHRAttrCard() {
         this.hideNodeByPath("GUI_PropWrap/Board/SubBoardWrap");
 
         const groupPropsList: CHRInfo.Prop[][] = [CHRManager.instance.propCtx.getMainPropsList(), CHRManager.instance.propCtx.getSubPropsList()];
@@ -81,7 +81,7 @@ export class GUI_Prop extends OBT_Component {
     }
 
     protected onDestroy(): void {
-        OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PROP_INIT, this._initCHRAttrCard, this);
+        OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PROP_INIT, this.initCHRAttrCard, this);
     }
 
     update(deltaTime: number) {

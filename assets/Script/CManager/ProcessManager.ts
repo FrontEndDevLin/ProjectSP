@@ -113,7 +113,7 @@ export default class ProcessManager extends OBT_UIManager {
         GUI_GamePlayManager.instance.initPrepareGUI();
         // GUI_GamePlayManager.instance.initPropGUI();
         GUI_GamePlayManager.instance.initPopupGUI();
-        // GUI_PopupManager.instance.initRootNode();
+        GUI_PopupManager.instance.initRootNode();
         GUI_TooltipsManager.instance.initRootNode();
         CHRManager.instance.showCHR();
     }
