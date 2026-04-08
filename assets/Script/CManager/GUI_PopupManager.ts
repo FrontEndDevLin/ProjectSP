@@ -1,11 +1,7 @@
 import { EventTouch, find, Node, tween, UIOpacity, UITransform, v3, Vec3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import ProcessManager from "./ProcessManager";
-import { NodePool } from "cc";
-import CHRManager from "./CHRManager";
 import { CHRInfo, SCREEN_WIDTH } from "../Common/Namespace";
-import OBT from "../OBT";
-import { transportWorldPosition } from "../Common/utils";
 import { PropBoard_Popup } from "../Controllers/GamePlay/GUI_Popup/PropBoard_Popup";
 
 export enum POPUP_NAME {
@@ -104,7 +100,6 @@ export default class GUI_PopupManager extends OBT_UIManager {
         let position: Vec3 = v3(-SCREEN_WIDTH / 2, 0, 0);
         let popupUITransform: UITransform = this._propBoardNode.getComponent(UITransform);
         this._propBoardNode.setPosition(v3(position.x + popupUITransform.width / 2, position.y, 0));
-        // this._propBoardNode.setPosition(v3(-100, 0, 0));
 
         this._popupRootNode.addChild(this._propBoardNode);
     }

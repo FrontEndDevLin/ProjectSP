@@ -36,7 +36,7 @@ export class CHRAttrItem extends OBT_Component {
         const prop: CHRInfo.Prop = this.node.OBT_param1;
         let index = this.node.OBT_param2 ? this.node.OBT_param2.index : 0;
         let propKey = prop.prop;
-        GUI_TooltipsManager.instance.showPropIntroTooltips(propKey, this.node);
+        GUI_TooltipsManager.instance.showPropIntroTooltips({ propKey, node: this.node });
 
         OBT.instance.eventCenter.emit(GamePlayEvent.GUI.UPDATE_PROP_ITEM_ACTIVE, propKey, index)
     }

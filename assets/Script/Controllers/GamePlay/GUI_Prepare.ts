@@ -14,6 +14,8 @@ import WarCoreManager from '../../CManager/WarCoreManager';
 import { GUI_PropWrap } from './GUI_PropWrap';
 import ItemBase from './Items/ItemBase';
 import ItemWarCore from './Items/ItemWarCore';
+import GUI_PopupManager from '../../CManager/GUI_PopupManager';
+import GUI_TooltipsManager from '../../CManager/GUI_TooltipsManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -21,7 +23,6 @@ export class GUI_Prepare extends OBT_Component {
     private _backpackWrapNode: Node;
 
     protected onLoad(): void {
-        this.view("GUI_PropWrap").addComponent("GUI_PropWrap");
         this.view("SidePropBtn").on(Node.EventType.TOUCH_END, this.showPropGUI, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.CURRENCY.CURRENCY_CHANGE, this._updateCurrency, this);
@@ -50,8 +51,7 @@ export class GUI_Prepare extends OBT_Component {
     }
 
     protected showPropGUI() {
-        const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
-        propWrapCtx.showPropGUI();
+        GUI_PopupManager.instance.showPropBoardPopup();
     }
 
     private _updateCurrency() {
@@ -189,15 +189,18 @@ export class GUI_Prepare extends OBT_Component {
     }
 
     private _showAtkCorePreview() {
-        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_WAR_CORE_UI);
+        // OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_WAR_CORE_UI);
+        GUI_TooltipsManager.instance.showAtkCoreTooltips();
     }
     private warCoreUpgradeIconTouch(e: EventTouch) {
         const targetNode: Node = e.currentTarget;
         // e.currentTarget.OBT_param2 idx
         // TODO: 展示升级包卡片
         let packId: string = targetNode.OBT_param1;
+        if (!packId) return;
         WarCoreManager.instance.previewUpgradePack(packId);
-        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_UPGRADE_PACK_UI);
+        GUI_TooltipsManager.instance.showUpgradePackTooltips();
+        // OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_UPGRADE_PACK_UI);
     }
 
     protected onDestroy(): void {

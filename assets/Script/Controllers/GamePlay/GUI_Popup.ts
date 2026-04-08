@@ -20,8 +20,7 @@ export class GUI_Popup extends OBT_Component {
 
     protected onLoad(): void {
         this.view("ItemPreview").addComponent("ItemPreview");
-        this.view("PropIntro").addComponent("PropIntro");
-        this.view("AtkCorePreview").addComponent("AtkCorePreview");
+        // this.view("AtkCorePreview").addComponent("AtkCorePreview");
         this.view("UpgradePackPreview").addComponent("UpgradePackPreview");
         this.view("Mask").on(Node.EventType.TOUCH_END, this._hideAll, this);
 

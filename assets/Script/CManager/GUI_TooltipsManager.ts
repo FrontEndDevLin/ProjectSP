@@ -6,47 +6,65 @@ import CHRManager from "./CHRManager";
 import { CHRInfo } from "../Common/Namespace";
 import OBT from "../OBT";
 import { transportWorldPosition } from "../Common/utils";
+import GUI_PopupManagerBase, { PopupMethodsMap } from "./GUI_PopupManagerBase";
+import { AtkCore_Tooltips } from "../Controllers/GamePlay/GUI_Tooltips/AtkCore_Tooltips";
+import { UpgradePack_Tooltips } from "../Controllers/GamePlay/GUI_Tooltips/UpgradePack_Tooltips";
+
+export enum TOOLTIPS_NAME {
+    PROP_DETAIL = 1,
+    ATK_CORE_DETAIL = 2,
+    UPGRADE_PACK_DETAIL = 3
+}
+
+export interface showPropIntroFnOptions {
+    propKey: string,
+    node: Node
+}
 
 /**
  * 全局轻提示管理
  * 用于角色属性说明
  * 交互Tooltips等
  */
-export default class GUI_TooltipsManager extends OBT_UIManager {
+export default class GUI_TooltipsManager extends GUI_PopupManagerBase {
     static instance: GUI_TooltipsManager;
 
-    private _tooltipsRootNode: Node;
-    private _maskNode: Node;
+    protected rootNodeName: string = "GUI_TooltipsWrap";
+    
+    protected maskVisiable: boolean = false;
 
     private _propIntroNode: Node;
     private _propIntroCtx: PropIntro_Tooltips;
 
+    private _atkCoreDetailNode: Node;
+    private _atkCoreDetailCtx: AtkCore_Tooltips;
+
+    private _upgradePackDetailNode: Node;
+    private _upgradePackDetailCtx: UpgradePack_Tooltips;
+
+    protected popupMethodsMap: PopupMethodsMap = {
+        [TOOLTIPS_NAME.PROP_DETAIL]: [this._showPropIntroTooltips, this._closePropIntroTooltips],
+        [TOOLTIPS_NAME.ATK_CORE_DETAIL]: [this._showAtkCoreTooltips, this._closeAtkCoreTooltips],
+        [TOOLTIPS_NAME.UPGRADE_PACK_DETAIL]: [this._showUpgradePackTooltips, this._closeUpgradePackTooltips]
+    };
+
     protected onLoad(): void {
+        super.onLoad();
         if (!GUI_TooltipsManager.instance) {
             GUI_TooltipsManager.instance = this
         } else {
             this.destroy();
             return;
         }
-
-        this.initMaskNode();
-    }
-
-    private initMaskNode() {
-        this._maskNode = this.loadPrefab({ prefabPath: "Common/Mask", scriptName: "NONE" });
-        this._maskNode.setPosition(v3(0, 0, 0));
-        this._maskNode.on(Node.EventType.TOUCH_START, this.preventSwallow, this);
-        this._maskNode.on(Node.EventType.TOUCH_END, this.touchMask, this);
-    }
-
-    public initRootNode() {
-        this._tooltipsRootNode = this.mountEmptyNode({ nodeName: "GUI_TooltipsWrap", parentNode: ProcessManager.instance.uiRootNode });
     }
 
     /**
      * 角色属性详情
      */
-    public showPropIntroTooltips(propKey: string, node: Node) {
+    public showPropIntroTooltips(options: showPropIntroFnOptions) {
+        this.pushQueue(TOOLTIPS_NAME.PROP_DETAIL, options);
+    }
+    private _showPropIntroTooltips({ propKey, node }: showPropIntroFnOptions) {
         if (!this._propIntroNode) {
             this._propIntroNode = this.loadPrefab({ prefabPath: "GUI_Tooltips/PropIntro_Tooltips" });
             this._propIntroCtx = this._propIntroNode.getComponent(PropIntro_Tooltips);
@@ -61,24 +79,75 @@ export default class GUI_TooltipsManager extends OBT_UIManager {
         
         let item: CHRInfo.Prop = CHRManager.instance.propCtx.getPropInfo(propKey);
         this._propIntroCtx.updateView(item);
-        this._tooltipsRootNode.addChild(this._propIntroNode);
+        this.popupRootNode.addChild(this._propIntroNode);
+    }
+    private _closePropIntroTooltips(event: EventTouch) {
+        event.preventSwallow = true;
+        this.popupRootNode.removeChild(this._propIntroNode);
+        this.hideMask();
     }
 
     /**
-     * showMask方法, 决定当前mask是否可见, 点击是否隐藏, 点击是否穿透
+     * 核心详情
      */
-    private showMask() {
-        this._maskNode.getComponent(UIOpacity).opacity = 0;
-        this._tooltipsRootNode.addChild(this._maskNode);
+    public showAtkCoreTooltips() {
+        this.pushQueue(TOOLTIPS_NAME.ATK_CORE_DETAIL);
+    }
+    private _showAtkCoreTooltips() {
+        if (!this._atkCoreDetailNode) {
+            this._atkCoreDetailNode = this.loadPrefab({ prefabPath: "GUI_Tooltips/AtkCore_Tooltips" });
+            this._atkCoreDetailCtx = this._atkCoreDetailNode.getComponent(AtkCore_Tooltips);
+            this._atkCoreDetailCtx.initAtkCorePreview();
+        }
+
+        this.showMask();
+        this.popupRootNode.addChild(this._atkCoreDetailNode);
+    }
+    private _closeAtkCoreTooltips(event: EventTouch) {
+        event.preventSwallow = true;
+        this.popupRootNode.removeChild(this._atkCoreDetailNode);
+        this.hideMask();
     }
 
-    private touchMask(event: EventTouch) {
-        event.preventSwallow = true;
-        this._tooltipsRootNode.removeChild(this._propIntroNode);
-        this._tooltipsRootNode.removeChild(this._maskNode);
+    /**
+     * 核心升级包详情
+     */
+    public showUpgradePackTooltips() {
+        this.pushQueue(TOOLTIPS_NAME.UPGRADE_PACK_DETAIL);
     }
-    private preventSwallow(event: EventTouch) {
+    private _showUpgradePackTooltips() {
+        if (!this._upgradePackDetailNode) {
+            this._upgradePackDetailNode = this.loadPrefab({ prefabPath: "GUI_Tooltips/UpgradePack_Tooltips" });
+            this._upgradePackDetailCtx = this._upgradePackDetailNode.getComponent(UpgradePack_Tooltips);
+            this._upgradePackDetailCtx.initUpgradePackPreview();
+        }
+
+        this.showMask();
+        this.popupRootNode.addChild(this._upgradePackDetailNode);
+    }
+    private _closeUpgradePackTooltips(event: EventTouch) {
         event.preventSwallow = true;
+        this.popupRootNode.removeChild(this._upgradePackDetailNode);
+        this.hideMask();
+    }
+
+    protected startTouchMask(event: EventTouch) {
+        switch (this.queue[0]) {
+            case TOOLTIPS_NAME.PROP_DETAIL:
+            case TOOLTIPS_NAME.ATK_CORE_DETAIL:
+            case TOOLTIPS_NAME.UPGRADE_PACK_DETAIL: {
+                event.preventSwallow = true;
+            } break;
+        }
+    }
+    protected touchMask(event: EventTouch) {
+        switch (this.queue[0]) {
+            case TOOLTIPS_NAME.PROP_DETAIL:
+            case TOOLTIPS_NAME.ATK_CORE_DETAIL:
+            case TOOLTIPS_NAME.UPGRADE_PACK_DETAIL: {
+                this.popQueue(event);
+            } break;
+        }
     }
 
     protected onDestroy(): void {
