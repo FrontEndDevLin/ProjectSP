@@ -21,8 +21,7 @@ const { ccclass, property } = _decorator;
 export class GUI_CoreSelect extends OBT_Component {
     protected onLoad(): void {
         this.view("TrophyIconWrap").addComponent("TrophyIconWrap");
-        
-        this.view("GUI_PropWrap").addComponent("GUI_PropWrap");
+
         this.view("SidePropBtn").on(Node.EventType.TOUCH_END, this.showPropGUI, this);
 
         // 核心选择倒计时

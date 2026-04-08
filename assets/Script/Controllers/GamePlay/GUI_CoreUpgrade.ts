@@ -15,14 +15,14 @@ import { CoreCard } from './GUI_CoreSelect/CoreCard';
 import { GUI_PropWrap } from './GUI_PropWrap';
 import { CoreUpgradeCard } from './GUI_CoreSelect/CoreUpgradeCard';
 import ItemBase from './Items/ItemBase';
+import GUI_PopupManager from '../../CManager/GUI_PopupManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_CoreUpgrade')
 export class GUI_CoreUpgrade extends OBT_Component {
     protected onLoad(): void {
         this.view("TrophyIconWrap").addComponent("TrophyIconWrap");
-        
-        this.view("GUI_PropWrap").addComponent("GUI_PropWrap");
+
         this.view("SidePropBtn").on(Node.EventType.TOUCH_END, this.showPropGUI, this);
 
         // 核心升级包选择倒计时
@@ -35,8 +35,7 @@ export class GUI_CoreUpgrade extends OBT_Component {
     }
 
     protected showPropGUI() {
-        const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
-        propWrapCtx.showPropGUI();
+        GUI_PopupManager.instance.showPropBoardPopup();
     }
 
     private _initCoreCard() {
