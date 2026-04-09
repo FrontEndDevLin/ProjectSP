@@ -12,11 +12,11 @@ export class ItemCard extends OBT_Component {
         const item: ItemBase = this.node.OBT_param1;
 
         this.node.OBT_param2 = {
-            updateView: this._updateView.bind(this)
+            updateView: this.updateView.bind(this)
         }
 
         if (item) {
-            this._updateView(item);
+            this.updateView(item);
         }
     }
 
@@ -24,7 +24,7 @@ export class ItemCard extends OBT_Component {
 
     }
 
-    private _updateView(item: ItemBase) {
+    public updateView(item: ItemBase) {
         let level = item.quality || ITEM_QUALITY.LV1;
         let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[level];
         let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);

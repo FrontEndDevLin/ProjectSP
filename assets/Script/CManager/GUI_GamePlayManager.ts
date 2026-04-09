@@ -15,13 +15,6 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     private _GUILevelUpNode: Node;
     // 备战界面
     private _GUIPrepareNode: Node;
-    // 属性界面
-    private _GUIPropNode: Node;
-    // 弹窗界面
-    private _GUIPopupNode: Node;
-
-    // 属性外壳
-    private _propWrap: Node;
     // 背包外壳
     private _backPackWrap: Node;
 
@@ -37,17 +30,11 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     public initGamePlayGUI() {
         this._GUIGamePlayNode = this.showPrefab({ prefabPath: "GUI_GamePlay", parentNode: ProcessManager.instance.uiRootNode });
     }
-    public initPropGUI() {
-        this._GUIPropNode = this.showPrefab({ prefabPath: "GUI_Prop", parentNode: ProcessManager.instance.uiRootNode });
-    }
     public initLevelUpGUI() {
         this._GUILevelUpNode = this.showPrefab({ prefabPath: "GUI_LevelUp", parentNode: ProcessManager.instance.uiRootNode });
     }
     public initPrepareGUI() {
         this._GUIPrepareNode = this.showPrefab({ prefabPath: "GUI_Prepare", parentNode: ProcessManager.instance.uiRootNode });
-    }
-    public initPopupGUI() {
-        this._GUIPopupNode = this.showPrefab({ prefabPath: "GUI_Popup", parentNode: ProcessManager.instance.uiRootNode });
     }
     public initCoreSelectGUI() {
         this._GUICoreSelectNode = this.showPrefab({ prefabPath: "GUI_CoreSelect", parentNode: ProcessManager.instance.uiRootNode });
@@ -63,13 +50,6 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
         this.hideNode(this._GUIGamePlayNode);
     }
 
-    public showPropGUI() {
-        this.showNode(this._GUIPropNode);
-    }
-    public hidePropGUI() {
-        this.hideNode(this._GUIPropNode);
-    }
-
     public showLevelUpGUI() {
         this.showNode(this._GUILevelUpNode);
     }
@@ -82,12 +62,6 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
     public hidePrepareGUI() {
         this.hideNode(this._GUIPrepareNode);
-    }
-    public showPopupGUI() {
-        this.showNode(this._GUIPopupNode);
-    }
-    public hidePopupGUI() {
-        this.hideNode(this._GUIPopupNode);
     }
 
     public showCoreSelectGUI() {
@@ -109,12 +83,6 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
     public getBackpackWrapNode() {
         return this._backPackWrap;
-    }
-    public setPropWrapNode(node: Node) {
-        this._propWrap = node;
-    }
-    public getPropWrapNode() {
-        return this._propWrap;
     }
 
     protected onDestroy(): void {

@@ -9,6 +9,7 @@ import { transportWorldPosition } from "../Common/utils";
 import GUI_PopupManagerBase, { PopupMethodsMap } from "./GUI_PopupManagerBase";
 import { AtkCore_Tooltips } from "../Controllers/GamePlay/GUI_Tooltips/AtkCore_Tooltips";
 import { UpgradePack_Tooltips } from "../Controllers/GamePlay/GUI_Tooltips/UpgradePack_Tooltips";
+import { Item_Tooltips } from "../Controllers/GamePlay/GUI_Tooltips/Item_Tooltips";
 
 export enum TOOLTIPS_NAME {
     PROP_DETAIL = 1,
@@ -19,6 +20,13 @@ export enum TOOLTIPS_NAME {
 
 export interface showPropIntroFnOptions {
     propKey: string,
+    node: Node
+}
+export interface showAtkCoreFnOptions {
+    node: Node
+}
+export interface showItemPreviewFnOptions {
+    itemKey: string,
     node: Node
 }
 
@@ -42,6 +50,9 @@ export default class GUI_TooltipsManager extends GUI_PopupManagerBase {
 
     private _upgradePackDetailNode: Node;
     private _upgradePackDetailCtx: UpgradePack_Tooltips;
+
+    private _itemPreviewNode: Node;
+    private _itemPreviewCtx: Item_Tooltips;
 
     protected popupMethodsMap: PopupMethodsMap = {
         [TOOLTIPS_NAME.PROP_DETAIL]: [this._showPropIntroTooltips, this._closePropIntroTooltips],
@@ -92,15 +103,20 @@ export default class GUI_TooltipsManager extends GUI_PopupManagerBase {
     /**
      * 核心详情
      */
-    public showAtkCoreTooltips() {
-        this.pushQueue(TOOLTIPS_NAME.ATK_CORE_DETAIL);
+    public showAtkCoreTooltips(options: showAtkCoreFnOptions) {
+        this.pushQueue(TOOLTIPS_NAME.ATK_CORE_DETAIL, options);
     }
-    private _showAtkCoreTooltips() {
+    private _showAtkCoreTooltips({ node }: showAtkCoreFnOptions) {
         if (!this._atkCoreDetailNode) {
             this._atkCoreDetailNode = this.loadPrefab({ prefabPath: "GUI_Tooltips/AtkCore_Tooltips" });
             this._atkCoreDetailCtx = this._atkCoreDetailNode.getComponent(AtkCore_Tooltips);
             this._atkCoreDetailCtx.initAtkCorePreview();
         }
+        this._atkCoreDetailCtx.updateView();
+        let position: Vec3 = transportWorldPosition(node.worldPosition);
+        let targetUITransform: UITransform = node.getComponent(UITransform);
+        let popupUITransform: UITransform = this._atkCoreDetailNode.getComponent(UITransform);
+        this._atkCoreDetailNode.setPosition(v3(position.x - targetUITransform.width / 2 + popupUITransform.width / 2, position.y + targetUITransform.height / 2 + popupUITransform.height / 2 + 8, position.z));
 
         this.showMask();
         this.popupRootNode.addChild(this._atkCoreDetailNode);
@@ -114,15 +130,20 @@ export default class GUI_TooltipsManager extends GUI_PopupManagerBase {
     /**
      * 核心升级包详情
      */
-    public showUpgradePackTooltips() {
-        this.pushQueue(TOOLTIPS_NAME.UPGRADE_PACK_DETAIL);
+    public showUpgradePackTooltips(options: showAtkCoreFnOptions) {
+        this.pushQueue(TOOLTIPS_NAME.UPGRADE_PACK_DETAIL, options);
     }
-    private _showUpgradePackTooltips() {
+    private _showUpgradePackTooltips({ node }: showAtkCoreFnOptions) {
         if (!this._upgradePackDetailNode) {
             this._upgradePackDetailNode = this.loadPrefab({ prefabPath: "GUI_Tooltips/UpgradePack_Tooltips" });
             this._upgradePackDetailCtx = this._upgradePackDetailNode.getComponent(UpgradePack_Tooltips);
             this._upgradePackDetailCtx.initUpgradePackPreview();
         }
+        this._upgradePackDetailCtx.updateView();
+        let position: Vec3 = transportWorldPosition(node.worldPosition);
+        let targetUITransform: UITransform = node.getComponent(UITransform);
+        let popupUITransform: UITransform = this._upgradePackDetailNode.getComponent(UITransform);
+        this._upgradePackDetailNode.setPosition(v3(position.x, position.y + targetUITransform.height / 2 + popupUITransform.height / 2 + 8, position.z));
 
         this.showMask();
         this.popupRootNode.addChild(this._upgradePackDetailNode);
@@ -136,15 +157,36 @@ export default class GUI_TooltipsManager extends GUI_PopupManagerBase {
     /**
      * 道具详情
      */
-    public showItemTooltips() {}
-    private _showItemTooltips() {}
-    private _closeItemTooltips(event: EventTouch) {}
+    public showItemTooltips(options: showItemPreviewFnOptions) {
+        this.pushQueue(TOOLTIPS_NAME.ITEM_DETAIL, options);
+    }
+    private _showItemTooltips({ itemKey, node } : showItemPreviewFnOptions) {
+        if (!this._itemPreviewNode) {
+            this._itemPreviewNode = this.loadPrefab({ prefabPath: "GUI_Tooltips/Item_Tooltips" });
+            this._itemPreviewCtx = this._itemPreviewNode.getComponent(Item_Tooltips);
+        }
+        this.showMask();
+
+        let position: Vec3 = transportWorldPosition(node.worldPosition);
+        let targetUITransform: UITransform = node.getComponent(UITransform);
+        let popupUITransform: UITransform = this._itemPreviewNode.getComponent(UITransform);
+        this._itemPreviewNode.setPosition(v3(position.x + targetUITransform.width / 2 + popupUITransform.width / 2 + 8, position.y + targetUITransform.height / 2 - popupUITransform.height / 2, position.z));
+
+        this._itemPreviewCtx.updateItemPreview(itemKey);
+        this.popupRootNode.addChild(this._itemPreviewNode);
+    }
+    private _closeItemTooltips(event: EventTouch) {
+        event.preventSwallow = true;
+        this.popupRootNode.removeChild(this._itemPreviewNode);
+        this.hideMask();
+    }
 
     protected startTouchMask(event: EventTouch) {
         switch (this.queue[0]) {
             case TOOLTIPS_NAME.PROP_DETAIL:
             case TOOLTIPS_NAME.ATK_CORE_DETAIL:
-            case TOOLTIPS_NAME.UPGRADE_PACK_DETAIL: {
+            case TOOLTIPS_NAME.UPGRADE_PACK_DETAIL:
+            case TOOLTIPS_NAME.ITEM_DETAIL: {
                 event.preventSwallow = true;
             } break;
         }
@@ -153,7 +195,8 @@ export default class GUI_TooltipsManager extends GUI_PopupManagerBase {
         switch (this.queue[0]) {
             case TOOLTIPS_NAME.PROP_DETAIL:
             case TOOLTIPS_NAME.ATK_CORE_DETAIL:
-            case TOOLTIPS_NAME.UPGRADE_PACK_DETAIL: {
+            case TOOLTIPS_NAME.UPGRADE_PACK_DETAIL:
+            case TOOLTIPS_NAME.ITEM_DETAIL: {
                 this.popQueue(event);
             } break;
         }

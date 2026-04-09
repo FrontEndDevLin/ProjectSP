@@ -87,8 +87,6 @@ export class GUI_Prepare extends OBT_Component {
     }
 
     private _prepareTimeout() {
-        const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
-        propWrapCtx.hidePropGUI();
         this._nextWave();
     }
 
@@ -190,7 +188,7 @@ export class GUI_Prepare extends OBT_Component {
 
     private _showAtkCorePreview() {
         // OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_WAR_CORE_UI);
-        GUI_TooltipsManager.instance.showAtkCoreTooltips();
+        GUI_TooltipsManager.instance.showAtkCoreTooltips({ node: this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot") });
     }
     private warCoreUpgradeIconTouch(e: EventTouch) {
         const targetNode: Node = e.currentTarget;
@@ -199,7 +197,7 @@ export class GUI_Prepare extends OBT_Component {
         let packId: string = targetNode.OBT_param1;
         if (!packId) return;
         WarCoreManager.instance.previewUpgradePack(packId);
-        GUI_TooltipsManager.instance.showUpgradePackTooltips();
+        GUI_TooltipsManager.instance.showUpgradePackTooltips({ node: this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/UpgradeWrap") });
         // OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_UPGRADE_PACK_UI);
     }
 

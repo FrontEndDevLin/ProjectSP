@@ -16,9 +16,12 @@ export class UpgradePack_Tooltips extends OBT_Component {
     }
 
     public initUpgradePackPreview() {
+        this.view("CoreUpgradeCard").addComponent(CoreUpgradeCard);
+    }
+
+    public updateView() {
         const packInfo: ItemBase = WarCoreManager.instance.getPreviewUpgradePackInfo();
         if (packInfo) {
-            this.view("CoreUpgradeCard").addComponent(CoreUpgradeCard);
             this.view("CoreUpgradeCard").getComponent(CoreUpgradeCard).updateView(packInfo);
         }
     }

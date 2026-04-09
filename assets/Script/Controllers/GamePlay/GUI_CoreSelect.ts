@@ -35,8 +35,6 @@ export class GUI_CoreSelect extends OBT_Component {
 
     protected showPropGUI() {
         GUI_PopupManager.instance.showPropBoardPopup();
-        // const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
-        // propWrapCtx.showPropGUI();
     }
 
     private _initCoreCard() {
@@ -65,9 +63,6 @@ export class GUI_CoreSelect extends OBT_Component {
     }
 
     private _coreSelectTimeout() {
-        const propWrapCtx: GUI_PropWrap = <GUI_PropWrap>this.view("GUI_PropWrap").getComponent("GUI_PropWrap");
-        propWrapCtx.hidePropGUI();
-
         const cardSlotList: Node[] = this.view("Container/StoreWrap/CardWrap").children;
         let node: Node = cardSlotList[getRandomNumber(0, cardSlotList.length - 1)].children[0];
         node.OBT_param2.autoTouch();

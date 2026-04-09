@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "671fb918-618e-4ae2-9cb5-75f6196bef05",
+  "uuid": "87b4ec41-ed72-46f1-980d-374a8c00435b",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "GUI_Popup"
+    "syncNodeName": "Item_Tooltips"
   }
 }

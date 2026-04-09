@@ -16,8 +16,11 @@ export class AtkCore_Tooltips extends OBT_Component {
     }
 
     public initAtkCorePreview() {
-        const warCore: ItemWarCore = WarCoreManager.instance.warCore;
         this.view("CoreCard").addComponent(CoreCard);
+    }
+
+    public updateView() {
+        const warCore: ItemWarCore = WarCoreManager.instance.warCore;
         this.view("CoreCard").getComponent(CoreCard).updateView(warCore);
     }
 

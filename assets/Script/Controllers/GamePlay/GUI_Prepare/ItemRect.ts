@@ -6,6 +6,7 @@ import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
 import ItemsManager from '../../../CManager/ItemsManager';
 import ItemBase from '../Items/ItemBase';
+import GUI_TooltipsManager from '../../../CManager/GUI_TooltipsManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('ItemRect')
@@ -40,8 +41,7 @@ export class ItemRect extends OBT_Component {
     }
 
     private _previewItem() {
-        let index = this.node.OBT_param2.index || 0;
-        OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_ITEM_UI, this._backpackItem.id, index);
+        GUI_TooltipsManager.instance.showItemTooltips({ itemKey: this._backpackItem.id, node: this.node });
     }
 
     start() {

@@ -1,6 +1,8 @@
 import { EventTouch, find, Node, tween, UIOpacity, UITransform, v3, Vec3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import ProcessManager from "./ProcessManager";
+import OBT from "../OBT";
+import { GamePlayEvent } from "../Common/Namespace";
 
 export interface PopupMethodsMap {
     [popupName: string]: Function[]
@@ -26,6 +28,11 @@ export default class GUI_PopupManagerBase extends OBT_UIManager {
 
     protected onLoad(): void {
         this.initPopupNode();
+
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_TIMEOUT, this.clearQueue, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.LEVEL_UP_TIMEOUT, this.clearQueue, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_TIMEOUT, this.clearQueue, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIMEOUT, this.clearQueue, this);
     }
     public initRootNode() {
         this.popupRootNode = this.mountEmptyNode({ nodeName: this.rootNodeName, parentNode: ProcessManager.instance.uiRootNode });
@@ -67,6 +74,13 @@ export default class GUI_PopupManagerBase extends OBT_UIManager {
             if (showFn) {
                 showFn.call(this);
             }
+        }
+    }
+    // 清除队列, 阶段超时后, 调用此方法可关闭所有弹窗
+    protected clearQueue() {
+        if (this.queue.length) {
+            this.queue = [];
+            this.popupRootNode.removeAllChildren();
         }
     }
 

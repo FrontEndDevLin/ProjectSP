@@ -1,8 +1,5 @@
-import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
-import { CHRInfo } from '../../../Common/Namespace';
+import { _decorator } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import CHRManager from '../../../CManager/CHRManager';
-import { getSuccessRichTxt } from '../../../Common/utils';
 import { GUI_Prop } from '../GUI_Prop';
 const { ccclass, property } = _decorator;
 

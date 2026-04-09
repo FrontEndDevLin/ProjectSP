@@ -3,7 +3,6 @@ import OBT_Component from '../../OBT_Component';
 import { CHRInfo, GamePlayEvent } from '../../Common/Namespace';
 import CHRManager from '../../CManager/CHRManager';
 import OBT from '../../OBT';
-import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prop')
@@ -21,8 +20,6 @@ export class GUI_Prop extends OBT_Component {
         // this.view("Mask").on(Node.EventType.TOUCH_END, this._touchMask, this);
 
         this.view("GUI_PropWrap").on(Node.EventType.TOUCH_END, this._touchContainer, this);
-
-        GUI_GamePlayManager.instance.setPropWrapNode(this.view("GUI_PropWrap/Board/MainBoardWrap"));
     }
 
     start() {
@@ -53,8 +50,6 @@ export class GUI_Prop extends OBT_Component {
         }
         this.hideNodeByPath(hidePath);
         this.showNodeByPath(showPath);
-
-        GUI_GamePlayManager.instance.setPropWrapNode(this.view(showPath));
     }
 
     public initCHRAttrCard() {
