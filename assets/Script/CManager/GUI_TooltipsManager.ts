@@ -13,7 +13,8 @@ import { UpgradePack_Tooltips } from "../Controllers/GamePlay/GUI_Tooltips/Upgra
 export enum TOOLTIPS_NAME {
     PROP_DETAIL = 1,
     ATK_CORE_DETAIL = 2,
-    UPGRADE_PACK_DETAIL = 3
+    UPGRADE_PACK_DETAIL = 3,
+    ITEM_DETAIL = 4
 }
 
 export interface showPropIntroFnOptions {
@@ -45,7 +46,8 @@ export default class GUI_TooltipsManager extends GUI_PopupManagerBase {
     protected popupMethodsMap: PopupMethodsMap = {
         [TOOLTIPS_NAME.PROP_DETAIL]: [this._showPropIntroTooltips, this._closePropIntroTooltips],
         [TOOLTIPS_NAME.ATK_CORE_DETAIL]: [this._showAtkCoreTooltips, this._closeAtkCoreTooltips],
-        [TOOLTIPS_NAME.UPGRADE_PACK_DETAIL]: [this._showUpgradePackTooltips, this._closeUpgradePackTooltips]
+        [TOOLTIPS_NAME.UPGRADE_PACK_DETAIL]: [this._showUpgradePackTooltips, this._closeUpgradePackTooltips],
+        [TOOLTIPS_NAME.ITEM_DETAIL]: [this._showItemTooltips, this._closeItemTooltips]
     };
 
     protected onLoad(): void {
@@ -130,6 +132,13 @@ export default class GUI_TooltipsManager extends GUI_PopupManagerBase {
         this.popupRootNode.removeChild(this._upgradePackDetailNode);
         this.hideMask();
     }
+
+    /**
+     * 道具详情
+     */
+    public showItemTooltips() {}
+    private _showItemTooltips() {}
+    private _closeItemTooltips(event: EventTouch) {}
 
     protected startTouchMask(event: EventTouch) {
         switch (this.queue[0]) {
