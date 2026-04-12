@@ -106,6 +106,7 @@ export default class EMYManager extends OBT_UIManager {
     }
     public removeEmyNode(node: Node) {
         let type: string = node.name;
+        node.setScale(v3(1, 1));
         this.enemyRootNode.removeChild(node);
         this._emyNodePoolMap[type].put(node);
     }
@@ -135,9 +136,21 @@ export default class EMYManager extends OBT_UIManager {
             spawnRole.spawned_count = 0;
             spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - spawnRole.start_delay);
 
-            this.enemyData[spawnRole.enemy_type].hp = spawnRole.hp;
-            this.enemyData[spawnRole.enemy_type].dmg = spawnRole.dmg;
-            this.enemyData[spawnRole.enemy_type].spec_dmg = spawnRole.spec_dmg;
+            let enemyProps: EMYInfo.EMYProps = this.enemyData[spawnRole.enemy_type];
+            let { hp = 0, dmg = 0, spec_dmg = 0, hp_growth = 0, dmg_growth = 0, spec_dmg_growth = 0 } = enemyProps;
+
+            hp = Math.round(hp + hp * hp_growth);
+
+            if (dmg) {
+                dmg = Math.round(dmg + dmg * dmg_growth);
+            }
+            if (spec_dmg) {
+                spec_dmg = Math.round(spec_dmg + spec_dmg * spec_dmg_growth);
+            }
+
+            this.enemyData[spawnRole.enemy_type].hp = hp;
+            this.enemyData[spawnRole.enemy_type].dmg = dmg;
+            this.enemyData[spawnRole.enemy_type].spec_dmg = spec_dmg;
             this.enemyData[spawnRole.enemy_type].timeout_drop_trophy = spawnRole.timeout_drop_trophy;
         })
         return true;

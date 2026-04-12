@@ -23,7 +23,8 @@
     "spd": 0,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 1,
-    "exp_cnt": 4
+    "exp_cnt": 4,
+    "hp": 15
   },
   "EMY01": {
     "id": "EMY01",
@@ -34,7 +35,9 @@
     "spd": 40,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 0.02,
-    "exp_cnt": 1
+    "exp_cnt": 1,
+    "hp": 5,
+    "dmg": 3
   },
   "EMY02": {
     "id": "EMY02",
@@ -45,7 +48,9 @@
     "spd": 60,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 0.9,
-    "exp_cnt": 1
+    "exp_cnt": 1,
+    "hp": 2,
+    "dmg": 2
   },
   "EMY03": {
     "id": "EMY03",
@@ -60,7 +65,9 @@
     "spd": 70,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 0.02,
-    "exp_cnt": 1
+    "exp_cnt": 1,
+    "hp": 3,
+    "dmg": 2
   },
   "EMY04": {
     "id": "EMY04",
@@ -75,7 +82,10 @@
     "spd": 40,
     "exp_drop_rate": 0.9,
     "trophy_drop_rate": 0.09,
-    "exp_cnt": 1
+    "exp_cnt": 1,
+    "hp": 8,
+    "dmg": 2,
+    "spec_dmg": 5
   },
   "EMY05": {
     "id": "EMY05",
@@ -86,11 +96,13 @@
     "attack_range": 250,
     "attack_cd": 2,
     "script": "EMY_Sprint",
-    "pic": "",
+    "pic": "", 
     "spd": 60,
     "exp_drop_rate": 0.8,
     "trophy_drop_rate": 0.02,
-    "exp_cnt": 3
+    "exp_cnt": 3,
+    "hp": 9,
+    "dmg": 5
   },
   "EMY06": {
     "id": "EMY06",
@@ -102,7 +114,9 @@
     "spd": 60,
     "exp_drop_rate": 0.8,
     "trophy_drop_rate": 0.01,
-    "exp_cnt": 3
+    "exp_cnt": 3,
+    "hp": 12,
+    "dmg": 5
   },
   "Elite_EMY01": {
     "id": "Elite_EMY01",
@@ -127,6 +141,8 @@
     "spd": 100,
     "exp_drop_rate": 1,
     "trophy_drop_rate": 1,
-    "exp_cnt": 8
+    "exp_cnt": 8,
+    "hp": 120,
+    "dmg": 2
   }
 }

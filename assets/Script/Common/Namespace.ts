@@ -147,9 +147,6 @@ export namespace GameConfigInfo {
         next_spawn_time: number,
         // 是否生成完毕
         spwaned: boolean,
-        hp: number,
-        dmg?: number,
-        spec_dmg?: number,
         // 是否在逃跑(超时)掉落战利品
         timeout_drop_trophy?: boolean
     }
@@ -499,7 +496,12 @@ export namespace EMYInfo {
         hp: number,
         dmg: number,
         spec_dmg: number,
-        timeout_drop_trophy?: boolean
+        timeout_drop_trophy?: boolean,
+        // 生命每波增长百分比
+        hp_growth?: number,
+        // 生命每波增长百分比
+        dmg_growth?: number,
+        spec_dmg_growth?: number
     }
     export interface EMYNormalData {
         [EMYId: string]: EMYProps

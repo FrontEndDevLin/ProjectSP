@@ -2,7 +2,7 @@
  * 游戏中，界面UI控制
  */
 
-import { _decorator, EventTouch, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, EventTouch, Label, Node, Sprite, SpriteFrame, UITransform } from 'cc';
 import OBT_Component from '../../OBT_Component';
 import OBT from '../../OBT';
 import CHRManager from '../../CManager/CHRManager';
@@ -21,6 +21,7 @@ const { ccclass, property } = _decorator;
 @ccclass('GUI_Prepare')
 export class GUI_Prepare extends OBT_Component {
     private _backpackWrapNode: Node;
+    private _coreExpBarWidth: number = 0;
 
     protected onLoad(): void {
         this.view("SidePropBtn").on(Node.EventType.TOUCH_END, this.showPropGUI, this);
@@ -45,6 +46,8 @@ export class GUI_Prepare extends OBT_Component {
         this.view("OperBtns/NextWave").on(Node.EventType.TOUCH_END, this._nextWave, this);
 
         this.bindWarCoreTouchEvent();
+
+        this._coreExpBarWidth = this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/SlotWrap/EXPWrap/BG").getComponent(UITransform).width;
     }
 
     start() {
@@ -80,6 +83,7 @@ export class GUI_Prepare extends OBT_Component {
         this._updateCountdownView(duration);
         this.updateAtkWarCoreIcon();
         this.updateWarCoreUpgradeIcon();
+        this.updateCoreExpBar();
         this.view("Header/TitleWrap/Val").getComponent(Label).string = `${ProcessManager.instance.waveRole.wave + 1}`;
     }
     private _updateCountdownView(duration) {
@@ -142,7 +146,7 @@ export class GUI_Prepare extends OBT_Component {
         const warCore: ItemWarCore = WarCoreManager.instance.warCore;
         let assets: SpriteFrame = warCore.getAssets();
         let quality: ITEM_QUALITY = warCore.quality || ITEM_QUALITY.LV1;
-        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/Pic").getComponent(Sprite).spriteFrame = assets;
+        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/SlotWrap/Pic").getComponent(Sprite).spriteFrame = assets;
 
         let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
         let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
@@ -199,6 +203,15 @@ export class GUI_Prepare extends OBT_Component {
         WarCoreManager.instance.previewUpgradePack(packId);
         GUI_TooltipsManager.instance.showUpgradePackTooltips({ node: this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/UpgradeWrap") });
         // OBT.instance.eventCenter.emit(GamePlayEvent.GUI.SHOW_PREVIEW_UPGRADE_PACK_UI);
+    }
+
+    // 核心经验进度
+    protected updateCoreExpBar() {
+        let { expCurrent, expTotal } = WarCoreManager.instance;
+        expCurrent = Math.floor(expCurrent);
+        let expBarWidth: number = Math.floor(this._coreExpBarWidth * expCurrent / expTotal);
+
+        this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/SlotWrap/EXPWrap/EXPProg").getComponent(UITransform).width = expBarWidth;
     }
 
     protected onDestroy(): void {
