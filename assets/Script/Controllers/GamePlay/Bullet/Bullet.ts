@@ -40,7 +40,7 @@ export class Bullet extends OBT_Component {
     start() {
     }
 
-    public init({ attr, vector, enemyId, ignoreList = [], groupId }: BulletInfo.BulletInitParams) {
+    public init({ attr, vector, enemyId, ignoreList = [], groupId, sleep = true }: BulletInfo.BulletInitParams) {
         this._collider = this.node.getComponent(BoxCollider2D);
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 

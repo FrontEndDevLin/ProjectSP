@@ -141,7 +141,7 @@ export default class BulletManager extends OBT_UIManager {
         }
     }
 
-    public createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId, penetrate, pen_dmg }: BulletInfo.CreateBulletParams ) {
+    public createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId, penetrate, pen_dmg, rootNode, sleep }: BulletInfo.CreateBulletParams ) {
         // console.log(`创建子弹${bulletId}`)
         const bulletAttr: BulletInfo.BulletAttr = copyObject(this.bulletData[bulletId]);
         const nodePool = this._nodePoolMap[bulletId];
@@ -168,8 +168,8 @@ export default class BulletManager extends OBT_UIManager {
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: Bullet = <Bullet>bulletNode.getComponent(bulletAttr.script);
         bulletNode.OBT_param2 = { attr: bulletAttr };
-        scriptComp.init({ attr: bulletAttr, vector, enemyId, ignoreList, groupId });
-        this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
+        scriptComp.init({ attr: bulletAttr, vector, enemyId, ignoreList, groupId, sleep });
+        this.mountNode({ node: bulletNode, parentNode: rootNode || this.bulletRootNode });
     }
 
     update(deltaTime: number) {

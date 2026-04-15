@@ -1,4 +1,4 @@
-import { Color, Size, Vec3, view } from "cc"
+import { Color, Size, Vec3, view, Node } from "cc"
 import ItemBase from "../Controllers/GamePlay/Items/ItemBase"
 import WeaponBase from "../Controllers/GamePlay/Weapons/WeaponBase"
 
@@ -626,7 +626,8 @@ export namespace BulletInfo {
         // 忽略打击目标, 设置这个将不会对忽略的目标造成伤害, 存入目标的uuid
         ignoreList?: string[],
         // 子弹群组id, 当被同一群组子弹多次击中时, 可设置伤害缩减
-        groupId?: number
+        groupId?: number,
+        sleep?: boolean
     }
 
     export interface CreateBulletParams {
@@ -637,7 +638,11 @@ export namespace BulletInfo {
         ignoreList?: string[],
         groupId?: number,
         penetrate?: number,
-        pen_dmg?: number
+        pen_dmg?: number,
+        // 子弹挂载的节点
+        rootNode?: Node,
+        // 是否休眠, 当sleep=true时, 子弹不动. 默认不休眠
+        sleep?: boolean
     }
 }
 
