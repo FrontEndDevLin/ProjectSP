@@ -630,10 +630,13 @@ export namespace BulletInfo {
         sleep?: boolean
     }
 
-    export interface CreateBulletParams {
+    export interface CreateBulletNodeParams {
         bulletId: string,
         position: Vec3,
-        vector: Vec3,
+        vector: Vec3
+    }
+
+    export interface CreateBulletParams extends CreateBulletNodeParams {
         enemyId?: string,
         ignoreList?: string[],
         groupId?: number,

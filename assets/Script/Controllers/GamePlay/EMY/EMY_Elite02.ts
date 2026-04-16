@@ -10,7 +10,7 @@ const { ccclass, property } = _decorator;
 export class EMY_Elite02 extends EMY_Base {
     protected phase: number = 1;
 
-    protected spNodePath: string[] = ["Body/Core"];
+    protected spNodePath: string[] = ["Body/Shell", "Body/Core"];
 
     private _bulletId: string = "EMY_Bullet020";
 
@@ -26,7 +26,18 @@ export class EMY_Elite02 extends EMY_Base {
     }
 
     protected ininSpinBullet() {
-        // BulletManager.instance.createBullet({ bulletId: this._bulletId, position: this.node.position, vector, enemyId: this.props.id });
+        let vec3Ary: Vec3[] = [v3(40, 40, 0), v3(-40, 40, 0), v3(-40, -40, 0), v3(40, -40, 0)];
+
+        vec3Ary.forEach((vec3: Vec3) => {
+            BulletManager.instance.createBulletByEnemy({
+                bulletId: this._bulletId,
+                position: vec3,
+                vector: v3(1, 0, 0),
+                enemyId: this.props.id,
+                rootNode: this.view("Body/Shell"),
+                sleep: true
+            });
+        })
     }
 
     protected updateHpBar() {
@@ -116,7 +127,7 @@ export class EMY_Elite02 extends EMY_Base {
             const angleList: number[] = [angle - 20, angle, angle + 20];
             angleList.forEach((ang: number) => {
                 let vector = getVectorByAngle(ang);
-                BulletManager.instance.createBullet({ bulletId: this._bulletId, position: this.node.position, vector, enemyId: this.props.id });
+                BulletManager.instance.createBulletByEnemy({ bulletId: this._bulletId, position: this.node.position, vector, enemyId: this.props.id });
             });
 
             this._currentCharge = 0;

@@ -24,6 +24,8 @@ export class Bullet extends OBT_Component {
 
     protected ignoreList: string[] = [];
 
+    private sleep: boolean;
+
     // 起点位置（相对）
     private _startRlt: Vec3 = null;
 
@@ -40,7 +42,7 @@ export class Bullet extends OBT_Component {
     start() {
     }
 
-    public init({ attr, vector, enemyId, ignoreList = [], groupId, sleep = true }: BulletInfo.BulletInitParams) {
+    public init({ attr, vector, enemyId, ignoreList = [], groupId, sleep = false }: BulletInfo.BulletInitParams) {
         this._collider = this.node.getComponent(BoxCollider2D);
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
@@ -52,6 +54,7 @@ export class Bullet extends OBT_Component {
         // 初始位置
         let { x, y } = this.node.position;
         this._startRlt = new Vec3(x, y);
+        this.sleep = sleep;
 
         // 敌人发射的子弹
         if (attr.type === "EMY_bullet" && enemyId) {
@@ -127,6 +130,9 @@ export class Bullet extends OBT_Component {
 
     update(dt: number) {
         if (!this._init || !this._alive) {
+            return;
+        }
+        if (this.sleep) {
             return;
         }
         let ax = dt * this._attr.speed * this._vector.x;

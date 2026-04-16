@@ -159,7 +159,7 @@ export class BaseAtkWarCore extends OBT_Component {
             // console.log(Vec3.angle(v3(1,0,0), {x: vecX, y: vecY, z: 0}));
             // console.log(Number((Math.atan(vecY / vecX)).toFixed(2)));
             // 向量要根据贴图的旋转角度计算
-            BulletManager.instance.createBullet({ bulletId: this.warCore.weaponCtx.bullet, position: chrLoc, vector });
+            BulletManager.instance.createBulletByCHR({ bulletId: this.warCore.weaponCtx.bullet, position: chrLoc, vector });
             // this._attacking = true;
             RealTimeEventManager.instance.onWarCoreAttack();
             // 冷却结合攻击速度修正
