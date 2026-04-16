@@ -141,9 +141,9 @@ export default class BulletManager extends OBT_UIManager {
         }
     }
 
-    public createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId, penetrate, pen_dmg, rootNode, sleep }: BulletInfo.CreateBulletParams ) {
+    public createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId, penetrate, pen_dmg, rootNode, sleep }: BulletInfo.CreateBulletParams) {
         // console.log(`创建子弹${bulletId}`)
-        const bulletAttr: BulletInfo.BulletAttr = copyObject(this.bulletData[bulletId]);
+        const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
         const nodePool = this._nodePoolMap[bulletId];
         let bulletNode: Node = nodePool ? nodePool.get() : null;
         if (!bulletNode) {
@@ -170,6 +170,20 @@ export default class BulletManager extends OBT_UIManager {
         bulletNode.OBT_param2 = { attr: bulletAttr };
         scriptComp.init({ attr: bulletAttr, vector, enemyId, ignoreList, groupId, sleep });
         this.mountNode({ node: bulletNode, parentNode: rootNode || this.bulletRootNode });
+    }
+
+    /**
+     * 敌人创建的子弹
+     *  存在enemyId
+     *  不需要pen_dmg和penetrate
+     */
+    public createBulletByEnemy() {
+
+    }
+
+    public createSleepBullet({ bulletId, position, vector, enemyId, ignoreList, groupId, penetrate, pen_dmg, rootNode }: BulletInfo.CreateBulletParams) {
+        // this.createBullet({ bulletId, position, vector, enemyId, ignoreList, groupId, penetrate, pen_dmg, rootNode, sleep: true });
+
     }
 
     update(deltaTime: number) {
