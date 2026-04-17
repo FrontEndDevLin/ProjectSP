@@ -152,23 +152,24 @@ export default class BulletManager extends OBT_UIManager {
         bulletNode.setPosition(position);
 
         // 旋转子弹
-        let vX: number = vector.x;
-        let vY: number = vector.y;
-        let angle = Number((Math.atan(vY / vX) * (180 / Math.PI)).toFixed(2));
-        let scaleX = 1;
-        if (vX < 0) {
-            scaleX = -1;
+        if (vector) {
+            let vX: number = vector.x;
+            let vY: number = vector.y;
+            let angle = Number((Math.atan(vY / vX) * (180 / Math.PI)).toFixed(2));
+            let scaleX = 1;
+            if (vX < 0) {
+                scaleX = -1;
+            }
+            let sfNode: Node = bulletNode.getChildByName("SF");
+            sfNode.angle = angle;
+            sfNode.setScale(v3(scaleX, 1));
         }
-        let sfNode: Node = bulletNode.getChildByName("SF");
-        sfNode.angle = angle;
-        sfNode.setScale(v3(scaleX, 1));
 
         return bulletNode;
     }
 
     /**
      * 主角创建的子弹
-     *  需要pen_dmg和penetrate
      */
     public createBulletByCHR({ bulletId, position, vector, ignoreList, groupId, penetrate, pen_dmg, rootNode, sleep }: BulletInfo.CreateBulletParams) {
         const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
@@ -186,19 +187,21 @@ export default class BulletManager extends OBT_UIManager {
     /**
      * 敌人创建的子弹
      *  存在enemyId
-     *  不需要pen_dmg和penetrate
+     *  penetrate和pen_dmg直接从子弹配置属性中拿取
      */
-    public createBulletByEnemy({ bulletId, position, vector, ignoreList, groupId, penetrate, pen_dmg, enemyId, rootNode, sleep }: BulletInfo.CreateBulletParams) {
-        const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
+    public createBulletByEnemy({ bulletId, position, vector, ignoreList, groupId, enemyId, rootNode, sleep }: BulletInfo.CreateBulletParams): Node {
+        const bulletAttr: BulletInfo.BulletAttr = copyObject(this.bulletData[bulletId]);
         let bulletNode: Node = this.createBullet({ bulletId, position, vector });
 
-        bulletAttr.penetrate = penetrate || 0;
-        bulletAttr.pen_dmg = pen_dmg || 1;
+        bulletAttr.penetrate = bulletAttr.penetrate || 0;
+        bulletAttr.pen_dmg = bulletAttr.pen_dmg || 1;
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: Bullet = <Bullet>bulletNode.getComponent(bulletAttr.script);
         bulletNode.OBT_param2 = { attr: bulletAttr };
         scriptComp.init({ attr: bulletAttr, vector, ignoreList, enemyId, groupId, sleep });
         this.mountNode({ node: bulletNode, parentNode: rootNode || this.bulletRootNode });
+
+        return bulletNode;
     }
 
     update(deltaTime: number) {

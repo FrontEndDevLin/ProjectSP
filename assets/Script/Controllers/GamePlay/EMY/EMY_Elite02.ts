@@ -1,9 +1,12 @@
-import { _decorator, SpriteComponent, v3, Vec3, UITransform } from 'cc';
+import { _decorator, SpriteComponent, v3, Vec3, UITransform, Node } from 'cc';
 import { EMYInfo, Point } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
-import { getVectorByAngle } from '../../../Common/utils';
+import { getVectorByAngle, transportWorldPosition } from '../../../Common/utils';
 import BulletManager from '../../../CManager/BulletManager';
 import { EMY_Base } from './EMY_Base';
+import CHRManager from '../../../CManager/CHRManager';
+import { Bullet } from '../Bullet/Bullet';
+import ProcessManager from '../../../CManager/ProcessManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EMY_Elite02')
@@ -12,7 +15,9 @@ export class EMY_Elite02 extends EMY_Base {
 
     protected spNodePath: string[] = ["Body/Shell", "Body/Core"];
 
-    private _bulletId: string = "EMY_Bullet020";
+    private _bulletId: string = "EMY_Bullet021";
+
+    private _bulletNodeList: Node[] = [];
 
     start() {
     }
@@ -26,10 +31,11 @@ export class EMY_Elite02 extends EMY_Base {
     }
 
     protected ininSpinBullet() {
+        this._bulletNodeList = [];
         let vec3Ary: Vec3[] = [v3(40, 40, 0), v3(-40, 40, 0), v3(-40, -40, 0), v3(40, -40, 0)];
 
         vec3Ary.forEach((vec3: Vec3) => {
-            BulletManager.instance.createBulletByEnemy({
+            let bulletNode: Node = BulletManager.instance.createBulletByEnemy({
                 bulletId: this._bulletId,
                 position: vec3,
                 vector: v3(1, 0, 0),
@@ -37,36 +43,26 @@ export class EMY_Elite02 extends EMY_Base {
                 rootNode: this.view("Body/Shell"),
                 sleep: true
             });
+            this._bulletNodeList.push(bulletNode);
         })
     }
 
     protected updateHpBar() {
-        let width: number = Math.floor(43 * this.props.hp / this.maxHp);
+        let width: number = Math.floor(66 * this.props.hp / this.maxHp);
         this.view("Elite_HPBar/HPProg").getComponent(UITransform).width = width;
     }
 
     // 二阶段
     protected changePhase() {
-        // console.log('进入二阶段');
-        this._breakShell();
+        console.log('进入二阶段');
+        this._breakShell()
         this.vector = null;
         this.phase = 2;
         this.currentMoveType = this.moveTypeList[this.phase - 1];
     }
 
     private _breakShell() {
-        this.aniComps[0].play("Break");
-
-        let curPosition: Vec3 = this.node.position;
-        let shellBreakPoints: Vec3[] = [];
-
-        let shellPoints: Point[] = <Point[]>this.props.broken_point[0];
-        shellPoints.forEach((point: Point) => {
-            let relPoint: Vec3 = v3(point[0], point[1], 0).add(curPosition);
-            shellBreakPoints.push(relPoint);
-        });
-
-        EMYManager.instance.particleCtrl.createGroupDieParticle(shellBreakPoints, 2);
+        // this.aniComps[0].stop();
         // this.spNodes[0].active = false;
     }
     private _breakCore() {
@@ -84,7 +80,7 @@ export class EMY_Elite02 extends EMY_Base {
 
     protected onHpReduce(): void {
         if (this.phase === 1 && this.props.hp <= this.maxHp / 2) {
-            // this.changePhase();
+            this.changePhase();
         }
         this.updateHpBar();
     }
@@ -121,14 +117,17 @@ export class EMY_Elite02 extends EMY_Base {
         this._currentCharge += dt;
         if (this._currentCharge >= this._chargeTime) {
             /**
-             * 远程攻击 向角色和角色夹角30度的位置发射3枚子弹
+             * 如果没有子弹环绕，装载子弹
+             * 如果有子弹环绕
+             *  远程攻击 向角色发射周边4个子弹
              */
-            let angle: number = this.getToCHRAngle();
-            const angleList: number[] = [angle - 20, angle, angle + 20];
-            angleList.forEach((ang: number) => {
-                let vector = getVectorByAngle(ang);
-                BulletManager.instance.createBulletByEnemy({ bulletId: this._bulletId, position: this.node.position, vector, enemyId: this.props.id });
-            });
+            if (this.view("Body/Shell").children.length) {
+                this._bulletNodeList.forEach((bulletNode: Node, index: number) => {
+                    this._shootBullet(bulletNode, (index + 1) * 200);
+                })
+            } else {
+                this.ininSpinBullet();
+            }
 
             this._currentCharge = 0;
             this.cd = this.props.attack_cd;
@@ -137,6 +136,33 @@ export class EMY_Elite02 extends EMY_Base {
             // 前摇阶段
             this.attackStage = EMYInfo.ATTACK_STAGE.BEFORE_ATTACK;
         }
+    }
+    private _shootBullet(bulletNode: Node, delay: number) {
+        let timer = setTimeout(() => {
+            if (!ProcessManager.instance.isOnPlaying()) {
+                clearTimeout(timer);
+                return;
+            }
+
+            let position: Vec3 = transportWorldPosition(bulletNode.worldPosition);
+            bulletNode.setParent(BulletManager.instance.bulletRootNode);
+            bulletNode.setPosition(position);
+            const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
+            const curLoc: Vec3 = position;
+            let vecX = chrLoc.x - curLoc.x;
+            let vecY = chrLoc.y - curLoc.y;
+            let angle = Number((Math.atan(vecY / vecX) * (180 / Math.PI)).toFixed(2));
+            if (vecX < 0) {
+                if (vecY > 0) {
+                    angle += 180;
+                } else {
+                    angle -= 180;
+                }
+            }
+
+            let vector = getVectorByAngle(angle);
+            bulletNode.getComponent(Bullet).awaken(vector);
+        }, delay)
     }
     // 是否处于攻击前摇
     // private _isCharging() {

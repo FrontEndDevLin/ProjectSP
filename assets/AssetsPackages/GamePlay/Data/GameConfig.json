@@ -134,7 +134,7 @@
                 "trophy": 2,
                 "emy": [{ "emyId": "EMY01", "count": 10 }, { "emyId": "EMY02", "count": 16 }, { "emyId": "EMY_Peace", "count": 2 }, { "emyId": "Elite_EMY02", "count": 1 }],
                 "emy_particle": 120,
-                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 8 }, { "bulletId": "EMY_Bullet020", "count": 6 }],
+                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 8 }, { "bulletId": "EMY_Bullet021", "count": 6 }],
                 "bullet_particle": 4,
                 "dmg_txt": 5
             },

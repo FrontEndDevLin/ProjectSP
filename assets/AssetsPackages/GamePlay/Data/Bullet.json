@@ -59,8 +59,10 @@
         "prefab": "EMY_Bullet021",
         "type": "EMY_bullet",
         "script": "Bullet",
-        "speed": 200,
+        "speed": 350,
         "max_dis": 500,
-        "cld": 520
+        "cld": 520,
+        "penetrate": 100,
+        "pen_dmg": 1
     }
 }

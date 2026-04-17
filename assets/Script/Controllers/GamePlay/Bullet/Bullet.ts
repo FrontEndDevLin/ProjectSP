@@ -128,6 +128,13 @@ export class Bullet extends OBT_Component {
         }
     }
 
+    public awaken(vector?: Vec3) {
+        if (vector) {
+            this._vector = vector;
+        }
+        this.sleep = false;
+    }
+
     update(dt: number) {
         if (!this._init || !this._alive) {
             return;

@@ -170,6 +170,7 @@
     "trophy_drop_rate": 1,
     "exp_cnt": 8,
     "hp": 120,
-    "dmg": 2
+    "dmg": 2,
+    "spec_dmg": 3
   }
 }
