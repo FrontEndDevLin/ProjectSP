@@ -99,7 +99,7 @@ export class EMY_Elite02 extends EMY_Base {
         this._breakCore();
     }
 
-    private _chargeTime: number = 1;
+    private _chargeTime: number = 0.2;
     private _currentCharge: number = 0;
 
     protected trySpecitalAttack(dt: number): void {
