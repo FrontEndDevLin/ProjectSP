@@ -1,9 +1,9 @@
 {
     "desc": "存储当前存档数据",
-    "wave": 3,
+    "wave": 1,
     "status": 1,
-    "unlock_war_core": false,
-    "unlock_war_core_": true,
+    "unlock_war_core_": false,
+    "unlock_war_core": true,
     "chr_prop": {
         "desc": "这里存角色的面板数据",
         "hp": 10,

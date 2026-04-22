@@ -79,7 +79,8 @@ export default class DamageManager extends OBT_UIManager {
     }
 
     public calcAttackDamage(bulletId: string, reduceRate: number, isGroupReduce: boolean, penDmg: number = 1): DamageInfo.DamageAttr {
-        let realDamage: number = this.getBulletRealDamage(bulletId);
+        let isCurrentWarCoreBullet: boolean = bulletId === WarCoreManager.instance.warCore.weaponCtx.bullet;
+        let realDamage: number = this.getBulletRealDamage(bulletId, isCurrentWarCoreBullet);
         let isCtitical: boolean = false;
         // 只有核心的bullet才能暴击
         if (bulletId === WarCoreManager.instance.warCore.weaponCtx.bullet) {
