@@ -25,7 +25,7 @@ export class EMY_Elite01 extends EMY_Base {
     }
 
     protected updateHpBar() {
-        let width: number = Math.floor(66 * this.props.hp / this.maxHp);
+        let width: number = Math.floor(66 * this.props.c_hp / this.maxHp);
         this.view("Elite_HPBar/HPProg").getComponent(UITransform).width = width;
     }
 
@@ -67,7 +67,7 @@ export class EMY_Elite01 extends EMY_Base {
     }
 
     protected onHpReduce(): void {
-        if (this.phase === 1 && this.props.hp <= this.maxHp / 2) {
+        if (this.phase === 1 && this.props.c_hp <= this.maxHp / 2) {
             this.changePhase();
         }
         this.updateHpBar();

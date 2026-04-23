@@ -24,7 +24,8 @@
     "exp_drop_rate": 1,
     "trophy_drop_rate": 1,
     "exp_cnt": 4,
-    "hp": 15
+    "hp": 15,
+    "hp_growth": 0.12
   },
   "EMY01": {
     "id": "EMY01",
@@ -37,6 +38,7 @@
     "trophy_drop_rate": 0.02,
     "exp_cnt": 1,
     "hp": 5,
+    "hp_growth": 0.34,
     "dmg": 3
   },
   "EMY02": {
@@ -50,6 +52,7 @@
     "trophy_drop_rate": 0.9,
     "exp_cnt": 1,
     "hp": 2,
+    "hp_growth": 0.3,
     "dmg": 2
   },
   "EMY03": {
@@ -66,7 +69,8 @@
     "exp_drop_rate": 1,
     "trophy_drop_rate": 0.02,
     "exp_cnt": 1,
-    "hp": 3,
+    "hp": 4,
+    "hp_growth": 0.4,
     "dmg": 2
   },
   "EMY04": {
@@ -84,6 +88,7 @@
     "trophy_drop_rate": 0.09,
     "exp_cnt": 1,
     "hp": 8,
+    "hp_growth": 0.32,
     "dmg": 2,
     "spec_dmg": 5
   },
@@ -101,7 +106,8 @@
     "exp_drop_rate": 0.8,
     "trophy_drop_rate": 0.02,
     "exp_cnt": 3,
-    "hp": 9,
+    "hp": 12,
+    "hp_growth": 0.34,
     "dmg": 5
   },
   "EMY06": {
@@ -115,7 +121,8 @@
     "exp_drop_rate": 0.8,
     "trophy_drop_rate": 0.01,
     "exp_cnt": 3,
-    "hp": 12,
+    "hp": 16,
+    "hp_growth": 0.36,
     "dmg": 5
   },
   "Elite_EMY01": {
@@ -142,7 +149,8 @@
     "exp_drop_rate": 1,
     "trophy_drop_rate": 1,
     "exp_cnt": 8,
-    "hp": 120,
+    "hp": 60,
+    "hp_growth": 0.3,
     "dmg": 2
   },
   "Elite_EMY02": {
@@ -170,6 +178,7 @@
     "trophy_drop_rate": 1,
     "exp_cnt": 8,
     "hp": 120,
+    "hp_growth": 0.3,
     "dmg": 2,
     "spec_dmg": 3
   }

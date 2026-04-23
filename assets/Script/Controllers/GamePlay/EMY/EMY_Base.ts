@@ -114,8 +114,8 @@ export class EMY_Base extends OBT_Component {
         if (!this.props.move) {
             this.props.move = "none";
         }
-        console.log(`生成敌人${props.id}, 血量${props.hp}, 伤害${props.dmg}, 特殊伤害${props.spec_dmg}`)
-        this.maxHp = this.props.hp;
+        console.log(`生成敌人${props.id}, 血量${props.c_hp}, 伤害${props.dmg}, 特殊伤害${props.spec_dmg}`)
+        this.maxHp = props.c_hp;
         this.moveTypeList = this.props.move.split(",");
         this.currentMoveType = this.moveTypeList[0];
 

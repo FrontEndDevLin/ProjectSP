@@ -35,7 +35,7 @@ export class EMY_Tank extends EMY_Base {
 
     protected onHpReduce(): void {
         // 血量低于60%变身
-        if (this.phase === 1 && this.props.hp <= this.maxHp * 0.6) {
+        if (this.phase === 1 && this.props.c_hp <= this.maxHp * 0.6) {
             this.changePhase();
         }
     }

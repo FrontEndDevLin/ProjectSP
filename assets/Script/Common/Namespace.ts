@@ -493,15 +493,20 @@ export namespace EMYInfo {
         broken_point: Point[] | Point[][],
         pic: string,
         spd: number,
+        // 基础生命值、伤害、特殊伤害
         hp: number,
-        dmg: number,
-        spec_dmg: number,
+        dmg?: number,
+        spec_dmg?: number,
         timeout_drop_trophy?: boolean,
         // 生命每波增长百分比
-        hp_growth?: number,
+        hp_growth: number,
         // 生命每波增长百分比
         dmg_growth?: number,
-        spec_dmg_growth?: number
+        spec_dmg_growth?: number,
+        // 实际生命值、伤害、特殊伤害
+        c_hp: number,
+        c_dmg?: number,
+        c_spec_dmg?: number
     }
     export interface EMYNormalData {
         [EMYId: string]: EMYProps

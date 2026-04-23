@@ -137,20 +137,20 @@ export default class EMYManager extends OBT_UIManager {
             spawnRole.next_spawn_time = getFloatNumber(this._waveRole.duration - spawnRole.start_delay);
 
             let enemyProps: EMYInfo.EMYProps = this.enemyData[spawnRole.enemy_type];
-            let { hp = 0, dmg = 0, spec_dmg = 0, hp_growth = 0, dmg_growth = 0, spec_dmg_growth = 0 } = enemyProps;
+            let { hp, dmg = 0, spec_dmg = 0, hp_growth = 0, dmg_growth = 0, spec_dmg_growth = 0 } = enemyProps;
 
-            hp = Math.round(hp + hp * hp_growth);
+            let c_hp: number = Math.round(hp + hp * hp_growth * (this._waveRole.wave - 1));
+            // let c_dmg: number = 0
+            // if (dmg) {
+            //     c_dmg = Math.round(dmg + dmg * dmg_growth);
+            // }
+            // if (spec_dmg) {
+            //     spec_dmg = Math.round(spec_dmg + spec_dmg * spec_dmg_growth);
+            // }
 
-            if (dmg) {
-                dmg = Math.round(dmg + dmg * dmg_growth);
-            }
-            if (spec_dmg) {
-                spec_dmg = Math.round(spec_dmg + spec_dmg * spec_dmg_growth);
-            }
-
-            this.enemyData[spawnRole.enemy_type].hp = hp;
-            this.enemyData[spawnRole.enemy_type].dmg = dmg;
-            this.enemyData[spawnRole.enemy_type].spec_dmg = spec_dmg;
+            this.enemyData[spawnRole.enemy_type].c_hp = c_hp;
+            // this.enemyData[spawnRole.enemy_type].dmg = dmg;
+            // this.enemyData[spawnRole.enemy_type].spec_dmg = spec_dmg;
             this.enemyData[spawnRole.enemy_type].timeout_drop_trophy = spawnRole.timeout_drop_trophy;
         })
         return true;
