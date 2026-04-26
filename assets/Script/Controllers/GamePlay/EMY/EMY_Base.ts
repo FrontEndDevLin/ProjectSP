@@ -114,7 +114,7 @@ export class EMY_Base extends OBT_Component {
         if (!this.props.move) {
             this.props.move = "none";
         }
-        console.log(`生成敌人${props.id}, 血量${props.c_hp}, 伤害${props.dmg}, 特殊伤害${props.spec_dmg}`)
+        console.log(`生成敌人${props.id}, 血量${props.c_hp}, 伤害${props.c_dmg}, 特殊伤害${props.c_spec_dmg}`)
         this.maxHp = props.c_hp;
         this.moveTypeList = this.props.move.split(",");
         this.currentMoveType = this.moveTypeList[0];
@@ -164,14 +164,14 @@ export class EMY_Base extends OBT_Component {
                     return;
                 }
 
-                this.props.hp -= dmg;
+                this.props.c_hp -= dmg;
 
                 this.onHpReduce();
 
                 // TODO: 位置根据当前敌人体型决定，目前是写死
                 DamageManager.instance.showDamageTxt({ dmg, position: new Vec3(this.node.position.x + 20, this.node.position.y + 20, 0), isEnemy: true, isCtitical: damageAttr.isCtitical });
                 
-                if (this.props.hp <= 0) {
+                if (this.props.c_hp <= 0) {
                     /**
                      * 敌人被击杀, 应当把击杀子弹, 子弹方向, 受到伤害等属性记录返回
                      */
@@ -396,6 +396,9 @@ export class EMY_Base extends OBT_Component {
         }
         if (!this.alive) {
             return;
+        }
+        if (this.node.getScale().x <= 0) {
+            console.log('敌人隐身BUG')
         }
         this._move(deltaTime);
         this._checkFlash(deltaTime);

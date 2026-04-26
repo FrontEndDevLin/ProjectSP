@@ -140,17 +140,18 @@ export default class EMYManager extends OBT_UIManager {
             let { hp, dmg = 0, spec_dmg = 0, hp_growth = 0, dmg_growth = 0, spec_dmg_growth = 0 } = enemyProps;
 
             let c_hp: number = Math.round(hp + hp * hp_growth * (this._waveRole.wave - 1));
-            // let c_dmg: number = 0
-            // if (dmg) {
-            //     c_dmg = Math.round(dmg + dmg * dmg_growth);
-            // }
-            // if (spec_dmg) {
-            //     spec_dmg = Math.round(spec_dmg + spec_dmg * spec_dmg_growth);
-            // }
+            let c_dmg: number = 0
+            let c_spec_dmg: number = 0
+            if (dmg) {
+                c_dmg = Math.round(dmg + dmg * dmg_growth * (this._waveRole.wave - 1));
+            }
+            if (spec_dmg) {
+                c_spec_dmg = Math.round(spec_dmg + spec_dmg * spec_dmg_growth * (this._waveRole.wave - 1));
+            }
 
             this.enemyData[spawnRole.enemy_type].c_hp = c_hp;
-            // this.enemyData[spawnRole.enemy_type].dmg = dmg;
-            // this.enemyData[spawnRole.enemy_type].spec_dmg = spec_dmg;
+            this.enemyData[spawnRole.enemy_type].c_dmg = c_dmg;
+            this.enemyData[spawnRole.enemy_type].c_spec_dmg = c_spec_dmg;
             this.enemyData[spawnRole.enemy_type].timeout_drop_trophy = spawnRole.timeout_drop_trophy;
         })
         return true;
@@ -433,7 +434,7 @@ export default class EMYManager extends OBT_UIManager {
     }
 
     public getEnemyDamage(enemyType: string, isSpec?: boolean): number {
-        return isSpec ? (this.enemyData[enemyType].spec_dmg || 0) : this.enemyData[enemyType].dmg;
+        return isSpec ? (this.enemyData[enemyType].c_spec_dmg || 0) : this.enemyData[enemyType].c_dmg;
     }
 
     protected onDestroy(): void {
