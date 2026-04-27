@@ -43,7 +43,7 @@ export class EMY_Tank extends EMY_Base {
     protected changePhase() {
         // console.log('进入二阶段');
         this.phase = 2;
-        // 获得40%减伤
+        // 获得20%减伤
         this.dmgReduceRate = 0.4;
         this.node.getComponent(Animation).play("EMY06_change_parse");
     }

@@ -114,7 +114,7 @@ export class EMY_Base extends OBT_Component {
         if (!this.props.move) {
             this.props.move = "none";
         }
-        console.log(`生成敌人${props.id}, 血量${props.c_hp}, 伤害${props.c_dmg}, 特殊伤害${props.c_spec_dmg}`)
+        // console.log(`生成敌人${props.id}, 血量${props.c_hp}, 伤害${props.c_dmg}, 特殊伤害${props.c_spec_dmg}`)
         this.maxHp = props.c_hp;
         this.moveTypeList = this.props.move.split(",");
         this.currentMoveType = this.moveTypeList[0];
@@ -397,7 +397,7 @@ export class EMY_Base extends OBT_Component {
         if (!this.alive) {
             return;
         }
-        if (this.node.getScale().x <= 0) {
+        if (this.node.getScale().x <= 0 || this.node.getScale().y <= 0) {
             console.log('敌人隐身BUG')
         }
         this._move(deltaTime);
