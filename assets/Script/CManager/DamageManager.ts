@@ -53,7 +53,6 @@ export default class DamageManager extends OBT_UIManager {
 
     public getBulletRealDamage(bulletId: string, isCurrentWarCoreBullet?: boolean) {
         let bulletDamage: number = BulletManager.instance.getBulletDamage(bulletId, isCurrentWarCoreBullet);
-
         // 1. 结合角色属性和核心属性对dmg进行修正
         let boostDmg: number = 0;
         const boost: BoostConfig = BulletManager.instance.getBulletInfo(bulletId, "boost");

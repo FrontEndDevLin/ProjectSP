@@ -48,7 +48,6 @@ export default class ItemFastScatter extends ItemSpecial {
             { prop: "ctl", value: this.val_4 }
         ];
         CHRManager.instance.upgradePropByBuff(buffList);
-        console.log('提升属性')
         // CHRManager.instance.propCtx.getPropRealValue('atk_spd')
         // console.log()
     }
@@ -59,7 +58,6 @@ export default class ItemFastScatter extends ItemSpecial {
             { prop: "ctl", value: -this.val_4 }
         ];
         CHRManager.instance.upgradePropByBuff(buffList);
-        console.log('恢复属性')
     }
 
     public onUse() {

@@ -106,7 +106,6 @@ export default class EMYManager extends OBT_UIManager {
     }
     public removeEmyNode(node: Node) {
         let type: string = node.name;
-        node.setScale(v3(1, 1));
         this.enemyRootNode.removeChild(node);
         this._emyNodePoolMap[type].put(node);
     }

@@ -172,7 +172,7 @@ export default class BulletManager extends OBT_UIManager {
      * 主角创建的子弹
      */
     public createBulletByCHR({ bulletId, position, vector, ignoreList, groupId, penetrate, pen_dmg, rootNode, sleep }: BulletInfo.CreateBulletParams) {
-        const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
+        const bulletAttr: BulletInfo.BulletAttr = copyObject(this.bulletData[bulletId]);
         let bulletNode: Node = this.createBullet({ bulletId, position, vector });
 
         bulletAttr.penetrate = penetrate || 0;

@@ -82,15 +82,15 @@ export default class PropCtrl extends BaseCtrl {
     }
     // new ..
     public getPropBasicValue(propKey: string) {
-        return this.propMap[propKey].basic_val;
+        return Math.round(this.propMap[propKey].basic_val);
     }
     public getPropValue(propKey: string) {
-        return this.propMap[propKey].real_val;
+        return Math.round(this.propMap[propKey].real_val);
     }
     public getPropRealValue(propKey: string): number {
         let prop: CHRInfo.Prop = this.getPropInfo(propKey);
-        let basicVal: number = prop.basic_val;
-        let val: number = prop.real_val;
+        let basicVal: number = Math.round(prop.basic_val);
+        let val: number = Math.round(prop.real_val);
         if (basicVal === 0) {
             if (prop.percent) {
                 // 存在百分比类型的属性，但基础值为0(闪避)
@@ -109,7 +109,7 @@ export default class PropCtrl extends BaseCtrl {
 
     public reCalcProps(propKeys: string[]) {
         propKeys.forEach((propKey: string) => {
-            this.propMap[propKey].real_val = this.propMap[propKey].val * (Profit[propKey] || 1)
+            this.propMap[propKey].real_val = Math.round(this.propMap[propKey].val * (Profit[propKey] || 1));
         })
     }
 
@@ -137,8 +137,9 @@ export default class PropCtrl extends BaseCtrl {
     public initProps(props: CHRInfo.PropValMap) {
         for (let prop in props) {
             if (this.propMap[prop]) {
-                this.propMap[prop].val = props[prop];
-                this.propMap[prop].real_val = props[prop] * (Profit[prop] || 1)
+                let val: number = Math.round(props[prop]);
+                this.propMap[prop].val = val;
+                this.propMap[prop].real_val = Math.round(val * (Profit[prop] || 1));
             }
         }
 
@@ -220,7 +221,8 @@ export default class PropCtrl extends BaseCtrl {
         // let prop: CHRInfo.upgradeProp;
         for (let item of this.preUpgradeList) {
             if (item.prop === propKey) {
-                this.propMap[propKey].val += item.value;
+                let val: number = Math.round(this.propMap[propKey].val);
+                this.propMap[propKey].val = val + item.value;
                 this.propMap[propKey].real_val = Math.round(this.propMap[propKey].val * (Profit[propKey] || 1))
                 break;
             }
@@ -239,8 +241,8 @@ export default class PropCtrl extends BaseCtrl {
             return false;
         }
         buffList.forEach((buff: CHRInfo.Buff) => {
-            this.propMap[buff.prop].val += buff.value;
-            this.propMap[buff.prop].real_val = this.propMap[buff.prop].val * (Profit[buff.prop] || 1)
+            this.propMap[buff.prop].val = Math.round(this.propMap[buff.prop].val + buff.value);
+            this.propMap[buff.prop].real_val = Math.round(this.propMap[buff.prop].val * (Profit[buff.prop] || 1))
         });
         return true;
     }

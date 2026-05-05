@@ -157,7 +157,7 @@ export class EMY_Base extends OBT_Component {
                 // damageAttr.isCtitical // 暴击
                 let dmg = damageAttr.dmg;
                 if (damageAttr.isCtitical) {
-                    console.log('触发暴击，伤害为' + dmg);
+                    // console.log('触发暴击，伤害为' + dmg);
                     RealTimeEventManager.instance.onCtiticalAttack();
                 }
                 if (dmg <= 0) {
@@ -375,6 +375,7 @@ export class EMY_Base extends OBT_Component {
         this.node.getComponent(Animation).play("EMY01_die");
     }
     private _remove() {
+        this.node.getComponent(Animation).stop();
         EMYManager.instance.removeEmyNode(this.node);
     }
 
@@ -397,7 +398,7 @@ export class EMY_Base extends OBT_Component {
         if (!this.alive) {
             return;
         }
-        if (this.node.getScale().x <= 0 || this.node.getScale().y <= 0) {
+        if (this.view("Body").getScale().x <= 0 || this.view("Body").getScale().y <= 0) {
             console.log('敌人隐身BUG')
         }
         this._move(deltaTime);

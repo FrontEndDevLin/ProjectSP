@@ -43,7 +43,7 @@ export default class WarCoreManager extends OBT_UIManager {
     private _hasUpgrade: boolean = false;
     // private _hasUpgrade: boolean = true;
 
-    protected expList: number[] = [50, 200, 300];
+    protected expList: number[] = [50, 50, 50];
 
     // 升级槽
     public upgradeSlot: string[] = [];
@@ -213,6 +213,9 @@ export default class WarCoreManager extends OBT_UIManager {
         if (!this.unlockWarCore) {
             return;
         }
+        if (this._hasUpgrade) {
+            return;
+        }
         this.addWarCoreExp();
     }
 
@@ -252,9 +255,8 @@ export default class WarCoreManager extends OBT_UIManager {
         if (this.coreLevel < MAX_WAR_CORE_LEVEL) {
             // this._levelUpCnt++;
             let overflowExp: number = this.expCurrent - this.expTotal;
-            this.expCurrent = 0;
+            this.expCurrent = overflowExp;
             this.expTotal = this.expList[this.coreLevel];
-            this.addWarCoreExp(overflowExp);
         }
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE, this.coreLevel);
     }
@@ -276,8 +278,8 @@ export default class WarCoreManager extends OBT_UIManager {
             } else {
                 this.upgradeSlotMap[packId] = 1;
             }
-    
-            this.coreLevel++;
+
+            // this.coreLevel++;
 
             /**
              * 升级核心后核心品质升级
@@ -287,6 +289,7 @@ export default class WarCoreManager extends OBT_UIManager {
             this.warCore.weaponCtx.updatePanel();
         }
 
+        this.finishLevelUp();
         // 挂载完后通知
         ItemsManager.instance.expendTrophy();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_FINISH);
