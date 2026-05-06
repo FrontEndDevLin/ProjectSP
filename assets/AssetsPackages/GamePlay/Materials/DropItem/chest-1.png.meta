@@ -11,7 +11,7 @@
     "6c48a": {
       "importer": "texture",
       "uuid": "92cb6f5c-bd61-4ce9-9983-b21460a9ab79@6c48a",
-      "displayName": "chest-normal-ico2",
+      "displayName": "chest-1",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -20,8 +20,8 @@
         "imageUuidOrDatabaseUri": "92cb6f5c-bd61-4ce9-9983-b21460a9ab79",
         "isUuid": true,
         "visible": false,
-        "minfilter": "linear",
-        "magfilter": "linear",
+        "minfilter": "nearest",
+        "magfilter": "nearest",
         "mipfilter": "none",
         "anisotropy": 0
       },
@@ -35,7 +35,7 @@
     "f9941": {
       "importer": "sprite-frame",
       "uuid": "92cb6f5c-bd61-4ce9-9983-b21460a9ab79@f9941",
-      "displayName": "chest-normal-ico2",
+      "displayName": "chest-1",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {

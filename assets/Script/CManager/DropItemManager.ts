@@ -33,6 +33,7 @@ export default class DropItemManager extends OBT_UIManager {
     private _expAssets: SpriteFrame[] = [];
     private _expNodePool: NodePool = null;
     private _trophyNodePool: NodePool = null;
+    private _chestNodePool: NodePool = null;
 
     private _resRecovering: boolean = false;
 
@@ -52,6 +53,7 @@ export default class DropItemManager extends OBT_UIManager {
 
         this._expNodePool = new NodePool("ExpBlock");
         this._trophyNodePool = new NodePool("TrophyBlock");
+        this._chestNodePool = new NodePool("ChestBlock");
 
         this.expBlockParticleCtrl = new ExpBlockParticleCtrl();
     }
@@ -64,6 +66,7 @@ export default class DropItemManager extends OBT_UIManager {
         const preloadConfig: GameConfigInfo.PreloadConfig = ProcessManager.instance.waveRole.preload;
         this.preloadExpBlock(preloadConfig.exp);
         this.preloadTrophyBlock(preloadConfig.trophy);
+        this.preloadChest1(preloadConfig.chest1);
         this.expBlockParticleCtrl.preloadParticle(preloadConfig.exp_particle);
     }
 
@@ -90,9 +93,20 @@ export default class DropItemManager extends OBT_UIManager {
             this._trophyNodePool.put(trophyNode);
         }
     }
+    public preloadChest1(count: number) {
+        this._chestNodePool.clear();
+        for (let i = 0; i < count; i++) {
+            let chest1Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "DropItem/ChestBlock", scriptName: "TrophyBlock" });
+            this._chestNodePool.put(chest1Node);
+        }
+    }
     public recoverTrophyBlock(trophyNode: Node) {
         this.dropItemRootNode.removeChild(trophyNode);
         this._trophyNodePool.put(trophyNode);
+    }
+    public recoveChest(trophyNode: Node) {
+        this.dropItemRootNode.removeChild(trophyNode);
+        this._chestNodePool.put(trophyNode);
     }
     public removeCoreBlock(coreNode: Node) {
         this.dropItemRootNode.removeChild(coreNode);
@@ -186,6 +200,12 @@ export default class DropItemManager extends OBT_UIManager {
                     trophyNode = this._trophyNodePool.get();
                     if (!trophyNode) {
                         trophyNode = this.loadPrefab({ prefabPath: "DropItem/TrophyBlock" });
+                    }
+                } break;
+                case ItemInfo.TROPHY_TYPE.CHEST: {
+                    trophyNode = this._chestNodePool.get();
+                    if (!trophyNode) {
+                        trophyNode = this.loadPrefab({ prefabPath: "DropItem/ChestBlock", scriptName: "TrophyBlock" });
                     }
                 } break;
                 case ItemInfo.TROPHY_TYPE.CORE: {
@@ -313,11 +333,11 @@ export default class DropItemManager extends OBT_UIManager {
     private _beenChest() {
         // TODO: 战利品掉落有几率变成箱子，和角色幸运值挂钩。目前临时处理
         let num = getRandomNumber(1, 100);
-        // if (num < 10) {
-        //     return ItemInfo.TROPHY_TYPE.CHEST;
-        // } else {
+        if (num < 60) {
+            return ItemInfo.TROPHY_TYPE.CHEST;
+        } else {
             return ItemInfo.TROPHY_TYPE.NORMAL;
-        // }
+        }
     }
 
     public pickUpExpBlock(expCnt: number) {

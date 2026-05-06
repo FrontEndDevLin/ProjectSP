@@ -166,6 +166,7 @@ export namespace GameConfigInfo {
         exp: number,
         exp_particle: number,
         trophy: number,
+        chest1: number,
         emy: EmyPreloadConfig[],
         emy_particle: number,
         bullet: BulletPreloadConfig[],

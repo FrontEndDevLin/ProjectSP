@@ -85,7 +85,15 @@ export class TrophyBlock extends OBT_Component {
             if (this._quality === ItemInfo.TROPHY_TYPE.CORE) {
                 DropItemManager.instance.removeCoreBlock(this.node);
             } else {
-                DropItemManager.instance.recoverTrophyBlock(this.node);
+                switch (this._quality) {
+                    case ItemInfo.TROPHY_TYPE.NORMAL: {
+                        DropItemManager.instance.recoverTrophyBlock(this.node);
+                    } break;
+                    case ItemInfo.TROPHY_TYPE.CHEST: {
+                        DropItemManager.instance.recoveChest(this.node);
+                    } break;
+                }
+                
             }
             return;
         }
