@@ -139,12 +139,20 @@
             "forward_val": true,
             "percent": false,
             "intro": "介绍文本"
+        },
+        "trophy_to_chest": {
+            "prop": "trophy_to_chest",
+            "txt": "战利品变成宝箱概率",
+            "val": 0,
+            "basic_val": 50,
+            "forward_val": true,
+            "percent": false
         }
     },
     "prop_group": {
         "major": ["hp", "dmg", "range_dmg", "melee_dmg", "range", "atk_spd", "ctl", "def", "spd", "avd", "luck"],
         "sub": ["exp_eff", "pen_dmg", "pick_range"],
-        "unvisiable": []
+        "unvisiable": ["trophy_to_chest"]
     },
     "quality_config": {
         "hp": [2, 3, 4, 5],

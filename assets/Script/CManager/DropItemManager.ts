@@ -332,8 +332,9 @@ export default class DropItemManager extends OBT_UIManager {
 
     private _beenChest() {
         // TODO: 战利品掉落有几率变成箱子，和角色幸运值挂钩。目前临时处理
+        let toChestRate: number = CHRManager.instance.propCtx.getPropRealValue("trophy_to_chest");
         let num = getRandomNumber(1, 100);
-        if (num < 60) {
+        if (num <= toChestRate) {
             return ItemInfo.TROPHY_TYPE.CHEST;
         } else {
             return ItemInfo.TROPHY_TYPE.NORMAL;

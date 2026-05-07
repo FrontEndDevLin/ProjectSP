@@ -90,10 +90,10 @@ export default class PropCtrl extends BaseCtrl {
     public getPropRealValue(propKey: string): number {
         let prop: CHRInfo.Prop = this.getPropInfo(propKey);
         let basicVal: number = Math.round(prop.basic_val);
-        let val: number = Math.round(prop.real_val);
+        let val: number = Math.round(prop.real_val) || 0;
         if (basicVal === 0) {
             if (prop.percent) {
-                // 存在百分比类型的属性，但基础值为0(闪避)
+                // 存在百分比类型的属性，但基础值为0(灵活)
                 return val;
             } else {
                 return val;
@@ -142,7 +142,7 @@ export default class PropCtrl extends BaseCtrl {
                 this.propMap[prop].real_val = Math.round(val * (Profit[prop] || 1));
             }
         }
-
+        console.log(this.propMap)
         // 保存对存档数据的引用，修改这里即可同步修改到存档
         // this._syncPropList();
     }
