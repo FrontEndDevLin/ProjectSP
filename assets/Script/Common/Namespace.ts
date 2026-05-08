@@ -7,6 +7,7 @@ export enum GAME_NODE {
     PASS_FIGHT, // 通过
     CORE_SELECT, // 核心选择
     CORE_UPGRADE, // 核心升级
+    CHEST_OPEN, // 宝箱开启
     LEVEL_UP, // 升级中
     PASS_LEVEL_UP, // 升级结束
     PREPARE, // 备战中

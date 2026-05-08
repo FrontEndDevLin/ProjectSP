@@ -142,7 +142,7 @@ export default class PropCtrl extends BaseCtrl {
                 this.propMap[prop].real_val = Math.round(val * (Profit[prop] || 1));
             }
         }
-        console.log(this.propMap)
+        // console.log(this.propMap)
         // 保存对存档数据的引用，修改这里即可同步修改到存档
         // this._syncPropList();
     }

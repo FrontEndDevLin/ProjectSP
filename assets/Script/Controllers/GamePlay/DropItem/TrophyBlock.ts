@@ -93,7 +93,6 @@ export class TrophyBlock extends OBT_Component {
                         DropItemManager.instance.recoveChest(this.node);
                     } break;
                 }
-                
             }
             return;
         }

@@ -248,6 +248,9 @@ export default class ProcessManager extends OBT_UIManager {
                         case ItemInfo.TROPHY_TYPE.CORE_UPGRADE: {
                             this.gameNode = GAME_NODE.CORE_UPGRADE;
                         } break;
+                        case ItemInfo.TROPHY_TYPE.CHEST: {
+                            this.gameNode = GAME_NODE.CHEST_OPEN;
+                        } break;
                     }
                 } else {
                     // TODO: 与下面升级判断同代码，需要优化
@@ -300,6 +303,9 @@ export default class ProcessManager extends OBT_UIManager {
                 this._coreUpgradeDuration = CORE_UPGRADE_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIME_INIT, this._coreUpgradeDuration);
                 // TODO: do sth
+            } break;
+            case GAME_NODE.CHEST_OPEN: {
+                console.log('进入开箱流程')
             } break;
             case GAME_NODE.LEVEL_UP: {
                 GUI_GamePlayManager.instance.hideGamePlayGUI();

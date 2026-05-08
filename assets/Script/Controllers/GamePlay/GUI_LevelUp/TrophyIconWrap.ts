@@ -27,6 +27,9 @@ export class TrophyIconWrap extends OBT_Component {
                 case ItemInfo.TROPHY_TYPE.CORE_UPGRADE: {
                     prefabPath = "Common/CoreLevelupIcon";
                 } break;
+                case ItemInfo.TROPHY_TYPE.CHEST: {
+                    prefabPath = "Common/ChestIcon";
+                } break;
             }
             if (prefabPath) {
                 OBT.instance.uiManager.showPrefab({

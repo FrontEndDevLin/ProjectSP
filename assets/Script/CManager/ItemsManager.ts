@@ -390,6 +390,10 @@ export default class ItemsManager extends OBT_UIManager {
                 this._pickUpTrophyList.unshift(trophy);
                 OBT.instance.eventCenter.emit(GamePlayEvent.GUI.UPDATE_TROPHY_ICON);
             } break;
+            case ItemInfo.TROPHY_TYPE.CHEST: {
+                this._pickUpTrophyList.push(trophy);
+                OBT.instance.eventCenter.emit(GamePlayEvent.GUI.UPDATE_TROPHY_ICON);
+            } break;
         }
     }
     public getPickUpTrophyList(): ItemInfo.TROPHY_TYPE[] {
