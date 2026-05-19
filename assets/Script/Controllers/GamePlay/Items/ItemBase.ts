@@ -9,6 +9,7 @@ import { getDangerRichTxt, getSuccessRichTxt } from "../../../Common/utils";
 import OBT from "../../../OBT";
 import WeaponBase from "../Weapons/WeaponBase";
 import WeaponManager from "../../../CManager/WeaponManager";
+import ProcessManager from "../../../CManager/ProcessManager";
 
 export default class ItemBase {
     public count: number = 0;
@@ -31,6 +32,9 @@ export default class ItemBase {
     public buff_list: CHRInfo.Buff[] = [];
     public weapon: string;
     public weaponCtx: WeaponBase;
+    // 当前价格=(基础价格+当前波次+(基础价格*0.1*当前波次)*角色属性'%道具价格')
+    public real_price: number;
+    public recover_price: number;
 
     public val_prefix: ItemInfo.ItemValPrefix = {
         val_1: "+-",
@@ -40,6 +44,11 @@ export default class ItemBase {
     constructor(itemData: ItemInfo.Item) {
         if (itemData) {
             Object.assign(this, itemData)
+            if (itemData.global === ItemInfo.Global.ITEM) {
+                let wave: number = ProcessManager.instance.waveRole.wave
+                this.real_price = Math.round(this.price + wave + (this.price * 0.1 * wave) * CHRManager.instance.propCtx.getPropRealValue("item_price"));
+                this.recover_price = Math.ceil(this.real_price * 0.25);
+            }
             if (itemData.weapon) {
                 this.weaponCtx = WeaponManager.instance.getWeaponCtxById(itemData.weapon);
             }

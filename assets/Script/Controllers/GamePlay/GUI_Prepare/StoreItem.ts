@@ -5,19 +5,20 @@ import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
 import ItemsManager from '../../../CManager/ItemsManager';
+import ItemBase from '../Items/ItemBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('StoreItem')
 export class StoreItem extends OBT_Component {
-    private _item: ItemInfo.Item;
+    private _item: ItemBase;
 
     protected onLoad(): void {
-        const item: ItemInfo.Item = this.node.OBT_param1;
+        const item: ItemBase = this.node.OBT_param1;
 
         this._item = item;
         this.view("ItemCard").OBT_param1 = item;
         this.view("ItemCard").addComponent("ItemCard");
-        this.view("ItemCard/Container/OperBar/BuyBtn/Price/Cost").getComponent(Label).string = `${item.price}`;
+        this.view("ItemCard/Container/OperBar/BuyBtn/Price/Cost").getComponent(Label).string = `${item.real_price}`;
 
         this.view("ItemCard/Container/OperBar/BuyBtn").once(Node.EventType.TOUCH_END, this._buyItem, this);
 

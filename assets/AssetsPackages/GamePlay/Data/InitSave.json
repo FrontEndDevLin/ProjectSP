@@ -20,7 +20,8 @@
         "exp_eff": 0,
         "pen_dmg": 0,
         "pick_range": 0,
-        "trophy_to_chest": 0
+        "trophy_to_chest": 0,
+        "item_price": -25
     },
     "chr_slot": {
         "level": 1,

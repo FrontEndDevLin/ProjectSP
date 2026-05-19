@@ -22,6 +22,7 @@ const CORE_SELECT_TIME: number = 5555;
 const CORE_UPGRADE_TIME: number = 5555;
 const LEVEL_UP_TIME: number = 5555;
 const PREPARE_TIME: number = 5555;
+const CHEST_OPEN_TIME: number = 5555;
 
 /**
  * Game流程管理控制
@@ -62,6 +63,10 @@ export default class ProcessManager extends OBT_UIManager {
     private _prepareDuration: number = PREPARE_TIME;
     private _prepareSecond: number = 0;
 
+    // 开箱持续时间
+    private _chestOpenDuration: number = CHEST_OPEN_TIME;
+    private _chestOpenSecond: number = 0;
+
     start() {
         /**
          * ProcessManager
@@ -88,6 +93,7 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PREPARE_FINISH, this._finishPrepare, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_SELECT_FINISH, this._finishCoreSelect, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CORE_UPGRADE_FINISH, this._finishCoreUpgrade, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.CHEST_OPEN_FINISH, this._finishChestOpen, this);
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.HP_CHANGE, this._checkGameOver, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.DROP_ITEM_RECOVER_FINISH, this._finishDropItemRecovery, this);
@@ -106,9 +112,6 @@ export default class ProcessManager extends OBT_UIManager {
     private _initMapAndGUI() {
         MapManager.instance.initMap();
         CHRManager.instance.initCompass();
-        GUI_GamePlayManager.instance.initLevelUpGUI();
-        GUI_GamePlayManager.instance.initCoreSelectGUI();
-        GUI_GamePlayManager.instance.initCoreUpgradeGUI();
         GUI_GamePlayManager.instance.initGamePlayGUI();
         GUI_GamePlayManager.instance.initPrepareGUI();
         GUI_PopupManager.instance.initRootNode();
@@ -206,7 +209,6 @@ export default class ProcessManager extends OBT_UIManager {
     private _finishLevelUp() {
         this.gameNode = GAME_NODE.PASS_LEVEL_UP;
         this.scheduleOnce(() => {
-            GUI_GamePlayManager.instance.hideLevelUpGUI();
             this._setGameNode();
             this._nextStep();
         }, 0.5)
@@ -219,7 +221,6 @@ export default class ProcessManager extends OBT_UIManager {
     private _finishCoreSelect() {
         this.gameNode = GAME_NODE.PASS_FIGHT;
         this.scheduleOnce(() => {
-            GUI_GamePlayManager.instance.hideCoreSelectGUI();
             this._setGameNode();
             this._nextStep();
         }, 0.5)
@@ -227,7 +228,13 @@ export default class ProcessManager extends OBT_UIManager {
     private _finishCoreUpgrade() {
         this.gameNode = GAME_NODE.PASS_FIGHT;
         this.scheduleOnce(() => {
-            GUI_GamePlayManager.instance.hideCoreUpgradeGUI();
+            this._setGameNode();
+            this._nextStep();
+        }, 0.5)
+    }
+    private _finishChestOpen() {
+        this.gameNode = GAME_NODE.PASS_FIGHT;
+        this.scheduleOnce(() => {
             this._setGameNode();
             this._nextStep();
         }, 0.5)
@@ -289,15 +296,12 @@ export default class ProcessManager extends OBT_UIManager {
         switch (this.gameNode) {
             case GAME_NODE.CORE_SELECT: {
                 // console.log('进入核心选择流程');
-                GUI_GamePlayManager.instance.hideGamePlayGUI();
-                // TODO: WarCoreManager.instance.initCoreSelectList()
                 GUI_GamePlayManager.instance.showCoreSelectGUI();
                 this._coreSelectDuration = CORE_SELECT_TIME;
                 OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_TIME_INIT, this._coreSelectDuration);
             } break;
             case GAME_NODE.CORE_UPGRADE: {
                 console.log('进入核心升级流程');
-                GUI_GamePlayManager.instance.hideGamePlayGUI();
                 GUI_GamePlayManager.instance.showCoreUpgradeGUI();
 
                 this._coreUpgradeDuration = CORE_UPGRADE_TIME;
@@ -305,10 +309,13 @@ export default class ProcessManager extends OBT_UIManager {
                 // TODO: do sth
             } break;
             case GAME_NODE.CHEST_OPEN: {
+                GUI_GamePlayManager.instance.showChestOpenGUI();
                 console.log('进入开箱流程')
+
+                this._chestOpenDuration = CHEST_OPEN_TIME;
+                OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CHEST_OPEN_TIME_INIT, this._chestOpenDuration);
             } break;
             case GAME_NODE.LEVEL_UP: {
-                GUI_GamePlayManager.instance.hideGamePlayGUI();
                 CHRManager.instance.propCtx.refreshPreUpgradeList(true);
                 GUI_GamePlayManager.instance.showLevelUpGUI();
                 this._levelUpDuration = LEVEL_UP_TIME;
@@ -397,6 +404,27 @@ export default class ProcessManager extends OBT_UIManager {
 
                     if (this._coreUpgradeDuration <= 0) {
                         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_UPGRADE_TIMEOUT);
+                    }
+                }
+            } break;
+            case GAME_NODE.CHEST_OPEN: {
+                if (this._chestOpenDuration <= 0) {
+                    return;
+                }
+
+                this._chestOpenSecond += dt;
+                if (this._chestOpenSecond >= 1) {
+                    this._chestOpenSecond -= 1;
+
+                    this._chestOpenDuration -= 1;
+                    if (this._chestOpenDuration === 5) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CHEST_OPEN_DEAD_TIME);
+                    }
+
+                    OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CHEST_OPEN_TIME_REDUCE, this._chestOpenDuration);
+
+                    if (this._chestOpenDuration <= 0) {
+                        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CHEST_OPEN_TIMEOUT);
                     }
                 }
             } break;

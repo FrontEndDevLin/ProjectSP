@@ -3,16 +3,11 @@ import OBT_UIManager from "../Manager/OBT_UIManager";
 import OBT from "../OBT";
 import { GamePlayEvent } from "../Common/Namespace";
 import ProcessManager from "./ProcessManager";
+import { GUI_GamePlay } from "../Controllers/GamePlay/GUI_GamePlay";
 export default class GUI_GamePlayManager extends OBT_UIManager {
     static instance: GUI_GamePlayManager;
 
     private _GUIGamePlayNode: Node;
-    // 核心选择界面
-    private _GUICoreSelectNode: Node;
-    // 核心升级界面
-    private _GUICoreUpgradeNode: Node;
-    // 升级界面
-    private _GUILevelUpNode: Node;
     // 备战界面
     private _GUIPrepareNode: Node;
     // 背包外壳
@@ -30,31 +25,24 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     public initGamePlayGUI() {
         this._GUIGamePlayNode = this.showPrefab({ prefabPath: "GUI_GamePlay", parentNode: ProcessManager.instance.uiRootNode });
     }
-    public initLevelUpGUI() {
-        this._GUILevelUpNode = this.showPrefab({ prefabPath: "GUI_LevelUp", parentNode: ProcessManager.instance.uiRootNode });
-    }
     public initPrepareGUI() {
         this._GUIPrepareNode = this.showPrefab({ prefabPath: "GUI_Prepare", parentNode: ProcessManager.instance.uiRootNode });
-    }
-    public initCoreSelectGUI() {
-        this._GUICoreSelectNode = this.showPrefab({ prefabPath: "GUI_CoreSelect", parentNode: ProcessManager.instance.uiRootNode });
-    }
-    public initCoreUpgradeGUI() {
-        this._GUICoreUpgradeNode = this.showPrefab({ prefabPath: "GUI_CoreUpgrade", parentNode: ProcessManager.instance.uiRootNode })
     }
 
     public showGamePlayGUI() {
         this.showNode(this._GUIGamePlayNode);
     }
     public hideGamePlayGUI() {
+        this._GUIGamePlayNode.getComponent(GUI_GamePlay).resetGamePlayView();
         this.hideNode(this._GUIGamePlayNode);
     }
 
     public showLevelUpGUI() {
-        this.showNode(this._GUILevelUpNode);
+        this._GUIGamePlayNode.getComponent(GUI_GamePlay).showLevelUpView();
     }
-    public hideLevelUpGUI() {
-        this.hideNode(this._GUILevelUpNode);
+
+    public showChestOpenGUI() {
+        this._GUIGamePlayNode.getComponent(GUI_GamePlay).showChestOpenView();
     }
 
     public showPrepareGUI() {
@@ -65,17 +53,11 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
     }
 
     public showCoreSelectGUI() {
-        this.showNode(this._GUICoreSelectNode);
-    }
-    public hideCoreSelectGUI() {
-        this.hideNode(this._GUICoreSelectNode);
+        this._GUIGamePlayNode.getComponent(GUI_GamePlay).showCoreSelectView();
     }
 
     public showCoreUpgradeGUI() {
-        this.showNode(this._GUICoreUpgradeNode);
-    }
-    public hideCoreUpgradeGUI() {
-        this.hideNode(this._GUICoreUpgradeNode);
+        this._GUIGamePlayNode.getComponent(GUI_GamePlay).showCoreUpgradeView();
     }
 
     public setBackpackWrapNode(node: Node) {

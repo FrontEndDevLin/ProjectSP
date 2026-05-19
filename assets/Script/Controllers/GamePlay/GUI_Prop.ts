@@ -8,6 +8,7 @@ const { ccclass, property } = _decorator;
 @ccclass('GUI_Prop')
 export class GUI_Prop extends OBT_Component {
     private _activeAttrTab: number = 0;
+    private _init: boolean = false;
 
     protected onLoad(): void {
         let tabNodeList: Node[] = this.view("GUI_PropWrap/Tabs").children;
@@ -53,6 +54,10 @@ export class GUI_Prop extends OBT_Component {
     }
 
     public initCHRAttrCard() {
+        if (this._init) {
+            return;
+        }
+
         this.hideNodeByPath("GUI_PropWrap/Board/SubBoardWrap");
 
         const groupPropsList: CHRInfo.Prop[][] = [CHRManager.instance.propCtx.getMainPropsList(), CHRManager.instance.propCtx.getSubPropsList()];
@@ -70,6 +75,8 @@ export class GUI_Prop extends OBT_Component {
                 OBT.instance.uiManager.mountNode({ node: propNode, parentNode: this.view(parentNodePath) });
             })
         })
+
+        this._init = true;
     }
 
     private _touchContainer(e: EventTouch) {

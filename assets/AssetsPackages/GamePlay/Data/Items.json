@@ -16,7 +16,7 @@
             "quality": 1,
             "label": "道具1",
             "ico": "Star",
-            "price": 1,
+            "price": 14,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -36,7 +36,7 @@
             "quality": 1,
             "label": "道具2",
             "ico": "Star",
-            "price": 1,
+            "price": 13,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -52,7 +52,7 @@
             "quality": 1,
             "label": "道具3",
             "ico": "Star",
-            "price": 1,
+            "price": 18,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -72,7 +72,7 @@
             "quality": 1,
             "label": "道具4",
             "ico": "Star",
-            "price": 1,
+            "price": 28,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -88,7 +88,7 @@
             "quality": 1,
             "label": "道具5",
             "ico": "Star",
-            "price": 1,
+            "price": 22,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -104,7 +104,7 @@
             "quality": 2,
             "label": "测试蓝色道具51",
             "ico": "Star",
-            "price": 1,
+            "price": 40,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -120,7 +120,7 @@
             "quality": 2,
             "label": "测试蓝色道具52",
             "ico": "Star",
-            "price": 1,
+            "price": 32,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -140,7 +140,7 @@
             "quality": 2,
             "label": "测试蓝色道具53",
             "ico": "Star",
-            "price": 1,
+            "price": 30,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -160,7 +160,7 @@
             "quality": 2,
             "label": "测试蓝色道具54",
             "ico": "Star",
-            "price": 1,
+            "price": 29,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -180,7 +180,7 @@
             "quality": 3,
             "label": "测试紫色道具61",
             "ico": "Star",
-            "price": 1,
+            "price": 56,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -196,7 +196,7 @@
             "quality": 3,
             "label": "测试紫色道具62",
             "ico": "Star",
-            "price": 1,
+            "price": 59,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -212,7 +212,7 @@
             "quality": 3,
             "label": "测试紫色道具63",
             "ico": "Star",
-            "price": 1,
+            "price": 65,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -228,7 +228,7 @@
             "quality": 4,
             "label": "测试金色道具71",
             "ico": "Star",
-            "price": 1,
+            "price": 100,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -264,7 +264,7 @@
             "quality": 4,
             "label": "测试金色道具72",
             "ico": "Star",
-            "price": 1,
+            "price": 102,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -280,7 +280,7 @@
             "quality": 4,
             "label": "测试金色道具73",
             "ico": "Star",
-            "price": 1,
+            "price": 92,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -300,7 +300,7 @@
             "quality": 4,
             "label": "测试金色道具74",
             "ico": "Star",
-            "price": 1,
+            "price": 108,
             "type": 1,
             "group": 1,
             "buff_list": [
@@ -317,7 +317,7 @@
             "label": "义警戒指",
             "intro": "波次结束后<%val_1%><&dmg&>",
             "ico": "Star",
-            "price": 1,
+            "price": 62,
             "type": 2,
             "group": 1,
             "val_1": 3
@@ -329,7 +329,7 @@
             "label": "左右开弓-全功率",
             "intro": "左右开弓的概率提升至100%",
             "ico": "Star",
-            "price": 1,
+            "price": 120,
             "type_": 2,
             "type": 1,
             "group": 3,

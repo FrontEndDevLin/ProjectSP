@@ -70,7 +70,8 @@
             "desc": "普通1+普通2",
             "wave_type": 1,
             "max_emy": 25,
-            "duration": 20,
+            "duration": 8,
+            "duration_": 20,
             "preload": {
                 "alert": 4,
                 "exp": 10,
@@ -119,8 +120,8 @@
             "wave": 3,
             "desc": "精英怪1-核心获取, 普通1+普通2+精英1",
             "wave_type": 2,
-            "duration": 40,
-            "duration_": 4,
+            "duration_": 40,
+            "duration": 4,
             "max_emy": 30,
             "max_emy_elite_fight": 3,
             "preload": {

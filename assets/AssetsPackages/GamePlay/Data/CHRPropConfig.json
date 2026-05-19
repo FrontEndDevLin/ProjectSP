@@ -147,11 +147,20 @@
             "basic_val": 50,
             "forward_val": true,
             "percent": false
+        },
+        "item_price": {
+            "prop": "item_price",
+            "txt": "%道具价格",
+            "val": 0,
+            "basic_val": 1,
+            "forward_val": false,
+            "percent": true,
+            "intro": "介绍文本"
         }
     },
     "prop_group": {
         "major": ["hp", "dmg", "range_dmg", "melee_dmg", "range", "atk_spd", "ctl", "def", "spd", "avd", "luck"],
-        "sub": ["exp_eff", "pen_dmg", "pick_range"],
+        "sub": ["exp_eff", "pen_dmg", "pick_range", "item_price"],
         "unvisiable": ["trophy_to_chest"]
     },
     "quality_config": {

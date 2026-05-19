@@ -38,6 +38,8 @@ export default class ItemsManager extends OBT_UIManager {
         [ITEM_QUALITY.LV4]: []
     };
 
+    protected chestItem: ItemBase;
+
     // 触发刷新的次数
     private _refreshTime: number = 0;
     // 下次刷新的费用
@@ -168,8 +170,6 @@ export default class ItemsManager extends OBT_UIManager {
                 ignoreList.push(randomItem.id);
                 let storeItem: ItemInfo.Item = copyObject(randomItem);
                 let scriptName: string = storeItem.type === ItemInfo.Type.NORMAL ? "Item_Base" : storeItem.id;
-                // TODO: 价格
-                storeItem.price = 1;
                 if (Item_def[scriptName]) {
                     let itemCtx = new Item_def[scriptName](storeItem)
                     items.push(itemCtx);
@@ -348,7 +348,7 @@ export default class ItemsManager extends OBT_UIManager {
             return false;
         }
 
-        let price: number = storeItem.price;
+        let price: number = storeItem.real_price;
         let nowCurrency: number = CHRManager.instance.currencyCtrl.getCurrency();
         if (nowCurrency < price) {
             console.log('元件不足');
@@ -410,6 +410,58 @@ export default class ItemsManager extends OBT_UIManager {
             this._pickUpTrophyList.shift();
             OBT.instance.eventCenter.emit(GamePlayEvent.GUI.UPDATE_TROPHY_ICON);
         }
+    }
+
+    // 随机一个符合当前阶段的道具，开箱用
+    public loadChestItem() {
+        // 筛除已锁定的道具(已锁定的道具，不要出现在开箱的物品列表里，避免唯一道具出现多个的情况)
+        let items: ItemBase[] = this._getLockStoreItem();
+        // 物品列表里排除背包里唯一/已达上限的项目
+        let ignoreList = this._getStoreIgnoreList();
+        if (items.length) {
+            items.forEach((item: ItemBase) => {
+                ignoreList.push(item.id)
+            });
+        }
+        let wave: number = ProcessManager.instance.waveRole.wave;
+        // 物品质量根据当前波次决定，低级物品概率大
+        let quality = RateConfigManager.instance.getItemQuality(wave);
+        // 普通开箱不会出现极品道具
+        if (quality === ITEM_QUALITY.LV4) {
+            quality = ITEM_QUALITY.LV3;
+        }
+
+        let item: ItemInfo.Item = null;
+
+        // 可选道具列表
+        let itemPool: ItemInfo.Item[] = this._getItemsList(quality, ignoreList);
+        if (itemPool.length) {
+            let idx: number = getRandomNumber(0, itemPool.length - 1);
+            item = itemPool[idx];
+        }
+
+        this.chestItem = this.getItemCtxById(item.id);
+    }
+    public getChestItem(): ItemBase {
+        return this.chestItem;
+    }
+    public obtainChestItem() {
+        if (!this.chestItem) {
+            return;
+        }
+        this.obtainItem(this.chestItem.id);
+        this.chestItem = null;
+        this.expendTrophy();
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CHEST_OPEN_FINISH);
+    }
+    public recoverChestItem() {
+        if (!this.chestItem) {
+            return;
+        }
+        CHRManager.instance.currencyCtrl.addCurrency(this.chestItem.recover_price);
+        this.chestItem = null;
+        this.expendTrophy();
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CHEST_OPEN_FINISH);
     }
 
     protected onDestroy(): void {
