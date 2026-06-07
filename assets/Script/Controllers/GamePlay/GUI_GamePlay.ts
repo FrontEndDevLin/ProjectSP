@@ -280,7 +280,6 @@ export class GUI_GamePlay extends OBT_Component {
 
         const warCoreList: ItemWarCore[] = WarCoreManager.instance.getPreCheckAtkWarCoreList();
         warCoreList.push(warCoreList[0])
-        warCoreList.push(warCoreList[0])
 
         warCoreList.forEach((itemWarCore: ItemWarCore, i) => {
             cardSlotList[i].removeAllChildren();

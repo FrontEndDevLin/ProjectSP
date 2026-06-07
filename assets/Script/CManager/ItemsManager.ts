@@ -251,8 +251,14 @@ export default class ItemsManager extends OBT_UIManager {
 
     // 刷新花费, 目前固定为1
     private _setNextRefreshCost() {
-        // 后续结合刷新次数，当前波次决定
-        this._nextRefreshCost = 1 + this._refreshTime - this._refreshTime;
+        let wave: number = ProcessManager.instance.waveRole.wave;
+        let boost: number = 0;
+        if (wave <= 4) {
+            boost = 1;
+        } else {
+            boost = Math.round(0.4 * wave);
+        }
+        this._nextRefreshCost = Math.round(wave * 0.75 + boost * this._refreshTime);
 
         OBT.instance.eventCenter.emit(GamePlayEvent.STORE.STORE_REF_COST_CHANGE, this._nextRefreshCost);
     }

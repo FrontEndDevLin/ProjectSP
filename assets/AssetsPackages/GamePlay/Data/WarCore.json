@@ -41,13 +41,26 @@
             "weapon": "Weapon_ScatterAtkWarCore",
             "upgrade_pool_": ["Item_FightWithBothHands", "Item_Blossom", "Item_CrossCloud", "Item_GatheringStorm"],
             "upgrade_pool": ["Item_FightWithBothHands", "Item_CrossCloud", "Item_FastScatter"]
+        },
+        "OrbitsAtkWarCore": {
+            "id": "OrbitsAtkWarCore",
+            "label": "轨道",
+            "ico": "scatter",
+            "ico_gaming": "...",
+            "quality": 1,
+            "global": 2,
+            "group": 1,
+            "intro": "-",
+            "type": 2,
+            "weapon": "Weapon_OrbitsAtkWarCore",
+            "upgrade_pool": []
         }
     },
-    "pub_atk_war_core": ["ScatterAtkWarCore"],
+    "pub_atk_war_core": ["ScatterAtkWarCore", "OrbitsAtkWarCore"],
     "war_core_upgrade_pack_def_": {
         "fightWithBothHands": {
             "id": "fightWithBothHands",
-            "name": "左右开弓",
+            "name": "镜像",
             "intro": "核心升级",
             "atk_intro": "攻击的同时会朝反方向发射, 但火力会减半",
             "icon_ui": "scatter",
@@ -60,7 +73,7 @@
         },
         "blossom": {
             "id": "blossom",
-            "name": "开花",
+            "name": "裂变",
             "intro": "核心升级",
             "atk_intro": "散射攻击击败敌人时, 会生成3发飞弹, 造成<%calcDmg%>伤害",
             "icon_ui": "scatter",
@@ -68,7 +81,7 @@
         },
         "fullPower": {
             "id": "fullPower",
-            "name": "超负荷",
+            "name": "超载",
             "intro": "核心升级",
             "atk_intro": "每30次攻击会朝四周发动一次威力更强大的攻击, 贯穿沿途敌人",
             "bullet": "",
@@ -78,7 +91,7 @@
         "fullPower2": {
             "id": "fullPower2",
             "_mark": "这个特性可以做成另一个核心",
-            "name": "荧焰",
+            "name": "TEMP",
             "intro": "核心升级",
             "atk_intro": "子弹命中敌人时会进行分裂",
             "icon_ui": "scatter",

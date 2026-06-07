@@ -87,7 +87,7 @@
             "prop": "spd",
             "txt": "%速度",
             "val": 0,
-            "basic_val": 160,
+            "basic_val": 240,
             "forward_val": true,
             "percent": true,
             "intro": "介绍文本",

@@ -167,7 +167,7 @@ export class GUI_Prepare extends OBT_Component {
             if (packId) {
                 let packInfo: ItemBase = WarCoreManager.instance.getUpgradePackInfo(packId);
                 let icon = packInfo.ico;
-                assets = OBT.instance.resourceManager.getSpriteFrameAssets(`WarCore/${icon}`);
+                assets = OBT.instance.resourceManager.getSpriteFrameAssets(`Item/${icon}`);
                 let quality: ITEM_QUALITY = packInfo.quality || ITEM_QUALITY.LV1;
                 let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
                 let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
