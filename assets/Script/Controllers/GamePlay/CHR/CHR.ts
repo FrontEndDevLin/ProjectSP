@@ -34,7 +34,7 @@ export class CHR extends OBT_Component {
 
         this._baseSpd = CHRManager.instance.propCtx.getPropRealValue("spd");
 
-        WarCoreManager.instance.setWarCoreRootNode(this.view("Pic"));
+        WarCoreManager.instance.setWarCoreRootNode(this.node);
         WarCoreManager.instance.initAtkWarCore(getSaveCtrl().save.chr_slot.atk_core);
     }
 

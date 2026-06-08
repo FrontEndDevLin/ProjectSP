@@ -73,6 +73,10 @@ export default class WarCoreManager extends OBT_UIManager {
 
     // 实时事件触发核心/道具效果
     public onRealTimeEvent(eventName: string, params?) {
+        if (!this.warCore) {
+            return console.log('TODO: 核心未初始化, 后续有些核心在启动时会有问题')
+        }
+
         if (this.warCore[eventName] && typeof this.warCore[eventName] === "function") {
             this.warCore[eventName](params);
         }

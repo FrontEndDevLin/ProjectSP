@@ -10,6 +10,7 @@ import WarCoreManager from '../../../CManager/WarCoreManager';
 import ItemWarCore from '../Items/ItemWarCore';
 import OBT from '../../../OBT';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
+import OBT_UIManager from '../../../Manager/OBT_UIManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -36,6 +37,7 @@ export class OrbitsAtkWarCore extends OBT_Component {
         this.warCore = WarCoreManager.instance.warCore;
         this._initDomainCollider();
 
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_START, this.initKnife, this);
         // this.warCore.weaponCtx.split
     }
 
@@ -131,6 +133,45 @@ export class OrbitsAtkWarCore extends OBT_Component {
             // 冷却结合攻击速度修正
             this._cd = this.warCore.weaponCtx.realCd;
         });
+    }
+
+    // 展开n个刀片
+    protected initKnife(n: number) {
+        /**
+         * 创建一个用于旋转的节点, 挂载n个刀片，刀片按照角度平均分布
+         * 节点旋转速度为攻击速度
+         */
+        let rotateNode: Node = new Node("rotateNode");
+        let rotateAry: number[] = [0, -120, -240];
+        const moveDistance: number = 80;
+        console.log(WarCoreManager.instance.warCoreWeapon.bullet)
+        for (let angle of rotateAry) {
+            let knifeNode: Node = BulletManager.instance.createBulletByCHR({
+                bulletId: WarCoreManager.instance.warCoreWeapon.bullet,
+                position: v3(0, 0, 0),
+                vector: v3(1, 0, 0),
+                rootNode: rotateNode,
+                sleep: true
+            });
+
+            knifeNode.angle = angle;
+
+            // 角度转弧度
+            const rad = angle * Math.PI / 180;
+            
+            // 计算移动向量
+            const dx = Math.sin(rad) * moveDistance;
+            const dy = Math.cos(rad) * moveDistance;
+            
+            // 移动节点
+            const pos = knifeNode.position;
+            knifeNode.setPosition(pos.x - dx, pos.y + dy, pos.z);
+        }
+        this.node.addChild(rotateNode);
+    }
+    // 收起刀片
+    protected retractKnife() {
+        
     }
 
     update(deltaTime: number) {

@@ -182,6 +182,8 @@ export default class BulletManager extends OBT_UIManager {
         bulletNode.OBT_param2 = { attr: bulletAttr };
         scriptComp.init({ attr: bulletAttr, vector, ignoreList, groupId, sleep });
         this.mountNode({ node: bulletNode, parentNode: rootNode || this.bulletRootNode });
+
+        return bulletNode;
     }
 
     /**
