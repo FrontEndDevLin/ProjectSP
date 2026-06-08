@@ -24,6 +24,18 @@ export default class RealTimeEventManager extends OBT_UIManager {
         // this._initBulletCldMap();
     }
 
+    // 进入战斗触发
+    public onEnterWave() {
+        ItemsManager.instance.onRealTimeEvent('onEnterWave');
+        WarCoreManager.instance.onRealTimeEvent('onEnterWave');
+    }
+
+    // 结束战斗触发(失败/胜利均触发)
+    public onExitWave() {
+        ItemsManager.instance.onRealTimeEvent('onExitWave');
+        WarCoreManager.instance.onRealTimeEvent('onExitWave');
+    }
+
     // 通过波次触发
     public onPassWave() {
         ItemsManager.instance.onRealTimeEvent('onPassWave');

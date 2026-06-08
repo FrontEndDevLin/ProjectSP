@@ -178,6 +178,8 @@ export default class ProcessManager extends OBT_UIManager {
         CHRManager.instance.showCompass();
         this.gameNode = GAME_NODE.FIGHTING;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_START, this._duration);
+
+        RealTimeEventManager.instance.onEnterWave();
     }
 
     public getFixedDropTrophy(enemyType: string): ItemInfo.TROPHY_TYPE {
@@ -197,6 +199,7 @@ export default class ProcessManager extends OBT_UIManager {
         CHRManager.instance.hideCompass();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.FIGHT_PASS);
         RealTimeEventManager.instance.onPassWave();
+        RealTimeEventManager.instance.onExitWave();
         EMYManager.instance.removeAllEnemy();
         DropItemManager.instance.resRecovery();
     }
@@ -344,6 +347,7 @@ export default class ProcessManager extends OBT_UIManager {
             return;
         }
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.GAME_OVER);
+        RealTimeEventManager.instance.onExitWave();
         // temp
         this.gameNode = GAME_NODE.PASS_LEVEL_UP
         console.log('游戏结束');
