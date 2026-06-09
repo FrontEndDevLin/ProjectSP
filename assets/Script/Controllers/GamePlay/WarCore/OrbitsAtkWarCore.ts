@@ -33,6 +33,10 @@ export class OrbitsAtkWarCore extends OBT_Component {
 
     protected bulletGroupId: number = 1;
 
+    protected isInit: boolean = false;
+    protected rotateNode: Node;
+    protected rotateAngle: number = 0;
+
     start() {
         this.warCore = WarCoreManager.instance.warCore;
         this._initDomainCollider();
@@ -110,30 +114,36 @@ export class OrbitsAtkWarCore extends OBT_Component {
         }
     }
 
+    // 对rotateNode进行旋转
     private _tryAttack(dt: number) {
-        if (this._cd <= 0) {
-            this._attack(dt);
-        } else {
-            this._cd -= dt;
+        /**
+         * 旋转一圈的时间为cd, 每一帧旋转的角度为360 / cd * dt
+         */
+        let cd: number = this.warCore.weaponCtx.realCd;
+        let rotateAngle: number = 360 / cd * dt;
+        this.rotateAngle += rotateAngle;
+        if (this.rotateAngle >= 360) {
+            this.rotateAngle -= 360;
         }
+        this.rotateNode.angle = this.rotateAngle;
     }
-    private _attack(dt: number): void {
-        this._chooseTarget((hasAtkTarget: boolean, target: EMYInfo.RealTimeInfo) => {
-            if (!hasAtkTarget || !target) {
-                return;
-            }
+    // private _attack(dt: number): void {
+    //     this._chooseTarget((hasAtkTarget: boolean, target: EMYInfo.RealTimeInfo) => {
+    //         if (!hasAtkTarget || !target) {
+    //             return;
+    //         }
 
-            // 同一批次的子弹, groupId一致
-            let groupId: number = this.bulletGroupId;
-            let { bullet, penetrate, pen_dmg } = this.warCore.weaponCtx;
-            // console.log("穿透数量:" + penetrate + ",穿透伤害:" + pen_dmg);
-            this.bulletGroupId++;
+    //         // 同一批次的子弹, groupId一致
+    //         let groupId: number = this.bulletGroupId;
+    //         let { bullet, penetrate, pen_dmg } = this.warCore.weaponCtx;
+    //         // console.log("穿透数量:" + penetrate + ",穿透伤害:" + pen_dmg);
+    //         this.bulletGroupId++;
 
-            // RealTimeEventManager.instance.onWarCoreAttack();
-            // 冷却结合攻击速度修正
-            this._cd = this.warCore.weaponCtx.realCd;
-        });
-    }
+    //         // RealTimeEventManager.instance.onWarCoreAttack();
+    //         // 冷却结合攻击速度修正
+    //         this._cd = this.warCore.weaponCtx.realCd;
+    //     });
+    // }
 
     // 展开n个刀片
     protected initKnife(n: number) {
@@ -143,8 +153,7 @@ export class OrbitsAtkWarCore extends OBT_Component {
          */
         let rotateNode: Node = new Node("rotateNode");
         let rotateAry: number[] = [0, -120, -240];
-        const moveDistance: number = 80;
-        console.log(WarCoreManager.instance.warCoreWeapon.bullet)
+        const moveDistance: number = 40;
         for (let angle of rotateAry) {
             let knifeNode: Node = BulletManager.instance.createBulletByCHR({
                 bulletId: WarCoreManager.instance.warCoreWeapon.bullet,
@@ -167,7 +176,9 @@ export class OrbitsAtkWarCore extends OBT_Component {
             const pos = knifeNode.position;
             knifeNode.setPosition(pos.x - dx, pos.y + dy, pos.z);
         }
+        this.rotateNode = rotateNode;
         this.node.addChild(rotateNode);
+        this.isInit = true;
     }
     // 收起刀片
     protected retractKnife() {
@@ -176,6 +187,9 @@ export class OrbitsAtkWarCore extends OBT_Component {
 
     update(deltaTime: number) {
         if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
+        if (!this.isInit) {
             return;
         }
         this._tryAttack(deltaTime);

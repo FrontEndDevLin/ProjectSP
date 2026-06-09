@@ -50,9 +50,8 @@
         "prefab": "CHR_Bullet004",
         "_mark": "轨道核心用的刀片",
         "type": "bullet",
-        "script": "Bullet",
+        "script": "Bullet_OrbitsKnife",
         "speed": 480,
-        "max_dis": 220,
         "damage": [2, 4, 6, 10],
         "cld": 503,
         "boost": {
