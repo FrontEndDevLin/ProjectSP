@@ -121,9 +121,9 @@ export class OrbitsAtkWarCore extends OBT_Component {
          */
         let cd: number = this.warCore.weaponCtx.realCd;
         let rotateAngle: number = 360 / cd * dt;
-        this.rotateAngle += rotateAngle;
-        if (this.rotateAngle >= 360) {
-            this.rotateAngle -= 360;
+        this.rotateAngle -= rotateAngle;
+        if (this.rotateAngle <= -360) {
+            this.rotateAngle += 360;
         }
         this.rotateNode.angle = this.rotateAngle;
     }
