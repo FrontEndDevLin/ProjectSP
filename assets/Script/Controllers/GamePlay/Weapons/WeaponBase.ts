@@ -24,6 +24,8 @@ export default class WeaponBase {
     public ctl: number[]; // 暴击率
     public realCtl: number;
     public ctl_dmg_rate: number; // 暴击倍率
+    public repel: number[]; // 击退力
+    public realRepel: number;
 
     // 子弹相应属性
     public base_dmg: number;
@@ -87,6 +89,7 @@ export default class WeaponBase {
         ];
         let ctlRichTxt: string = this.getCtlRichTxt();
         let penRichTxt: string = this.getPenetrateRichTxt();
+        let repelRichTxt: string = this.getRepelRichTxt();
         let cdRichTxt: string = this.getCdRichTxt();
         let rangeRichTxt: string = this.getRangeRichTxt();
         let splitDmgRateRichTxt: string = this.getSplitDmgRateRichTxt();
@@ -98,6 +101,9 @@ export default class WeaponBase {
         }
         if (cdRichTxt) {
             richTxtList.push(cdRichTxt);
+        }
+        if (repelRichTxt) {
+            richTxtList.push(repelRichTxt);
         }
         if (rangeRichTxt) {
             richTxtList.push(rangeRichTxt);
@@ -136,6 +142,22 @@ export default class WeaponBase {
             return `贯穿: ${ getSuccessRichTxt(penetrate) }|${ pen_dmg * 100 }%伤害`;
         }
         return "";
+    }
+    // 获取击退属性文本
+    protected getRepelRichTxt(): string {
+        let { realRepel, repel } = this;
+        if (!realRepel) {
+            if (repel && repel.length) {
+                realRepel = repel[WarCoreManager.instance.warCore.quality - 1];
+            } else {
+                return;
+            }
+        }
+
+        if (realRepel <= 0) {
+            return "";
+        }
+        return `击退: ${ getSuccessRichTxt(realRepel) }`;
     }
     // 获取暴击属性富文本
     protected getCtlRichTxt(): string {
