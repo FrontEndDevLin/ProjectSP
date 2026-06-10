@@ -168,6 +168,8 @@ export class EMY_Base extends OBT_Component {
 
                 this.onHpReduce();
 
+                // TODO: 计算击退距离
+
                 // TODO: 位置根据当前敌人体型决定，目前是写死
                 DamageManager.instance.showDamageTxt({ dmg, position: new Vec3(this.node.position.x + 20, this.node.position.y + 20, 0), isEnemy: true, isCtitical: damageAttr.isCtitical });
                 
