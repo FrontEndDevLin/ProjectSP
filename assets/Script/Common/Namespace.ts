@@ -514,7 +514,9 @@ export namespace EMYInfo {
         // 实际生命值、伤害、特殊伤害
         c_hp: number,
         c_dmg?: number,
-        c_spec_dmg?: number
+        c_spec_dmg?: number,
+        // 质量, 与武器击退属性相抵
+        weight?: number
     }
     export interface EMYNormalData {
         [EMYId: string]: EMYProps

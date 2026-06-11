@@ -10,6 +10,7 @@
     "exp_drop_rate": "经验掉率",
     "trophy_drop_rate": "战利品掉率",
     "trophy": "战利品类型 core->核心",
+    "weight": "质量, 与武器击退属性抵抗, 默认为0",
     "exp_cnt": "掉落经验个数"
   },
   "EMY_def": {
@@ -85,6 +86,7 @@
     "attack_range": 320,
     "attack_cd": 3,
     "script": "EMY_Range",
+    "weight": 1,
     "pic": "",
     "spd": 80,
     "exp_drop_rate": 0.9,
@@ -106,6 +108,7 @@
     "attack_range": 250,
     "attack_cd": 2,
     "script": "EMY_Sprint",
+    "weight": 1,
     "pic": "", 
     "spd": 120,
     "exp_drop_rate": 0.8,
@@ -122,6 +125,7 @@
     "type": "normal",
     "move": "normal",
     "script": "EMY_Tank",
+    "weight": 1,
     "pic": "",
     "spd": 120,
     "exp_drop_rate": 0.8,
@@ -139,6 +143,7 @@
     "script": "EMY_Elite01",
     "move": "normal,surround",
     "attack": "none,remote",
+    "weight": 1,
     "attack_cd": 2,
     "broken_point": [
       [[-25, 52], [-8, 52], [8, 52], [25, 52], [-25, -52], [-8, -52], [8, -52], [25, -52], [-52, 25], [-52, 8], [-52, -8], [-52, -25], [52, 25], [52, 8], [52, -8], [52, -25]],
@@ -171,6 +176,7 @@
     "move": "normal,surround",
     "attack": "none,remote",
     "attack_cd": 2,
+    "weight": 4,
     "broken_point": [
       [[-25, 52], [-8, 52], [8, 52], [25, 52], [-25, -52], [-8, -52], [8, -52], [25, -52], [-52, 25], [-52, 8], [-52, -8], [-52, -25], [52, 25], [52, 8], [52, -8], [52, -25]],
       [
