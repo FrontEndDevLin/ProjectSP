@@ -1,6 +1,6 @@
 import { _decorator, BoxCollider2D, Color, Contact2DType, Node, Sprite, SpriteComponent, v3, Vec3, Animation } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { Common, DamageInfo, EMYInfo, FLASH_TIME, GameCollider, GamePlayEventOptions } from '../../../Common/Namespace';
+import { Common, DamageInfo, EMYInfo, FLASH_TIME, GameCollider, GamePlayEventOptions, ITEM_QUALITY, PIXEL_UNIT, REPEL_TIME } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
@@ -8,6 +8,7 @@ import { copyObject, getAngleByVector, getRandomNumber, getVectorByAngle } from 
 import DropItemManager from '../../../CManager/DropItemManager';
 import DamageManager from '../../../CManager/DamageManager';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
+import WarCoreManager from '../../../CManager/WarCoreManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EMY_Base')
@@ -55,6 +56,10 @@ export class EMY_Base extends OBT_Component {
 
     // 被同一批次子弹击中map
     protected groupBulletMap: Common.SimpleObj = {};
+
+    // 击退时间
+    protected repelTime: number = 0;
+    protected repelSpeed: number = 0;
 
     start() {
     }
@@ -135,6 +140,8 @@ export class EMY_Base extends OBT_Component {
                     return;
                 }
 
+                const isCoreBullet: boolean = otherCollider.node.OBT_param2.attr.isCoreBullet;
+
                 // 被同一批次子弹击中伤害衰减处理
                 let bulletGroupId: number = otherCollider.node.OBT_param2.groupId;
                 let isGroupReduce = false;
@@ -169,6 +176,33 @@ export class EMY_Base extends OBT_Component {
                 this.onHpReduce();
 
                 // TODO: 计算击退距离
+                let repelAry: number[] = otherCollider.node.OBT_param2.attr.repel;
+                if (repelAry && repelAry.length) {
+                    let repel: number = repelAry[0];
+                    if (isCoreBullet) {
+                        let quality: ITEM_QUALITY = WarCoreManager.instance.warCore.quality;
+                        repel = repelAry[quality - 1] || 0;
+                    }
+                    let weight: number = this.props.weight || 0;
+                    repel = repel - weight;
+                    if (repel > 0) {
+                        console.log('击退敌人: ' + repel + '距离');
+                        // 角色->敌人向量
+                        
+                        switch (otherCollider.tag) {
+                            case GameCollider.TAG.BULLET_ORBITS_KNIFE: {
+                                // 角色->自身向量
+                                let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+                                let vector = v3(this.node.position.x - characterLoc.x, this.node.position.y - characterLoc.y).normalize();
+                                // TODO: vector结合线速度做偏移
+                                
+                                this.vector = vector;
+                                this.repelTime = REPEL_TIME;
+                                this.repelSpeed = PIXEL_UNIT * 2 / REPEL_TIME;
+                            } break;
+                        }
+                    }
+                }
 
                 // TODO: 位置根据当前敌人体型决定，目前是写死
                 DamageManager.instance.showDamageTxt({ dmg, position: new Vec3(this.node.position.x + 20, this.node.position.y + 20, 0), isEnemy: true, isCtitical: damageAttr.isCtitical });
@@ -234,25 +268,39 @@ export class EMY_Base extends OBT_Component {
             return;
         }
         if (this.isCanMove()) {
-            switch (this.currentMoveType) {
-                case "none": {
-                    // 移动类型为none时，不移动
-                } break;
-                case "normal": {
-                    this.normalMove();
-                } break;
-                case "surround": {
-                    this.surroundMove();
-                } break;
-                case "drag": {
-                    this.dragMove();
-                } break;
-            }
-
-            if (this.vector) {
-                let speed = dt * this.props.spd;
-                let newPos: Vec3 = this.node.position.add(new Vec3(this.vector.x * speed, this.vector.y * speed));
-                this.node.setPosition(newPos);
+            // 被击退中，不可正常移动
+            if (this.repelTime > 0) {
+                if (this.vector) {
+                    let speed = this.repelSpeed * dt;
+                    let newPos: Vec3 = this.node.position.add(new Vec3(this.vector.x * speed, this.vector.y * speed));
+                    this.node.setPosition(newPos);
+                }
+                this.repelTime -= dt;
+                if (this.repelTime <= 0) {
+                    this.vector = null;
+                    this.repelTime = 0;
+                }
+            } else {
+                switch (this.currentMoveType) {
+                    case "none": {
+                        // 移动类型为none时，不移动
+                    } break;
+                    case "normal": {
+                        this.normalMove();
+                    } break;
+                    case "surround": {
+                        this.surroundMove();
+                    } break;
+                    case "drag": {
+                        this.dragMove();
+                    } break;
+                }
+    
+                if (this.vector) {
+                    let speed = dt * this.props.spd;
+                    let newPos: Vec3 = this.node.position.add(new Vec3(this.vector.x * speed, this.vector.y * speed));
+                    this.node.setPosition(newPos);
+                }
             }
         }
 

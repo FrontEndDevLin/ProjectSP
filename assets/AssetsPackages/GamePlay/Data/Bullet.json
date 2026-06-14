@@ -5,6 +5,7 @@
         "cld": "碰撞体id",
         "type": "当type为EMY_bullet时, 为敌人发射的子弹, 伤害由SpawnRole决定",
         "damage": "基础伤害",
+        "repel": "击退力",
         "boost": "受到的属性加成, 值为百分比"
     },
     "CHR_Bullet001": {

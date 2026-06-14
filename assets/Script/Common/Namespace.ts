@@ -575,7 +575,8 @@ export namespace GameCollider {
         EMY_02 = 101,
 
         // 子弹碰撞id
-        BULLET_BASE = 500
+        BULLET_BASE = 500,
+        BULLET_ORBITS_KNIFE = 503
     }
 
     export enum GROUP {
@@ -606,7 +607,9 @@ export namespace BulletInfo {
         pen_dmg: number,
         is_penetrate: boolean,  // 是否已经贯穿过
         cld: number,
-        boost?: BoostConfig
+        boost?: BoostConfig,
+        // 是否为核心创建的子弹
+        isCoreBullet?: boolean
     }
 
     export interface BulletPachData {
@@ -625,7 +628,8 @@ export namespace BulletInfo {
         bulletId: string,
         base_dmg: number,
         dmg: number,
-        boost?: BoostConfig
+        boost?: BoostConfig,
+        repel: number[]
     }
 
     export interface BulletCldData {
@@ -660,7 +664,9 @@ export namespace BulletInfo {
         // 子弹挂载的节点
         rootNode?: Node,
         // 是否休眠, 当sleep=true时, 子弹不动. 默认不休眠
-        sleep?: boolean
+        sleep?: boolean,
+        // 是否是核心创建的子弹
+        isCoreBullet?: boolean
     }
 }
 
@@ -711,6 +717,9 @@ export const FLASH_TIME: number = 0.06;
 export const SAFE_DISTANCE: number = 160;
 
 export const MAX_WAR_CORE_LEVEL: number = 3;
+
+// 击退时间
+export const REPEL_TIME: number = 0.1;
 
 export enum ITEM_QUALITY {
     LV1 = 1,

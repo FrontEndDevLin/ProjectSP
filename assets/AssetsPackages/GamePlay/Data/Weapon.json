@@ -34,7 +34,6 @@
             "count": 3,
             "bullet": "CHR_Bullet004",
             "range": 200,
-            "repel": [1, 1, 1, 1],
             "cd": [3, 2.8, 2.5, 2.2],
             "ctl": [1, 2, 4, 6],
             "ctl_dmg_rate": 1.5

@@ -117,6 +117,13 @@ export class OrbitsAtkWarCore extends OBT_Component {
     // 对rotateNode进行旋转
     private _tryAttack(dt: number) {
         /**
+         * TODO:
+         * 默认半径为40，旋转1圈时间为攻击速度，需转化为线速度，内置为默认的线速度(不可见属性)
+         * 当提升攻击速度时，代入上述公式算出新的线速度
+         * 当提升范围, 即提升半径，线速度不变, 计算出新的攻击速度
+         * 
+         * 
+         * 
          * 旋转一圈的时间为cd, 每一帧旋转的角度为360 / cd * dt
          */
         let cd: number = this.warCore.weaponCtx.realCd;

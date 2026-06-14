@@ -132,12 +132,14 @@ export default class BulletManager extends OBT_UIManager {
         let base_dmg: number = this.getBulletDamage(bulletId, isCurrentWarCoreBullet);
         let dmg: number = DamageManager.instance.getBulletRealDamage(bulletId, isCurrentWarCoreBullet);
         let boost: BoostConfig = this.getBulletInfo(bulletId, "boost");
+        let repel: number[] = this.getBulletInfo(bulletId, "repel");
 
         return {
             bulletId,
             base_dmg,
             dmg,
-            boost
+            boost,
+            repel
         }
     }
 
@@ -171,10 +173,11 @@ export default class BulletManager extends OBT_UIManager {
     /**
      * 主角创建的子弹
      */
-    public createBulletByCHR({ bulletId, position, vector, ignoreList, groupId, penetrate, pen_dmg, rootNode, sleep }: BulletInfo.CreateBulletParams) {
+    public createBulletByCHR({ bulletId, position, vector, ignoreList, groupId, penetrate, pen_dmg, rootNode, sleep, isCoreBullet }: BulletInfo.CreateBulletParams) {
         const bulletAttr: BulletInfo.BulletAttr = copyObject(this.bulletData[bulletId]);
         let bulletNode: Node = this.createBullet({ bulletId, position, vector });
 
+        bulletAttr.isCoreBullet = isCoreBullet;
         bulletAttr.penetrate = penetrate || 0;
         bulletAttr.pen_dmg = pen_dmg || 1;
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
