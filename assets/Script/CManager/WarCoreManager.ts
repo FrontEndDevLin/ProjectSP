@@ -289,7 +289,7 @@ export default class WarCoreManager extends OBT_UIManager {
              * 升级核心后核心品质升级
              * 同时需要修正核心数值
              */
-            this.warCore.quality++;
+            this.warCore.upgradeQuality();
             this.warCore.weaponCtx.updatePanel();
         }
 

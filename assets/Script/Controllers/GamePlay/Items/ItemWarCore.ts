@@ -15,6 +15,15 @@ export default class ItemWarCore extends ItemSpecial {
         if (warCoreData.weapon) {
             this.weaponCtx = WeaponManager.instance.getWeaponCtxById(warCoreData.weapon);
         }
+        this.onInit();
+    }
+
+    protected onInit() {}
+    protected onUpgradeQuality() {}
+
+    public upgradeQuality() {
+        this.quality++;
+        this.onUpgradeQuality();
     }
 
     public onPassWave() {};
