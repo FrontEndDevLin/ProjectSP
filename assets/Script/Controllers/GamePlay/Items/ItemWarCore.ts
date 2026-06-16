@@ -19,12 +19,6 @@ export default class ItemWarCore extends ItemSpecial {
     }
 
     protected onInit() {}
-    protected onUpgradeQuality() {}
-
-    public upgradeQuality() {
-        this.quality++;
-        this.onUpgradeQuality();
-    }
 
     public onPassWave() {};
 

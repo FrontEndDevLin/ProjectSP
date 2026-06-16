@@ -12,6 +12,7 @@ import WarCoreManager from "../../../CManager/WarCoreManager";
 
 export default class WeaponBase {
     public id: string;
+    public quality: ITEM_QUALITY;
     public intro: string;
     public bullet: string;
     public penetrate: number; // 穿透数
@@ -42,6 +43,10 @@ export default class WeaponBase {
         this.originData = copyObject(weaponData);
     }
 
+    public setQuality(quality: ITEM_QUALITY) {
+        this.quality = quality;
+    }
+
     // TODO: 可能需要通知更新?
     public setProps(setPropsMap: Common.SimpleObj) {
         for (let prop in setPropsMap) {
@@ -68,7 +73,12 @@ export default class WeaponBase {
         this.range = range;
         this.base_dmg = bulletRealTimeAttr.base_dmg;
         this.dmg = bulletRealTimeAttr.dmg;
+
+        this.correctPanel();
     }
+
+    // 修正面板方法，发生在updatePanel之后。部分特殊武器需要修正面板
+    protected correctPanel() {}
 
     public getIntroRichTxt(): string {
         let introRichTxt: string = this.intro || "";

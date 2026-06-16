@@ -51,8 +51,19 @@ export default class ItemBase {
             }
             if (itemData.weapon) {
                 this.weaponCtx = WeaponManager.instance.getWeaponCtxById(itemData.weapon);
+                if (this.quality) {
+                    this.weaponCtx.setQuality(this.quality);
+                }
             }
         }
+    }
+
+    protected onUpgradeQuality() {}
+
+    public upgradeQuality() {
+        this.quality++;
+        this.onUpgradeQuality();
+        this.weaponCtx.setQuality(this.quality);
     }
 
     public getGroupTxt(): string {
