@@ -41,10 +41,15 @@ export default class WeaponBase {
     constructor(weaponData: WeaponInfo.Weapon) {
         Object.assign(this, weaponData)
         this.originData = copyObject(weaponData);
+        this.init();
     }
+
+    protected init() {}
+    protected onQualityChange() {}
 
     public setQuality(quality: ITEM_QUALITY) {
         this.quality = quality;
+        this.onQualityChange();
     }
 
     // TODO: 可能需要通知更新?
