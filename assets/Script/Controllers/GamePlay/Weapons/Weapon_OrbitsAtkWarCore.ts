@@ -3,10 +3,10 @@ import { getFloatNumber } from "../../../Common/utils";
 import WeaponBase from "./WeaponBase";
 
 export default class WeaponOrbits extends WeaponBase {
-    private defaultRange: number;
-    private defaultAtkSpd: number;
+    protected defaultRange: number = 0;
+    protected defaultAtkSpd: number = 0;
 
-    protected init(): void {
+    public init(): void {
         this.setDefaultVal();
     }
 

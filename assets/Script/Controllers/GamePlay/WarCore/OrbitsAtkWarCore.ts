@@ -42,8 +42,8 @@ export class OrbitsAtkWarCore extends OBT_Component {
         this._initDomainCollider();
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_START, this.initKnife, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, this.retractKnife, this);
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.GAME_OVER, this.retractKnife, this);
+        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, this.retractKnife, this);
+        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.GAME_OVER, this.retractKnife, this);
         // this.warCore.weaponCtx.split
     }
 

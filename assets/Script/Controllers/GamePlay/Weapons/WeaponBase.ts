@@ -42,10 +42,9 @@ export default class WeaponBase {
     constructor(weaponData: WeaponInfo.Weapon) {
         Object.assign(this, weaponData)
         this.originData = copyObject(weaponData);
-        this.init();
     }
 
-    protected init() {}
+    public init() {}
     protected onQualityChange() {}
 
     public setQuality(quality: ITEM_QUALITY) {
