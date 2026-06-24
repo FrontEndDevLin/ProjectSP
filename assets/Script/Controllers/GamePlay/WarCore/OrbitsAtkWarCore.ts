@@ -42,6 +42,8 @@ export class OrbitsAtkWarCore extends OBT_Component {
         this._initDomainCollider();
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_START, this.initKnife, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, this.retractKnife, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.GAME_OVER, this.retractKnife, this);
         // this.warCore.weaponCtx.split
     }
 
@@ -116,14 +118,6 @@ export class OrbitsAtkWarCore extends OBT_Component {
 
     // 对rotateNode进行旋转
     private _tryAttack(dt: number) {
-        /**
-         * TODO:
-         * 将半径40, 攻速为3s作为默认的参数, 算出默认的线速度
-         * 默认的线速度为常量LINE_SPEED
-         * 提升攻速时
-         * 
-         * 旋转一圈的时间为cd, 每一帧旋转的角度为360 / cd * dt
-         */
         let cd: number = this.warCore.weaponCtx.realCd;
         let rotateAngle: number = 360 / cd * dt;
         this.rotateAngle -= rotateAngle;
@@ -151,14 +145,19 @@ export class OrbitsAtkWarCore extends OBT_Component {
     // }
 
     // 展开n个刀片
-    protected initKnife(n: number) {
+    protected initKnife() {
         /**
          * 创建一个用于旋转的节点, 挂载n个刀片，刀片按照角度平均分布
          * 节点旋转速度为攻击速度
          */
+        let knifeCount: number = this.warCore.weaponCtx.count || 3;
+        let avgAngle: number = 360 / knifeCount;
         let rotateNode: Node = new Node("rotateNode");
-        let rotateAry: number[] = [0, -120, -240];
-        const moveDistance: number = 40;
+        let rotateAry: number[] = [];
+        for (let i = 0; i < knifeCount; i++) {
+            rotateAry.push(-avgAngle * i);
+        }
+        const moveDistance: number = this.warCore.weaponCtx.range;
         for (let angle of rotateAry) {
             let knifeNode: Node = BulletManager.instance.createBulletByCHR({
                 bulletId: WarCoreManager.instance.warCoreWeapon.bullet,
@@ -187,7 +186,7 @@ export class OrbitsAtkWarCore extends OBT_Component {
     }
     // 收起刀片
     protected retractKnife() {
-        
+        this.rotateNode.destroy();
     }
 
     update(deltaTime: number) {

@@ -27,6 +27,7 @@ export default class WeaponBase {
     public ctl_dmg_rate: number; // 暴击倍率
     public repel: number[]; // 击退力
     public realRepel: number;
+    public count: number;
 
     // 子弹相应属性
     public base_dmg: number;
