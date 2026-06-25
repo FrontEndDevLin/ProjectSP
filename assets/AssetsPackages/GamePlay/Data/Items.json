@@ -442,6 +442,23 @@
                 "val_3": "+-",
                 "val_4": "+-"
             }
+        },
+        "Item_AddKnife": {
+            "id": "Item_AddKnife",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "label": "接轨",
+            "intro": "获得<%val_1%>刀片",
+            "type": 2,
+            "ico": "doublebow",
+            "val_1": 1,
+            "buff_list": [
+                {
+                    "prop": "melee_dmg",
+                    "value": -4
+                }
+            ]
         }
     }
-} 
+}

@@ -37,14 +37,13 @@ export default class WeaponBase {
     public originData: WeaponInfo.Weapon;
 
     // 可以被setProps更新的属性白名单
-    protected propsUpdateWhiteList: string[] = ["penetrate", "split", "split_dmg_rate"];
+    protected propsUpdateWhiteList: string[] = ["penetrate", "split", "split_dmg_rate", "count"];
 
     constructor(weaponData: WeaponInfo.Weapon) {
         Object.assign(this, weaponData)
         this.originData = copyObject(weaponData);
     }
 
-    public init() {}
     protected onQualityChange() {}
 
     public setQuality(quality: ITEM_QUALITY) {

@@ -53,7 +53,7 @@
             "intro": "-",
             "type": 2,
             "weapon": "Weapon_OrbitsAtkWarCore",
-            "upgrade_pool": []
+            "upgrade_pool": ["Item_AddKnife", "Item_AddKnife", "Item_AddKnife"]
         }
     },
     "pub_atk_war_core": ["ScatterAtkWarCore", "OrbitsAtkWarCore"],

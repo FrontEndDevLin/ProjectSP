@@ -1,12 +1,14 @@
 import CHRManager from "../../../CManager/CHRManager";
+import { WeaponInfo } from "../../../Common/Namespace";
 import { getFloatNumber } from "../../../Common/utils";
 import WeaponBase from "./WeaponBase";
 
 export default class WeaponOrbits extends WeaponBase {
-    protected defaultRange: number = 0;
-    protected defaultAtkSpd: number = 0;
+    public defaultRange: number = 0;
+    public defaultAtkSpd: number = 0;
 
-    public init(): void {
+    constructor(weaponData: WeaponInfo.Weapon) {
+        super(weaponData);
         this.setDefaultVal();
     }
 

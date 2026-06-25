@@ -51,7 +51,6 @@ export default class ItemBase {
             }
             if (itemData.weapon) {
                 this.weaponCtx = WeaponManager.instance.getWeaponCtxById(itemData.weapon);
-                this.weaponCtx.init();
                 if (this.quality) {
                     this.weaponCtx.setQuality(this.quality);
                 }
