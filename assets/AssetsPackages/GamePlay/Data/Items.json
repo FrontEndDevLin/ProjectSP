@@ -459,6 +459,17 @@
                     "value": -4
                 }
             ]
+        },
+        "Item_ExtKnifeSize": {
+            "id": "Item_ExtKnifeSize",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "label": "扩张",
+            "intro": "刀片长度提升<%val_1%><s%s>",
+            "type": 2,
+            "ico": "doublebow",
+            "val_1": 33.33
         }
     }
 }

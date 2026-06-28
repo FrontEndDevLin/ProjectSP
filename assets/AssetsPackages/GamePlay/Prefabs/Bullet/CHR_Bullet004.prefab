@@ -128,7 +128,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 12,
-      "height": 24
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -219,7 +219,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 12,
-      "height": 24
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -305,7 +305,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 12,
-      "height": 24
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -339,12 +339,12 @@
     "_offset": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 12
+      "y": 20
     },
     "_size": {
       "__type__": "cc.Size",
       "width": 12,
-      "height": 24
+      "height": 40
     },
     "_id": ""
   },

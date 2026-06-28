@@ -3,6 +3,8 @@ import { getFloatNumber } from "../../../Common/utils";
 import ItemWarCore from "./ItemWarCore";
 
 export default class ItemOrbitsAtkWarCore extends ItemWarCore {
+    public sizeY: number = 1;
+
     protected onInit(): void {
         // console.log(this.weaponCtx)
     }

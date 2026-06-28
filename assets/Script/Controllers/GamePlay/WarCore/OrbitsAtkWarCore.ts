@@ -11,6 +11,7 @@ import ItemWarCore from '../Items/ItemWarCore';
 import OBT from '../../../OBT';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 import OBT_UIManager from '../../../Manager/OBT_UIManager';
+import ItemOrbitsAtkWarCore from '../Items/ItemOrbitsAtkWarCore';
 const { ccclass, property } = _decorator;
 
 /**
@@ -29,7 +30,7 @@ export class OrbitsAtkWarCore extends OBT_Component {
 
     private _cd: number = 0;
 
-    protected warCore: ItemWarCore;
+    protected warCore: ItemOrbitsAtkWarCore;
 
     protected bulletGroupId: number = 1;
 
@@ -37,13 +38,15 @@ export class OrbitsAtkWarCore extends OBT_Component {
     protected rotateNode: Node;
     protected rotateAngle: number = 0;
 
+    public sizeY: number = 1;
+
     start() {
-        this.warCore = WarCoreManager.instance.warCore;
+        this.warCore = <ItemOrbitsAtkWarCore>WarCoreManager.instance.warCore;
         this._initDomainCollider();
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_START, this.initKnife, this);
-        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, this.retractKnife, this);
-        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.GAME_OVER, this.retractKnife, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, this.retractKnife, this);
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.GAME_OVER, this.retractKnife, this);
         // this.warCore.weaponCtx.split
     }
 
@@ -166,7 +169,7 @@ export class OrbitsAtkWarCore extends OBT_Component {
                 rootNode: rotateNode,
                 sleep: true
             });
-
+            knifeNode.setScale(1, this.warCore.sizeY, 1);
             knifeNode.angle = angle;
 
             // 角度转弧度

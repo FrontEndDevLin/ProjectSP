@@ -26,6 +26,7 @@
     "trophy_drop_rate": 1,
     "exp_cnt": 4,
     "hp": 15,
+    "weight": 100,
     "hp_growth": 0.12
   },
   "EMY01": {

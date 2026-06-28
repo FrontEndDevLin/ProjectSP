@@ -10,6 +10,7 @@ import ItemMoreScatter from "./ItemMoreScatter";
 import ItemFastScatter from "./ItemFastScatter";
 import ItemOrbitsAtkWarCore from "./ItemOrbitsAtkWarCore";
 import ItemAddKnife from "./ItemAddKnife";
+import ItemExtKnifeSize from "./ItemExtKnifeSize";
 
 export namespace Item_def {
     export const Item_Base = ItemBase;
@@ -24,4 +25,5 @@ export namespace Item_def {
     export const Item_MoreScatter = ItemMoreScatter;
     export const Item_FastScatter = ItemFastScatter;
     export const Item_AddKnife = ItemAddKnife;
+    export const Item_ExtKnifeSize = ItemExtKnifeSize;
 }
