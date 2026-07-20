@@ -24,8 +24,13 @@ export default class WeaponManager extends OBT_UIManager {
         this.weaponData = DBManager.instance.getDBData("Weapon");
     }
 
-    public getWeaponCtxById(weaponId: string): WeaponBase {
+    public getWeaponDataById(weaponId: string): WeaponInfo.Weapon {
         const weaponData: WeaponInfo.Weapon = this.weaponData.weapon_def[weaponId];
+        return copyObject(weaponData);
+    }
+
+    public getWeaponCtxById(weaponId: string): WeaponBase {
+        const weaponData: WeaponInfo.Weapon = this.getWeaponDataById(weaponId);
         if (weaponData.bullet) {
             const bulletRealTimeAttr: BulletInfo.BulletRealTimeAttr = BulletManager.instance.getBulletRealTimeAttr(weaponData.bullet);
             Object.assign(weaponData, bulletRealTimeAttr);

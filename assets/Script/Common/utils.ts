@@ -72,7 +72,9 @@ export const shuffleArray = function (ary: any[]): any[] {
 }
 
 export const copyObject = function (object: any): any {
-  return JSON.parse(JSON.stringify(object));
+  const newObject: any = {};
+  Object.assign(newObject, object);
+  return newObject;
 }
 
 // 获取随机一个向量
