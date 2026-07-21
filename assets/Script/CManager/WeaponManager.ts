@@ -12,6 +12,7 @@ export default class WeaponManager extends OBT_UIManager {
     static instance: WeaponManager = null;
 
     public weaponData: WeaponInfo.WeaponDBData;
+    public iWeaponData: WeaponInfo.IWeaponDBData;
 
     protected onLoad(): void {
         if (!WeaponManager.instance) {
@@ -22,10 +23,16 @@ export default class WeaponManager extends OBT_UIManager {
         }
 
         this.weaponData = DBManager.instance.getDBData("Weapon");
+        this.iWeaponData = DBManager.instance.getDBData("IWeapon");
     }
 
     public getWeaponDataById(weaponId: string): WeaponInfo.Weapon {
         const weaponData: WeaponInfo.Weapon = this.weaponData.weapon_def[weaponId];
+        return copyObject(weaponData);
+    }
+
+    public getIWeaponDataById(weaponId: string): WeaponInfo.IWeapon {
+        const weaponData: WeaponInfo.IWeapon = this.iWeaponData.weapon_def[weaponId];
         return copyObject(weaponData);
     }
 

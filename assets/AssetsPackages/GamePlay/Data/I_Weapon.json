@@ -1,0 +1,32 @@
+{
+    "desc": {
+        "mark": "武器定义, 核心,道具等拥有攻击/治疗手段的系统可以引入武器",
+        "type": "武器类型 2->远程 1->近战",
+        "split": "分裂数",
+        "count": "生成数量",
+        "repel": "击退力, 默认为0, 当(击退力 - 敌人质量) n > 0时, 敌人会被击退n格",
+        "split_dmg_rate": "目标被一次攻击的多个子弹击中的伤害比例",
+        "blt_max_dis": "子弹最大飞行距离",
+        "blt_cld": "子弹碰撞体id",
+        "blt_speed": "子弹飞行速度",
+        "damage": "基础伤害",
+        "boost": "受到的属性加成, 值为百分比"
+    },
+    "weapon_def": {
+        "Weapon_BaseAtkWarCore": {
+            "code": "Weapon_BaseAtkWarCore",
+            "type": 2,
+            "intro": "基础飞弹攻击",
+            "bullet": "CHR_Bullet001",
+            "quality": 1,
+            "damage": "3,5,7,10",
+            "range": 200,
+            "cd": "0.4,0.38,0.35,0.3",
+            "ctl": "10,12,16,24",
+            "ctl_dmg_rate": 1.5,
+            "blt_speed": 480,
+            "blt_max_dis": 200,
+            "blt_cld": 500
+        }
+    }
+}

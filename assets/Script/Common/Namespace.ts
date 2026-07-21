@@ -450,9 +450,15 @@ export namespace WeaponInfo {
     export interface WeaponDBData {
         weapon_def: WeaponMap
     }
+    export interface IWeaponDBData {
+        weapon_def: IWeaponMap
+    }
 
     export interface WeaponMap {
         [WeaponId: string]: Weapon
+    }
+    export interface IWeaponMap {
+        [WeaponId: string]: IWeapon
     }
 
     export interface Weapon {
@@ -472,6 +478,22 @@ export namespace WeaponInfo {
         base_dmg: number,
         dmg: number,
         boost: BoostConfig
+    }
+    
+    export interface IWeapon {
+        code: string,
+        type: WEAPON_TYPE,
+        intro: string,
+        bullet: string,
+        quality: ITEM_QUALITY,
+        damage: string,
+        range: number,
+        cd: string,
+        ctl: string[],
+        ctl_dmg_rate: number,
+        blt_speed: number,
+        blt_max_dis: number,
+        blt_cld: number
     }
 }
 
@@ -593,6 +615,13 @@ export namespace GameCollider {
 }
 
 export namespace BulletInfo {
+    export interface IBulletAttr {
+        code: string,
+        prefab: string,
+        type: string,
+        script: string
+    }
+
     export interface BulletAttr {
         id: string,
         prefab: string,
@@ -720,6 +749,11 @@ export const MAX_WAR_CORE_LEVEL: number = 3;
 
 // 击退时间
 export const REPEL_TIME: number = 0.1;
+
+export enum WEAPON_TYPE {
+    MELEE = 1,
+    RANGE = 2
+}
 
 export enum ITEM_QUALITY {
     LV1 = 1,
