@@ -229,8 +229,16 @@ export namespace WarCoreInfo {
         upgrade_pool: string[]
     }
 
+    export interface I_WarCoreAttr extends ItemInfo.I_Item {
+        upgrade_pool?: string[]
+    }
+
     export interface AtkWarCoreMap {
         [atkWarCoreId: string]: AtkWarCoreAttr
+    }
+
+    export interface I_WarCoreMap {
+        [warCoreCode: string]: I_WarCoreAttr
     }
 
     export interface WarCoreUpgradePack {
@@ -246,6 +254,11 @@ export namespace WarCoreInfo {
     export interface WarCoreDBData {
         atk_war_core_def: WarCoreMap,
         pub_atk_war_core: string[]
+    }
+
+    export interface I_WarCoreDBData {
+        war_core_def: I_WarCoreMap,
+        pub_war_core: string[]
     }
 }
 
@@ -391,6 +404,18 @@ export namespace ItemInfo {
         val_prefix?: ItemValPrefix,
         weapon?: string,
         not_open?: boolean
+    }
+
+    export interface I_Item {
+        code: string,
+        name: string,
+        ico: string,
+        ico_gaming: string,
+        quality: ITEM_QUALITY,
+        global: Global,
+        intro: string,
+        type: Type,
+        weapon: string
     }
 
     export interface ItemMap {

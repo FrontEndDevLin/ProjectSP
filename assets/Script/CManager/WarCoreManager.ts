@@ -25,6 +25,7 @@ export default class WarCoreManager extends OBT_UIManager {
     public warCoreRootNode: Node = null;
 
     public warCoreData: WarCoreInfo.WarCoreDBData;
+    public iWarCoreData: WarCoreInfo.I_WarCoreDBData;
 
     public warCore: ItemWarCore = null;
     public warCoreItem: ItemBase = null;
@@ -65,6 +66,7 @@ export default class WarCoreManager extends OBT_UIManager {
         }
 
         this.warCoreData = DBManager.instance.getDBData("WarCore");
+        this.iWarCoreData = DBManager.instance.getDBData("I_WarCore");
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
 
@@ -121,8 +123,23 @@ export default class WarCoreManager extends OBT_UIManager {
         }
     }
 
-    public initAtkWarCore(atkWarCoreId: string) {
-        this._setAtkWarCore(atkWarCoreId);
+    private _setWarCore(warCoreCode: string) {
+        const warCoreData: WarCoreInfo.I_WarCoreAttr = this.iWarCoreData.war_core_def[warCoreCode];
+        if (warCoreData) {
+            // this.warCore = this.getIWarCoreCtxById(warCoreData.code);
+            // if (this.warCore.weapon) {
+            //     this.warCoreWeapon = this.warCore.weaponCtx;
+            //     this.updateRealAtkWarCore();
+            // }
+            // this.warCore.use();
+
+            // OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
+            this.showPrefab({ prefabPath: `WarCore/${warCoreData.code}`, parentNode: this.warCoreRootNode, scriptName: warCoreData.code });
+        }
+    }
+
+    public initAtkWarCore(warCoreCode: string) {
+        this._setWarCore(warCoreCode);
 
         let save = getSaveCtrl().save;
         if (save.unlock_war_core) {
@@ -175,6 +192,12 @@ export default class WarCoreManager extends OBT_UIManager {
     public getWarCoreCtxById(warCoreId: string): ItemWarCore {
         let warCoreData: WarCoreInfo.WarCore = this.warCoreData.atk_war_core_def[warCoreId];
         let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? "Item_WarCore" : "Item_" + warCoreData.id;
+        return new Item_def[warScriptName](warCoreData);
+    }
+
+    public getIWarCoreCtxById(warCoreCode: string): ItemWarCore {
+        let warCoreData: WarCoreInfo.I_WarCoreAttr = this.iWarCoreData.war_core_def[warCoreCode];
+        let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? "Item_WarCore" : "Item_" + warCoreData.code;
         return new Item_def[warScriptName](warCoreData);
     }
 

@@ -29,7 +29,7 @@
             "wave_type": 1,
             "max_emy": 30,
             "duration_": 20,
-            "duration": 20,
+            "duration": 2000,
             "preload": {
                 "alert": 4,
                 "exp": 10,
@@ -43,6 +43,8 @@
                 "dmg_txt": 5
             },
             "spawn_roles": [
+            ],
+            "spawn_roles_": [
                 {
                     "enemy_type": "EMY_Peace",
                     "spawn_total": 4,

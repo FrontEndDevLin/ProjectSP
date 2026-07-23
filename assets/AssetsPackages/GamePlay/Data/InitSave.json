@@ -1,6 +1,6 @@
 {
     "desc": "存储当前存档数据",
-    "wave": 3,
+    "wave": 1,
     "status": 1,
     "unlock_war_core": false,
     "unlock_war_core_": true,
@@ -26,7 +26,7 @@
     "chr_slot": {
         "level": 1,
         "atk_core_": "ScatterAtkWarCore",
-        "atk_core": "BaseAtkWarCore",
+        "atk_core": "BaseWarCore",
         "core_level": 0,
         "core_exp": 0
     }
