@@ -408,14 +408,21 @@ export namespace ItemInfo {
 
     export interface I_Item {
         code: string,
+        // 道具类型 普通=1, 特殊=2
+        type: Type,
+        // 道具全局分组, 1->商店道具 2->核心内置道具 3->核心升级包道具
+        global: Global,
+        // 道具分组, 1->普通 2->限制 3->独特的
+        group: Group,
+        quality: ITEM_QUALITY,
         name: string,
         ico: string,
         ico_gaming: string,
-        quality: ITEM_QUALITY,
-        global: Global,
         intro: string,
-        type: Type,
-        weapon: string
+        max?: number,
+        price?: number,
+        buff_list?: CHRInfo.Buff[],
+        weapon?: string
     }
 
     export interface ItemMap {

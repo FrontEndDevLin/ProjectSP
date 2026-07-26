@@ -17,6 +17,7 @@ import { Weapon_def } from '../Controllers/GamePlay/Weapons/Weapon_def';
 import WeaponManager from './WeaponManager';
 import ItemWarCore from '../Controllers/GamePlay/Items/ItemWarCore';
 import ItemSpecial from '../Controllers/GamePlay/Items/ItemSpecial';
+import Item_WarCore from '../Controllers/GamePlay/Items/Item_WarCore';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -126,7 +127,8 @@ export default class WarCoreManager extends OBT_UIManager {
     private _setWarCore(warCoreCode: string) {
         const warCoreData: WarCoreInfo.I_WarCoreAttr = this.iWarCoreData.war_core_def[warCoreCode];
         if (warCoreData) {
-            // this.warCore = this.getIWarCoreCtxById(warCoreData.code);
+            const warCore = this.getIWarCoreCtxById(warCoreData.code);
+            warCore.use();
             // if (this.warCore.weapon) {
             //     this.warCoreWeapon = this.warCore.weaponCtx;
             //     this.updateRealAtkWarCore();
@@ -134,7 +136,7 @@ export default class WarCoreManager extends OBT_UIManager {
             // this.warCore.use();
 
             // OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
-            this.showPrefab({ prefabPath: `WarCore/${warCoreData.code}`, parentNode: this.warCoreRootNode, scriptName: warCoreData.code });
+            // this.showPrefab({ prefabPath: `WarCore/${warCoreData.code}`, parentNode: this.warCoreRootNode, scriptName: warCoreData.code });
         }
     }
 
@@ -195,9 +197,10 @@ export default class WarCoreManager extends OBT_UIManager {
         return new Item_def[warScriptName](warCoreData);
     }
 
-    public getIWarCoreCtxById(warCoreCode: string): ItemWarCore {
+    public getIWarCoreCtxById(warCoreCode: string): Item_WarCore {
         let warCoreData: WarCoreInfo.I_WarCoreAttr = this.iWarCoreData.war_core_def[warCoreCode];
-        let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? "Item_WarCore" : "Item_" + warCoreData.code;
+        let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? "Item_WarCoreBaseWarCore" : "Item_WarCore" + warCoreCode;
+        console.log(warScriptName)
         return new Item_def[warScriptName](warCoreData);
     }
 
