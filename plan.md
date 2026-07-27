@@ -18,7 +18,7 @@
 
 ---
 
-BaseWeapon（数据层）
+WeaponBasic（数据层）
 * 处理武器数据，包括武器类型、伤害值、攻击范围、攻击间隔等、武器类型（普通、远程）等。
 
 AttackBehavior（逻辑层）

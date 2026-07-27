@@ -6,14 +6,14 @@
 import WeaponManager from "../../../CManager/WeaponManager";
 import { GamePlayEventOptions, ItemInfo, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
 import { copyObject } from "../../../Common/utils";
-import BaseWeapon from "../Weapons/BaseWeapon";
+import WeaponBasic from "../Weapons/WeaponBasic";
 import WeaponBase from "../Weapons/WeaponBase";
 import ItemBasic from "./ItemBasic";
 
 export default class ItemSpec extends ItemBasic {
     public props: ItemInfo.I_Item | WarCoreInfo.I_WarCoreAttr;
     // public weaponCtx: WeaponBase;
-    public weaponCtx: BaseWeapon;
+    public weaponCtx: WeaponBasic;
 
     constructor(itemData: ItemInfo.I_Item) {
         super(null)
@@ -37,14 +37,14 @@ export default class ItemSpec extends ItemBasic {
         if (!this.props.weapon) {
             return;
         }
-        const weaponCtx: BaseWeapon = WeaponManager.instance.getWeaponCtxById(this.props.weapon);
+        const weaponCtx: WeaponBasic = WeaponManager.instance.getIWeaponCtxById(this.props.weapon);
         if (!weaponCtx) {
             console.error('ItemSpec mountWeapon weaponCtx is null');
             return;
         }
         this.weaponCtx = weaponCtx;
         if (this.props.quality) {
-            this.weaponCtx.setQuality(this.props.quality);
+            // this.weaponCtx.setQuality(this.props.quality);
         }
     }
 

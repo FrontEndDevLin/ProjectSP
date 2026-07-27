@@ -3,9 +3,10 @@ import OBT_UIManager from "../Manager/OBT_UIManager";
 import { BulletInfo, WeaponInfo } from '../Common/Namespace';
 import DBManager from './DBManager';
 import WeaponBase from '../Controllers/GamePlay/Weapons/WeaponBase';
-import { Weapon_def } from '../Controllers/GamePlay/Weapons/Weapon_def';
+import { Weapon_def, IWeapon_def } from '../Controllers/GamePlay/Weapons/Weapon_def';
 import BulletManager from './BulletManager';
 import { copyObject } from '../Common/utils';
+import WeaponBasic from '../Controllers/GamePlay/Weapons/WeaponBasic';
 const { ccclass, property } = _decorator;
 
 export default class WeaponManager extends OBT_UIManager {
@@ -31,8 +32,8 @@ export default class WeaponManager extends OBT_UIManager {
         return copyObject(weaponData);
     }
 
-    public getIWeaponDataById(weaponId: string): WeaponInfo.IWeapon {
-        const weaponData: WeaponInfo.IWeapon = this.iWeaponData.weapon_def[weaponId];
+    public getIWeaponDataById(weaponCode: string): WeaponInfo.IWeapon {
+        const weaponData: WeaponInfo.IWeapon = this.iWeaponData.weapon_def[weaponCode];
         return copyObject(weaponData);
     }
 
@@ -48,5 +49,11 @@ export default class WeaponManager extends OBT_UIManager {
         return null;
     }
 
-    // TODO:
+    public getIWeaponCtxById(weaponCode: string): WeaponBasic {
+        const iWeaponData: WeaponInfo.IWeapon = this.getIWeaponDataById(weaponCode);
+        if (iWeaponData) {
+            return new IWeapon_def[weaponCode](iWeaponData);
+        }
+        return null;
+    }
 }
