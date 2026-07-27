@@ -12,22 +12,8 @@ export default class Item_WarCore extends ItemSpec {
     public upgrade_pool: string[];
 
     constructor(warCoreData: WarCoreInfo.I_WarCoreAttr) {
-        super(null);
-        const props: WarCoreInfo.I_WarCoreAttr = copyObject(warCoreData);
-        this.props = props;
-        if (props.weapon) {
-            // this.weaponCtx = WeaponManager.instance.getWeaponCtxById(props.weapon);
-        }
-        this.onInit();
+        super(warCoreData);
     }
 
-    protected onInit() {}
-
-    public onPassWave() {};
-
-    public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
-
-    public onEnterWave() {}
-
-    public onExitWave() {}
+    public onWarCoreAttack() {};
 }

@@ -47,4 +47,6 @@ export default class WeaponManager extends OBT_UIManager {
         }
         return null;
     }
+
+    // TODO:
 }

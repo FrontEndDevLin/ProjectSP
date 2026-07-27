@@ -6,12 +6,14 @@
 import WeaponManager from "../../../CManager/WeaponManager";
 import { GamePlayEventOptions, ItemInfo, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
 import { copyObject } from "../../../Common/utils";
+import BaseWeapon from "../Weapons/BaseWeapon";
 import WeaponBase from "../Weapons/WeaponBase";
 import ItemBasic from "./ItemBasic";
 
 export default class ItemSpec extends ItemBasic {
     public props: ItemInfo.I_Item | WarCoreInfo.I_WarCoreAttr;
-    public weaponCtx: WeaponBase;
+    // public weaponCtx: WeaponBase;
+    public weaponCtx: BaseWeapon;
 
     constructor(itemData: ItemInfo.I_Item) {
         super(null)
@@ -23,18 +25,34 @@ export default class ItemSpec extends ItemBasic {
             //     this.real_price = Math.round(this.props.price + wave + (this.props.price * 0.1 * wave) * CHRManager.instance.propCtx.getPropRealValue("item_price"));
             //     this.recover_price = Math.ceil(this.real_price * 0.25);
             // }
-            if (props.weapon) {
-                this.weaponCtx = WeaponManager.instance.getWeaponCtxById(itemData.weapon);
-                if (props.quality) {
-                    this.weaponCtx.setQuality(props.quality);
-                }
-            }
+            this.mountWeapon();
+        }
+
+        this.onInit();
+    }
+
+    protected onInit() {}
+
+    protected mountWeapon() {
+        if (!this.props.weapon) {
+            return;
+        }
+        const weaponCtx: BaseWeapon = WeaponManager.instance.getWeaponCtxById(this.props.weapon);
+        if (!weaponCtx) {
+            console.error('ItemSpec mountWeapon weaponCtx is null');
+            return;
+        }
+        this.weaponCtx = weaponCtx;
+        if (this.props.quality) {
+            this.weaponCtx.setQuality(this.props.quality);
         }
     }
 
     public onPassWave() {};
 
-    public onWarCoreAttack() {};
-
     public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
+
+    public onEnterWave() {}
+
+    public onExitWave() {}
 }

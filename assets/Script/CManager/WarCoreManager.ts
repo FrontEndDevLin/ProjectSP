@@ -32,6 +32,8 @@ export default class WarCoreManager extends OBT_UIManager {
     public warCoreItem: ItemBase = null;
     public warCoreWeapon: WeaponBase = null;
 
+    public iWarCore: Item_WarCore = null;
+
     protected unlockWarCore: boolean = false;
 
     // 当前核心等级
@@ -127,8 +129,8 @@ export default class WarCoreManager extends OBT_UIManager {
     private _setWarCore(warCoreCode: string) {
         const warCoreData: WarCoreInfo.I_WarCoreAttr = this.iWarCoreData.war_core_def[warCoreCode];
         if (warCoreData) {
-            const warCore = this.getIWarCoreCtxById(warCoreData.code);
-            warCore.use();
+            this.iWarCore = this.getIWarCoreCtxById(warCoreData.code);
+            this.iWarCore.use();
             // if (this.warCore.weapon) {
             //     this.warCoreWeapon = this.warCore.weaponCtx;
             //     this.updateRealAtkWarCore();
@@ -200,7 +202,7 @@ export default class WarCoreManager extends OBT_UIManager {
     public getIWarCoreCtxById(warCoreCode: string): Item_WarCore {
         let warCoreData: WarCoreInfo.I_WarCoreAttr = this.iWarCoreData.war_core_def[warCoreCode];
         let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? "Item_WarCoreBaseWarCore" : "Item_WarCore" + warCoreCode;
-        console.log(warScriptName)
+        // console.log(warScriptName)
         return new Item_def[warScriptName](warCoreData);
     }
 
