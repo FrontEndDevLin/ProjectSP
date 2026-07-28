@@ -10,6 +10,13 @@ import WeaponBasic from "../Weapons/WeaponBasic";
 import WeaponBase from "../Weapons/WeaponBase";
 import ItemBasic from "./ItemBasic";
 
+interface WeaponInitOptions {
+    // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
+    // itemRef: any;
+    // 武器挂载节点
+    mountNode: any;
+}
+
 export default class ItemSpec extends ItemBasic {
     // public weaponCtx: WeaponBase;
     public weaponCtx: WeaponBasic;
@@ -18,18 +25,21 @@ export default class ItemSpec extends ItemBasic {
 
     protected onInit() {}
 
-    public mountWeapon() {
+    public initWeapon(initOptions: WeaponInitOptions = { mountNode: null }) {
         if (!this.props.weapon) {
             return;
         }
         const weaponCtx: WeaponBasic = WeaponManager.instance.getIWeaponCtxById(this.props.weapon);
         if (!weaponCtx) {
-            console.error('ItemSpec mountWeapon weaponCtx is null');
+            console.error('ItemSpec initWeapon weaponCtx is null');
             return;
         }
         this.weaponCtx = weaponCtx;
         if (this.props.quality) {
             // this.weaponCtx.setQuality(this.props.quality);
+        }
+        if (initOptions.mountNode) {
+            // TODO
         }
         console.log('已挂载武器', this.weaponCtx);
     }

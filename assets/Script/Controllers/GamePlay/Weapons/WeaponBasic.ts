@@ -54,4 +54,9 @@ export default class WeaponBasic {
 
         // this.correctPanel();
     }
+
+    // 挂载攻击行为模块, 模块里实现挂载预制体, 警告检测, 攻击检测等
+    public mountBehaviorModule() {
+
+    }
 }
