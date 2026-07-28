@@ -7,7 +7,6 @@ import { copyObject } from "../../../Common/utils";
 import ItemSpec from "./ItemSpec";
 
 export default class Item_WarCore extends ItemSpec {
-    public props: WarCoreInfo.I_WarCoreAttr;
     public ico_gaming: string;
     public upgrade_pool: string[];
 

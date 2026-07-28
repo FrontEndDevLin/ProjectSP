@@ -4,7 +4,7 @@
 
 import { SpriteFrame } from "cc";
 import CHRManager from "../../../CManager/CHRManager";
-import { CHRInfo, ITEM_QUALITY, ItemInfo } from "../../../Common/Namespace";
+import { CHRInfo, ITEM_QUALITY, ItemInfo, WarCoreInfo } from "../../../Common/Namespace";
 import { copyObject, getDangerRichTxt, getSuccessRichTxt } from "../../../Common/utils";
 import OBT from "../../../OBT";
 import WeaponBase from "../Weapons/WeaponBase";
@@ -12,7 +12,7 @@ import WeaponManager from "../../../CManager/WeaponManager";
 import ProcessManager from "../../../CManager/ProcessManager";
 
 export default class ItemBasic {
-    public props: ItemInfo.I_Item;
+    public props: ItemInfo.I_Item | WarCoreInfo.I_WarCoreAttr;
 
     public count: number = 0;
     // 当前价格=(基础价格+当前波次+(基础价格*0.1*当前波次)*角色属性'%道具价格')
@@ -96,5 +96,5 @@ export default class ItemBasic {
         return true;
     }
 
-    public onUse() {}
+    protected onUse() {}
 }

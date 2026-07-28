@@ -131,6 +131,7 @@ export default class WarCoreManager extends OBT_UIManager {
         if (warCoreData) {
             this.iWarCore = this.getIWarCoreCtxById(warCoreData.code);
             this.iWarCore.use();
+            this.iWarCore.mountWeapon();
             // if (this.warCore.weapon) {
             //     this.warCoreWeapon = this.warCore.weaponCtx;
             //     this.updateRealAtkWarCore();
@@ -376,7 +377,7 @@ export default class WarCoreManager extends OBT_UIManager {
      */
 
     update(deltaTime: number) {
-        
+        // TODO: 在这里处理核心武器的攻击行为
     }
 }
 

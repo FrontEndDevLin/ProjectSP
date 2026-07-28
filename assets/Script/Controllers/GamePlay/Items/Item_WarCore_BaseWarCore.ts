@@ -7,10 +7,10 @@ import { copyObject } from "../../../Common/utils";
 import Item_WarCore from "./Item_WarCore";
 
 export default class Item_WarCore_BaseWarCore extends Item_WarCore {
-    protected onInit() {
-        // 在这里处理武器挂载
-        console.log('Item_WarCore_BaseWarCore onInit');
-    }
+    // protected onInit() {
+    //     // 在这里处理武器挂载
+    //     console.log('Item_WarCore_BaseWarCore onInit');
+    // }
 
     public onPassWave() {};
 

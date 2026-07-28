@@ -1,7 +1,7 @@
 import WeaponBase from "./WeaponBase";
 import WeaponOrbitsAtkWarCore from "./Weapon_OrbitsAtkWarCore";
 
-import WeaponBasic from "./WeaponBasic";
+import WeaponBaseFlyBullet from "./Weapon_BaseFlyBullet";
 
 export namespace Weapon_def {
     export const Weapon_Base = WeaponBase;
@@ -12,5 +12,5 @@ export namespace Weapon_def {
 }
 
 export namespace IWeapon_def {
-    export const IWeapon_Base = WeaponBasic;
+    export const Weapon_BaseFlyBullet = WeaponBaseFlyBullet;
 }

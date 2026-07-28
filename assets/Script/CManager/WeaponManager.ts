@@ -24,7 +24,7 @@ export default class WeaponManager extends OBT_UIManager {
         }
 
         this.weaponData = DBManager.instance.getDBData("Weapon");
-        this.iWeaponData = DBManager.instance.getDBData("IWeapon");
+        this.iWeaponData = DBManager.instance.getDBData("I_Weapon");
     }
 
     public getWeaponDataById(weaponId: string): WeaponInfo.Weapon {
@@ -52,7 +52,11 @@ export default class WeaponManager extends OBT_UIManager {
     public getIWeaponCtxById(weaponCode: string): WeaponBasic {
         const iWeaponData: WeaponInfo.IWeapon = this.getIWeaponDataById(weaponCode);
         if (iWeaponData) {
-            return new IWeapon_def[weaponCode](iWeaponData);
+            if (IWeapon_def[weaponCode]) {
+                return new IWeapon_def[weaponCode](iWeaponData);
+            } else {
+                console.error(`IWeapon_def 不存在 ${weaponCode}`);
+            }
         }
         return null;
     }

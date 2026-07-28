@@ -13,13 +13,6 @@ import BulletManager from "../../../CManager/BulletManager";
 import WarCoreManager from "../../../CManager/WarCoreManager";
 import WeaponManager from "../../../CManager/WeaponManager";
 
-interface WeaponInitOptions {
-    // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
-    itemRef: any;
-    // 武器挂载节点
-    mountNode: any;
-}
-
 export default class WeaponBasic {
     // 武器品质
     public quality: ITEM_QUALITY;
@@ -32,13 +25,15 @@ export default class WeaponBasic {
     // 攻击行为, 子类需要实现, 暂时使用string类型
     protected attackBehavior: string;
 
-    constructor(weaponId: string, options: WeaponInitOptions) {
-        const weaponData: WeaponInfo.IWeapon = WeaponManager.instance.getIWeaponDataById(weaponId);
+    // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
+    // public itemRef: any;
+    // // 武器挂载节点
+    // public mountNode: any;
+
+    constructor(weaponData: WeaponInfo.IWeapon) {
         this.curInf = weaponData;
         this.orgInf = copyObject(weaponData);
     }
-
-    // TODO: 决定武器挂载节点和道具引用
 
     public updatePanel() {
         if (!this.orgInf) {

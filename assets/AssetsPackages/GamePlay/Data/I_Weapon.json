@@ -13,8 +13,8 @@
         "boost": "受到的属性加成, 值为百分比"
     },
     "weapon_def": {
-        "Weapon_BaseAtkWarCore": {
-            "code": "Weapon_BaseAtkWarCore",
+        "Weapon_BaseFlyBullet": {
+            "code": "Weapon_BaseFlyBullet",
             "type": 2,
             "intro": "基础飞弹攻击",
             "bullet": "CHR_Bullet001",

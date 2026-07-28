@@ -16,7 +16,7 @@
             "global": 2,
             "intro": "发射基础飞弹进行攻击",
             "type": 1,
-            "weapon": "Weapon_BaseWarCore"
+            "weapon": "Weapon_BaseFlyBullet"
         }
     },
     "pub_war_core": []

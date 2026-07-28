@@ -11,29 +11,14 @@ import WeaponBase from "../Weapons/WeaponBase";
 import ItemBasic from "./ItemBasic";
 
 export default class ItemSpec extends ItemBasic {
-    public props: ItemInfo.I_Item | WarCoreInfo.I_WarCoreAttr;
     // public weaponCtx: WeaponBase;
     public weaponCtx: WeaponBasic;
 
-    constructor(itemData: ItemInfo.I_Item) {
-        super(null)
-        if (itemData) {
-            const props: ItemInfo.I_Item = copyObject(itemData);
-            this.props = props;
-            // if (itemData.global === ItemInfo.Global.ITEM) {
-            //     let wave: number = ProcessManager.instance.waveRole.wave
-            //     this.real_price = Math.round(this.props.price + wave + (this.props.price * 0.1 * wave) * CHRManager.instance.propCtx.getPropRealValue("item_price"));
-            //     this.recover_price = Math.ceil(this.real_price * 0.25);
-            // }
-            this.mountWeapon();
-        }
-
-        this.onInit();
-    }
+    protected onUse() {}
 
     protected onInit() {}
 
-    protected mountWeapon() {
+    public mountWeapon() {
         if (!this.props.weapon) {
             return;
         }
@@ -46,6 +31,7 @@ export default class ItemSpec extends ItemBasic {
         if (this.props.quality) {
             // this.weaponCtx.setQuality(this.props.quality);
         }
+        console.log('已挂载武器', this.weaponCtx);
     }
 
     public onPassWave() {};

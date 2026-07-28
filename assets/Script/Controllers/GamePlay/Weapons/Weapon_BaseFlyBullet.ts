@@ -12,6 +12,8 @@ import WarCoreManager from "../../../CManager/WarCoreManager";
 import WeaponManager from "../../../CManager/WeaponManager";
 import WeaponBasic from "./WeaponBasic";
 
+// TODO: 这个文件可以作废，每个武器都用同一个通用的数据类(WeaponBasic), 只需要定义不同的攻击行为
+
 interface WeaponInitOptions {
     // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
     itemRef: any;
@@ -22,11 +24,6 @@ interface WeaponInitOptions {
 export default class Weapon_BaseFlyBullet extends WeaponBasic {
     // 武器品质
     public quality: ITEM_QUALITY;
-
-    // 当前武器数据
-    public curInf: WeaponInfo.IWeapon;
-    // 原始武器数据
-    public orgInf: WeaponInfo.IWeapon;
 
     // 攻击行为, 子类需要实现, 暂时使用string类型
     protected attackBehavior: string;
