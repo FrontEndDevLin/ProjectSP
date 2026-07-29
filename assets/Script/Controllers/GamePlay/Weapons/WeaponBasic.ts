@@ -22,8 +22,10 @@ export default class WeaponBasic {
     // 原始武器数据
     public orgInf: WeaponInfo.IWeapon;
 
-    // 攻击行为, 子类需要实现, 暂时使用string类型
+    // 攻击行为, 子类需要赋值, 暂时使用string类型
     protected attackBehavior: string;
+    // 预制体名称
+    protected prefabName: string;
 
     // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
     // public itemRef: any;
@@ -58,5 +60,7 @@ export default class WeaponBasic {
     // 挂载攻击行为模块, 模块里实现挂载预制体, 警告检测, 攻击检测等
     public mountBehaviorModule(mountNode: Node) {
         // 挂载对应武器的预制体, 和对应的行为脚本
+
+        // 加载后要顺便拿到攻击行为脚本组件, 指向到 this.attackBehavior
     }
 }

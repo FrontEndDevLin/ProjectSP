@@ -25,8 +25,8 @@ export default class Weapon_BaseFlyBullet extends WeaponBasic {
     // 武器品质
     public quality: ITEM_QUALITY;
 
-    // 攻击行为, 子类需要实现, 暂时使用string类型
-    protected attackBehavior: string;
+    protected attackBehavior: "RangeBehavior_BaseFlyBullet";
+    protected prefabName: "";
 
     public updatePanel() {
         if (!this.orgInf) {
