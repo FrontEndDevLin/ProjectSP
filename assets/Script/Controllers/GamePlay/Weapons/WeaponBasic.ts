@@ -4,7 +4,7 @@
  * 处理武器数据，包括武器类型、伤害值、攻击范围、攻击间隔等、武器类型（普通、远程）等。
  */
 
-import { SpriteFrame } from "cc";
+import { SpriteFrame, Node } from "cc";
 import CHRManager from "../../../CManager/CHRManager";
 import { BoostConfig, BulletInfo, COLOR, Common, ITEM_QUALITY, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
 import { copyObject, getDangerRichTxt, getFloatNumber, getSuccessRichTxt } from "../../../Common/utils";
@@ -56,7 +56,7 @@ export default class WeaponBasic {
     }
 
     // 挂载攻击行为模块, 模块里实现挂载预制体, 警告检测, 攻击检测等
-    public mountBehaviorModule() {
-
+    public mountBehaviorModule(mountNode: Node) {
+        // 挂载对应武器的预制体, 和对应的行为脚本
     }
 }

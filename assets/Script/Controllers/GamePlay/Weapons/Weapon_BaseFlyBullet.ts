@@ -12,7 +12,7 @@ import WarCoreManager from "../../../CManager/WarCoreManager";
 import WeaponManager from "../../../CManager/WeaponManager";
 import WeaponBasic from "./WeaponBasic";
 
-// TODO: 这个文件可以作废，每个武器都用同一个通用的数据类(WeaponBasic), 只需要定义不同的攻击行为
+// 定义武器预制体, 包含武器的模型, 和武器的行为脚本
 
 interface WeaponInitOptions {
     // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)

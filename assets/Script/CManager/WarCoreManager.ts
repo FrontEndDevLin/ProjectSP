@@ -131,7 +131,7 @@ export default class WarCoreManager extends OBT_UIManager {
         if (warCoreData) {
             this.iWarCore = this.getIWarCoreCtxById(warCoreData.code);
             this.iWarCore.use();
-            this.iWarCore.initWeapon();
+            this.iWarCore.initWeapon({ mountNode: this.warCoreRootNode });
             // if (this.warCore.weapon) {
             //     this.warCoreWeapon = this.warCore.weaponCtx;
             //     this.updateRealAtkWarCore();

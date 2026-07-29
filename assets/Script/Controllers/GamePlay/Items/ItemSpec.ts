@@ -39,9 +39,9 @@ export default class ItemSpec extends ItemBasic {
             // this.weaponCtx.setQuality(this.props.quality);
         }
         if (initOptions.mountNode) {
-            // TODO
+            weaponCtx.mountBehaviorModule(initOptions.mountNode);
+            console.log('已挂载武器', this.weaponCtx);
         }
-        console.log('已挂载武器', this.weaponCtx);
     }
 
     public onPassWave() {};
