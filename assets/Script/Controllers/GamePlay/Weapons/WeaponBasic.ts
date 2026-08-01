@@ -12,6 +12,7 @@ import OBT from "../../../OBT";
 import BulletManager from "../../../CManager/BulletManager";
 import WarCoreManager from "../../../CManager/WarCoreManager";
 import WeaponManager from "../../../CManager/WeaponManager";
+import OBT_UIManager from "../../../Manager/OBT_UIManager";
 
 export default class WeaponBasic {
     // 武器品质
@@ -60,7 +61,8 @@ export default class WeaponBasic {
     // 挂载攻击行为模块, 模块里实现挂载预制体, 警告检测, 攻击检测等
     public mountBehaviorModule(mountNode: Node) {
         // 挂载对应武器的预制体, 和对应的行为脚本
-
         // 加载后要顺便拿到攻击行为脚本组件, 指向到 this.attackBehavior
+        // this.showPrefab({ prefabPath: `WarCore/${warCoreData.code}`, parentNode: this.warCoreRootNode, scriptName: warCoreData.code });
+        const weaponNode: Node = OBT_UIManager.instance.loadPrefab({ prefabPath: this.prefabName, scriptName: this.attackBehavior });
     }
 }
