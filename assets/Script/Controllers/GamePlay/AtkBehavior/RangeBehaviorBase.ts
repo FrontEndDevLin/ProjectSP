@@ -8,6 +8,7 @@ const { ccclass, property } = _decorator;
 @ccclass('RangeBehaviorBase')
 export class RangeBehaviorBase extends BehaviorBase {
     start() {
+        super.start();
         console.log('挂载远程攻击行为组件 RangeBehaviorBase');
     }
 

@@ -132,6 +132,8 @@ export default class WarCoreManager extends OBT_UIManager {
             this.iWarCore = this.getIWarCoreCtxById(warCoreData.code);
             this.iWarCore.use();
             this.iWarCore.initWeapon({ mountNode: this.warCoreRootNode });
+
+            console.log(this.warCoreRootNode)
             // if (this.warCore.weapon) {
             //     this.warCoreWeapon = this.warCore.weaponCtx;
             //     this.updateRealAtkWarCore();
@@ -359,25 +361,13 @@ export default class WarCoreManager extends OBT_UIManager {
         OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
     }
 
-
-    /**
-     * 黑岩石1200+600
-     * 精致凿1200  
-     * 松煤600  740
-     * 烟罗袋60
-     * 镶金5
-     * 
-     * 风行石
-     * =10黑曜+5黑玛瑙+1烟罗袋
-     * =20黑岩+20精致凿+10黑岩+10松煤
-     * 
-     * 风行石x60
-     * =600黑曜+300黑玛瑙+60烟罗袋
-     * =1200黑岩+1200精致凿+600黑岩+600松煤
-     */
-
     update(deltaTime: number) {
-        // TODO: 在这里处理核心武器的攻击行为
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
+        if (this.iWarCore && this.iWarCore.weaponCtx) {
+            this.iWarCore.weaponCtx.runBehavior(deltaTime);
+        }
     }
 }
 

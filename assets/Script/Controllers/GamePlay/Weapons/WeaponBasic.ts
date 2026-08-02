@@ -4,7 +4,7 @@
  * 处理武器数据，包括武器类型、伤害值、攻击范围、攻击间隔等、武器类型（普通、远程）等。
  */
 
-import { SpriteFrame, Node } from "cc";
+import { SpriteFrame, Node, Component } from "cc";
 import CHRManager from "../../../CManager/CHRManager";
 import { BoostConfig, BulletInfo, COLOR, Common, ITEM_QUALITY, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
 import { copyObject, getDangerRichTxt, getFloatNumber, getSuccessRichTxt } from "../../../Common/utils";
@@ -12,7 +12,8 @@ import OBT from "../../../OBT";
 import BulletManager from "../../../CManager/BulletManager";
 import WarCoreManager from "../../../CManager/WarCoreManager";
 import WeaponManager from "../../../CManager/WeaponManager";
-import OBT_UIManager from "../../../Manager/OBT_UIManager";
+import OBT_UIManager, { NodeAndCxtComponent } from "../../../Manager/OBT_UIManager";
+import { BehaviorBase } from "../AtkBehavior/BehaviorBase";
 
 export default class WeaponBasic {
     // 武器品质
@@ -23,10 +24,12 @@ export default class WeaponBasic {
     // 原始武器数据
     public orgInf: WeaponInfo.IWeapon;
 
-    // 攻击行为, 子类需要赋值, 暂时使用string类型
-    protected attackBehavior: string;
+    // 行为, 子类需要赋值, 暂时使用string类型
+    protected behavior: string;
     // 预制体名称
     protected prefabName: string;
+    // 行为组件
+    protected behaviorCtx: BehaviorBase;
 
     // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
     // public itemRef: any;
@@ -60,9 +63,21 @@ export default class WeaponBasic {
 
     // 挂载攻击行为模块, 模块里实现挂载预制体, 警告检测, 攻击检测等
     public mountBehaviorModule(mountNode: Node) {
+        if (!this.prefabName || !this.behavior) {
+            console.log(`武器预设体或行为未定义, 预设体: ${this.prefabName}, 行为: ${this.behavior}`);
+            return;
+        }
         // 挂载对应武器的预制体, 和对应的行为脚本
-        // 加载后要顺便拿到攻击行为脚本组件, 指向到 this.attackBehavior
-        // this.showPrefab({ prefabPath: `WarCore/${warCoreData.code}`, parentNode: this.warCoreRootNode, scriptName: warCoreData.code });
-        const weaponNode: Node = OBT_UIManager.instance.loadPrefab({ prefabPath: this.prefabName, scriptName: this.attackBehavior });
+        // 加载后要顺便拿到攻击行为脚本组件, 指向到 this.behavior
+        const nodeAndCtx: NodeAndCxtComponent = WeaponManager.instance.loadPrefabAndScript({ prefabPath: `Weapon/${this.prefabName}`, scriptName: this.behavior });
+        this.behaviorCtx = nodeAndCtx.ctx as BehaviorBase;
+        this.behaviorCtx.setWeaponRef(this);
+        WeaponManager.instance.mountNode({ parentNode: mountNode, node: nodeAndCtx.node });
+    }
+
+    public runBehavior(deltaTime: number) {
+        if (this.behaviorCtx) {
+            this.behaviorCtx.runBehavior(deltaTime);
+        }
     }
 }

@@ -26,6 +26,10 @@ interface MountEmptyNodeOptions {
     nodeName: string,
     parentNode?: Node
 }
+export interface NodeAndCxtComponent {
+    node: Node,
+    ctx: Component
+}
 
 export default class OBT_UIManager extends OBT_Component {
     static instance: OBT_UIManager = null;
@@ -65,6 +69,28 @@ export default class OBT_UIManager extends OBT_Component {
             }
         }
         return uiNode;
+    }
+    public loadPrefabAndScript(loadPrefabOptions: LoadPrefabOptions): NodeAndCxtComponent {
+        let { prefabPath, scriptName } = loadPrefabOptions;
+        let uiPrefab: Prefab = OBT_ResourceManager.instance.getPrefabAssets(prefabPath) as Prefab;
+        if (!uiPrefab) {
+            return null;
+        }
+        const uiNode: Node = instantiate(uiPrefab);
+        let ctx: Component = null;
+        if (scriptName !== 'NONE') {
+            scriptName = scriptName || uiNode.name;
+            try {
+                ctx = uiNode.addComponent(scriptName);
+            } catch (error) {
+                console.info(`[OBT_UIManager]:showUI:prefab add script ${scriptName} error`);
+                console.info(error);
+            }
+        }
+        return {
+            node: uiNode,
+            ctx
+        };
     }
     public mountNode(mountNodeOptions: MountNodeOptions): Node {
         let { node, parentNode = this.rootNode } = mountNodeOptions;
