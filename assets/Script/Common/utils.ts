@@ -72,8 +72,24 @@ export const shuffleArray = function (ary: any[]): any[] {
 }
 
 export const copyObject = function (object: any): any {
+  if (object === null || typeof object !== 'object') {
+    return object;
+  }
+  
+  if (object instanceof Array) {
+    const newArray: any[] = [];
+    for (let i = 0; i < object.length; i++) {
+      newArray.push(copyObject(object[i]));
+    }
+    return newArray;
+  }
+  
   const newObject: any = {};
-  Object.assign(newObject, object);
+  for (const key in object) {
+    if (object.hasOwnProperty(key)) {
+      newObject[key] = copyObject(object[key]);
+    }
+  }
   return newObject;
 }
 

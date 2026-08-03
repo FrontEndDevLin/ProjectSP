@@ -42,9 +42,9 @@
                 "bullet_particle": 4,
                 "dmg_txt": 5
             },
-            "spawn_roles": [
-            ],
             "spawn_roles_": [
+            ],
+            "spawn_roles": [
                 {
                     "enemy_type": "EMY_Peace",
                     "spawn_total": 4,

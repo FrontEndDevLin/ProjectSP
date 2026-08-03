@@ -19,6 +19,9 @@ export default class WeaponBasic {
     // 武器品质
     public quality: ITEM_QUALITY;
 
+    // 攻击冷却
+    public cd: number = 0;
+
     // 当前武器数据
     public curInf: WeaponInfo.IWeapon;
     // 原始武器数据
@@ -39,6 +42,12 @@ export default class WeaponBasic {
     constructor(weaponData: WeaponInfo.IWeapon) {
         this.curInf = weaponData;
         this.orgInf = copyObject(weaponData);
+    }
+
+    public finishAttack(): boolean {
+        this.cd = this.curInf.cd[this.quality - 1] || this.curInf.cd[0];
+        console.log(this.cd)
+        return true;
     }
 
     public updatePanel() {
@@ -68,7 +77,7 @@ export default class WeaponBasic {
             return;
         }
         // 挂载对应武器的预制体, 和对应的行为脚本
-        // 加载后要顺便拿到攻击行为脚本组件, 指向到 this.behavior
+        // 加载后拿到攻击行为脚本组件, 指向到 this.behavior
         const nodeAndCtx: NodeAndCxtComponent = WeaponManager.instance.loadPrefabAndScript({ prefabPath: `Weapon/${this.prefabName}`, scriptName: this.behavior });
         this.behaviorCtx = nodeAndCtx.ctx as BehaviorBase;
         this.behaviorCtx.setWeaponRef(this);

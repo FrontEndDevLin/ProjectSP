@@ -160,7 +160,11 @@ export class EMY_Base extends OBT_Component {
                 if (isPenetrate) {
                     penDmg = otherCollider.node.OBT_param2.attr.pen_dmg;
                 }
-                let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate, isGroupReduce, penDmg);
+                // let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate, isGroupReduce, penDmg);
+                let damageAttr: DamageInfo.DamageAttr = {
+                    dmg: 5,
+                    isCtitical: false
+                };
                 // damageAttr.isCtitical // 暴击
                 let dmg = damageAttr.dmg;
                 if (damageAttr.isCtitical) {

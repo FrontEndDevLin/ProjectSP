@@ -7,13 +7,18 @@ const { ccclass, property } = _decorator;
 
 /**
  * 攻击行为组件
+ * 
+ * 未考虑敌人攻击，敌人攻击时不检测攻击范围
+ * 可能要区分两个类, 一个是角色武器的攻击, 一个是敌人攻击
  */
 @ccclass('BehaviorBase')
 export class BehaviorBase extends OBT_Component {
     protected weaponRef: WeaponBasic = null;
 
-    // 是否一直处于攻击状态
-    protected alwaysAttack: boolean = false;
+    // 是否一直处于攻击状态, 这个状态下不考虑cd
+    protected isAlwaysAttack: boolean = false;
+
+    protected isAttacking: boolean = false;  
 
     // 警戒碰撞盒
     protected alertDomainCollider: CircleCollider2D = null;
@@ -86,41 +91,54 @@ export class BehaviorBase extends OBT_Component {
         }
     }
     // 每帧检查队列中对应节点距离角色的距离
-    protected chooseTarget(callback: EMYInfo.ChooseTargetCallback) {
+    protected chooseTarget(): EMYInfo.ChooseTargetRes {
         // 优先判断攻击范围内的敌人
         if (Object.keys(this.dangerEnemyList).length) {
             let target: EMYInfo.RealTimeInfo = EMYManager.instance.getNearestEnemy(this.dangerEnemyList);
-            callback(true, target);
-            return;
+            return { isCanBeAttacked: true, realTimeEnemyInfo: target };
         }
         // 攻击范围内无敌人，再判断警戒范围内的敌人
         if (Object.keys(this.highEnemyList).length) {
             let target: EMYInfo.RealTimeInfo = EMYManager.instance.getNearestEnemy(this.highEnemyList);
-            callback(false, target);
-            return;
+            return { isCanBeAttacked: false, realTimeEnemyInfo: target };
         }
-        callback(false, null);
+        return { isCanBeAttacked: false, realTimeEnemyInfo: null };
     }
 
     public setWeaponRef(weaponRef: WeaponBasic) {
         this.weaponRef = weaponRef;
     }
 
-    protected tryAttack(dt: number) {
-        // if (this.weaponRef.curInf.cd) {
-        //     this._attack(dt);
-        // } else {
-        //     this._cd -= dt;
-        // }
+    protected isCdOver(dt: number): boolean {
+        if (this.weaponRef.cd <= 0) {
+            return true;
+        } else {
+            this.weaponRef.cd -= dt;
+            return false;
+        }
     }
-    protected execAttack(deltaTime: number) {}
+    protected execAttack(deltaTime: number, target?: EMYInfo.RealTimeInfo) {}
+    protected finishAttack() {
+        this.weaponRef.finishAttack();
+        this.isAttacking = false;
+    }
 
     public runBehavior(deltaTime: number) {
-        console.log('运行攻击行为');
-        if (this.alwaysAttack) {
+        if (this.isAlwaysAttack) {
             this.execAttack(deltaTime);
         } else {
-            
+            if (this.isAttacking) {
+                return;
+            }
+            if (this.isCdOver(deltaTime)) {
+                let target: EMYInfo.ChooseTargetRes = this.chooseTarget();
+                if (target.isCanBeAttacked) {
+                    this.isAttacking = true;
+                    this.execAttack(deltaTime, target.realTimeEnemyInfo);
+                } else {
+                    console.log('无可攻击目标');
+                }
+            }
         }
     }
 }

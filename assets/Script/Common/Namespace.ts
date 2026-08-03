@@ -518,10 +518,10 @@ export namespace WeaponInfo {
         intro: string,
         bullet: string,
         quality: ITEM_QUALITY,
-        damage: string,
+        damage: number[],
         range: number,
-        cd: string,
-        ctl: string[],
+        cd: number[],
+        ctl: number[],
         ctl_dmg_rate: number,
         blt_speed: number,
         blt_max_dis: number,
@@ -588,7 +588,12 @@ export namespace EMYInfo {
     }
     
     export interface ChooseTargetCallback {
-        (isCanBeAttacked?: any, realTimeEnemyInfo?: RealTimeInfo): void
+        (isCanBeAttacked?: any, target?: RealTimeInfo): void
+    }
+
+    export interface ChooseTargetRes {
+        isCanBeAttacked: boolean,
+        realTimeEnemyInfo: RealTimeInfo
     }
 
     export interface CreateAnEnemyParams {

@@ -1,5 +1,10 @@
-import { _decorator } from 'cc';
+import { _decorator, Vec3 } from 'cc';
 import { RangeBehaviorBase } from './RangeBehaviorBase';
+import { EMYInfo } from '../../../Common/Namespace';
+import CHRManager from '../../../CManager/CHRManager';
+import { getVectorByAngle } from '../../../Common/utils';
+import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
+import BulletManager from '../../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -16,7 +21,30 @@ export class RangeBehavior_BaseFlyBullet extends RangeBehaviorBase {
     protected onLoad(): void {
     }
 
-    public runBehavior(deltaTime: number) {
-        console.log('运行远程攻击行为-基础飞弹');
+    execAttack(deltaTime: number, target: EMYInfo.RealTimeInfo) {
+        if (!target) {
+            return;
+        }
+
+        // 通知BulletManager发射子弹，带上当前坐标，向量
+        const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
+        if (!chrLoc) {
+            return;
+        }
+        let vecX = target.x - chrLoc.x;
+        let vecY = target.y - chrLoc.y;
+        let angle = Number((Math.atan(vecY / vecX) * (180 / Math.PI)).toFixed(2));
+        if (vecX < 0) {
+            angle -= 180;
+        }
+        let vector = getVectorByAngle(angle);
+
+        // console.log(Vec3.angle(v3(1,0,0), {x: vecX, y: vecY, z: 0}));
+        // console.log(Number((Math.atan(vecY / vecX)).toFixed(2)));
+        // 向量要根据贴图的旋转角度计算
+        BulletManager.instance.createBulletByCHR({ bulletId: this.weaponRef.curInf.bullet, position: chrLoc, vector });
+        // this._attacking = true;
+        RealTimeEventManager.instance.onWarCoreAttack();
+        this.finishAttack();
     }
 }
