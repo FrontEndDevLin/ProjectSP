@@ -37,6 +37,9 @@ interface BulletPoolMap {
  * 生成子弹时直接设置好子弹的伤害
  * 生成友军子弹时, 伤害由武器结合角色属性计算
  * 生成敌人子弹时, 伤害由武器结合当前波次修正值计算
+ * 
+ * 子弹与目标碰撞时，只使用子弹的onBeginContact方法
+ * 实现一个战斗管理类，在子弹碰撞回调中调用该类的方法处理伤害
  */
 
 /**
@@ -47,6 +50,7 @@ export default class BulletManager extends OBT_UIManager {
     public bulletRootNode: Node = null;
 
     public bulletData: BulletInfo.BulletDBData = {};
+    public ibulletData: BulletInfo.IBulletDBData = {};
 
     // 存储当前装备的武器的弹头数据
     // private _bulletCldMap: BulletInfo.BulletCldData = {};
@@ -71,7 +75,7 @@ export default class BulletManager extends OBT_UIManager {
         this.particleCtrl = new BulletParticleCtrl();
 
         this.bulletData = DBManager.instance.getDBData("Bullet");
-        
+        this.ibulletData = DBManager.instance.getDBData("I_Bullet");
         // this._initBulletCldMap();
     }
 
@@ -98,7 +102,7 @@ export default class BulletManager extends OBT_UIManager {
         }
         this._nodePoolMap = {};
         configList.forEach(({ bulletId, count }) => {
-            const bulletAttr: BulletInfo.BulletAttr = this.bulletData[bulletId];
+            const bulletAttr: BulletInfo.IBulletAttr = this.ibulletData[bulletId];
             if (!this._nodePoolMap[bulletId]) {
                 this._nodePoolMap[bulletId] = new NodePool();
             }

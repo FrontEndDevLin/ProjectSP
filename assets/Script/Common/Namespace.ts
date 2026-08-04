@@ -690,6 +690,10 @@ export namespace BulletInfo {
         [bulletId: string]: BulletAttr
     }
 
+    export interface IBulletDBData {
+        [bulletId: string]: IBulletAttr
+    }
+
     export interface BulletRealTimeAttr {
         bulletId: string,
         base_dmg: number,
