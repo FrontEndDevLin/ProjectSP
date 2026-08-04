@@ -52,6 +52,16 @@ export class BulletBasic extends OBT_Component {
     }
 
     protected _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        // 判断otherCollider是否是敌人
+        switch (otherCollider.group) {
+            case GameCollider.GROUP.ENEMY: {
+
+            } break;
+            case GameCollider.GROUP.CHR: {
+
+            } break;
+        }
+
         // if (otherCollider.group === GameCollider.GROUP.ENEMY) {
         //     // if (otherCollider.node.OBT_param2 && this.ignoreList.indexOf(otherCollider.node.OBT_param2.id) !== -1) {
         //     //     console.log(`bullet触发忽略`);
