@@ -130,6 +130,7 @@ export class EMY_Base extends OBT_Component {
     protected onHpReduce() {}
 
     protected onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        return;
         if (!this.alive || !ProcessManager.instance.isOnPlaying()) {
             return;
         }

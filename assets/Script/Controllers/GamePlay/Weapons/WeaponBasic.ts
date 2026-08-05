@@ -23,7 +23,7 @@ export default class WeaponBasic {
     public cd: number = 0;
 
     // 当前武器数据
-    public curInf: WeaponInfo.IWeapon;
+    public curInf: WeaponInfo.WeaponRealTimeProps;
     // 原始武器数据
     public orgInf: WeaponInfo.IWeapon;
 
@@ -40,13 +40,31 @@ export default class WeaponBasic {
     // public mountNode: any;
 
     constructor(weaponData: WeaponInfo.IWeapon) {
-        this.curInf = weaponData;
-        this.orgInf = copyObject(weaponData);
+        this.orgInf = weaponData;
+        this.initCurInf();
+    }
+
+    protected initCurInf() {
+        let nAryKey = ["damage", "cd", "ctl"];
+        let curInf: any = {};
+        for (let key in this.orgInf) {
+            if (nAryKey.indexOf(key) !== -1) {
+                curInf[key] = this.orgInf[key][this.quality - 1] || this.orgInf[key][0];
+            } else if (key === 'boost') {
+                let boost = {};
+                for (let propKey in this.orgInf[key]) {
+                    boost[propKey] = this.orgInf[key][propKey][this.quality - 1] || this.orgInf[key][propKey][0];
+                }
+                curInf[key] = boost;
+            } else {
+                curInf[key] = this.orgInf[key];
+            }
+        }
+        this.curInf = curInf;
     }
 
     public finishAttack(): boolean {
-        this.cd = this.curInf.cd[this.quality - 1] || this.curInf.cd[0];
-        console.log(this.cd)
+        this.cd = this.curInf.cd;
         return true;
     }
 

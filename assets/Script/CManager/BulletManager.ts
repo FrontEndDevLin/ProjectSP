@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, Vec3, tween, v3, find, NodePool } from 'cc';
 import OBT_UIManager from '../Manager/OBT_UIManager';
-import { BoostConfig, BulletInfo, COLOR, Common, GameCollider, GameConfigInfo, ITEM_QUALITY } from '../Common/Namespace';
+import { BoostConfig, BulletInfo, COLOR, Common, GameCollider, GameConfigInfo, ITEM_QUALITY, WeaponInfo } from '../Common/Namespace';
 import OBT from '../OBT';
 import DBManager from './DBManager';
 import { BulletParticleCtrl } from './Class/BulletParticleCtrl';
@@ -10,10 +10,17 @@ import DamageManager from './DamageManager';
 import CHRManager from './CHRManager';
 import { copyObject } from '../Common/utils';
 import WarCoreManager from './WarCoreManager';
+import { BulletBasic } from '../Controllers/GamePlay/Bullet/BulletBasic';
 const { ccclass, property } = _decorator;
 
 interface BulletPoolMap {
     [bulletId: string]: NodePool
+}
+
+export interface CreateIBulletParams {
+    weaponRealTimeProps: WeaponInfo.WeaponRealTimeProps,
+    position: Vec3,
+    vector: Vec3
 }
 
 /**
@@ -50,7 +57,7 @@ export default class BulletManager extends OBT_UIManager {
     public bulletRootNode: Node = null;
 
     public bulletData: BulletInfo.BulletDBData = {};
-    public ibulletData: BulletInfo.IBulletDBData = {};
+    public iBulletData: BulletInfo.IBulletDBData = {};
 
     // 存储当前装备的武器的弹头数据
     // private _bulletCldMap: BulletInfo.BulletCldData = {};
@@ -75,7 +82,7 @@ export default class BulletManager extends OBT_UIManager {
         this.particleCtrl = new BulletParticleCtrl();
 
         this.bulletData = DBManager.instance.getDBData("Bullet");
-        this.ibulletData = DBManager.instance.getDBData("I_Bullet");
+        this.iBulletData = DBManager.instance.getDBData("I_Bullet");
         // this._initBulletCldMap();
     }
 
@@ -102,7 +109,7 @@ export default class BulletManager extends OBT_UIManager {
         }
         this._nodePoolMap = {};
         configList.forEach(({ bulletId, count }) => {
-            const bulletAttr: BulletInfo.IBulletAttr = this.ibulletData[bulletId];
+            const bulletAttr: BulletInfo.IBulletAttr = this.iBulletData[bulletId];
             if (!this._nodePoolMap[bulletId]) {
                 this._nodePoolMap[bulletId] = new NodePool();
             }
@@ -153,6 +160,22 @@ export default class BulletManager extends OBT_UIManager {
             boost,
             repel
         }
+    }
+
+    public createIBullet({ weaponRealTimeProps, position, vector }: CreateIBulletParams): Node {
+        const bulletAttr: BulletInfo.IBulletAttr = this.iBulletData[weaponRealTimeProps.bullet];
+        const nodePool = this._nodePoolMap[weaponRealTimeProps.bullet];
+        let bulletNode: Node = nodePool ? nodePool.get() : null;
+        if (!bulletNode) {
+            bulletNode = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
+        }
+
+        const scriptComp: BulletBasic = bulletNode.getComponent(BulletBasic);
+        scriptComp.init({ bulletAttr, weaponRealTimeProps, position, vector });
+
+        this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
+
+        return bulletNode;
     }
 
     public createBullet({ bulletId, position, vector }: BulletInfo.CreateBulletNodeParams): Node {

@@ -1,10 +1,15 @@
 import { _decorator, BoxCollider2D, Component, Contact2DType, Game, Node, Sprite, v3, Vec3 } from 'cc';
 // import { BulletAttr, BulletInitParams } from '../../Interface';
 import OBT_Component from '../../../OBT_Component';
-import { BulletInfo, GameCollider } from '../../../Common/Namespace';
+import { BulletInfo, GameCollider, WeaponInfo } from '../../../Common/Namespace';
 import { getDistance } from '../../../Common/utils';
-import BulletManager from '../../../CManager/BulletManager';
+import BulletManager, { CreateIBulletParams } from '../../../CManager/BulletManager';
+import CombatManager from '../../../CManager/CombatManager';
 const { ccclass, property } = _decorator;
+
+export interface InitIBulletPrams extends CreateIBulletParams {
+    bulletAttr: BulletInfo.IBulletAttr;
+}
 
 /**
  * 通用的子弹脚本
@@ -17,6 +22,7 @@ export class BulletBasic extends OBT_Component {
     protected collider: BoxCollider2D;
 
     protected attr: BulletInfo.IBulletAttr = null;
+    protected realTimeProps: WeaponInfo.WeaponRealTimeProps = null;
     protected vector: Vec3 = null;
 
     protected isSleep: boolean;
@@ -27,18 +33,33 @@ export class BulletBasic extends OBT_Component {
     start() {
     }
 
-    public init({ attr, vector, enemyId, ignoreList = [], groupId, sleep = false }: BulletInfo.BulletInitParams) {
+    public init({ bulletAttr, weaponRealTimeProps, position, vector }: InitIBulletPrams) {
         this.collider = this.node.getComponent(BoxCollider2D);
         this.collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
 
-        // this.attr = attr;
-        // this.vector = vector;
+        this.node.setPosition(position);
+        this.attr = bulletAttr;
+        this.realTimeProps = weaponRealTimeProps;
+        this.vector = vector;
+        // 旋转子弹
+        if (vector) {
+            let vX: number = vector.x;
+            let vY: number = vector.y;
+            let angle = Number((Math.atan(vY / vX) * (180 / Math.PI)).toFixed(2));
+            let scaleX = 1;
+            if (vX < 0) {
+                scaleX = -1;
+            }
+            let sfNode: Node = this.node.getChildByName("SF");
+            sfNode.angle = angle;
+            sfNode.setScale(v3(scaleX, 1));
+        }
         // // 子弹运动
         // this.isInit = true;
-        // this.isAlive = true;
-        // // 初始位置
-        // let { x, y } = this.node.position;
-        // this.startRlt = new Vec3(x, y);
+        this.isAlive = true;
+        // 初始位置
+        let { x, y } = this.node.position;
+        this.startRlt = new Vec3(x, y);
         // this.isSleep = isSleep;
     }
 
@@ -53,14 +74,15 @@ export class BulletBasic extends OBT_Component {
 
     protected _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         // 判断otherCollider是否是敌人
-        switch (otherCollider.group) {
-            case GameCollider.GROUP.ENEMY: {
+        CombatManager.instance.onBulletHit(selfCollider, otherCollider);
+        // switch (otherCollider.group) {
+        //     case GameCollider.GROUP.ENEMY: {
 
-            } break;
-            case GameCollider.GROUP.CHR: {
+        //     } break;
+        //     case GameCollider.GROUP.CHR: {
 
-            } break;
-        }
+        //     } break;
+        // }
 
         // if (otherCollider.group === GameCollider.GROUP.ENEMY) {
         //     // if (otherCollider.node.OBT_param2 && this.ignoreList.indexOf(otherCollider.node.OBT_param2.id) !== -1) {
@@ -112,20 +134,21 @@ export class BulletBasic extends OBT_Component {
         // if (!this.isInit || !this.isAlive) {
         //     return;
         // }
+        if (!this.isAlive) {
+            return;
+        }
         // if (this.isSleep) {
         //     return;
         // }
-        // let ax = dt * this.attr.speed * this.vector.x;
-        // let ay = dt * this.attr.speed * this.vector.y;
-        // let { x, y } = this.node.position;
-        // let newLoc = v3(x + ax, y + ay);
-        // // 如果两点之间距离超过_maxDisPx，销毁
-        // if (getDistance(this.startRlt, newLoc) < this.attr.max_dis) {
-        //     this.node.setPosition(newLoc);
-        // } else {
-        //     this._die();
-        // }
+        let ax = dt * this.attr.speed * this.vector.x;
+        let ay = dt * this.attr.speed * this.vector.y;
+        let { x, y } = this.node.position;
+        let newLoc = v3(x + ax, y + ay);
+        // 如果两点之间距离超过_maxDisPx，销毁
+        if (getDistance(this.startRlt, newLoc) < this.attr.max_dis) {
+            this.node.setPosition(newLoc);
+        } else {
+            this._die();
+        }
     }
 }
-
-

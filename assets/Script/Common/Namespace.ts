@@ -525,7 +525,25 @@ export namespace WeaponInfo {
         ctl_dmg_rate: number,
         blt_speed: number,
         blt_max_dis: number,
-        blt_cld: number
+        blt_cld: number,
+        boost: BoostConfig
+    }
+    // 武器实时数据, 受面板加成, cd、ctl等属性为数字, 由quality决定
+    export interface WeaponRealTimeProps {
+        code: string,
+        type: WEAPON_TYPE,
+        intro: string,
+        bullet: string,
+        quality: ITEM_QUALITY,
+        damage: number,
+        range: number,
+        cd: number,
+        ctl: number,
+        ctl_dmg_rate: number,
+        blt_speed: number,
+        blt_max_dis: number,
+        blt_cld: number,
+        boost: BoostRealTimeConfig
     }
 }
 
@@ -656,7 +674,10 @@ export namespace BulletInfo {
         code: string,
         prefab: string,
         type: string,
-        script: string
+        script: string,
+        speed: number,
+        // 最大飞行距离
+        max_dis: number
     }
 
     export interface BulletAttr {
@@ -756,6 +777,9 @@ export namespace DamageInfo {
 
 export interface BoostConfig {
     [prop: string]: number[]
+}
+export interface BoostRealTimeConfig {
+    [prop: string]: number
 }
 
 // 刷新概率配置相关
