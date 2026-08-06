@@ -677,7 +677,11 @@ export namespace BulletInfo {
         script: string,
         speed: number,
         // 最大飞行距离
-        max_dis: number
+        max_dis: number,
+        // 穿透数
+        penetrate?: number,
+        // 穿透伤害(0-1), 不超过1
+        penetrate_dmg?: number
     }
 
     export interface BulletAttr {

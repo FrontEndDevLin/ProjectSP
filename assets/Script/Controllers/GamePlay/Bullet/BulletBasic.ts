@@ -13,6 +13,7 @@ export interface InitIBulletPrams extends CreateIBulletParams {
 
 /**
  * 通用的子弹脚本
+ * 说是子弹, 实际上是能造成伤害的碰撞体
  */
 @ccclass('BulletBasic')
 export class BulletBasic extends OBT_Component {
@@ -35,7 +36,7 @@ export class BulletBasic extends OBT_Component {
 
     public init({ bulletAttr, weaponRealTimeProps, position, vector }: InitIBulletPrams) {
         this.collider = this.node.getComponent(BoxCollider2D);
-        this.collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
 
         this.node.setPosition(position);
         this.attr = bulletAttr;
@@ -54,7 +55,7 @@ export class BulletBasic extends OBT_Component {
             sfNode.angle = angle;
             sfNode.setScale(v3(scaleX, 1));
         }
-        // // 子弹运动
+        // 子弹运动
         // this.isInit = true;
         this.isAlive = true;
         // 初始位置
@@ -63,17 +64,18 @@ export class BulletBasic extends OBT_Component {
         // this.isSleep = isSleep;
     }
 
-    protected _die() {
+    public onHit() {}
+
+    protected die() {
         this.isAlive = false;
 
-        this.collider.off(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+        this.collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
         this.collider = null;
 
         BulletManager.instance.recoverBullet(this.attr.code, this.node);
     }
 
-    protected _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
-        // 判断otherCollider是否是敌人
+    protected onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         CombatManager.instance.onBulletHit(selfCollider, otherCollider);
         // switch (otherCollider.group) {
         //     case GameCollider.GROUP.ENEMY: {
@@ -130,6 +132,8 @@ export class BulletBasic extends OBT_Component {
     //     this.isSleep = false;
     // }
 
+    protected runBehavior(dt: number) {}
+
     update(dt: number) {
         // if (!this.isInit || !this.isAlive) {
         //     return;
@@ -137,18 +141,6 @@ export class BulletBasic extends OBT_Component {
         if (!this.isAlive) {
             return;
         }
-        // if (this.isSleep) {
-        //     return;
-        // }
-        let ax = dt * this.attr.speed * this.vector.x;
-        let ay = dt * this.attr.speed * this.vector.y;
-        let { x, y } = this.node.position;
-        let newLoc = v3(x + ax, y + ay);
-        // 如果两点之间距离超过_maxDisPx，销毁
-        if (getDistance(this.startRlt, newLoc) < this.attr.max_dis) {
-            this.node.setPosition(newLoc);
-        } else {
-            this._die();
-        }
+        this.runBehavior(dt);
     }
 }

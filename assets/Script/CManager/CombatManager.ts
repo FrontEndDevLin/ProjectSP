@@ -1,6 +1,8 @@
 import { BoxCollider2D } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import { GameCollider } from "../Common/Namespace";
+import { BulletBasic } from "../Controllers/GamePlay/Bullet/BulletBasic";
+import { EmyBasic } from "../Controllers/GamePlay/EMY/EmyBasic";
 
 export default class CombatManager extends OBT_UIManager {
     static instance: CombatManager = null;
@@ -12,8 +14,6 @@ export default class CombatManager extends OBT_UIManager {
             this.destroy();
             return;
         }
-
-        console.log("Battle Manager loaded");
     }
 
     /**
@@ -26,14 +26,24 @@ export default class CombatManager extends OBT_UIManager {
                 this.onEnemyHit(bulletCollider, targetCollider);
             } break;
             case GameCollider.GROUP.EMY_BULLET: {
-                // 敌人被击中
+                // 子弹命中角色
                 this.onCHRHit(bulletCollider, targetCollider);
             } break;
         }
     }
 
     protected onEnemyHit(bulletCollider: BoxCollider2D, enemyCollider: BoxCollider2D) {
-        // 敌人被击中
+        // 伤害等在这里计算好
+
+        let enemy = enemyCollider.node.getComponent(EmyBasic);
+        if (enemy) {
+            enemy.onHit();
+        }
+
+        let bullet: BulletBasic = bulletCollider.node.getComponent(BulletBasic);
+        if (bullet) {
+            bullet.onHit();
+        }
         console.log("敌人被击中");
     }
     protected onCHRHit(bulletCollider: BoxCollider2D, chrCollider: BoxCollider2D) {

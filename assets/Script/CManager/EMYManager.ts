@@ -8,6 +8,7 @@ import ProcessManager from './ProcessManager';
 import DBManager from './DBManager';
 import { EmyParticleCtrl } from './Class/EmyParticleCtrl';
 import { EMY_Base } from '../Controllers/GamePlay/EMY/EMY_Base';
+import { EmyBasic } from '../Controllers/GamePlay/EMY/EmyBasic';
 
 export interface EnemyInfo {
     x?: number,
@@ -94,7 +95,7 @@ export default class EMYManager extends OBT_UIManager {
         configList.forEach(config => {
             let { emyId, count } = config;
             let enemyProps: EMYInfo.EMYProps = this.enemyData[emyId];
-            let scriptName = enemyProps.script || "EMY_Base";
+            let scriptName = enemyProps.script || "EmyBasic";
             if (!this._emyNodePoolMap[emyId]) {
                 this._emyNodePoolMap[emyId] = new NodePool();
             }
@@ -332,12 +333,12 @@ export default class EMYManager extends OBT_UIManager {
 
         let enemyProps: EMYInfo.EMYProps = this.enemyData[enemyType];
         let isEliteEnemy: boolean = this._isEliteEnemy(enemyType);
-        let scriptName: string = enemyProps.script || "EMY_Base";
+        let scriptName: string = enemyProps.script || "EmyBasic";
         let enemyNode = this._emyNodePoolMap[enemyType].get();
         if (!enemyNode) {
             enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName });
         }
-        let enemyScript: EMY_Base = <EMY_Base>enemyNode.getComponent(scriptName);
+        let enemyScript: EmyBasic = enemyNode.getComponent(EmyBasic);
         this.createCounter++;
         let nodeId: string = `${this.createCounter}`;
         enemyScript.init(enemyProps, nodeId);

@@ -48,7 +48,9 @@ export default class WeaponBasic {
         let nAryKey = ["damage", "cd", "ctl"];
         let curInf: any = {};
         for (let key in this.orgInf) {
-            if (nAryKey.indexOf(key) !== -1) {
+            if (key === 'penetrate') {
+                curInf[key] = this.orgInf[key] || 0;
+            } else if (nAryKey.indexOf(key) !== -1) {
                 curInf[key] = this.orgInf[key][this.quality - 1] || this.orgInf[key][0];
             } else if (key === 'boost') {
                 let boost = {};

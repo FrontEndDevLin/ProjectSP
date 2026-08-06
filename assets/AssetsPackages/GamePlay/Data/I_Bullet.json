@@ -7,7 +7,7 @@
         "code": "CHR_Bullet001",
         "prefab": "CHR_Bullet001",
         "type": "bullet",
-        "script": "BulletBasic",
+        "script": "Bullet_Normal",
         "speed": 480,
         "max_dis": 200
     }

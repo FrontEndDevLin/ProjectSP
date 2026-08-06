@@ -11,8 +11,8 @@ import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 const { ccclass, property } = _decorator;
 
-@ccclass('EMY_Base')
-export class EMY_Base extends OBT_Component {
+@ccclass('EmyBasic')
+export class EmyBasic extends OBT_Component {
     protected alive: boolean = true;
 
     protected collider: BoxCollider2D = null;
@@ -127,7 +127,9 @@ export class EMY_Base extends OBT_Component {
         this.initOther();
     }
 
-    public onHit() {}
+    public onHit() {
+        console.log(131)
+    }
 
     protected onHpReduce() {}
 
