@@ -1,12 +1,20 @@
 {
     "desc": {
-        "intro": "子弹配置, 在这个文件中定义子弹的伤害, 飞行速度, 最大飞行距离等",
-        "type": "当type为EMY_bullet时, 为敌人发射的子弹, 伤害由SpawnRole决定"
+        "intro": "伤害体配置, 在这个文件中定义伤害体的伤害、脚本、预制体等属性",
+        "type": "1->普通伤害体 2->子弹伤害体",
+        "speed": "type=2有效, 伤害体飞行速度",
+        "max_dis": "type=2有效, 伤害体最大飞行距离"
+    },
+    "EMY_Body001": {
+        "code": "EMY_Body001",
+        "prefab": "EMY_Body001",
+        "type": 1,
+        "script": "BulletBasic"
     },
     "CHR_Bullet001": {
         "code": "CHR_Bullet001",
         "prefab": "CHR_Bullet001",
-        "type": "bullet",
+        "type": 2,
         "script": "Bullet_Normal",
         "speed": 480,
         "max_dis": 200

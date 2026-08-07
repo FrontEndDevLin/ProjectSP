@@ -9,6 +9,7 @@ import DropItemManager from '../../../CManager/DropItemManager';
 import DamageManager from '../../../CManager/DamageManager';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
+import { HitInfo } from '../../../CManager/CombatManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EmyBasic')
@@ -127,8 +128,65 @@ export class EmyBasic extends OBT_Component {
         this.initOther();
     }
 
-    public onHit() {
-        console.log(131)
+    public onHit(damageInfo: HitInfo) {
+        let dmg = damageInfo.damage;
+        if (damageInfo.isCritical) {
+            // console.log('触发暴击，伤害为' + dmg);
+            RealTimeEventManager.instance.onCtiticalAttack();
+        }
+        if (dmg <= 0) {
+            return;
+        }
+
+        this.props.c_hp -= dmg;
+
+        this.onHpReduce();
+
+        // TODO: 计算击退距离
+        // let repelAry: number[] = otherCollider.node.OBT_param2.attr.repel;
+        // if (repelAry && repelAry.length) {
+        //     let repel: number = repelAry[0];
+        //     if (isCoreBullet) {
+        //         let quality: ITEM_QUALITY = WarCoreManager.instance.warCore.quality;
+        //         repel = repelAry[quality - 1] || 0;
+        //     }
+        //     let weight: number = this.props.weight || 0;
+        //     repel = repel - weight;
+        //     if (repel > 0) {
+        //         console.log('击退敌人: ' + repel + '距离');
+        //         // 角色->敌人向量
+                
+        //         switch (otherCollider.tag) {
+        //             case GameCollider.TAG.BULLET_ORBITS_KNIFE: {
+        //                 // 角色->自身向量
+        //                 let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+        //                 let vector = v3(this.node.position.x - characterLoc.x, this.node.position.y - characterLoc.y).normalize();
+        //                 // TODO: vector结合线速度做偏移
+                        
+        //                 this.vector = vector;
+        //                 this.repelTime = REPEL_TIME;
+        //                 this.repelSpeed = PIXEL_UNIT * 2 / REPEL_TIME;
+        //             } break;
+        //         }
+        //     }
+        // }
+
+        // TODO: 位置根据当前敌人体型决定，目前是写死
+        DamageManager.instance.showDamageTxt({ dmg, position: new Vec3(this.node.position.x + 20, this.node.position.y + 20, 0), isEnemy: true, isCtitical: damageInfo.isCritical });
+
+        if (this.props.c_hp <= 0) {
+            /**
+             * 敌人被击杀, 应当把击杀子弹, 子弹方向, 受到伤害等属性记录返回
+             */
+            let vector: Vec3 = damageInfo.vector;
+            const { x, y } = this.node.position;
+            const dieParams: GamePlayEventOptions.EnemyDieParams = { vector, dmg, bullet: damageInfo.bullet, id: this.id, loc: v3(x, y) };
+            RealTimeEventManager.instance.onEnemyDie(dieParams);
+            this.die();
+        } else {
+            // 受击效果
+            this._flash();
+        }
     }
 
     protected onHpReduce() {}
@@ -171,64 +229,6 @@ export class EmyBasic extends OBT_Component {
                     isCtitical: false
                 };
                 // damageAttr.isCtitical // 暴击
-                let dmg = damageAttr.dmg;
-                if (damageAttr.isCtitical) {
-                    // console.log('触发暴击，伤害为' + dmg);
-                    RealTimeEventManager.instance.onCtiticalAttack();
-                }
-                if (dmg <= 0) {
-                    return;
-                }
-
-                this.props.c_hp -= dmg;
-
-                this.onHpReduce();
-
-                // TODO: 计算击退距离
-                let repelAry: number[] = otherCollider.node.OBT_param2.attr.repel;
-                if (repelAry && repelAry.length) {
-                    let repel: number = repelAry[0];
-                    if (isCoreBullet) {
-                        let quality: ITEM_QUALITY = WarCoreManager.instance.warCore.quality;
-                        repel = repelAry[quality - 1] || 0;
-                    }
-                    let weight: number = this.props.weight || 0;
-                    repel = repel - weight;
-                    if (repel > 0) {
-                        console.log('击退敌人: ' + repel + '距离');
-                        // 角色->敌人向量
-                        
-                        switch (otherCollider.tag) {
-                            case GameCollider.TAG.BULLET_ORBITS_KNIFE: {
-                                // 角色->自身向量
-                                let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
-                                let vector = v3(this.node.position.x - characterLoc.x, this.node.position.y - characterLoc.y).normalize();
-                                // TODO: vector结合线速度做偏移
-                                
-                                this.vector = vector;
-                                this.repelTime = REPEL_TIME;
-                                this.repelSpeed = PIXEL_UNIT * 2 / REPEL_TIME;
-                            } break;
-                        }
-                    }
-                }
-
-                // TODO: 位置根据当前敌人体型决定，目前是写死
-                DamageManager.instance.showDamageTxt({ dmg, position: new Vec3(this.node.position.x + 20, this.node.position.y + 20, 0), isEnemy: true, isCtitical: damageAttr.isCtitical });
-                
-                if (this.props.c_hp <= 0) {
-                    /**
-                     * 敌人被击杀, 应当把击杀子弹, 子弹方向, 受到伤害等属性记录返回
-                     */
-                    let vector: Vec3 = otherCollider.node.OBT_param2.vector;
-                    const { x, y } = this.node.position;
-                    const dieParams: GamePlayEventOptions.EnemyDieParams = { vector, dmg, bullet: bulletId, id: this.id, loc: v3(x, y) };
-                    RealTimeEventManager.instance.onEnemyDie(dieParams);
-                    this.die();
-                } else {
-                    // 受击效果
-                    this._flash();
-                }
             } break;
             // case GP_GROUP.CHARACTER: {
             //     console.log('击中角色')

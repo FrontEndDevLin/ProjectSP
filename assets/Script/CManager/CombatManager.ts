@@ -1,8 +1,17 @@
-import { BoxCollider2D } from "cc";
+import { BoxCollider2D, Vec3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import { GameCollider } from "../Common/Namespace";
 import { BulletBasic } from "../Controllers/GamePlay/Bullet/BulletBasic";
 import { EmyBasic } from "../Controllers/GamePlay/EMY/EmyBasic";
+import { getRandomNumber } from "../Common/utils";
+
+export interface HitInfo {
+    damage: number,
+    isCritical?: boolean,
+    vector?: Vec3,
+    bullet: string
+    // TODO: 还有击退属性, 击退时, 判断方向为武器位置到目标位置的向量
+}
 
 export default class CombatManager extends OBT_UIManager {
     static instance: CombatManager = null;
@@ -33,18 +42,42 @@ export default class CombatManager extends OBT_UIManager {
     }
 
     protected onEnemyHit(bulletCollider: BoxCollider2D, enemyCollider: BoxCollider2D) {
+        let bullet: BulletBasic = bulletCollider.node.getComponent(BulletBasic);
         // 伤害等在这里计算好
+        if (!bullet) {
+            return console.error("弹体脚本不存在");
+        }
 
         let enemy = enemyCollider.node.getComponent(EmyBasic);
-        if (enemy) {
-            enemy.onHit();
+        if (!enemy) {
+            return console.error("敌人脚本不存在");
         }
 
-        let bullet: BulletBasic = bulletCollider.node.getComponent(BulletBasic);
-        if (bullet) {
-            bullet.onHit();
+        let realDamage: number = bullet.realTimeProps.damage;
+        let isCritical: boolean = false;
+        let crit_rate: number = bullet.realTimeProps.crit_rate;
+        if (crit_rate > 0) {
+            if (crit_rate >= 1) {
+                isCritical = true;
+            } else {
+                let num: number = getRandomNumber(1, 100) / 100;
+                isCritical = num <= crit_rate;
+            }
+            if (isCritical) {
+                realDamage = realDamage * bullet.realTimeProps.crit_dmg_rate;
+            }
         }
-        console.log("敌人被击中");
+
+        // 计算伤害
+        let damageInfo: HitInfo = {
+            bullet: bullet.realTimeProps.code,
+            damage: bullet.realTimeProps.damage,
+            isCritical,
+            vector: bullet.vector
+        };
+
+        enemy.onHit(damageInfo);
+        bullet.onHit();
     }
     protected onCHRHit(bulletCollider: BoxCollider2D, chrCollider: BoxCollider2D) {
         // 角色被击中

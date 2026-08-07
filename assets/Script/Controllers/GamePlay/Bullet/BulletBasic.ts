@@ -23,8 +23,8 @@ export class BulletBasic extends OBT_Component {
     protected collider: BoxCollider2D;
 
     protected attr: BulletInfo.IBulletAttr = null;
-    protected realTimeProps: WeaponInfo.WeaponRealTimeProps = null;
-    protected vector: Vec3 = null;
+    public realTimeProps: WeaponInfo.WeaponRealTimeProps = null;
+    public vector: Vec3 = null;
 
     protected isSleep: boolean;
 

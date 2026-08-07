@@ -45,7 +45,7 @@ export default class WeaponBasic {
     }
 
     protected initCurInf() {
-        let nAryKey = ["damage", "cd", "ctl"];
+        let nAryKey = ["damage", "cd", "crit_rate"];
         let curInf: any = {};
         for (let key in this.orgInf) {
             if (key === 'penetrate') {

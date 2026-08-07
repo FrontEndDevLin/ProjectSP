@@ -521,14 +521,11 @@ export namespace WeaponInfo {
         damage: number[],
         range: number,
         cd: number[],
-        ctl: number[],
-        ctl_dmg_rate: number,
-        blt_speed: number,
-        blt_max_dis: number,
-        blt_cld: number,
+        crit_rate: number[],
+        crit_dmg_rate: number,
         boost: BoostConfig
     }
-    // 武器实时数据, 受面板加成, cd、ctl等属性为数字, 由quality决定
+    // 武器实时数据, 受面板加成, cd、crit_rate等属性为数字, 由quality决定
     export interface WeaponRealTimeProps {
         code: string,
         type: WEAPON_TYPE,
@@ -538,11 +535,8 @@ export namespace WeaponInfo {
         damage: number,
         range: number,
         cd: number,
-        ctl: number,
-        ctl_dmg_rate: number,
-        blt_speed: number,
-        blt_max_dis: number,
-        blt_cld: number,
+        crit_rate: number,
+        crit_dmg_rate: number,
         boost: BoostRealTimeConfig
     }
 }
@@ -673,11 +667,11 @@ export namespace BulletInfo {
     export interface IBulletAttr {
         code: string,
         prefab: string,
-        type: string,
+        type: number,
         script: string,
         speed: number,
         // 最大飞行距离
-        max_dis: number,
+        max_dis?: number,
         // 穿透数
         penetrate?: number,
         // 穿透伤害(0-1), 不超过1
