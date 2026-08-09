@@ -1,5 +1,5 @@
 import { _decorator, Vec3 } from 'cc';
-import { RangeBehaviorBase } from './RangeBehaviorBase';
+import { RangeBehaviorBase_Chr } from './RangeBehaviorBase_Chr';
 import { EMYInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import { getVectorByAngle } from '../../../Common/utils';
@@ -10,8 +10,8 @@ const { ccclass, property } = _decorator;
 /**
  * 远程攻击行为-基础飞弹
  */
-@ccclass('RangeBehavior_BaseFlyBullet')
-export class RangeBehavior_BaseFlyBullet extends RangeBehaviorBase {
+@ccclass('RangeBehavior_Chr_BaseFlyBullet')
+export class RangeBehavior_Chr_BaseFlyBullet extends RangeBehaviorBase_Chr {
     // start() {
     //     super.start();
     //     console.log('挂载远程攻击行为组件 RangeBehavior_BaseFlyBullet');

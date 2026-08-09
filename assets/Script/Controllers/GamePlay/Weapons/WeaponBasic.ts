@@ -30,7 +30,7 @@ export default class WeaponBasic {
     // 行为, 子类需要赋值, 暂时使用string类型
     protected behavior: string;
     // 预制体名称
-    protected prefabName: string;
+    protected prefabName: string = "Default";
     // 行为组件
     protected behaviorCtx: BehaviorBase;
 

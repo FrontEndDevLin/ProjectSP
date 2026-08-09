@@ -21,11 +21,11 @@ interface WeaponInitOptions {
     mountNode: any;
 }
 
-export default class Weapon_BaseFlyBullet extends WeaponBasic {
+export default class Weapon_Chr_BaseFlyBullet extends WeaponBasic {
     // 武器品质
     public quality: ITEM_QUALITY;
 
-    protected behavior: string = "RangeBehavior_BaseFlyBullet";
+    protected behavior: string = "RangeBehavior_Chr_BaseFlyBullet";
     protected prefabName: string = "BaseFlyBullet";
 
     public updatePanel() {

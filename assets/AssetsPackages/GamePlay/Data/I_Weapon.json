@@ -14,8 +14,8 @@
         "boost": "受到的属性加成, 值为百分比"
     },
     "weapon_def": {
-        "Weapon_EmyBody": {
-            "code": "Weapon_EmyBody",
+        "Weapon_Emy_Body": {
+            "code": "Weapon_Emy_Body",
             "group": 2,
             "type": 1,
             "intro": "敌人身体碰撞攻击",
@@ -24,8 +24,8 @@
             "damage": [2],
             "cd": [1]
         },
-        "Weapon_BaseFlyBullet": {
-            "code": "Weapon_BaseFlyBullet",
+        "Weapon_Chr_BaseFlyBullet": {
+            "code": "Weapon_Chr_BaseFlyBullet",
             "group": 1,
             "type": 2,
             "intro": "基础飞弹攻击",

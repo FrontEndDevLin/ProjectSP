@@ -16,8 +16,6 @@ const { ccclass, property } = _decorator;
 export class EmyBasic extends OBT_Component {
     protected alive: boolean = true;
 
-    protected collider: BoxCollider2D = null;
-
     protected spNodePath: string[] = ["Body/PIC"];
 
     protected flashing: boolean = false;
@@ -79,16 +77,6 @@ export class EmyBasic extends OBT_Component {
         }
         this.bodyNode.setScale(v3(1, 1));
     }
-    // 初始化碰撞体
-    protected initCollider() {
-        if (this.collider) {
-            this.collider.enabled = true;
-            return;
-        }
-        this.collider = this.node.getComponent(BoxCollider2D);
-        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
-        this.collider.enabled = true;
-    }
     // 初始化图形节点
     protected initSprite() {
         if (this.spNodes.length) {
@@ -108,7 +96,6 @@ export class EmyBasic extends OBT_Component {
         this.id = id;
         this.alive = true;
         this.initBodyNode();
-        this.initCollider();
         this.initSprite();
 
         this.node.OBT_param2 = {
@@ -190,51 +177,6 @@ export class EmyBasic extends OBT_Component {
     }
 
     protected onHpReduce() {}
-
-    protected onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
-        return;
-        if (!this.alive || !ProcessManager.instance.isOnPlaying()) {
-            return;
-        }
-        switch (otherCollider.group) {
-            case GameCollider.GROUP.CHR_BULLET: {
-                if (otherCollider.node.OBT_param2 && otherCollider.node.OBT_param2.ignoreList.indexOf(this.id) !== -1) {
-                    console.log(`enemy触发忽略`);
-                    return;
-                }
-
-                const isCoreBullet: boolean = otherCollider.node.OBT_param2.attr.isCoreBullet;
-
-                // 被同一批次子弹击中伤害衰减处理
-                let bulletGroupId: number = otherCollider.node.OBT_param2.groupId;
-                let isGroupReduce = false;
-                if (bulletGroupId) {
-                    if (this.groupBulletMap[bulletGroupId]) {
-                        isGroupReduce = true;
-                    } else {
-                        this.groupBulletMap[bulletGroupId] = 1;
-                    }
-                }
-
-                // 显示伤害由一个类单独管理
-                let bulletId: string = otherCollider.node.name;
-                let isPenetrate: boolean = otherCollider.node.OBT_param2.attr.is_penetrate;
-                let penDmg: number = 1;
-                if (isPenetrate) {
-                    penDmg = otherCollider.node.OBT_param2.attr.pen_dmg;
-                }
-                // let damageAttr: DamageInfo.DamageAttr = DamageManager.instance.calcAttackDamage(bulletId, this.dmgReduceRate, isGroupReduce, penDmg);
-                let damageAttr: DamageInfo.DamageAttr = {
-                    dmg: 5,
-                    isCtitical: false
-                };
-                // damageAttr.isCtitical // 暴击
-            } break;
-            // case GP_GROUP.CHARACTER: {
-            //     console.log('击中角色')
-            // } break;
-        }
-    }
 
     // 闪烁图形, 可以重写
     protected flashSprite() {
@@ -408,7 +350,7 @@ export class EmyBasic extends OBT_Component {
 
     public die() {
         this.alive = false;
-        this.collider.enabled = false;
+        // this.collider.enabled = false;
         this.groupBulletMap = {};
         this.onDie();
         EMYManager.instance.removeEnemy(this.id);
@@ -419,7 +361,7 @@ export class EmyBasic extends OBT_Component {
     // 逃跑
     protected runAway() {
         this.alive = false;
-        this.collider.enabled = false;
+        // this.collider.enabled = false;
         this.groupBulletMap = {};
         EMYManager.instance.removeEnemy(this.id);
         this._playDieAni();

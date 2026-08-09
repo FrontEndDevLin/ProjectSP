@@ -12,12 +12,15 @@ import WarCoreManager from "../../../CManager/WarCoreManager";
 import WeaponManager from "../../../CManager/WeaponManager";
 import WeaponBasic from "./WeaponBasic";
 
-// 定义武器预制体, 包含武器的模型, 和武器的行为脚本
+/**
+ * 敌人身体碰撞武器, 每个敌人都必须挂载
+ * 创建敌人时, 挂载该武器, 由该类创建预设体EmyBody并挂载行为组件MeleeBehavior_Emy_Body
+ * 行为组件再挂载碰撞体EMY_Body001
+ */
 
-export default class Weapon_EmyBody extends WeaponBasic {
+export default class Weapon_Emy_Body extends WeaponBasic {
     // 武器品质
     public quality: ITEM_QUALITY;
 
-    protected behavior: string = "RangeBehavior_BaseFlyBullet";
-    protected prefabName: string = "BaseFlyBullet";
+    protected behavior: string = "MeleeBehavior_Emy_Body";
 }
