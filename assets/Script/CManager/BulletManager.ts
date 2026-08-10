@@ -20,7 +20,8 @@ interface BulletPoolMap {
 export interface CreateIBulletParams {
     weaponRealTimeProps: WeaponInfo.WeaponRealTimeProps,
     position: Vec3,
-    vector: Vec3
+    vector: Vec3,
+    rootNode?: Node
 }
 
 /**
@@ -162,7 +163,7 @@ export default class BulletManager extends OBT_UIManager {
         }
     }
 
-    public createIBullet({ weaponRealTimeProps, position, vector }: CreateIBulletParams): Node {
+    public createIBullet({ weaponRealTimeProps, position, vector, rootNode }: CreateIBulletParams): Node {
         const bulletAttr: BulletInfo.IBulletAttr = this.iBulletData[weaponRealTimeProps.bullet];
         const nodePool = this._nodePoolMap[weaponRealTimeProps.bullet];
         let bulletNode: Node = nodePool ? nodePool.get() : null;
@@ -173,7 +174,7 @@ export default class BulletManager extends OBT_UIManager {
         const scriptComp: BulletBasic = bulletNode.getComponent(BulletBasic);
         scriptComp.init({ bulletAttr, weaponRealTimeProps, position, vector });
 
-        this.mountNode({ node: bulletNode, parentNode: this.bulletRootNode });
+        this.mountNode({ node: bulletNode, parentNode: rootNode || this.bulletRootNode });
 
         return bulletNode;
     }

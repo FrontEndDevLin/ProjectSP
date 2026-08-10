@@ -42,6 +42,7 @@ export default class CombatManager extends OBT_UIManager {
     }
 
     protected onEnemyHit(bulletCollider: BoxCollider2D, enemyCollider: BoxCollider2D) {
+        return;
         let bullet: BulletBasic = bulletCollider.node.getComponent(BulletBasic);
         // 伤害等在这里计算好
         if (!bullet) {

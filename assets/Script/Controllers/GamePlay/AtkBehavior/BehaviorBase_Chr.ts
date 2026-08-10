@@ -110,7 +110,6 @@ export class BehaviorBase_Chr extends BehaviorBase {
         // 优先判断攻击范围内的敌人
         if (Object.keys(this.dangerEnemyList).length) {
             let target: EMYInfo.RealTimeInfo = EMYManager.instance.getNearestEnemy(this.dangerEnemyList);
-            console.log(target)
             return { isCanBeAttacked: true, realTimeEnemyInfo: target };
         }
         // 攻击范围内无敌人，再判断警戒范围内的敌人
@@ -130,12 +129,11 @@ export class BehaviorBase_Chr extends BehaviorBase {
             }
             if (this.isCdOver(deltaTime)) {
                 let target: EMYInfo.ChooseTargetRes = this.chooseTarget();
-                console.log(target);
-                if (target.isCanBeAttacked) {
+                if (target.isCanBeAttacked && target.realTimeEnemyInfo) {
                     this.isAttacking = true;
                     this.execAttack(deltaTime, target.realTimeEnemyInfo);
                 } else {
-                    console.log('无可攻击目标');
+                    // console.log('无可攻击目标');
                 }
             }
         }

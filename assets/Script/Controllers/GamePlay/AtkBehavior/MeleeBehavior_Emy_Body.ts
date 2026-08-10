@@ -26,7 +26,7 @@ export class MeleeBehavior_Emy_Body extends MeleeBehaviorBase {
     public init(enemyId: string) {
         this.enemyId = enemyId;
         if (!this.bulletNode) {
-            this.bulletNode = BulletManager.instance.createIBullet({ weaponRealTimeProps: this.weaponRef.curInf, position: v3(0, 0, 0), vector: null })
+            this.bulletNode = BulletManager.instance.createIBullet({ weaponRealTimeProps: this.weaponRef.curInf, position: v3(0, 0, 0), vector: null, rootNode: this.node })
         }
         const bullet: Bullet_Emy_Body = this.bulletNode.getComponent(Bullet_Emy_Body);
         bullet.setEnemyId(enemyId);
