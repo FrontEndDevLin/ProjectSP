@@ -11,6 +11,7 @@ import BulletManager from "../../../CManager/BulletManager";
 import WarCoreManager from "../../../CManager/WarCoreManager";
 import WeaponManager from "../../../CManager/WeaponManager";
 import WeaponBasic from "./WeaponBasic";
+import { MeleeBehavior_Emy_Body } from "../AtkBehavior/MeleeBehavior_Emy_Body";
 
 /**
  * 敌人身体碰撞武器, 每个敌人都必须挂载
@@ -23,4 +24,6 @@ export default class Weapon_Emy_Body extends WeaponBasic {
     public quality: ITEM_QUALITY;
 
     protected behavior: string = "MeleeBehavior_Emy_Body";
+    // 行为组件
+    public behaviorCtx: MeleeBehavior_Emy_Body;
 }

@@ -9,7 +9,7 @@
         "code": "EMY_Body001",
         "prefab": "EMY_Body001",
         "type": 1,
-        "script": "BulletBasic"
+        "script": "Bullet_Emy_Body"
     },
     "CHR_Bullet001": {
         "code": "CHR_Bullet001",

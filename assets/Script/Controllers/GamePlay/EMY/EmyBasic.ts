@@ -10,6 +10,9 @@ import DamageManager from '../../../CManager/DamageManager';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import { HitInfo } from '../../../CManager/CombatManager';
+import WeaponBasic from '../Weapons/WeaponBasic';
+import WeaponManager from '../../../CManager/WeaponManager';
+import Weapon_Emy_Body from '../Weapons/Weapon_Emy_Body';
 const { ccclass, property } = _decorator;
 
 @ccclass('EmyBasic')
@@ -60,6 +63,8 @@ export class EmyBasic extends OBT_Component {
     protected repelTime: number = 0;
     protected repelSpeed: number = 0;
 
+    protected bodyWeaponCtx: Weapon_Emy_Body;
+
     start() {
     }
 
@@ -99,7 +104,7 @@ export class EmyBasic extends OBT_Component {
         this.initSprite();
 
         this.node.OBT_param2 = {
-            id,
+            // id,
             runAway: this.runAway.bind(this)
         }
         this.attackStage = EMYInfo.ATTACK_STAGE.NONE;
@@ -111,6 +116,12 @@ export class EmyBasic extends OBT_Component {
         this.maxHp = props.c_hp;
         this.moveTypeList = this.props.move.split(",");
         this.currentMoveType = this.moveTypeList[0];
+
+        if (!this.bodyWeaponCtx) {
+            this.bodyWeaponCtx = WeaponManager.instance.getIWeaponCtxById("Weapon_Emy_Body") as Weapon_Emy_Body;
+            this.bodyWeaponCtx.mountBehaviorModule(this.node);
+        }
+        this.bodyWeaponCtx.behaviorCtx.init(id);
 
         this.initOther();
     }

@@ -4,6 +4,9 @@ import WeaponBasic from '../Weapons/WeaponBasic';
 import { EMYInfo, GameCollider } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import { BehaviorBase } from './BehaviorBase';
+import { EmyBasic } from '../EMY/EmyBasic';
+import { MeleeBehavior_Emy_Body } from './MeleeBehavior_Emy_Body';
+import { Bullet_Emy_Body } from '../Bullet/Bullet_Emy_Body';
 const { ccclass, property } = _decorator;
 
 /**
@@ -63,14 +66,20 @@ export class BehaviorBase_Chr extends BehaviorBase {
 
     protected onCHRDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+            const enemyBodyBullet: Bullet_Emy_Body = otherCollider.node.getComponent(Bullet_Emy_Body);
+            if (!enemyBodyBullet) {
+                console.error('7111111111111111111111')
+                console.log(otherCollider)
+                return
+            }
             switch (selfCollider.tag) {
                 case GameCollider.TAG.CHR_RANGE_ALERT: {
                     // 将敌人放入队列中，结束碰撞时将敌人移出
-                    let nodeId: string = otherCollider.node.OBT_param2.id;
+                    let nodeId: string = enemyBodyBullet.enemyId;
                     this.highEnemyList[nodeId] = 1;
                 } break;
                 case GameCollider.TAG.CHR_RANGE_ATTACK: {
-                    let nodeId: string = otherCollider.node.OBT_param2.id;
+                    let nodeId: string = enemyBodyBullet.enemyId;
                     this.dangerEnemyList[nodeId] = 1;
                 } break;
             }
@@ -78,13 +87,19 @@ export class BehaviorBase_Chr extends BehaviorBase {
     }
     protected onCHRDomainEndContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+            const enemyBodyBullet: Bullet_Emy_Body = otherCollider.node.getComponent(Bullet_Emy_Body);
+            if (!enemyBodyBullet) {
+                console.error('22222224444444444')
+                console.log(otherCollider)
+                return
+            }
             switch (selfCollider.tag) {
                 case GameCollider.TAG.CHR_RANGE_ALERT: {
-                    let nodeId: string = otherCollider.node.OBT_param2.id;
+                    let nodeId: string = enemyBodyBullet.enemyId;
                     delete this.highEnemyList[nodeId];
                 } break;
                 case GameCollider.TAG.CHR_RANGE_ATTACK: {
-                    let nodeId: string = otherCollider.node.OBT_param2.id;
+                    let nodeId: string = enemyBodyBullet.enemyId;
                     delete this.dangerEnemyList[nodeId];
                 } break;
             }
@@ -95,6 +110,7 @@ export class BehaviorBase_Chr extends BehaviorBase {
         // 优先判断攻击范围内的敌人
         if (Object.keys(this.dangerEnemyList).length) {
             let target: EMYInfo.RealTimeInfo = EMYManager.instance.getNearestEnemy(this.dangerEnemyList);
+            console.log(target)
             return { isCanBeAttacked: true, realTimeEnemyInfo: target };
         }
         // 攻击范围内无敌人，再判断警戒范围内的敌人
@@ -114,6 +130,7 @@ export class BehaviorBase_Chr extends BehaviorBase {
             }
             if (this.isCdOver(deltaTime)) {
                 let target: EMYInfo.ChooseTargetRes = this.chooseTarget();
+                console.log(target);
                 if (target.isCanBeAttacked) {
                     this.isAttacking = true;
                     this.execAttack(deltaTime, target.realTimeEnemyInfo);

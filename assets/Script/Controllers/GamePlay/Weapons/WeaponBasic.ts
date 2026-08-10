@@ -32,7 +32,7 @@ export default class WeaponBasic {
     // 预制体名称
     protected prefabName: string = "Default";
     // 行为组件
-    protected behaviorCtx: BehaviorBase;
+    public behaviorCtx: BehaviorBase;
 
     // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
     // public itemRef: any;

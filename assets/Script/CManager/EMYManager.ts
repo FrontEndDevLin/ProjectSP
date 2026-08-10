@@ -103,8 +103,6 @@ export default class EMYManager extends OBT_UIManager {
             }
             for (let i = 0; i < count; i++) {
                 let enemyNode = this.loadPrefab({ prefabPath: `EMY/${emyId}`, scriptName });
-                const weaponCtx: WeaponBasic = WeaponManager.instance.getIWeaponCtxById("Weapon_Emy_Body");
-                weaponCtx.mountBehaviorModule(enemyNode);
                 this._emyNodePoolMap[emyId].put(enemyNode);
             }
         })
@@ -341,8 +339,6 @@ export default class EMYManager extends OBT_UIManager {
         let enemyNode = this._emyNodePoolMap[enemyType].get();
         if (!enemyNode) {
             enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName });
-            const weaponCtx: WeaponBasic = WeaponManager.instance.getIWeaponCtxById("Weapon_Emy_Body");
-            weaponCtx.mountBehaviorModule(enemyNode);
         }
         let enemyScript: EmyBasic = enemyNode.getComponent(EmyBasic);
         this.createCounter++;
