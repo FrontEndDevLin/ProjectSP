@@ -549,6 +549,7 @@ export interface Point {
 export namespace EMYInfo {
     export interface EMYDropInfo {
         id: string,
+        code: string,
         exp_drop_rate: number,
         trophy_drop_rate: number,
         exp_cnt: number

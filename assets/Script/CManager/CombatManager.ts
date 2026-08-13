@@ -4,6 +4,7 @@ import { GameCollider } from "../Common/Namespace";
 import { BulletBasic } from "../Controllers/GamePlay/Bullet/BulletBasic";
 import { EmyBasic } from "../Controllers/GamePlay/EMY/EmyBasic";
 import { getRandomNumber } from "../Common/utils";
+import { Bullet_Emy_Body } from "../Controllers/GamePlay/Bullet/Bullet_Emy_Body";
 
 export interface HitInfo {
     damage: number,
@@ -42,18 +43,16 @@ export default class CombatManager extends OBT_UIManager {
     }
 
     protected onEnemyHit(bulletCollider: BoxCollider2D, enemyCollider: BoxCollider2D) {
-        return;
+        console.log(45)
         let bullet: BulletBasic = bulletCollider.node.getComponent(BulletBasic);
         // 伤害等在这里计算好
         if (!bullet) {
             return console.error("弹体脚本不存在");
         }
-
-        let enemy = enemyCollider.node.getComponent(EmyBasic);
+        let enemy = enemyCollider.node.getComponent(Bullet_Emy_Body);
         if (!enemy) {
-            return console.error("敌人脚本不存在");
+            return;
         }
-
         let realDamage: number = bullet.realTimeProps.damage;
         let isCritical: boolean = false;
         let crit_rate: number = bullet.realTimeProps.crit_rate;
@@ -78,7 +77,7 @@ export default class CombatManager extends OBT_UIManager {
         };
 
         enemy.onHit(damageInfo);
-        bullet.onHit();
+        bullet.onHit(damageInfo);
     }
     protected onCHRHit(bulletCollider: BoxCollider2D, chrCollider: BoxCollider2D) {
         // 角色被击中

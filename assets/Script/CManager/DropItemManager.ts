@@ -116,18 +116,19 @@ export default class DropItemManager extends OBT_UIManager {
         this._dropRateMap = {};
         const enemyData: EMYInfo.EMYDBData = EMYManager.instance.enemyData;
         for (let emyId in enemyData) {
-            if (!emyId.includes("EMY")) {
+            if (!emyId.includes("EMY") && !emyId.includes("Emy")) {
                 continue;
             }
             const enemyProps: EMYInfo.EMYProps = enemyData[emyId];
             this._dropRateMap[emyId] = {
-                id: enemyProps.id,
+                id: enemyProps.id || enemyProps.code,
+                code: enemyProps.code,
                 exp_drop_rate: enemyProps.exp_drop_rate,
                 trophy_drop_rate: enemyProps.trophy_drop_rate,
                 exp_cnt: enemyProps.exp_cnt
             };
         }
-
+        console.log(this._dropRateMap)
     }
 
     // 更新全局爆率修正概率

@@ -17,8 +17,8 @@ import Weapon_Emy_Body from '../Weapons/Weapon_Emy_Body';
 import { EmyBasic1 } from './EmyBasic1';
 const { ccclass, property } = _decorator;
 
-@ccclass('EmyGoblin')
-export class EmyGoblin extends EmyBasic1 {
+@ccclass('Emy_Goblin')
+export class Emy_Goblin extends EmyBasic1 {
     // 跟随
     protected moveBehavior1: string = "follow";
 }

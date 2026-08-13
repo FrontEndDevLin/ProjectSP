@@ -73,7 +73,6 @@ export class EmyBasic1 extends OBT_Component {
         this.alive = true;
 
         this.node.OBT_param2 = {
-            // id,
             runAway: this.runAway.bind(this)
         }
         this.props = copyObject(props);
@@ -83,11 +82,12 @@ export class EmyBasic1 extends OBT_Component {
         // console.log(`生成敌人${props.id}, 血量${props.c_hp}, 伤害${props.c_dmg}, 特殊伤害${props.c_spec_dmg}`)
         this.maxHp = props.c_hp;
 
+        // 加载身体碰撞
         if (!this.bodyWeaponCtx) {
             this.bodyWeaponCtx = WeaponManager.instance.getIWeaponCtxById("Weapon_Emy_Body") as Weapon_Emy_Body;
-            this.bodyWeaponCtx.mountBehaviorModule(this.node);
+            this.bodyWeaponCtx.mountBehaviorModule(this.view("Weapons"));
         }
-        this.bodyWeaponCtx.behaviorCtx.init(id);
+        this.bodyWeaponCtx.behaviorCtx.init(id, this);
 
         this.initOther();
     }
@@ -172,7 +172,11 @@ export class EmyBasic1 extends OBT_Component {
         EMYManager.instance.removeEnemy(this.id);
         this._playDieAni();
         // 掉落物品并爆出粒子效果
-        DropItemManager.instance.dropItem(this.props.id, this.node.position);
+        try {
+            DropItemManager.instance.dropItem(this.props.code, this.node.position);
+        } catch (error) {
+            console.log(error)
+        }
     }
     // 逃跑
     protected runAway() {

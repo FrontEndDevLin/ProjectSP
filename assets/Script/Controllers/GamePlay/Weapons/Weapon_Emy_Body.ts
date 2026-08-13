@@ -2,7 +2,7 @@
  * 敌人身体碰撞武器
  */
 
-import { SpriteFrame } from "cc";
+import { Node, SpriteFrame } from "cc";
 import CHRManager from "../../../CManager/CHRManager";
 import { BoostConfig, BulletInfo, COLOR, Common, ITEM_QUALITY, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
 import { copyObject, getDangerRichTxt, getFloatNumber, getSuccessRichTxt } from "../../../Common/utils";
@@ -26,11 +26,4 @@ export default class Weapon_Emy_Body extends WeaponBasic {
     protected behavior: string = "MeleeBehavior_Emy_Body";
     // 行为组件
     public behaviorCtx: MeleeBehavior_Emy_Body;
-
-    /**
-     * TODO: 直接挂载到碰撞体节点上，不使用mountBehaviorModule
-     */
-    public mount() {
-
-    }
 }

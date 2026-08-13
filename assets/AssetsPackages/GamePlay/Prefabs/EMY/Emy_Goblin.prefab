@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "EMY01",
+    "_name": "Emy_Goblin",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "EMY01",
+    "_name": "Emy_Goblin",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -402,7 +402,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "05tmKHc91MZp+vLMKuHi+J"
+    "fileId": "0a9GrrqfxHtrJa7FKYOoTh"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -412,7 +412,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "3buZT0DEZMnpEAwulsh15+",
+    "fileId": "6ezQ8hgH5ACbiGioTMqZ/H",
     "instance": null,
     "targetOverrides": null,
     "nestedPrefabInstanceRoots": null

@@ -29,6 +29,19 @@
     "weight": 100,
     "hp_growth": 0.12
   },
+  "Emy_Goblin": {
+    "code": "Emy_Goblin",
+    "cld": 100,
+    "type": "normal",
+    "script": "Emy_Goblin",
+    "spd": 80,
+    "exp_drop_rate": 1,
+    "trophy_drop_rate": 0.02,
+    "exp_cnt": 1,
+    "hp": 5,
+    "hp_growth": 0.34,
+    "dmg_growth": 0.28
+  },
   "EMY01": {
     "id": "EMY01",
     "cld": 100,

@@ -1,0 +1,31 @@
+{
+  "desc": {
+    "id": "敌人id 预设体名",
+    "type": "敌人类型 normal->小怪",
+    "move": "移动逻辑 normal->走脸",
+    "broken_point": "死亡时的爆炸点位",
+    "attack": "攻击逻辑 none->只有碰撞攻击, remote->远程攻击",
+    "attack_cd": "攻击冷却",
+    "attack_range": "攻击冷却",
+    "exp_drop_rate": "经验掉率",
+    "trophy_drop_rate": "战利品掉率",
+    "trophy": "战利品类型 core->核心",
+    "weight": "质量, 与武器击退属性抵抗, 默认为0",
+    "exp_cnt": "掉落经验个数"
+  },
+  "EMY_def": {
+  },
+  "Emy_Goblin": {
+    "id": "Emy_Goblin",
+    "cld": 100,
+    "type": "normal",
+    "move": "normal",
+    "spd": 80,
+    "exp_drop_rate": 1,
+    "trophy_drop_rate": 0.02,
+    "exp_cnt": 1,
+    "hp": 5,
+    "hp_growth": 0.34,
+    "dmg_growth": 0.28
+  }
+}

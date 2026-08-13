@@ -4,7 +4,7 @@ import OBT_Component from '../../../OBT_Component';
 import { BulletInfo, GameCollider, WeaponInfo } from '../../../Common/Namespace';
 import { getDistance } from '../../../Common/utils';
 import BulletManager, { CreateIBulletParams } from '../../../CManager/BulletManager';
-import CombatManager from '../../../CManager/CombatManager';
+import CombatManager, { HitInfo } from '../../../CManager/CombatManager';
 const { ccclass, property } = _decorator;
 
 export interface InitIBulletPrams extends CreateIBulletParams {
@@ -64,7 +64,7 @@ export class BulletBasic extends OBT_Component {
         // this.isSleep = isSleep;
     }
 
-    public onHit() {}
+    public onHit(damageInfo?: HitInfo) {}
 
     protected die() {
         this.isAlive = false;

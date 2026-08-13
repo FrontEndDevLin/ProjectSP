@@ -11,6 +11,7 @@ import { EMY_Base } from '../Controllers/GamePlay/EMY/EMY_Base';
 import { EmyBasic } from '../Controllers/GamePlay/EMY/EmyBasic';
 import WeaponBasic from '../Controllers/GamePlay/Weapons/WeaponBasic';
 import WeaponManager from './WeaponManager';
+import { EmyBasic1 } from '../Controllers/GamePlay/EMY/EmyBasic1';
 
 export interface EnemyInfo {
     x?: number,
@@ -335,12 +336,12 @@ export default class EMYManager extends OBT_UIManager {
 
         let enemyProps: EMYInfo.EMYProps = this.enemyData[enemyType];
         let isEliteEnemy: boolean = this._isEliteEnemy(enemyType);
-        let scriptName: string = enemyProps.script || "EmyBasic";
+        let scriptName: string = enemyProps.script || "EmyBasic1";
         let enemyNode = this._emyNodePoolMap[enemyType].get();
         if (!enemyNode) {
             enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName });
         }
-        let enemyScript: EmyBasic = enemyNode.getComponent(EmyBasic);
+        let enemyScript: EmyBasic1 = enemyNode.getComponent(EmyBasic1);
         this.createCounter++;
         let nodeId: string = `${this.createCounter}`;
         enemyScript.init(enemyProps, nodeId);
