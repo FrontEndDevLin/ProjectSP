@@ -12,7 +12,7 @@ import WeaponManager from "../../../CManager/WeaponManager";
 import ProcessManager from "../../../CManager/ProcessManager";
 
 export default class ItemBasic {
-    public props: ItemInfo.I_Item | WarCoreInfo.I_WarCoreAttr;
+    public props: ItemInfo.I_Item;
 
     public count: number = 0;
     // 当前价格=(基础价格+当前波次+(基础价格*0.1*当前波次)*角色属性'%道具价格')
@@ -26,6 +26,7 @@ export default class ItemBasic {
 
     constructor(itemData: ItemInfo.I_Item) {
         if (itemData) {
+            console.log(itemData)
             const props: ItemInfo.I_Item = copyObject(itemData);
             this.props = props;
             // if (itemData.global === ItemInfo.Global.ITEM) {
@@ -33,8 +34,11 @@ export default class ItemBasic {
             //     this.real_price = Math.round(this.props.price + wave + (this.props.price * 0.1 * wave) * CHRManager.instance.propCtx.getPropRealValue("item_price"));
             //     this.recover_price = Math.ceil(this.real_price * 0.25);
             // }
+            this.onInit();
         }
     }
+
+    protected onInit() {}
 
     protected onUpgradeQuality() {}
 
@@ -72,6 +76,100 @@ export default class ItemBasic {
         // if (this[propKey] !== undefined) {
         //     this[propKey] = value;
         // }
+    }
+
+    // 道具介绍
+    public getIntro() {
+        let intro = this.props.intro;
+
+        // 对模板的 <%XX%> 进行处理
+        const valRegex = /<%([^%]+)%>/g;
+        const valMatches = intro.match(valRegex)?.map(m => m.replace(/^<%|%>$/g, '')) || [];
+        if (valMatches.length) {
+            valMatches.forEach((key) => {
+                let val: number = this[key];
+                if (val) {
+                    let valRichTxt: string;
+                    let prefix: string = "";
+                    let valPrefix: string = this.val_prefix[key];
+                    if (valPrefix === "+-") {
+                        prefix = val >= 0 ? "+" : "-";
+                    } else {
+                        prefix = valPrefix;
+                    }
+                    let richVal: string = `${prefix}${val}`;
+                    if (val >= 0) {
+                        valRichTxt = getSuccessRichTxt(richVal);
+                    } else {
+                        valRichTxt = getDangerRichTxt(richVal);
+                    }
+                    intro = intro.replace(`<%${key}%>`, valRichTxt);
+                }
+            })
+        }
+
+        // 对模板的 <&XX&> 进行处理
+        const propRegex = /<&([^&]+)&>/g;
+        const propMatches = intro.match(propRegex)?.map(m => m.replace(/^<&|&>$/g, '')) || [];
+        if (propMatches.length) {
+            propMatches.forEach((key) => {
+                let propTxt = CHRManager.instance.propCtx.getPropInfo(key, "txt");
+                if (propTxt) {
+                    let propTxtRichTxt: string = getSuccessRichTxt(propTxt);
+                    intro = intro.replace(`<&${key}&>`, propTxtRichTxt);
+                }
+            })
+        }
+
+        // 对模板的 <sXXs> 进行处理
+        const sColorRegex = /<s([^s]+)s>/g;
+        const sColorMatches = intro.match(sColorRegex)?.map(m => m.replace(/^<s|s>$/g, '')) || [];
+        if (sColorMatches.length) {
+            sColorMatches.forEach((txt) => {
+                let sColorTxtRichTxt: string = getSuccessRichTxt(txt);
+                intro = intro.replace(`<s${txt}s>`, sColorTxtRichTxt);
+            })
+        }
+
+        // TODO: 普通道具不会对全局收益进行修正, 这段代码可以优化到特殊类里面。
+        // 对模板的 <~XX,YY~>进行处理(全局修正属性)
+        const amendRegex = /<~([^~]+)~>/g;
+        const amendMatches = intro.match(amendRegex)?.map(m => m.replace(/^<~|~>$/g, '')) || [];
+        if (amendMatches.length) {
+            amendMatches.forEach((rule) => {
+                let [amendProp, key] = rule.split(',')
+                if (amendProp && key) {
+                    let value = this[key];
+                    let propTxt = CHRManager.instance.propCtx.getPropInfo(amendProp, "txt");
+                    if (value && propTxt) {
+                        let amendTxtRichTxt: string = getSuccessRichTxt(propTxt) + '的加成';
+                        let amendValTxt: string;
+                        value *= 100;
+                        if (value > 0) {
+                            amendValTxt = getSuccessRichTxt(`+${value}%`);
+                        } else {
+                            amendValTxt = getDangerRichTxt(`-${value}%`);
+                        }
+
+                        intro = intro.replace(`<~${rule}~>`, `${amendTxtRichTxt}${amendValTxt}`);
+                    }
+                }
+            })
+        }
+
+        return intro;
+    }
+
+    // buff富文本
+    public getBuffTxt() {
+        let buffTxt = "";
+        this.props.buff_list.forEach((buff, i) => {
+            buffTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
+            if (i !== this.props.buff_list.length - 1) {
+                buffTxt += "<br/>";
+            }
+        });
+        return buffTxt;
     }
 
     // 使用道具

@@ -14,6 +14,11 @@ export enum GAME_NODE {
     PASS_PREPARE // 备战结束
 }
 
+export enum Camp {
+    ALLY = 1,
+    ENEMY = 2
+}
+
 export namespace Common {
     export interface SimpleObj {
         [str: string]: number | number
@@ -515,6 +520,7 @@ export namespace WeaponInfo {
     export interface IWeapon {
         code: string,
         type: WEAPON_TYPE,
+        camp: Camp,
         intro: string,
         bullet: string,
         quality: ITEM_QUALITY,
@@ -529,6 +535,7 @@ export namespace WeaponInfo {
     export interface WeaponRealTimeProps {
         code: string,
         type: WEAPON_TYPE,
+        camp: Camp,
         intro: string,
         bullet: string,
         quality: ITEM_QUALITY,
@@ -648,7 +655,9 @@ export namespace GameCollider {
 
         // 子弹碰撞id
         BULLET_BASE = 500,
-        BULLET_ORBITS_KNIFE = 503
+        BULLET_ORBITS_KNIFE = 503,
+
+        BULLET_EMY_BODY = 540
     }
 
     export enum GROUP {

@@ -1,13 +1,14 @@
 import { _decorator, BoxCollider2D, CircleCollider2D, Contact2DType, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import OBT from '../../../OBT';
-import { GameCollider, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
+import { DamageInfo, GameCollider, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import ProcessManager from '../../../CManager/ProcessManager';
 import { getSaveCtrl } from '../../../CManager/Class/SaveCtrl';
 import DamageManager from '../../../CManager/DamageManager';
 import { getRandomNumber } from '../../../Common/utils';
+import { HitInfo } from '../../../CManager/CombatManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -70,38 +71,44 @@ export class CHR extends OBT_Component {
         // if (selfCollider.tag === GameCollider.TAG.)
     }
 
+    public onHit(damageInfo: HitInfo) {
+        console.log('角色被击中', damageInfo);
+        // damageInfo.
+        // 根据角色闪避属性，决定是否受击
+        let avdVal: number = CHRManager.instance.propCtx.getPropRealValue("avd");
+        let isHit: boolean = true;
+        if (avdVal > 0) {
+            if (avdVal > 60) {
+                avdVal = 60;
+            }
+            let randomNum = getRandomNumber(1, 100);
+            // 打不中
+            if (randomNum <= avdVal) {
+                isHit = false;
+            }
+        }
+
+        if (isHit) {
+            // let enemyId: string = otherCollider.node.name;
+            // let isSpecDmg: boolean = otherCollider.group === GameCollider.GROUP.EMY_BULLET;
+            // if (isSpecDmg) {
+            //     enemyId = otherCollider.node.OBT_param1;
+            // }
+            // let damage = DamageManager.instance.calcEnemyDamage(enemyId, isSpecDmg);
+            let damage = damageInfo.damage;
+            CHRManager.instance.propCtx.addHP(-damage);
+        } else {
+            // 通知伤害数字管理，跳出“闪避”字样
+            console.log('触发闪避')
+        }
+    }
+
     // 角色受击处理/吸收战利品
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GameCollider.GROUP.ENEMY || otherCollider.group === GameCollider.GROUP.EMY_BULLET) {
             return;
             if (otherCollider.tag === GameCollider.TAG.PEACE) {
                 return;
-            }
-            // 根据角色闪避属性，决定是否受击
-            let avdVal: number = CHRManager.instance.propCtx.getPropRealValue("avd");
-            let isHit: boolean = true;
-            if (avdVal > 0) {
-                if (avdVal > 60) {
-                    avdVal = 60;
-                }
-                let randomNum = getRandomNumber(1, 100);
-                // 打不中
-                if (randomNum <= avdVal) {
-                    isHit = false;
-                }
-            }
-
-            if (isHit) {
-                let enemyId: string = otherCollider.node.name;
-                let isSpecDmg: boolean = otherCollider.group === GameCollider.GROUP.EMY_BULLET;
-                if (isSpecDmg) {
-                    enemyId = otherCollider.node.OBT_param1;
-                }
-                let damage = DamageManager.instance.calcEnemyDamage(enemyId, isSpecDmg);
-                CHRManager.instance.propCtx.addHP(-damage);
-            } else {
-                // 通知伤害数字管理，跳出“闪避”字样
-                console.log('触发闪避')
             }
         }
         if (otherCollider.group === GameCollider.GROUP.DROP_ITEM) {

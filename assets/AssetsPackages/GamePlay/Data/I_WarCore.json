@@ -1,6 +1,7 @@
 {
     "desc": {
-        "intro": "核心配置文件",
+        "desc": "核心配置文件",
+        "intro": "内置道具介绍",
         "desc2": "这里面可以定义首角色属性加成的属性",
         "split": "分裂",
         "pub_war_core": "允许选择的核心",
@@ -16,8 +17,49 @@
             "global": 2,
             "intro": "发射基础飞弹进行攻击",
             "type": 1,
-            "weapon": "Weapon_Chr_BaseFlyBullet"
+            "weapon": "Weapon_Chr_BaseFlyBullet",
+            "upgrade_pool": []
+        },
+        "ScatterWarCore": {
+            "code": "ScatterWarCore",
+            "name": "散射核心",
+            "ico": "scatter",
+            "ico_gaming": "...",
+            "quality": 1,
+            "global": 2,
+            "intro": "攻击会分裂成o个飞弹",
+            "type": 2,
+            "buff_list": [
+                {
+                    "prop": "avd",
+                    "value": 5
+                }
+            ],
+            "weapon": "Weapon_Chr_Scatter",
+            "upgrade_pool": ["Item_UPack_Mirror"]
+        },
+        "a": {
+            "id": "ScatterAtkWarCore",
+            "label": "散射",
+            "ico": "scatter",
+            "ico_gaming": "...",
+            "quality": 1,
+            "global": 2,
+            "group": 1,
+            "intro": "<~range_dmg,val_1~><br/>波次结束后<%val_2%><&spd&>",
+            "type": 2,
+            "val_1": 0.5,
+            "val_2": 1,
+            "buff_list": [
+                {
+                    "prop": "avd",
+                    "value": 5
+                }
+            ],
+            "weapon": "Weapon_ScatterAtkWarCore",
+            "upgrade_pool_": ["Item_FightWithBothHands", "Item_Blossom", "Item_CrossCloud", "Item_GatheringStorm"],
+            "upgrade_pool": ["Item_FightWithBothHands", "Item_CrossCloud", "Item_FastScatter"]
         }
     },
-    "pub_war_core": []
+    "pub_war_core": ["ScatterWarCore"]
 }

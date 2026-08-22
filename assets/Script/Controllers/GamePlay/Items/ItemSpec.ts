@@ -23,9 +23,7 @@ export default class ItemSpec extends ItemBasic {
 
     protected onUse() {}
 
-    protected onInit() {}
-
-    public initWeapon(initOptions: WeaponInitOptions = { mountNode: null }) {
+    public initWeapon() {
         if (!this.props.weapon) {
             return;
         }
@@ -34,12 +32,19 @@ export default class ItemSpec extends ItemBasic {
             console.error('ItemSpec initWeapon weaponCtx is null');
             return;
         }
+        weaponCtx.setItemRef(this);
         this.weaponCtx = weaponCtx;
         if (this.props.quality) {
             // this.weaponCtx.setQuality(this.props.quality);
         }
+    }
+
+    public mountWeapon(initOptions: WeaponInitOptions = { mountNode: null }) {
+        if (!this.weaponCtx) {
+            return;
+        }
         if (initOptions.mountNode) {
-            weaponCtx.mountBehaviorModule(initOptions.mountNode);
+            this.weaponCtx.mountBehaviorModule(initOptions.mountNode);
             console.log('已挂载武器', this.weaponCtx);
         }
     }

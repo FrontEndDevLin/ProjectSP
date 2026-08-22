@@ -308,7 +308,7 @@ export default class DropItemManager extends OBT_UIManager {
     // 是否掉落战利品
     private _dropTrophy(emyRateData: EMYInfo.EMYDropInfo): number {
         // 先查看是否有固定掉落
-        let trophy: ItemInfo.TROPHY_TYPE = ProcessManager.instance.getFixedDropTrophy(emyRateData.id);
+        let trophy: ItemInfo.TROPHY_TYPE = ProcessManager.instance.getFixedDropTrophy(emyRateData.code);
         if (typeof trophy === 'number') {
             return trophy;
         }

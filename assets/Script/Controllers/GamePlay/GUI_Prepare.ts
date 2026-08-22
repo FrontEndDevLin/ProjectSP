@@ -16,6 +16,7 @@ import ItemBase from './Items/ItemBase';
 import ItemWarCore from './Items/ItemWarCore';
 import GUI_PopupManager from '../../CManager/GUI_PopupManager';
 import GUI_TooltipsManager from '../../CManager/GUI_TooltipsManager';
+import Item_WarCore from './Items/Item_WarCore';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -143,9 +144,9 @@ export class GUI_Prepare extends OBT_Component {
 
     // 核心区主核心图标
     protected updateAtkWarCoreIcon() {
-        const warCore: ItemWarCore = WarCoreManager.instance.warCore;
-        let assets: SpriteFrame = warCore.getAssets();
-        let quality: ITEM_QUALITY = warCore.quality || ITEM_QUALITY.LV1;
+        const warCore: Item_WarCore = WarCoreManager.instance.iWarCore;
+        let assets: SpriteFrame = warCore.getAssets() || null;
+        let quality: ITEM_QUALITY = warCore.props.quality || ITEM_QUALITY.LV1;
         this.view("PrepareWrap/InfoWrap/CoreWrap/Wrap/WarCoreSlot/SlotWrap/Pic").getComponent(Sprite).spriteFrame = assets;
 
         let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];

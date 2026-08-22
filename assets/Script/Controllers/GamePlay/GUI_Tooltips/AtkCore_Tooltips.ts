@@ -1,8 +1,8 @@
 import { _decorator } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import ItemWarCore from '../Items/ItemWarCore';
 import { CoreCard } from '../GUI_CoreSelect/CoreCard';
 import WarCoreManager from '../../../CManager/WarCoreManager';
+import Item_WarCore from '../Items/Item_WarCore';
 const { ccclass, property } = _decorator;
 
 @ccclass('AtkCore_Tooltips')
@@ -20,7 +20,7 @@ export class AtkCore_Tooltips extends OBT_Component {
     }
 
     public updateView() {
-        const warCore: ItemWarCore = WarCoreManager.instance.warCore;
+        const warCore: Item_WarCore = WarCoreManager.instance.iWarCore;
         this.view("CoreCard").getComponent(CoreCard).updateView(warCore);
     }
 

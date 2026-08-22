@@ -36,7 +36,8 @@ export class BulletBasic extends OBT_Component {
 
     public init({ bulletAttr, weaponRealTimeProps, position, vector }: InitIBulletPrams) {
         this.collider = this.node.getComponent(BoxCollider2D);
-        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        this.collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+        this.collider.on(Contact2DType.END_CONTACT, this._onEndContact, this);
 
         this.node.setPosition(position);
         this.attr = bulletAttr;
@@ -69,10 +70,18 @@ export class BulletBasic extends OBT_Component {
     protected die() {
         this.isAlive = false;
 
-        this.collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        this.collider.off(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+        this.collider.off(Contact2DType.END_CONTACT, this._onEndContact, this);
         this.collider = null;
 
         BulletManager.instance.recoverBullet(this.attr.code, this.node);
+    }
+
+    private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        if (otherCollider.group === GameCollider.GROUP.CORE_DOMAIN) {
+            return;
+        }
+        this.onBeginContact(selfCollider, otherCollider);
     }
 
     protected onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
@@ -123,6 +132,16 @@ export class BulletBasic extends OBT_Component {
         //         this.attr.penetrate--;
         //     }
         // }
+    }
+
+    private _onEndContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        if (otherCollider.group === GameCollider.GROUP.CORE_DOMAIN) {
+            return;
+        }
+        this.onEndContact(selfCollider, otherCollider);
+    }
+
+    protected onEndContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
     }
 
     // public awaken(vector?: Vec3) {

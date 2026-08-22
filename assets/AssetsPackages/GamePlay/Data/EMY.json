@@ -15,11 +15,11 @@
   },
   "EMY_def": {
   },
-  "EMY_Peace": {
-    "id": "EMY_Peace",
+  "Emy_Pacifist": {
+    "code": "Emy_Pacifist",
     "cld": 96,
     "type": "normal",
-    "move": "none",
+    "script": "Emy_Pacifist",
     "pic": "",
     "spd": 0,
     "exp_drop_rate": 1,
@@ -41,6 +41,51 @@
     "hp": 5,
     "hp_growth": 0.34,
     "dmg_growth": 0.28
+  },
+  "Emy_Goblin2": {
+    "code": "Emy_Goblin2",
+    "cld": 100,
+    "type": "normal",
+    "script": "Emy_Goblin2",
+    "spd": 120,
+    "exp_drop_rate": 1,
+    "trophy_drop_rate": 0.9,
+    "exp_cnt": 1,
+    "hp": 2,
+    "hp_growth": 0.3,
+    "dmg_growth": 0.28
+  },
+  "Emy_Elite01": {
+    "code": "Emy_Elite01",  
+    "cld": 120,
+    "type": "elite",
+    "script": "Emy_Elite01",
+    "move": "normal,surround",
+    "attack": "none,remote",
+    "weight": 1,
+    "attack_cd": 2,
+    "broken_point": [
+      [[-25, 52], [-8, 52], [8, 52], [25, 52], [-25, -52], [-8, -52], [8, -52], [25, -52], [-52, 25], [-52, 8], [-52, -8], [-52, -25], [52, 25], [52, 8], [52, -8], [52, -25]],
+      [
+        [-35, 35], [-21, 35], [-7, 35], [7, 35], [21, 35], [35, 35],
+        [-35, 21], [-21, 21], [-7, 21], [7, 21], [21, 21], [35, 21],
+        [-35, 7], [-21, 7], [-7, 7], [7, 7], [21, 7], [35, 7],
+        [-35, -7], [-21, -7], [-7, -7], [7, -7], [21, -7], [35, -7],
+        [-35, -21], [-21, -21], [-7, -21], [7, -21], [21, -21], [35, -21],
+        [-35, -35], [-21, -35], [-7, -35], [7, -35], [21, -35], [35, -35]
+      ]
+    ],
+    "pic": "",
+    "spd": 100,
+    "exp_drop_rate": 1,
+    "trophy_drop_rate": 1,
+    "exp_cnt": 8,
+    "hp": 60,
+    "hp_growth": 0.3,
+    "dmg": 2,
+    "dmg_growth": 0.38,
+    "spec_dmg": 3,
+    "spec_dmg_growth": 0.25
   },
   "EMY01": {
     "id": "EMY01",

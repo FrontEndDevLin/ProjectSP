@@ -7,6 +7,7 @@ import { BehaviorBase } from './BehaviorBase';
 import { EmyBasic } from '../EMY/EmyBasic';
 import { MeleeBehavior_Emy_Body } from './MeleeBehavior_Emy_Body';
 import { Bullet_Emy_Body } from '../Bullet/Bullet_Emy_Body';
+import { EmyBasic1 } from '../EMY/EmyBasic1';
 const { ccclass, property } = _decorator;
 
 /**
@@ -66,8 +67,8 @@ export class BehaviorBase_Chr extends BehaviorBase {
 
     protected onCHRDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GameCollider.GROUP.ENEMY) {
-            const enemyBodyBullet: Bullet_Emy_Body = otherCollider.node.getComponent(Bullet_Emy_Body);
-            if (!enemyBodyBullet) {
+            const enemy: EmyBasic1 = otherCollider.node.getComponent(EmyBasic1);
+            if (!enemy) {
                 console.error('7111111111111111111111')
                 console.log(otherCollider)
                 return
@@ -75,11 +76,11 @@ export class BehaviorBase_Chr extends BehaviorBase {
             switch (selfCollider.tag) {
                 case GameCollider.TAG.CHR_RANGE_ALERT: {
                     // 将敌人放入队列中，结束碰撞时将敌人移出
-                    let nodeId: string = enemyBodyBullet.enemyId;
+                    let nodeId: string = enemy.id;
                     this.highEnemyList[nodeId] = 1;
                 } break;
                 case GameCollider.TAG.CHR_RANGE_ATTACK: {
-                    let nodeId: string = enemyBodyBullet.enemyId;
+                    let nodeId: string = enemy.id;
                     this.dangerEnemyList[nodeId] = 1;
                 } break;
             }
@@ -87,7 +88,7 @@ export class BehaviorBase_Chr extends BehaviorBase {
     }
     protected onCHRDomainEndContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GameCollider.GROUP.ENEMY) {
-            const enemyBodyBullet: Bullet_Emy_Body = otherCollider.node.getComponent(Bullet_Emy_Body);
+            const enemyBodyBullet: EmyBasic1 = otherCollider.node.getComponent(EmyBasic1);
             if (!enemyBodyBullet) {
                 console.error('22222224444444444')
                 console.log(otherCollider)
@@ -95,11 +96,11 @@ export class BehaviorBase_Chr extends BehaviorBase {
             }
             switch (selfCollider.tag) {
                 case GameCollider.TAG.CHR_RANGE_ALERT: {
-                    let nodeId: string = enemyBodyBullet.enemyId;
+                    let nodeId: string = enemyBodyBullet.id;
                     delete this.highEnemyList[nodeId];
                 } break;
                 case GameCollider.TAG.CHR_RANGE_ATTACK: {
-                    let nodeId: string = enemyBodyBullet.enemyId;
+                    let nodeId: string = enemyBodyBullet.id;
                     delete this.dangerEnemyList[nodeId];
                 } break;
             }
@@ -127,7 +128,7 @@ export class BehaviorBase_Chr extends BehaviorBase {
             if (this.isAttacking) {
                 return;
             }
-            if (this.isCdOver(deltaTime)) {
+            if (this.calcCd(deltaTime)) {
                 let target: EMYInfo.ChooseTargetRes = this.chooseTarget();
                 if (target.isCanBeAttacked && target.realTimeEnemyInfo) {
                     this.isAttacking = true;

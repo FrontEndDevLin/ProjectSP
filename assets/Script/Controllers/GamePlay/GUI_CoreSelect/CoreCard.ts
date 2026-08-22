@@ -10,11 +10,12 @@ import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber } from '../../../Common/utils';
 import ItemWarCore from '../Items/ItemWarCore';
 import ItemsManager from '../../../CManager/ItemsManager';
+import Item_WarCore from '../Items/Item_WarCore';
 const { ccclass, property } = _decorator;
 
 @ccclass('CoreCard')
 export class CoreCard extends OBT_Component {
-    private _props: ItemWarCore;
+    private warCoreRef: Item_WarCore;
 
     protected showProps: string[] = ["ctl", "cd", "range"];
 
@@ -30,11 +31,13 @@ export class CoreCard extends OBT_Component {
 
     }
 
-    public updateView(props: ItemWarCore) {
-        this._props = props;
+    public updateView(warCore: Item_WarCore) {
+        this.warCoreRef = warCore;
 
-        // console.log('预览核心, 当前核心品质:' + props.quality);
-        let quality = props.quality || ITEM_QUALITY.LV1;
+        // return console.log(warCore)
+
+        // console.log('预览核心, 当前核心品质:' + warCore.props.quality);
+        let quality = warCore.props.quality || ITEM_QUALITY.LV1;
         let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
         let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
         this.view("Border").getComponent(Sprite).spriteFrame = borderAssets;
@@ -42,30 +45,34 @@ export class CoreCard extends OBT_Component {
         this.view("Background").getComponent(Sprite).color = uiConfg.background;
         this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).color = uiConfg.color;
 
-        this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = props.getAssets();
-        this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).string = props.label;
+        this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = warCore.getAssets();
+        this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).string = warCore.props.name;
 
-        this.view("Container/Content/Intro").getComponent(RichText).string = props.weaponCtx.getIntroRichTxt();
-        this.view("Container/Content/Attr").getComponent(RichText).string = props.weaponCtx.getPanelRichTxt();
+        /**
+         * TODO: 由核心介绍文本和武器介绍文本组成
+         */
 
-        if (props.intro) {
-            this.view("Container/Content/Trait").active = true;
-            this.view("Container/Content/Trait").getComponent(RichText).string = props.getIntro();
-        } else {
-            this.view("Container/Content/Trait").active = false;
-        }
+        this.view("Container/Content/Intro").getComponent(RichText).string = warCore.getIntro();
+        this.view("Container/Content/Attr").getComponent(RichText).string = warCore.weaponCtx.getPanelRichTxt();
 
-        if (props.buff_list && props.buff_list.length) {
-            this.view("Container/Content/Buff").getComponent(RichText).string = props.getBuffTxt();
+        // if (props.intro) {
+        //     this.view("Container/Content/Trait").active = true;
+        //     this.view("Container/Content/Trait").getComponent(RichText).string = props.getIntro();
+        // } else {
+        //     this.view("Container/Content/Trait").active = false;
+        // }
+
+        if (warCore.props.buff_list && warCore.props.buff_list.length) {
+            this.view("Container/Content/Buff").getComponent(RichText).string = warCore.getBuffTxt();
         }
     }
 
     private _touchCard() {
-        if (!this._props) {
+        if (!this.warCoreRef) {
             return;
         }
         if (ProcessManager.instance.gameNode === GAME_NODE.CORE_SELECT) {
-            WarCoreManager.instance.mountAtkWarCore(this._props.id);
+            WarCoreManager.instance.mountAtkWarCore(this.warCoreRef.props.code);
             this.hideNodeByPath();
         }
     }

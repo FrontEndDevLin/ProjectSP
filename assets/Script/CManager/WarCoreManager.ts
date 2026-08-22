@@ -18,6 +18,8 @@ import WeaponManager from './WeaponManager';
 import ItemWarCore from '../Controllers/GamePlay/Items/ItemWarCore';
 import ItemSpecial from '../Controllers/GamePlay/Items/ItemSpecial';
 import Item_WarCore from '../Controllers/GamePlay/Items/Item_WarCore';
+import WeaponBasic from '../Controllers/GamePlay/Weapons/WeaponBasic';
+import ItemBasic from '../Controllers/GamePlay/Items/ItemBasic';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -30,7 +32,7 @@ export default class WarCoreManager extends OBT_UIManager {
 
     public warCore: ItemWarCore = null;
     public warCoreItem: ItemBase = null;
-    public warCoreWeapon: WeaponBase = null;
+    public warCoreWeapon: WeaponBasic = null;
 
     public iWarCore: Item_WarCore = null;
 
@@ -113,7 +115,7 @@ export default class WarCoreManager extends OBT_UIManager {
                 // this.warCoreWeapon = WeaponManager.instance.getWeaponCtxById(warCore.weapon);
                 // this.atkWarCore.weaponCtx = this.warCoreWeapon;
                 // console.log(this.warCoreWeapon)
-                this.warCoreWeapon = this.warCore.weaponCtx;
+                // this.warCoreWeapon = this.warCore.weaponCtx;
                 this.updateRealAtkWarCore();
             }
             this.warCore.use();
@@ -131,13 +133,12 @@ export default class WarCoreManager extends OBT_UIManager {
         if (warCoreData) {
             this.iWarCore = this.getIWarCoreCtxById(warCoreData.code);
             this.iWarCore.use();
-            this.iWarCore.initWeapon({ mountNode: this.warCoreRootNode });
+            this.iWarCore.mountWeapon({ mountNode: this.warCoreRootNode });
 
-            console.log(this.warCoreRootNode)
-            // if (this.warCore.weapon) {
-            //     this.warCoreWeapon = this.warCore.weaponCtx;
-            //     this.updateRealAtkWarCore();
-            // }
+            if (this.iWarCore.weaponCtx) {
+                this.warCoreWeapon = this.iWarCore.weaponCtx;
+                this.updateRealAtkWarCore();
+            }
             // this.warCore.use();
 
             // OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
@@ -156,32 +157,39 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     // 仅限核心选择时调用
-    public mountAtkWarCore(atkWarCoreId: string) {
-        if (this.warCore) {
+    public mountAtkWarCore(warCoreCode: string) {
+        if (this.iWarCore) {
             console.log('当前已有挂载攻击核心，需要先卸载');
             this.unmountAtkWarCore();
         }
-        this._setAtkWarCore(atkWarCoreId);
+        this._setWarCore(warCoreCode);
         ItemsManager.instance.expendTrophy();
         this.unlockWarCore = true;
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CORE_SELECT_FINISH);
     }
     // 卸载当前核心，卸载时，如当前核心有增益类buff，角色属性等值减去所有增益属性
     protected unmountAtkWarCore() {
-        this.warCoreRootNode.getChildByName(this.warCore.id).destroy();
-        this.warCore = null;
+        this.iWarCore.weaponCtx.node.destroy();
+        this.iWarCore = null;
+        console.log(this.warCoreRootNode)
     }
 
     // 预选进攻核心列表
-    public getPreCheckAtkWarCoreList(): ItemWarCore[] {
-        let pubAtkWarCoreList: string[] = this.warCoreData.pub_atk_war_core;
+    public getPreCheckAtkWarCoreList(): Item_WarCore[] {
+        let pubAtkWarCoreList: string[] = this.iWarCoreData.pub_war_core;
         const MAX: number = 3;
-        let list: ItemWarCore[] = [];
+        let list: Item_WarCore[] = [];
         let randomIdxList = [];
         if (pubAtkWarCoreList.length <= MAX) {
             pubAtkWarCoreList.forEach((_, idx: number) => {
                 randomIdxList.push(idx)
             })
+            let n = MAX - randomIdxList.length;
+            if (n > 0) {
+                for (let i = 0; i < n; i++) {
+                    randomIdxList.push(randomIdxList[0]);
+                }
+            }
         } else {
             randomIdxList = getRandomNumbers(0, pubAtkWarCoreList.length - 1, MAX);
         }
@@ -189,8 +197,10 @@ export default class WarCoreManager extends OBT_UIManager {
         randomIdxList.forEach((idx: number) => {
             let warCoreId: string = pubAtkWarCoreList[idx];
 
-            let warCoreCtx: ItemWarCore = this.getWarCoreCtxById(warCoreId);
-            list.push(warCoreCtx);
+            let warCoreCtx: Item_WarCore = this.getIWarCoreCtxById(warCoreId);
+            if (warCoreCtx) {
+                list.push(warCoreCtx);
+            }
         });
 
         return list;
@@ -206,7 +216,14 @@ export default class WarCoreManager extends OBT_UIManager {
         let warCoreData: WarCoreInfo.I_WarCoreAttr = this.iWarCoreData.war_core_def[warCoreCode];
         let warScriptName: string = warCoreData.type === ItemInfo.Type.NORMAL ? "Item_WarCoreBaseWarCore" : "Item_WarCore" + warCoreCode;
         // console.log(warScriptName)
-        return new Item_def[warScriptName](warCoreData);
+        const constructorFn = Item_def[warScriptName];
+        if (!constructorFn) {
+            console.error(`未找到核心道具类 ${warScriptName}`);
+            return null;
+        }
+        let itemCtx: Item_WarCore = new constructorFn(warCoreData);
+        itemCtx.initWeapon();
+        return itemCtx;
     }
 
     // 获取是否已解锁核心升级
@@ -215,10 +232,11 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     // 预选核心升级包列表
-    public getPreCheckUpgradePackList(): ItemBase[] {
-        let upgradePool: string[] = this.warCore.upgrade_pool;
+    public getPreCheckUpgradePackList(): ItemBasic[] {
+        console.log('TODO: 预选核心升级包列表');
+        let upgradePool: string[] = this.iWarCore.upgrade_pool;
         const MAX: number = 3;
-        let list: ItemBase[] = [];
+        let list: ItemBasic[] = [];
         let randomIdxList: number[] = [];
         if (upgradePool.length <= MAX) {
             upgradePool.forEach((_, idx: number) => {
@@ -228,11 +246,13 @@ export default class WarCoreManager extends OBT_UIManager {
             randomIdxList = getRandomNumbers(0, upgradePool.length - 1, MAX);
         }
 
-        randomIdxList.forEach((idx: number) => {
-            list.push(ItemsManager.instance.getItemCtxById(upgradePool[idx]));
-        });
+        console.log(randomIdxList);
+        return []
+        // randomIdxList.forEach((idx: number) => {
+        //     list.push(ItemsManager.instance.getItemCtxById(upgradePool[idx]));
+        // });
 
-        return list;
+        // return list;
     }
 
     private _initWarCoreLevel(lev?: number, expCur?: number) {
@@ -298,6 +318,8 @@ export default class WarCoreManager extends OBT_UIManager {
 
     // 挂载升级包
     public mountUpgradePack(packId: string) {
+        console.log('TODO: 挂载升级包');
+        return;
         if (this.upgradeSlot.length >= 3) {
             return;
         }

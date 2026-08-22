@@ -142,7 +142,8 @@ export default class EMYManager extends OBT_UIManager {
             let enemyProps: EMYInfo.EMYProps = this.enemyData[spawnRole.enemy_type];
             let { hp, dmg = 0, spec_dmg = 0, hp_growth = 0, dmg_growth = 0, spec_dmg_growth = 0 } = enemyProps;
 
-            let c_hp: number = Math.round(hp + hp * hp_growth * (this._waveRole.wave - 1));
+            // let c_hp: number = Math.round(hp + hp * hp_growth * (this._waveRole.wave - 1));
+            let c_hp: number = hp;
             let c_dmg: number = 0
             let c_spec_dmg: number = 0
             if (dmg) {
@@ -341,10 +342,10 @@ export default class EMYManager extends OBT_UIManager {
         if (!enemyNode) {
             enemyNode = this.loadPrefab({ prefabPath: `EMY/${enemyType}`, scriptName });
         }
-        let enemyScript: EmyBasic1 = enemyNode.getComponent(EmyBasic1);
+        let enemy: EmyBasic1 = enemyNode.getComponent(EmyBasic1);
         this.createCounter++;
         let nodeId: string = `${this.createCounter}`;
-        enemyScript.init(enemyProps, nodeId);
+        enemy.init(enemyProps, nodeId);
         enemyNode.setPosition(v3(x, y));
 
         alertAnimation.once(Animation.EventType.FINISHED, () => {

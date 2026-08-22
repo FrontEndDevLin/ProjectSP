@@ -3,6 +3,7 @@ import OBT_Component from '../../../OBT_Component';
 import WeaponBasic from '../Weapons/WeaponBasic';
 import { EMYInfo, GameCollider } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
+import WeaponEmy from '../Weapons/WeaponEmy';
 const { ccclass, property } = _decorator;
 
 /**
@@ -13,7 +14,7 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('BehaviorBase')
 export class BehaviorBase extends OBT_Component {
-    protected weaponRef: WeaponBasic = null;
+    protected weaponRef: WeaponBasic;
 
     protected isAttacking: boolean = false;
 
@@ -28,7 +29,7 @@ export class BehaviorBase extends OBT_Component {
         this.weaponRef = weaponRef;
     }
 
-    protected isCdOver(dt: number): boolean {
+    protected calcCd(dt: number): boolean {
         if (this.weaponRef.cd <= 0) {
             return true;
         } else {
@@ -41,6 +42,8 @@ export class BehaviorBase extends OBT_Component {
         this.weaponRef.finishAttack();
         this.isAttacking = false;
     }
+
+    public onInit() {}
 
     public runBehavior(deltaTime: number) {}
 }

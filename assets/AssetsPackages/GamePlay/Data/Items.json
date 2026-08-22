@@ -98,6 +98,22 @@
                 }
             ]
         },
+        "Item7": {
+            "id": "Item7",
+            "global": 1,
+            "quality": 1,
+            "label": "道具7",
+            "ico": "Star",
+            "price": 22,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "ctl",
+                    "value": 3
+                }
+            ]
+        },
         "Item51": {
             "id": "Item51",
             "global": 1,

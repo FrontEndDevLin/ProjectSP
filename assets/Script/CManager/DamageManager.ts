@@ -4,11 +4,12 @@ import OBT from '../OBT';
 import EMYManager from './EMYManager';
 import BulletManager from './BulletManager';
 import CHRManager from './CHRManager';
-import { BoostConfig, DamageInfo, ITEM_QUALITY } from '../Common/Namespace';
+import { BoostConfig, DamageInfo, ITEM_QUALITY, WeaponInfo } from '../Common/Namespace';
 import WarCoreManager from './WarCoreManager';
 import { getRandomNumber } from '../Common/utils';
 import { DamageTxt } from '../Controllers/GamePlay/Common/DamageTxt';
 import ProcessManager from './ProcessManager';
+import WeaponManager from './WeaponManager';
 
 /**
  * 伤害管理类

@@ -1,7 +1,7 @@
 {
     "desc": {
         "mark": "武器定义, 核心,道具等拥有攻击/治疗手段的系统可以引入武器",
-        "group": "1->友方 2->敌方",
+        "camp": "1->友方 2->敌方",
         "type": "武器类型 2->远程 1->近战",
         "split": "分裂数",
         "count": "生成数量",
@@ -14,30 +14,76 @@
         "boost": "受到的属性加成, 值为百分比"
     },
     "weapon_def": {
-        "Weapon_Emy_Body": {
-            "code": "Weapon_Emy_Body",
-            "group": 2,
+        "Weapon_Emy_Goblin": {
+            "code": "Weapon_Emy_Goblin",
+            "camp": 2,
             "type": 1,
             "intro": "敌人身体碰撞攻击",
-            "bullet": "EMY_Body001",
+            "bullet": "Emy_Body001",
             "quality": 1,
             "damage": [2],
             "cd": [1]
         },
+        "Weapon_Emy_Goblin2": {
+            "code": "Weapon_Emy_Goblin2",
+            "camp": 2,
+            "type": 1,
+            "intro": "敌人身体碰撞攻击",
+            "bullet": "Emy_Body002",
+            "quality": 1,
+            "damage": [2],
+            "cd": [1]
+        },
+        "Weapon_Emy_Elite01": {
+            "code": "Weapon_Emy_Elite01",
+            "camp": 2,
+            "type": 1,
+            "intro": "敌人身体碰撞攻击",
+            "bullet": "Emy_Body020",
+            "quality": 1,
+            "damage": [2],
+            "cd": [1]
+        },
+        "Weapon_Emy_TripleFlyBullet": {
+            "code": "Weapon_Emy_TripleFlyBullet",
+            "camp": 2,
+            "type": 1,
+            "intro": "敌人三飞弹武器",
+            "bullet": "Emy_Bullet020",
+            "quality": 1,
+            "damage": [2],
+            "cd": [2]
+        },
         "Weapon_Chr_BaseFlyBullet": {
             "code": "Weapon_Chr_BaseFlyBullet",
-            "group": 1,
+            "camp": 1,
             "type": 2,
             "intro": "基础飞弹攻击",
             "bullet": "CHR_Bullet001",
             "quality": 1,
             "damage": [3, 5, 7, 10],
             "range": 200,
-            "cd": [1, 0.38, 0.35, 0.3],
+            "cd": [0.42, 0.38, 0.35, 0.3],
             "crit_rate": [0.1, 0.12, 0.16, 0.24],
             "crit_dmg_rate": 1.5,
             "boost": {
                 "range_dmg": [0.2, 0.22, 0.24, 0.28]
+            }
+        },
+        "Weapon_Chr_Scatter": {
+            "code": "Weapon_Chr_Scatter",
+            "camp": 1,
+            "type": 2,
+            "intro": "散射飞弹攻击",
+            "bullet": "CHR_Bullet001",
+            "quality": 1,
+            "damage": [2, 4, 6, 10],
+            "range": 200,
+            "cd": [0.8, 0.74, 0.68, 0.6],
+            "crit_rate": [0.01, 0.02, 0.04, 0.08],
+            "crit_dmg_rate": 1.5,
+            "boost": {
+                "range_dmg": [0.4, 0.44, 0.5, 0.58]
             }
         }
     }

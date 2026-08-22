@@ -5,11 +5,31 @@
         "speed": "type=2有效, 伤害体飞行速度",
         "max_dis": "type=2有效, 伤害体最大飞行距离"
     },
-    "EMY_Body001": {
-        "code": "EMY_Body001",
-        "prefab": "EMY_Body001",
+    "Emy_Body001": {
+        "code": "Emy_Body001",
+        "prefab": "Emy_Body001",
         "type": 1,
         "script": "Bullet_Emy_Body"
+    },
+    "Emy_Body002": {
+        "code": "Emy_Body002",
+        "prefab": "Emy_Body002",
+        "type": 1,
+        "script": "Bullet_Emy_Body"
+    },
+    "Emy_Body020": {
+        "code": "Emy_Body020",
+        "prefab": "Emy_Body020",
+        "type": 1,
+        "script": "Bullet_Emy_Body"
+    },
+    "Emy_Bullet020": {
+        "code": "Emy_Bullet020",
+        "prefab": "Emy_Bullet020",
+        "type": 2,
+        "script": "Bullet_Normal",
+        "speed": 200,
+        "max_dis": 500
     },
     "CHR_Bullet001": {
         "code": "CHR_Bullet001",

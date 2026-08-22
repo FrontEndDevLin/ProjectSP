@@ -32,9 +32,9 @@ export default class WeaponManager extends OBT_UIManager {
         return copyObject(weaponData);
     }
 
-    public getIWeaponDataById(weaponCode: string): WeaponInfo.IWeapon {
+    public getIWeaponDataById(weaponCode: string, deepCopy: boolean = true): WeaponInfo.IWeapon {
         const weaponData: WeaponInfo.IWeapon = this.iWeaponData.weapon_def[weaponCode];
-        return copyObject(weaponData);
+        return deepCopy ? copyObject(weaponData) : weaponData;
     }
 
     public getWeaponCtxById(weaponId: string): WeaponBase {
