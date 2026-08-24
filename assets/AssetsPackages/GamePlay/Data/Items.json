@@ -9,7 +9,7 @@
         "not_open": "是否未开放, 未开放的道具不会进入商店列表, 需要调用ItemsManager中的开放方法来激活",
         "Item_LargePlumbum": {}
     },
-    "item_def": {
+    "item_def_": {
         "Item1": {
             "id": "Item1",
             "global": 1,
@@ -486,6 +486,80 @@
             "type": 2,
             "ico": "doublebow",
             "val_1": 33.33
+        }
+    },
+    "item_def": {
+        "Item1": {
+            "code": "Item1",
+            "global": 1,
+            "quality": 1,
+            "label": "道具1",
+            "ico": "Star",
+            "price": 14,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "hp",
+                    "value": 3
+                },
+                {
+                    "prop": "spd",
+                    "value": -1
+                }
+            ]
+        },
+        "Item2": {
+            "code": "Item2",
+            "global": 1,
+            "quality": 1,
+            "label": "道具2",
+            "ico": "Star",
+            "price": 13,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "range",
+                    "value": 10
+                }
+            ]
+        },
+        "Item3": {
+            "code": "Item3",
+            "global": 1,
+            "quality": 1,
+            "label": "道具3",
+            "ico": "Star",
+            "price": 18,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "atk_spd",
+                    "value": 8
+                },
+                {
+                    "prop": "dmg",
+                    "value": -2
+                }
+            ]
+        },
+        "Item4": {
+            "code": "Item4",
+            "global": 1,
+            "quality": 1,
+            "label": "道具4",
+            "ico": "Star",
+            "price": 28,
+            "type": 1,
+            "group": 1,
+            "buff_list": [
+                {
+                    "prop": "exp_eff",
+                    "value": 15
+                }
+            ]
         }
     }
 }

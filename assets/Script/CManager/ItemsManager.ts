@@ -7,10 +7,10 @@ import ProcessManager from "./ProcessManager";
 import OBT from "../OBT";
 import CHRManager from "./CHRManager";
 import { Item_def } from "../Controllers/GamePlay/Items/Item_def";
-import ItemBase from "../Controllers/GamePlay/Items/ItemBase";
 import ItemSpecial from "../Controllers/GamePlay/Items/ItemSpecial";
 import WarCoreManager from "./WarCoreManager";
 import RateConfigManager from "./RateConfigManager";
+import ItemBasic from "../Controllers/GamePlay/Items/ItemBasic";
 
 interface GetRandomItemConfig {
     ignoreKeyList?: string[]
@@ -38,16 +38,16 @@ export default class ItemsManager extends OBT_UIManager {
         [ITEM_QUALITY.LV4]: []
     };
 
-    protected chestItem: ItemBase;
+    protected chestItem: ItemBasic;
 
     // 触发刷新的次数
     private _refreshTime: number = 0;
     // 下次刷新的费用
     private _nextRefreshCost: number = 0;
-    public storeItemList: ItemBase[] = [];
+    public storeItemList: ItemBasic[] = [];
 
     // 当前背包道具
-    protected backpack: ItemBase[] = [];
+    protected backpack: ItemBasic[] = [];
 
     private _itemPreviewNode: Node;
 
@@ -75,13 +75,13 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     // 获取背包道具，返回分组为正常道具的道具列表
-    public getBackpack(): ItemBase[] {
-        return this.backpack.filter((item: ItemBase) => item.global === ItemInfo.Global.ITEM);
+    public getBackpack(): ItemBasic[] {
+        return this.backpack.filter((item: ItemBasic) => item.props.global === ItemInfo.Global.ITEM);
     }
 
     // 实时事件触发道具效果
     public onRealTimeEvent(eventName: string, params?: any) {
-        this.backpack.forEach((item: ItemBase) => {
+        this.backpack.forEach((item: ItemBasic) => {
             if (item[eventName] && typeof item[eventName] === "function") {
                 item[eventName](params);
             }
@@ -93,17 +93,17 @@ export default class ItemsManager extends OBT_UIManager {
 
         const { item_def } = this.itemData;
 
-        for (let itemId in item_def) {
-            let item: ItemInfo.Item = item_def[itemId];
-            this._groupMap[item.group].push(itemId);
+        for (let itemCode in item_def) {
+            let item: ItemInfo.I_Item = item_def[itemCode];
+            this._groupMap[item.group].push(itemCode);
             
             if (item.global === ItemInfo.Global.ITEM) {
-                if (item.not_open) {
+                if (item.unlock) {
                     continue;
                 }
 
                 let quality: ITEM_QUALITY = item.quality;
-                this.storeItemPool[quality].push(itemId)
+                this.storeItemPool[quality].push(itemCode)
             }
         }
     }
@@ -115,12 +115,12 @@ export default class ItemsManager extends OBT_UIManager {
         console.log('激活未开放道具：', itemIdList);
         const { item_def } = this.itemData;
         
-        itemIdList.forEach((itemId: string) => {
-            let item: ItemInfo.Item = item_def[itemId];
+        itemIdList.forEach((itemCode: string) => {
+            let item: ItemInfo.I_Item = item_def[itemCode];
             let quality: ITEM_QUALITY = item.quality || ITEM_QUALITY.LV1;
-            if (this.storeItemPool[quality].indexOf(itemId) === -1) {
+            if (this.storeItemPool[quality].indexOf(itemCode) === -1) {
                 if (item.global === ItemInfo.Global.ITEM) {
-                    this.storeItemPool[quality].push(itemId);
+                    this.storeItemPool[quality].push(itemCode);
                 }
             }
         })
@@ -129,9 +129,9 @@ export default class ItemsManager extends OBT_UIManager {
     // 刷新商店时，获取背包里已达上限/唯一的道具列表，以进行忽略操作
     private _getStoreIgnoreList(): string[] {
         let ignoreList: string[] = [];
-        this.backpack.forEach((backpackItem: ItemBase, i: number) => {
-            let itemId: string = backpackItem.id;
-            let item: ItemInfo.Item = this.getItemById(itemId);
+        this.backpack.forEach((backpackItem: ItemBasic, i: number) => {
+            let itemId: string = backpackItem.props.code;
+            let item: ItemInfo.I_Item = this.getItemById(itemId);
             switch (item.group) {
                 case ItemInfo.Group.SPECIAL: {
                     ignoreList.push(itemId);
@@ -148,28 +148,29 @@ export default class ItemsManager extends OBT_UIManager {
         return ignoreList;
     }
 
-    private _getLockStoreItem(): ItemBase[] {
-        return this.storeItemList.filter(item => item.lock === true);
+    private _getLockStoreItem(): ItemBasic[] {
+        // return this.storeItemList.filter(item => item.lock === true);
+        return []
     }
     private _loadStoreList(n: number = STORE_ITEM_COUNT): Boolean {
         // 筛除已锁定的道具(已锁定的道具，不要出现在开箱的物品列表里，避免唯一道具出现多个的情况)
-        let items: ItemBase[] = this._getLockStoreItem();
+        let items: ItemBasic[] = this._getLockStoreItem();
         n = n - items.length;
         if (n <= 0) {
             return false;
         }
         let ignoreList = this._getStoreIgnoreList();
         if (items.length) {
-            items.forEach((item: ItemBase) => {
-                ignoreList.push(item.id)
+            items.forEach((item: ItemBasic) => {
+                ignoreList.push(item.props.code)
             });
         }
         for (let i = 0; i < n; i++) {
-            let randomItem: ItemInfo.Item = this._getRandomItemByStore({ ignoreKeyList: ignoreList });
+            let randomItem: ItemInfo.I_Item = this._getRandomItemByStore({ ignoreKeyList: ignoreList });
             if (randomItem) {
-                ignoreList.push(randomItem.id);
-                let storeItem: ItemInfo.Item = copyObject(randomItem);
-                let scriptName: string = storeItem.type === ItemInfo.Type.NORMAL ? "Item_Base" : storeItem.id;
+                ignoreList.push(randomItem.code);
+                let storeItem: ItemInfo.I_Item = copyObject(randomItem);
+                let scriptName: string = storeItem.type === ItemInfo.Type.NORMAL ? "Item_Base" : storeItem.code;
                 if (Item_def[scriptName]) {
                     let itemCtx = new Item_def[scriptName](storeItem)
                     items.push(itemCtx);
@@ -182,16 +183,16 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     // 获取一个符合当前阶段的道具，刷新商店用
-    private _getRandomItemByStore(options: GetRandomItemConfig = {}): ItemInfo.Item {
+    private _getRandomItemByStore(options: GetRandomItemConfig = {}): ItemInfo.I_Item {
         let nextWave: number = ProcessManager.instance.waveRole.wave + 1;
         // 物品质量根据当前波次决定，低级物品概率大
         let quality = RateConfigManager.instance.getItemQuality(nextWave);
         let ignoreList = options.ignoreKeyList;
 
-        let item: ItemInfo.Item = null;
+        let item: ItemInfo.I_Item = null;
 
         // 可选道具列表
-        let itemPool: ItemInfo.Item[] = this._getItemsList(quality, ignoreList);
+        let itemPool: ItemInfo.I_Item[] = this._getItemsList(quality, ignoreList);
         if (itemPool.length) {
             let idx: number = getRandomNumber(0, itemPool.length - 1);
             item = itemPool[idx];
@@ -201,7 +202,7 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     private _getItemsList(quality: ITEM_QUALITY, ignoreKeyList: string[] = []) {
-        let pool: ItemInfo.Item[] = [];
+        let pool: ItemInfo.I_Item[] = [];
         for (let id of this.storeItemPool[quality]) {
             // 排除已进入当前商店列表/已达上限的项目
             if (ignoreKeyList.indexOf(id) !== -1) {
@@ -216,11 +217,11 @@ export default class ItemsManager extends OBT_UIManager {
         return this.itemData.item_def[id];
     }
     public getBackpackItemById(id) {
-        return this.backpack.find(item => item.id === id);
+        return this.backpack.find(item => item.props.code === id);
     }
 
-    // private _getRandomItem(quality: number = ItemInfo.TROPHY_TYPE.CHEST): ItemInfo.Item {
-    //     let item: ItemInfo.Item = null;
+    // private _getRandomItem(quality: number = ItemInfo.TROPHY_TYPE.CHEST): ItemInfo.I_Item {
+    //     let item: ItemInfo.I_Item = null;
     //     switch (quality) {
     //         // TODO: 普通宝箱，大概率获得白色、蓝色道具；小概率获得紫色道具；极小概率获得红色道具(概率也要随着关卡变动)
     //         case ItemInfo.TROPHY_TYPE.CHEST: {
@@ -268,7 +269,7 @@ export default class ItemsManager extends OBT_UIManager {
     //     if (!key) {
     //         return "";
     //     }
-    //     let item: ItemInfo.Item = this.getItemById(key);
+    //     let item: ItemInfo.I_Item = this.getItemById(key);
     //     if (!item) {
     //         return "";
     //     }
@@ -319,9 +320,9 @@ export default class ItemsManager extends OBT_UIManager {
     // 获得道具
     public obtainItem(id: string) {
         let hasItemInBackpack:  boolean = false;
-        let backpackItem: ItemBase;
+        let backpackItem: ItemBasic;
         for (let bItem of this.backpack) {
-            if (bItem.id === id) {
+            if (bItem.props.code === id) {
                 backpackItem = bItem;
                 hasItemInBackpack = true;
                 // 道具更新, 数量变化
@@ -336,20 +337,20 @@ export default class ItemsManager extends OBT_UIManager {
         }
 
         let res: boolean = backpackItem.use();
-        if (res && backpackItem.global === ItemInfo.Global.ITEM) {
+        if (res && backpackItem.props.global === ItemInfo.Global.ITEM) {
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ITEM_CHANGE, { hasItemInBackpack, backpackItem });
         }
     }
 
-    public getItemCtxById(id): ItemBase {
-        let item: ItemInfo.Item = this.getItemById(id);
-        let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Base" : item.id;
+    public getItemCtxById(id): ItemBasic {
+        let item: ItemInfo.I_Item = this.getItemById(id);
+        let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Base" : item.code;
         return new Item_def[scriptName](item);
     }
 
     // 购买道具
     public buyItem(id: string): boolean {
-        let storeItem: ItemBase = this.storeItemList.find((item: ItemBase) => item.id === id);
+        let storeItem: ItemBasic = this.storeItemList.find((item: ItemBasic) => item.props.code === id);
         if (!storeItem) {
             return false;
         }
@@ -369,15 +370,15 @@ export default class ItemsManager extends OBT_UIManager {
 
     // 锁定，解锁商店
     public toggleLockStoreItem(id: string) {
-        let item: ItemBase = this.storeItemList.find(item => item.id === id);
+        let item: ItemBasic = this.storeItemList.find(item => item.props.code === id);
         if (item) {
-            item.lock = !item.lock;
+            // item.lock = !item.lock;
         }
     }
 
     // 预览道具
     public previewItem(id: string, index: number) {
-        let item: ItemInfo.Item = this.getItemById(id);
+        let item: ItemInfo.I_Item = this.getItemById(id);
         this._itemPreviewNode.OBT_param2.updateView(item);
 
         this.showNode(this._itemPreviewNode);
@@ -421,12 +422,12 @@ export default class ItemsManager extends OBT_UIManager {
     // 随机一个符合当前阶段的道具，开箱用
     public loadChestItem() {
         // 筛除已锁定的道具(已锁定的道具，不要出现在开箱的物品列表里，避免唯一道具出现多个的情况)
-        let items: ItemBase[] = this._getLockStoreItem();
+        let items: ItemBasic[] = this._getLockStoreItem();
         // 物品列表里排除背包里唯一/已达上限的项目
         let ignoreList = this._getStoreIgnoreList();
         if (items.length) {
-            items.forEach((item: ItemBase) => {
-                ignoreList.push(item.id)
+            items.forEach((item: ItemBasic) => {
+                ignoreList.push(item.props.code)
             });
         }
         let wave: number = ProcessManager.instance.waveRole.wave;
@@ -437,25 +438,25 @@ export default class ItemsManager extends OBT_UIManager {
             quality = ITEM_QUALITY.LV3;
         }
 
-        let item: ItemInfo.Item = null;
+        let item: ItemInfo.I_Item = null;
 
         // 可选道具列表
-        let itemPool: ItemInfo.Item[] = this._getItemsList(quality, ignoreList);
+        let itemPool: ItemInfo.I_Item[] = this._getItemsList(quality, ignoreList);
         if (itemPool.length) {
             let idx: number = getRandomNumber(0, itemPool.length - 1);
             item = itemPool[idx];
         }
 
-        this.chestItem = this.getItemCtxById(item.id);
+        this.chestItem = this.getItemCtxById(item.code);
     }
-    public getChestItem(): ItemBase {
+    public getChestItem(): ItemBasic {
         return this.chestItem;
     }
     public obtainChestItem() {
         if (!this.chestItem) {
             return;
         }
-        this.obtainItem(this.chestItem.id);
+        this.obtainItem(this.chestItem.props.code);
         this.chestItem = null;
         this.expendTrophy();
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.CHEST_OPEN_FINISH);

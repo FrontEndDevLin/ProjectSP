@@ -419,19 +419,24 @@ export namespace ItemInfo {
         global: Global,
         // 道具分组, 1->普通 2->限制 3->独特的
         group: Group,
+        // 当group为2 limit(限制)时, 该属性生效
+        max?: number,
         quality: ITEM_QUALITY,
+        // 道具名称
         name: string,
+        // 道具介绍
+        intro: string,
         ico: string,
         ico_gaming: string,
-        intro: string,
-        max?: number,
         price?: number,
         buff_list?: CHRInfo.Buff[],
-        weapon?: string
+        weapon?: string,
+        // 是否开放, 为false时, 不会出现在商店。默认为true
+        unlock?: boolean
     }
 
     export interface ItemMap {
-        [itemId: string]: Item
+        [itemId: string]: I_Item
     }
 
     export interface StoreItemPool {
