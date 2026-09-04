@@ -1,21 +1,28 @@
 import ItemBase from "./ItemBase";
-import ItemBlossom from "./ItemBlossom";
-import ItemCrossCloud from "./ItemCrossCloud";
-import ItemFightWithBothHands from "./ItemFightWithBothHands";
-import ItemScatterAtkWarCore from "./ItemScatterAtkWarCore";
-import ItemWarCore from "./ItemWarCore";
-import ItemYijingRing from "./ItemYijingRing";
-import ItemGatheringStorm from "./ItemGatheringStorm";
-import ItemMoreScatter from "./ItemMoreScatter";
-import ItemFastScatter from "./ItemFastScatter";
-import ItemOrbitsAtkWarCore from "./ItemOrbitsAtkWarCore";
-import ItemAddKnife from "./ItemAddKnife";
-import ItemExtKnifeSize from "./ItemExtKnifeSize";
-import Item_WarCore_BaseWarCore from "./Item_WarCore_BaseWarCore";
-import Item_WarCore_ScatterWarCore from "./Item_WarCore_ScatterWarCore";
+import ItemBlossom from "./Items/ItemBlossom";
+import ItemCrossCloud from "./Items/ItemCrossCloud";
+import ItemFightWithBothHands from "./Items/ItemFightWithBothHands";
+import ItemScatterAtkWarCore from "./Items/ItemScatterAtkWarCore";
+import ItemWarCore from "./Items/ItemWarCore";
+import ItemYijingRing from "./Items/ItemYijingRing";
+import ItemGatheringStorm from "./Items/ItemGatheringStorm";
+import ItemMoreScatter from "./Items/ItemMoreScatter";
+import ItemFastScatter from "./Items/ItemFastScatter";
+import ItemOrbitsAtkWarCore from "./Items/ItemOrbitsAtkWarCore";
+import ItemAddKnife from "./Items/ItemAddKnife";
+import ItemExtKnifeSize from "./Items/ItemExtKnifeSize";
+import Item_WarCore_BaseWarCore from "./WarCore/Item_WarCore_BaseWarCore";
+import Item_WarCore_ScatterWarCore from "./WarCore/Item_WarCore_ScatterWarCore";
+import ItemBasic from "./ItemBasic";
+import Item_UPack_Mirror from "./UpgradePack/Item_UPack_Mirror";
+import Item_UPack_Fission from "./UpgradePack/Item_UPack_Fission";
+import Item_UPack_Penetrate from "./UpgradePack/Item_UPack_Penetrate";
+import Item_UPack_Readyfor from "./UpgradePack/Item_UPack_Readyfor";
+import Item_UPack_Overload from "./UpgradePack/Item_UPack_Overload";
 
 export namespace Item_def {
-    export const Item_Base = ItemBase;
+    // export const Item_Base = ItemBase;
+    export const Item_Basic = ItemBasic;
     export const Item_YijingRing = ItemYijingRing;
     export const Item_FightWithBothHands = ItemFightWithBothHands;
     export const Item_WarCore = ItemWarCore;
@@ -30,4 +37,9 @@ export namespace Item_def {
     export const Item_ExtKnifeSize = ItemExtKnifeSize;
     export const Item_WarCoreBaseWarCore = Item_WarCore_BaseWarCore;
     export const Item_WarCoreScatterWarCore = Item_WarCore_ScatterWarCore;
+    export const Item_UPackMirror = Item_UPack_Mirror;
+    export const Item_UPackFission = Item_UPack_Fission;
+    export const Item_UPackPenetrate = Item_UPack_Penetrate;
+    export const Item_UPackReadyfor = Item_UPack_Readyfor;
+    export const Item_UPackOverload = Item_UPack_Overload;
 }

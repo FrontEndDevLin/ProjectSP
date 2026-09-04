@@ -10,13 +10,6 @@ import WeaponBasic from "../Weapons/WeaponBasic";
 import WeaponBase from "../Weapons/WeaponBase";
 import ItemBasic from "./ItemBasic";
 
-interface WeaponInitOptions {
-    // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
-    // itemRef: any;
-    // 武器挂载节点
-    mountNode: any;
-}
-
 export default class ItemSpec extends ItemBasic {
     // public weaponCtx: WeaponBase;
     public weaponCtx: WeaponBasic;
@@ -39,7 +32,7 @@ export default class ItemSpec extends ItemBasic {
         }
     }
 
-    public mountWeapon(initOptions: WeaponInitOptions = { mountNode: null }) {
+    public mountWeapon(initOptions = { mountNode: null }) {
         if (!this.weaponCtx) {
             return;
         }
@@ -48,6 +41,8 @@ export default class ItemSpec extends ItemBasic {
             console.log('已挂载武器', this.weaponCtx);
         }
     }
+
+    public onWarCoreAttack() {};
 
     public onPassWave() {};
 

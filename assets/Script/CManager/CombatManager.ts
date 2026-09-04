@@ -76,7 +76,7 @@ export default class CombatManager extends OBT_UIManager {
 
         // 计算伤害
         let damageInfo: HitInfo = {
-            bullet: bullet.realTimeProps.code,
+            bullet: bullet.realTimeProps.bullet,
             damage: realDamage,
             isCritical,
             vector: bullet.vector
@@ -104,7 +104,7 @@ export default class CombatManager extends OBT_UIManager {
         let realDamage: number = bullet.realTimeProps.damage;
 
         let damageInfo: HitInfo = {
-            bullet: bullet.realTimeProps.code,
+            bullet: bullet.realTimeProps.bullet,
             damage: realDamage,
             vector: bullet.vector
         };

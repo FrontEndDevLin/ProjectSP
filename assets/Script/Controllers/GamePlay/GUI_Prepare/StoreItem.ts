@@ -6,14 +6,15 @@ import ProcessManager from '../../../CManager/ProcessManager';
 import OBT from '../../../OBT';
 import ItemsManager from '../../../CManager/ItemsManager';
 import ItemBase from '../Items/ItemBase';
+import ItemBasic from '../Items/ItemBasic';
 const { ccclass, property } = _decorator;
 
 @ccclass('StoreItem')
 export class StoreItem extends OBT_Component {
-    private _item: ItemBase;
+    private _item: ItemBasic;
 
     protected onLoad(): void {
-        const item: ItemBase = this.node.OBT_param1;
+        const item: ItemBasic = this.node.OBT_param1;
 
         this._item = item;
         this.view("ItemCard").OBT_param1 = item;
@@ -33,14 +34,14 @@ export class StoreItem extends OBT_Component {
     }
 
     private _buyItem() {
-        let buyRes: boolean = ItemsManager.instance.buyItem(this._item.id);
+        let buyRes: boolean = ItemsManager.instance.buyItem(this._item.props.code);
         if (buyRes) {
             this.hideNodeByPath();
         }
     }
 
     private _toggleLock() {
-        ItemsManager.instance.toggleLockStoreItem(this._item.id);
+        ItemsManager.instance.toggleLockStoreItem(this._item.props.code);
         this._changeLockBtn();
     }
 

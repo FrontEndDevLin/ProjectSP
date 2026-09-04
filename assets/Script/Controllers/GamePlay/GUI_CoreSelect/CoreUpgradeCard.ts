@@ -10,11 +10,13 @@ import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber } from '../../../Common/utils';
 import ItemsManager from '../../../CManager/ItemsManager';
 import ItemBase from '../Items/ItemBase';
+import ItemBasic from '../Items/ItemBasic';
+import ItemSpec from '../Items/ItemSpec';
 const { ccclass, property } = _decorator;
 
 @ccclass('CoreUpgradeCard')
 export class CoreUpgradeCard extends OBT_Component {
-    private _props: ItemBase;
+    private _item: ItemBasic;
 
     protected showProps: string[] = ["ctl", "cd", "range"];
 
@@ -30,10 +32,13 @@ export class CoreUpgradeCard extends OBT_Component {
 
     }
 
-    public updateView(props: ItemBase) {
-        this._props = props;
+    public updateView(item: ItemBasic) {
+        if (!item) {
+            return;
+        }
+        this._item = item;
 
-        let quality = props.quality || ITEM_QUALITY.LV1;
+        let quality = item.props.quality || ITEM_QUALITY.LV1;
         let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
         let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
         this.view("Border").getComponent(Sprite).spriteFrame = borderAssets;
@@ -41,18 +46,17 @@ export class CoreUpgradeCard extends OBT_Component {
         this.view("Background").getComponent(Sprite).color = uiConfg.background;
         this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).color = uiConfg.color;
 
-        this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = props.getAssets();
+        this.view("Container/Head/PicWrap/Pic").getComponent(Sprite).spriteFrame = item.getAssets();
 
-        this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).string = props.label;
+        this.view("Container/Head/TitleWrap/CoreName").getComponent(Label).string = item.props.name;
         
         // TODO: 2026.1.3
-
-        if (props.intro) {
+        if (item.props.intro) {
             this.view("Container/Content/Intro").active = true;
-            this.view("Container/Content/Intro").getComponent(RichText).string = props.getIntro();
+            this.view("Container/Content/Intro").getComponent(RichText).string = item.getIntro();
         }
 
-        let buffTxt: string = props.getBuffTxt();
+        let buffTxt: string = item.getBuffTxt();
         if (buffTxt) {
             this.view("Container/Content/Buff").getComponent(RichText).string = buffTxt;
         }
@@ -61,9 +65,11 @@ export class CoreUpgradeCard extends OBT_Component {
         //     console.log(props.weaponCtx.getIntroRichTxt())
         // }
 
-        if (props.weapon) {
+        if (item.props.weapon) {
             this.view("Container/Content/Attr").active = true;
-            this.view("Container/Content/Attr").getComponent(RichText).string = props.weaponCtx.getPanelRichTxt();
+            let weaponItem: ItemSpec = <ItemSpec>item;
+            let panelRichTxt: string = weaponItem.weaponCtx.getPanelRichTxt();
+            this.view("Container/Content/Attr").getComponent(RichText).string = panelRichTxt;
         }
 
         // this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
@@ -138,11 +144,11 @@ export class CoreUpgradeCard extends OBT_Component {
     // }
 
     private _touchCard() {
-        if (!this._props) {
+        if (!this._item) {
             return;
         }
         if (ProcessManager.instance.gameNode === GAME_NODE.CORE_UPGRADE) {
-            WarCoreManager.instance.mountUpgradePack(this._props.id);
+            WarCoreManager.instance.mountUpgradePack(this._item.props.code);
             this.hideNodeByPath();
         }
     }

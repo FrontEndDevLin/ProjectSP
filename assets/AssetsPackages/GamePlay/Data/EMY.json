@@ -6,7 +6,8 @@
     "broken_point": "死亡时的爆炸点位",
     "attack": "攻击逻辑 none->只有碰撞攻击, remote->远程攻击",
     "attack_cd": "攻击冷却",
-    "attack_range": "攻击冷却",
+    "attack_desc": "特殊攻击, 指与武器无关的攻击, 比如冲锋攻击等",
+    "attack_range": "特殊攻击范围, 当角色进入范围时, 敌人的攻击状态会激活。如果没有设置该值, 则该单位没有特殊攻击。单位的攻击由携带的武器决定",
     "exp_drop_rate": "经验掉率",
     "trophy_drop_rate": "战利品掉率",
     "trophy": "战利品类型 core->核心",
@@ -60,10 +61,7 @@
     "cld": 120,
     "type": "elite",
     "script": "Emy_Elite01",
-    "move": "normal,surround",
-    "attack": "none,remote",
     "weight": 1,
-    "attack_cd": 2,
     "broken_point": [
       [[-25, 52], [-8, 52], [8, 52], [25, 52], [-25, -52], [-8, -52], [8, -52], [25, -52], [-52, 25], [-52, 8], [-52, -8], [-52, -25], [52, 25], [52, 8], [52, -8], [52, -25]],
       [
@@ -87,45 +85,11 @@
     "spec_dmg": 3,
     "spec_dmg_growth": 0.25
   },
-  "EMY01": {
-    "id": "EMY01",
-    "cld": 100,
-    "type": "normal",
-    "move": "normal",
-    "pic": "",
-    "spd": 80,
-    "exp_drop_rate": 1,
-    "trophy_drop_rate": 0.02,
-    "exp_cnt": 1,
-    "hp": 5,
-    "hp_growth": 0.34,
-    "dmg": 2,
-    "dmg_growth": 0.28
-  },
-  "EMY02": {
-    "id": "EMY02",
-    "cld": 101,
-    "type": "normal",
-    "move": "normal",
-    "pic": "",
-    "spd": 120,
-    "exp_drop_rate": 1,
-    "trophy_drop_rate": 0.9,
-    "exp_cnt": 1,
-    "hp": 2,
-    "hp_growth": 0.3,
-    "dmg": 2,
-    "dmg_growth": 0.28
-  },
-  "EMY03": {
-    "id": "EMY03",
+  "Emy_Marauder": {
+    "code": "Emy_Marauder",
     "cld": 102,
     "type": "normal",
-    "move": "normal",
-    "attack": "none,sprint",
-    "attack_range": 250,
-    "attack_cd": 2,
-    "script": "EMY_Sprint",
+    "script": "Emy_Marauder",
     "pic": "",
     "spd": 140,
     "exp_drop_rate": 1,
@@ -136,15 +100,13 @@
     "dmg": 4,
     "dmg_growth": 0.16
   },
-  "EMY04": {
-    "id": "EMY04",
+  "Emy_Witch": {
+    "code": "Emy_Witch",
     "cld": 103,
     "type": "normal",
-    "move": "drag",
-    "attack": "none,remote",
     "attack_range": 320,
     "attack_cd": 3,
-    "script": "EMY_Range",
+    "script": "Emy_Witch",
     "weight": 1,
     "pic": "",
     "spd": 80,
@@ -155,18 +117,16 @@
     "hp_growth": 0.32,
     "dmg": 2,
     "dmg_growth": 0.1,
-    "spec_dmg": 5,
-    "spec_dmg_growth": 0.2
+    "spec_dmg__": 5,
+    "spec_dmg_growth__": 0.2
   },
-  "EMY05": {
-    "id": "EMY05",
+  "Emy_Werewolf": {
+    "code": "Emy_Werewolf",
     "cld": 104,
     "type": "normal",
-    "move": "normal",
-    "attack": "none,sprint",
     "attack_range": 250,
     "attack_cd": 2,
-    "script": "EMY_Sprint",
+    "script": "Emy_Werewolf",
     "weight": 1,
     "pic": "", 
     "spd": 120,
@@ -178,12 +138,11 @@
     "dmg": 5,
     "dmg_growth": 0.2
   },
-  "EMY06": {
-    "id": "EMY06",
+  "Emy_Mummy": {
+    "code": "Emy_Mummy",
     "cld": 105,
     "type": "normal",
-    "move": "normal",
-    "script": "EMY_Tank",
+    "script": "Emy_Mummy",
     "weight": 1,
     "pic": "",
     "spd": 120,
@@ -195,43 +154,11 @@
     "dmg": 5,
     "dmg_growth": 0.2
   },
-  "Elite_EMY01": {
-    "id": "Elite_EMY01",
-    "cld": 120,
-    "type": "elite",
-    "script": "EMY_Elite01",
-    "move": "normal,surround",
-    "attack": "none,remote",
-    "weight": 1,
-    "attack_cd": 2,
-    "broken_point": [
-      [[-25, 52], [-8, 52], [8, 52], [25, 52], [-25, -52], [-8, -52], [8, -52], [25, -52], [-52, 25], [-52, 8], [-52, -8], [-52, -25], [52, 25], [52, 8], [52, -8], [52, -25]],
-      [
-        [-35, 35], [-21, 35], [-7, 35], [7, 35], [21, 35], [35, 35],
-        [-35, 21], [-21, 21], [-7, 21], [7, 21], [21, 21], [35, 21],
-        [-35, 7], [-21, 7], [-7, 7], [7, 7], [21, 7], [35, 7],
-        [-35, -7], [-21, -7], [-7, -7], [7, -7], [21, -7], [35, -7],
-        [-35, -21], [-21, -21], [-7, -21], [7, -21], [21, -21], [35, -21],
-        [-35, -35], [-21, -35], [-7, -35], [7, -35], [21, -35], [35, -35]
-      ]
-    ],
-    "pic": "",
-    "spd": 200,
-    "exp_drop_rate": 1,
-    "trophy_drop_rate": 1,
-    "exp_cnt": 8,
-    "hp": 60,
-    "hp_growth": 0.3,
-    "dmg": 2,
-    "dmg_growth": 0.38,
-    "spec_dmg": 3,
-    "spec_dmg_growth": 0.25
-  },
-  "Elite_EMY02": {
-    "id": "Elite_EMY02",
+  "Emy_Elite02": {
+    "code": "Emy_Elite02",
     "cld": 121,
     "type": "elite",
-    "script": "EMY_Elite02",
+    "script": "Emy_Elite02",
     "move": "normal,surround",
     "attack": "none,remote",
     "attack_cd": 2,

@@ -1,6 +1,5 @@
 {
     "desc": {
-        "cur_def_enemy": "emy01-普通怪1, emy02-普通怪2, emy03-冲锋怪1, emy04-远程怪1, emy05-冲锋怪2, emy06-肉怪1;",
         "cur_def_elite_enemy": "elite_emy01-精英核心, elite_emy02-精英2",
         "max_emy": "最大同屏小怪数",
         "max_emy_elite_fight": "只有在wave_type为2,3时生效。在有精英怪存在时, 最大同屏小怪数",
@@ -38,7 +37,6 @@
                 "chest1": 2,
                 "emy": [{ "emyId": "Emy_Goblin", "count": 4 }, { "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 20,
-                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 2 }],
                 "bullet_particle": 4,
                 "dmg_txt": 5
             },
@@ -82,7 +80,6 @@
                 "chest1": 2,
                 "emy": [{ "emyId": "Emy_Goblin", "count": 4 }, { "emyId": "Emy_Goblin2", "count": 6 }, { "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 20,
-                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 2 }],
                 "bullet_particle": 4,
                 "dmg_txt": 5
             },
@@ -134,8 +131,6 @@
                 "chest1": 2,
                 "emy": [{ "emyId": "Emy_Goblin", "count": 10 }, { "emyId": "Emy_Goblin2", "count": 16 }, { "emyId": "Emy_Pacifist", "count": 2 }, { "emyId": "Emy_Elite01", "count": 1 }],
                 "emy_particle": 120,
-                "bullet_": [{ "bulletId": "CHR_Bullet001", "count": 8 }, { "bulletId": "EMY_Bullet020", "count": 6 }],
-                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 8 }],
                 "bullet_particle": 4,
                 "dmg_txt": 5
             },
@@ -191,6 +186,7 @@
             "wave_type": 1,
             "max_emy": 80,
             "duration": 25,
+            "duration_": 4,
             "preload": {
                 "alert": 20,
                 "exp": 20,
@@ -199,7 +195,6 @@
                 "chest1": 2,
                 "emy": [{ "emyId": "Emy_Goblin2", "count": 20 }, { "emyId": "Emy_Goblin", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 20,
-                "bullet": [{ "bulletId": "CHR_Bullet001", "count": 12 }],
                 "bullet_particle": 20,
                 "dmg_txt": 5
             },
@@ -249,7 +244,6 @@
             "desc": "普通1+冲锋1",
             "wave_type": 1,
             "max_emy": 80,
-            "duration_": 25,
             "duration": 25,
             "preload": {
                 "alert": 20,
@@ -257,15 +251,14 @@
                 "exp_particle": 9,
                 "trophy": 2,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 15 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 15 }, { "emyId": "Emy_Marauder", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 20,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
                 "bullet_particle": 20,
                 "dmg_txt": 5
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -276,7 +269,7 @@
                     "spawn_duration": 30
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 1,
                     "spawn_interval": 1.6,
                     "spawn_pattern": "random",
@@ -285,7 +278,7 @@
                     "spawn_duration": 18
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 3,
                     "spawn_interval": 6,
                     "spawn_pattern": "random",
@@ -294,7 +287,7 @@
                     "spawn_duration": 30
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 2,
                     "spawn_interval": 2,
                     "spawn_pattern": "random",
@@ -316,15 +309,14 @@
                 "exp_particle": 9,
                 "trophy": 2,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Goblin2", "count": 30 }, { "emyId": "Emy_Marauder", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 20,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
                 "bullet_particle": 20,
                 "dmg_txt": 5
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -335,7 +327,7 @@
                     "spawn_duration": 30
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 1,
                     "spawn_interval": 1.6,
                     "spawn_pattern": "random",
@@ -344,7 +336,7 @@
                     "spawn_duration": 18
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 4,
                     "spawn_interval": 3,
                     "spawn_pattern": "random",
@@ -353,7 +345,7 @@
                     "spawn_duration": 30
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 2,
                     "spawn_interval": 2,
                     "spawn_pattern": "random",
@@ -375,15 +367,14 @@
                 "exp_particle": 15,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 20 }, { "emyId": "Emy_Goblin2", "count": 30 }, { "emyId": "Emy_Marauder", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 40,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 5
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -394,7 +385,7 @@
                     "spawn_duration": 40
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 2,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -403,7 +394,7 @@
                     "spawn_duration": 35
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 4,
                     "spawn_interval": 7,
                     "spawn_pattern": "random",
@@ -412,7 +403,7 @@
                     "spawn_duration": 35
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 2,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -435,15 +426,14 @@
                 "exp_particle": 15,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY04", "count": 10 }, { "emyId": "EMY_Peace", "count": 3 }],
+                "emy": [{ "emyId": "Emy_Goblin2", "count": 30 }, { "emyId": "Emy_Marauder", "count": 10 }, { "emyId": "Emy_Witch", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 3 }],
                 "emy_particle": 40,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }, { "bulletId": "CHR_Bullet003", "count": 50 }],
                 "bullet_particle": 40,
                 "dmg_txt": 5
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -454,7 +444,7 @@
                     "spawn_duration": 40
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 5,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -463,7 +453,7 @@
                     "spawn_duration": 20
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 3,
                     "spawn_interval": 2.2,
                     "spawn_pattern": "random",
@@ -472,7 +462,7 @@
                     "spawn_duration": 40
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 1,
                     "spawn_interval": 2.4,
                     "spawn_pattern": "random",
@@ -481,7 +471,7 @@
                     "spawn_duration": 30
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Witch",
                     "spawn_once_time": 1,
                     "spawn_interval": 3,
                     "spawn_pattern": "random",
@@ -503,15 +493,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 50 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY_Peace", "count": 3 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 20 }, { "emyId": "Emy_Goblin2", "count": 50 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 3 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 5
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -522,7 +511,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 2,
                     "spawn_interval": 2,
                     "spawn_pattern": "random",
@@ -531,7 +520,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 5,
                     "spawn_interval": 2.4,
                     "spawn_pattern": "random",
@@ -540,7 +529,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 6,
                     "spawn_interval": 6,
                     "spawn_pattern": "random",
@@ -549,7 +538,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 1,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -571,15 +560,14 @@
                 "exp_particle": 15,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 30 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY04", "count": 10 }, { "emyId": "EMY_Peace", "count": 3 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 20 }, { "emyId": "Emy_Goblin2", "count": 30 }, { "emyId": "Emy_Marauder", "count": 10 }, { "emyId": "Emy_Witch", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 3 }],
                 "emy_particle": 40,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }, { "bulletId": "CHR_Bullet003", "count": 50 }],
                 "bullet_particle": 40,
                 "dmg_txt": 5
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -590,7 +578,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 4,
                     "spawn_interval": 3.4,
                     "spawn_pattern": "random",
@@ -599,7 +587,7 @@
                     "spawn_duration": 25
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 4,
                     "spawn_interval": 2.6,
                     "spawn_pattern": "random",
@@ -608,7 +596,7 @@
                     "spawn_duration": 25
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 2,
                     "spawn_interval": 5.4,
                     "spawn_pattern": "random",
@@ -617,7 +605,7 @@
                     "spawn_duration": 25
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 3,
                     "spawn_interval": 2.8,
                     "spawn_pattern": "random",
@@ -626,7 +614,7 @@
                     "spawn_duration": 25
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 1,
                     "spawn_interval": 4.6,
                     "spawn_pattern": "random",
@@ -635,7 +623,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Witch",
                     "spawn_once_time": 1,
                     "spawn_interval": 5,
                     "spawn_pattern": "random",
@@ -657,15 +645,14 @@
                 "exp_particle": 15,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 30 }, { "emyId": "EMY04", "count": 10 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY_Peace", "count": 3 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 20 }, { "emyId": "Emy_Goblin2", "count": 30 }, { "emyId": "Emy_Witch", "count": 10 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 3 }],
                 "emy_particle": 40,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 5
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -676,7 +663,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 2,
                     "spawn_interval": 1.2,
                     "spawn_pattern": "random",
@@ -685,7 +672,7 @@
                     "spawn_duration": 25
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 4,
                     "spawn_interval": 2,
                     "spawn_pattern": "random",
@@ -694,7 +681,7 @@
                     "spawn_duration": 25
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 2,
                     "spawn_interval": 3,
                     "spawn_pattern": "random",
@@ -703,7 +690,7 @@
                     "spawn_duration": 25
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 1,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -712,7 +699,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Witch",
                     "spawn_once_time": 1,
                     "spawn_interval": 3.6,
                     "spawn_pattern": "random",
@@ -734,15 +721,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY02", "count": 20 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY04", "count": 10 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY_Peace", "count": 3 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 20 }, { "emyId": "Emy_Goblin2", "count": 20 }, { "emyId": "Emy_Marauder", "count": 10 }, { "emyId": "Emy_Witch", "count": 10 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 3 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 5
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -753,7 +739,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 3,
                     "spawn_interval": 5,
                     "spawn_pattern": "random",
@@ -762,7 +748,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 4,
                     "spawn_interval": 2.8,
                     "spawn_pattern": "random",
@@ -771,7 +757,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 2,
                     "spawn_interval": 5,
                     "spawn_pattern": "random",
@@ -780,7 +766,7 @@
                     "spawn_duration": 45
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Witch",
                     "spawn_once_time": 2,
                     "spawn_interval": 4.4,
                     "spawn_pattern": "random",
@@ -789,7 +775,7 @@
                     "spawn_duration": 20
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 1,
                     "spawn_interval": 8,
                     "spawn_pattern": "random",
@@ -811,15 +797,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY04", "count": 20 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY06", "count": 5 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 20 }, { "emyId": "Emy_Witch", "count": 20 }, { "emyId": "Emy_Marauder", "count": 10 }, { "emyId": "Emy_Mummy", "count": 5 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 10
             },
-            "spawn_roles": [
+            "spawn_roles_": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -830,7 +815,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 3,
                     "spawn_interval": 3.6,
                     "spawn_pattern": "random",
@@ -839,7 +824,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 2,
                     "spawn_interval": 5,
                     "spawn_pattern": "random",
@@ -848,7 +833,7 @@
                     "spawn_duration": 30
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Witch",
                     "spawn_once_time": 2,
                     "spawn_interval": 4.4,
                     "spawn_pattern": "random",
@@ -857,12 +842,23 @@
                     "spawn_duration": 38
                 },
                 {
-                    "enemy_type": "EMY06",
+                    "enemy_type": "Emy_Mummy",
                     "spawn_once_time": 1,
                     "spawn_interval": 8,
                     "spawn_pattern": "random",
                     "batch_mode": "normal",
                     "start_delay": 14,
+                    "spawn_duration": 50
+                }
+            ],
+            "spawn_roles": [
+                {
+                    "enemy_type": "Emy_Mummy",
+                    "spawn_once_time": 1,
+                    "spawn_interval": 40,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 2,
                     "spawn_duration": 50
                 }
             ]
@@ -879,15 +875,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY02", "count": 20 }, { "emyId": "EMY04", "count": 8 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Goblin2", "count": 20 }, { "emyId": "Emy_Witch", "count": 8 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 10 
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -898,7 +893,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 5,
                     "spawn_interval": 2.4,
                     "spawn_pattern": "random",
@@ -907,7 +902,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Witch",
                     "spawn_once_time": 1,
                     "spawn_interval": 5,
                     "spawn_pattern": "random",
@@ -916,7 +911,7 @@
                     "spawn_duration": 30
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 2,
                     "spawn_interval": 4.4,
                     "spawn_pattern": "random",
@@ -938,15 +933,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 20 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY06", "count": 10 },{ "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 20 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Mummy", "count": 10 },{ "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 10
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -957,7 +951,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 3,
                     "spawn_interval": 2.2,
                     "spawn_pattern": "random",
@@ -966,7 +960,7 @@
                     "spawn_duration": 30
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 4,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -975,7 +969,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 2,
                     "spawn_interval": 4.4,
                     "spawn_pattern": "random",
@@ -984,7 +978,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY06",
+                    "enemy_type": "Emy_Mummy",
                     "spawn_once_time": 2,
                     "spawn_interval": 6,
                     "spawn_pattern": "random",
@@ -1006,15 +1000,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY02", "count": 20 }, { "emyId": "EMY04", "count": 8 }, { "emyId": "EMY03", "count": 10 }, { "emyId": "EMY05", "count": 10 },{ "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Goblin2", "count": 20 }, { "emyId": "Emy_Witch", "count": 8 }, { "emyId": "Emy_Marauder", "count": 10 }, { "emyId": "Emy_Werewolf", "count": 10 },{ "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 10
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -1025,7 +1018,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 5,
                     "spawn_interval": 3,
                     "spawn_pattern": "random",
@@ -1034,7 +1027,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Witch",
                     "spawn_once_time": 1,
                     "spawn_interval": 5,
                     "spawn_pattern": "random",
@@ -1043,7 +1036,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 2,
                     "spawn_interval": 4.4,
                     "spawn_pattern": "random",
@@ -1052,7 +1045,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 3,
                     "spawn_interval": 2.4,
                     "spawn_pattern": "random",
@@ -1074,15 +1067,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 15 }, { "emyId": "EMY04", "count": 8 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY06", "count": 10 },{ "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 15 }, { "emyId": "Emy_Witch", "count": 8 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Mummy", "count": 10 },{ "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 10
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -1093,7 +1085,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 4,
                     "spawn_interval": 3,
                     "spawn_pattern": "random",
@@ -1102,7 +1094,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Witch",
                     "spawn_once_time": 1,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -1111,7 +1103,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 2,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -1120,7 +1112,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY06",
+                    "enemy_type": "Emy_Mummy",
                     "spawn_once_time": 2,
                     "spawn_interval": 2.4,
                     "spawn_pattern": "random",
@@ -1142,15 +1134,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY01", "count": 15 }, { "emyId": "EMY02", "count": 20 }, { "emyId": "EMY03", "count": 8 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY06", "count": 10 },{ "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Goblin", "count": 15 }, { "emyId": "Emy_Goblin2", "count": 20 }, { "emyId": "Emy_Marauder", "count": 8 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Mummy", "count": 10 },{ "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 10
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -1161,7 +1152,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY01",
+                    "enemy_type": "Emy_Goblin",
                     "spawn_once_time": 2,
                     "spawn_interval": 2,
                     "spawn_pattern": "random",
@@ -1170,7 +1161,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY02",
+                    "enemy_type": "Emy_Goblin2",
                     "spawn_once_time": 4,
                     "spawn_interval": 3,
                     "spawn_pattern": "random",
@@ -1179,7 +1170,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 2,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -1188,7 +1179,7 @@
                     "spawn_duration": 23
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 3,
                     "spawn_interval": 5,
                     "spawn_pattern": "random",
@@ -1197,7 +1188,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 1,
                     "spawn_interval": 3,
                     "spawn_pattern": "random",
@@ -1206,7 +1197,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY06",
+                    "enemy_type": "Emy_Mummy",
                     "spawn_once_time": 3,
                     "spawn_interval": 2.8,
                     "spawn_pattern": "random",
@@ -1228,15 +1219,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "EMY03", "count": 8 }, { "emyId": "EMY04", "count": 8 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY06", "count": 10 },{ "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Marauder", "count": 8 }, { "emyId": "Emy_Marauder", "count": 8 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Mummy", "count": 10 },{ "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }],
                 "bullet_particle": 40,
                 "dmg_txt": 10
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -1247,7 +1237,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 3,
                     "spawn_interval": 6,
                     "spawn_pattern": "random",
@@ -1256,7 +1246,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 2,
                     "spawn_interval": 3.8,
                     "spawn_pattern": "random",
@@ -1265,7 +1255,7 @@
                     "spawn_duration": 23
                 },
                 {
-                    "enemy_type": "EMY03",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 3,
                     "spawn_interval": 4.6,
                     "spawn_pattern": "random",
@@ -1274,7 +1264,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 2,
                     "spawn_interval": 6,
                     "spawn_pattern": "random",
@@ -1283,7 +1273,7 @@
                     "spawn_duration": 50
                 },
                 {
-                    "enemy_type": "EMY06",
+                    "enemy_type": "Emy_Mummy",
                     "spawn_once_time": 3,
                     "spawn_interval": 2.8,
                     "spawn_pattern": "random",
@@ -1306,15 +1296,14 @@
                 "exp_particle": 20,
                 "trophy": 4,
                 "chest1": 2,
-                "emy": [{ "emyId": "Elite_EMY02", "count": 1 }, { "emyId": "EMY06", "count": 6 }, { "emyId": "EMY04", "count": 8 }, { "emyId": "EMY05", "count": 10 }, { "emyId": "EMY_Peace", "count": 2 }],
+                "emy": [{ "emyId": "Emy_Elite02", "count": 1 }, { "emyId": "Emy_Mummy", "count": 6 }, { "emyId": "Emy_Marauder", "count": 8 }, { "emyId": "Emy_Werewolf", "count": 10 }, { "emyId": "Emy_Pacifist", "count": 2 }],
                 "emy_particle": 50,
-                "bullet": [{ "bulletId": "CHR_Bullet002", "count": 10 }, { "bulletId": "EMY_Bullet020", "count": 10 }, { "bulletId": "EMY_Bullet021", "count": 6 }],
                 "bullet_particle": 40,
                 "dmg_txt": 10
             },
             "spawn_roles": [
                 {
-                    "enemy_type": "EMY_Peace",
+                    "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
                     "spawn_mode": "random",
                     "spawn_rate": 0.05,
@@ -1325,7 +1314,7 @@
                     "spawn_duration": 55
                 },
                 {
-                    "enemy_type": "EMY06",
+                    "enemy_type": "Emy_Mummy",
                     "spawn_once_time": 1,
                     "spawn_interval": 4,
                     "spawn_pattern": "random",
@@ -1334,7 +1323,7 @@
                     "spawn_duration": 55
                 },
                 {
-                    "enemy_type": "EMY04",
+                    "enemy_type": "Emy_Marauder",
                     "spawn_once_time": 1,
                     "spawn_interval": 6,
                     "spawn_pattern": "random",
@@ -1343,7 +1332,7 @@
                     "spawn_duration": 55
                 },
                 {
-                    "enemy_type": "EMY05",
+                    "enemy_type": "Emy_Werewolf",
                     "spawn_once_time": 2,
                     "spawn_interval": 4.4,
                     "spawn_pattern": "random",
@@ -1352,7 +1341,7 @@
                     "spawn_duration": 55
                 },
                 {
-                    "enemy_type": "Elite_EMY02",
+                    "enemy_type": "Emy_Elite02",
                     "spawn_total": 1,
                     "spawn_mode": "normal",
                     "spawn_pattern": "fixed",

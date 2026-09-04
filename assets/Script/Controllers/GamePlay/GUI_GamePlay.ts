@@ -15,12 +15,13 @@ import WarCoreManager from '../../CManager/WarCoreManager';
 import GUI_PopupManager from '../../CManager/GUI_PopupManager';
 import ItemBase from './Items/ItemBase';
 import { CoreUpgradeCard } from './GUI_CoreSelect/CoreUpgradeCard';
-import ItemWarCore from './Items/ItemWarCore';
+import ItemWarCore from './Items/Items/ItemWarCore';
 import { CoreCard } from './GUI_CoreSelect/CoreCard';
 import { GUI_Prop } from './GUI_Prop';
 import ItemsManager from '../../CManager/ItemsManager';
 import { ItemCard } from './GUI_Prepare/ItemCard';
-import Item_WarCore from './Items/Item_WarCore';
+import Item_WarCore from './Items/WarCore/Item_WarCore';
+import ItemBasic from './Items/ItemBasic';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_GamePlay')
@@ -154,7 +155,7 @@ export class GUI_GamePlay extends OBT_Component {
         if (!isUnlockWarCore) {
             return;
         }
-        let assets: SpriteFrame = WarCoreManager.instance.warCore.getAssets();
+        let assets: SpriteFrame = WarCoreManager.instance.iWarCore.getAssets();
         this.view("CoreInfo/Top/CoreWrap/CorePic").getComponent(Sprite).spriteFrame = assets;
 
         let coreLevel: number = WarCoreManager.instance.coreLevel;
@@ -326,8 +327,9 @@ export class GUI_GamePlay extends OBT_Component {
     private _initCoreUpgradeCard() {
         const cardSlotList: Node[] = this.view("CoreUpgradeWrap/Container/StoreWrap/CardWrap").children;
 
-        const upgradePackList: ItemBase[] = WarCoreManager.instance.getPreCheckUpgradePackList();
-        upgradePackList.forEach((upgradePack: ItemBase, i) => {
+        const upgradePackList: ItemBasic[] = WarCoreManager.instance.getPreCheckUpgradePackList();
+
+        upgradePackList.forEach((upgradePack: ItemBasic, i) => {
             cardSlotList[i].removeAllChildren();
             const coreCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_CoreSelect/CoreUpgradeCard" });
             const coreCardCtx: CoreUpgradeCard = coreCard.getComponent(CoreUpgradeCard);
@@ -370,7 +372,7 @@ export class GUI_GamePlay extends OBT_Component {
 
     private _initChestOpenCard() {
         ItemsManager.instance.loadChestItem();
-        let chestItem: ItemBase = ItemsManager.instance.getChestItem();
+        let chestItem: ItemBasic = ItemsManager.instance.getChestItem();
         if (chestItem) {
             this.view("ChestOpenWrap/Wrap/Container/StoreWrap/CardWrap/ItemCard").getComponent(ItemCard).updateView(chestItem);
             this.view("ChestOpenWrap/Wrap/Container/StoreWrap/OperBar/RecBtn/Txt/Cost").getComponent(Label).string = `${chestItem.recover_price}`;

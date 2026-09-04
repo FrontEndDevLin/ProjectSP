@@ -17,6 +17,36 @@
         "type": 1,
         "script": "Bullet_Emy_Body"
     },
+    "Emy_Body003": {
+        "code": "Emy_Body003",
+        "prefab": "Emy_Body003",
+        "type": 1,
+        "script": "Bullet_Emy_Body"
+    },
+    "Emy_Body004": {
+        "code": "Emy_Body004",
+        "prefab": "Emy_Body004",
+        "type": 1,
+        "script": "Bullet_Emy_Body"
+    },
+    "Emy_Body005": {
+        "code": "Emy_Body005",
+        "prefab": "Emy_Body005",
+        "type": 1,
+        "script": "Bullet_Emy_Body"
+    },
+    "Emy_Body006": {
+        "code": "Emy_Body006",
+        "prefab": "Emy_Body006",
+        "type": 1,
+        "script": "Bullet_Emy_Body"
+    },
+    "Emy_Body007": {
+        "code": "Emy_Body007",
+        "prefab": "Emy_Body007",
+        "type": 1,
+        "script": "Bullet_Emy_Body"
+    },
     "Emy_Body020": {
         "code": "Emy_Body020",
         "prefab": "Emy_Body020",
@@ -38,5 +68,13 @@
         "script": "Bullet_Normal",
         "speed": 480,
         "max_dis": 200
+    },
+    "CHR_Bullet003": {
+        "code": "CHR_Bullet003",
+        "prefab": "CHR_Bullet003",
+        "type": 2,
+        "script": "Bullet_Normal",
+        "speed": 300,
+        "max_dis": 120
     }
 }

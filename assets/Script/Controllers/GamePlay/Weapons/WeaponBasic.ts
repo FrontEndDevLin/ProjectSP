@@ -44,9 +44,42 @@ export default class WeaponBasic {
     // // 武器挂载节点
     // public mountNode: any;
 
+    protected showCdTxt: boolean = true;
+
     constructor(weaponData: WeaponInfo.IWeapon) {
         this.orgInf = weaponData;
         this.initCurInf();
+    }
+
+    protected onUpgradeQuality() {}
+
+    public upgradeQuality() {
+        this.quality++;
+        this.onUpgradeQuality();
+
+        // 更新curInf
+        this.updateCurInf();
+
+        this.updatePanel();
+    }
+
+    protected updateCurInf() {
+        let nAryKey = ["damage", "cd", "crit_rate"];
+        for (let key in this.curInf) {
+            if (nAryKey.indexOf(key) !== -1) {
+                this.curInf[key] = this.orgInf[key][this.quality - 1] || this.orgInf[key][0];
+            } else if (key === 'boost') {
+                let boost = {};
+                for (let propKey in this.orgInf[key]) {
+                    boost[propKey] = this.orgInf[key][propKey][this.quality - 1] || this.orgInf[key][propKey][0];
+                }
+                this.curInf[key] = boost;
+            } else {
+                if (this.orgInf[key]) {
+                    this.curInf[key] = this.orgInf[key];
+                }
+            }
+        }
     }
 
     protected initCurInf() {
@@ -107,6 +140,14 @@ export default class WeaponBasic {
         return finalDamage;
     }
 
+    public addPenetrate(penetrate: number) {
+        if (typeof this.curInf.penetrate === 'number') {
+            this.curInf.penetrate += penetrate;
+        } else {
+            this.curInf.penetrate = penetrate;
+        }
+    }
+
     /**
      * 角色属性变化时调用
      * 更新武器数据
@@ -125,6 +166,17 @@ export default class WeaponBasic {
         this.curInf.cd = cd;
         this.curInf.range = range;
 
+        if (this.curInf.penetrate) {
+            let penetrate_damage = Math.round(this.curInf.damage * CHRManager.instance.propCtx.getPropRealValue("pen_dmg"));
+            if (penetrate_damage <= 1) {
+                penetrate_damage = 1;
+            }
+            if (penetrate_damage > this.curInf.damage) {
+                penetrate_damage = this.curInf.damage;
+            }
+            this.curInf.penetrate_damage = penetrate_damage;
+        }
+
         // this.base_dmg = bulletRealTimeAttr.base_dmg;
         this.curInf.damage = this.getRealDamage();
 
@@ -141,6 +193,10 @@ export default class WeaponBasic {
         // 加载后拿到攻击行为脚本组件, 指向到 this.behavior
         const nodeAndCtx: NodeAndCxtComponent = WeaponManager.instance.loadPrefabAndScript({ prefabPath: `Weapon/${this.prefabName}`, scriptName: this.behavior });
         this.behaviorCtx = nodeAndCtx.ctx as BehaviorBase;
+        if (!this.behaviorCtx) {
+            console.log(`武器行为组件未定义, 行为: `, nodeAndCtx);
+            return;
+        }
         this.behaviorCtx.setWeaponRef(this);
         this.behaviorCtx.onInit();
         this.node = nodeAndCtx.node;
@@ -216,10 +272,12 @@ export default class WeaponBasic {
     }
     // 获取贯穿属性文本
     protected getPenetrateRichTxt(): string {
-        // const { penetrate, pen_dmg } = this;
-        // if (penetrate && penetrate > 0 && pen_dmg && pen_dmg > 0) {
-        //     return `贯穿: ${ getSuccessRichTxt(penetrate) }|${ pen_dmg * 100 }%伤害`;
-        // }
+        const { penetrate } = this.curInf;
+        let pen_dmg: number = CHRManager.instance.propCtx.getPropRealValue("pen_dmg");
+        if (penetrate && penetrate > 0 && pen_dmg && pen_dmg > 0) {
+            // TODO: pen_dmg结合角色属性计算
+            return `贯穿: ${ getSuccessRichTxt(penetrate) }|${ pen_dmg * 100 }%伤害`;
+        }
         return "";
     }
     // 获取击退属性文本
@@ -254,6 +312,9 @@ export default class WeaponBasic {
     }
     // 获取冷却属性富文本
     protected getCdRichTxt(): string {
+        if (!this.showCdTxt) {
+            return "";
+        }
         let { cd } = this.curInf;
         if (typeof cd !== "number") {
             return "";

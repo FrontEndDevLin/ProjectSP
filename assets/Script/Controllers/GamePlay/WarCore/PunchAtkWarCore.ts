@@ -1,7 +1,7 @@
 import { _decorator } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import WarCoreManager from '../../../CManager/WarCoreManager';
-import ItemWarCore from '../Items/ItemWarCore';
+import ItemWarCore from '../Items/Items/ItemWarCore';
 const { ccclass, property } = _decorator;
 
 /**

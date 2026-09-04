@@ -11,6 +11,13 @@ import WeaponBase from "../Weapons/WeaponBase";
 import WeaponManager from "../../../CManager/WeaponManager";
 import ProcessManager from "../../../CManager/ProcessManager";
 
+interface WeaponInitOptions {
+    // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
+    // itemRef: any;
+    // 武器挂载节点
+    mountNode: any;
+}
+
 export default class ItemBasic {
     public props: ItemInfo.I_Item;
 
@@ -24,43 +31,40 @@ export default class ItemBasic {
         val_2: "+-"
     }
 
-    constructor(itemData: ItemInfo.I_Item) {
+    // 当属于商店道具时, 决定是否锁定在商店
+    public lock: boolean = false;
+
+    public init(itemData: ItemInfo.I_Item) {
         if (itemData) {
-            console.log(itemData)
             const props: ItemInfo.I_Item = copyObject(itemData);
             this.props = props;
-            // if (itemData.global === ItemInfo.Global.ITEM) {
-            //     let wave: number = ProcessManager.instance.waveRole.wave
-            //     this.real_price = Math.round(this.props.price + wave + (this.props.price * 0.1 * wave) * CHRManager.instance.propCtx.getPropRealValue("item_price"));
-            //     this.recover_price = Math.ceil(this.real_price * 0.25);
-            // }
+            if (itemData.global === ItemInfo.Global.ITEM) {
+                let wave: number = ProcessManager.instance.waveRole.wave
+                this.real_price = Math.round(this.props.price + wave + (this.props.price * 0.1 * wave) * CHRManager.instance.propCtx.getPropRealValue("item_price"));
+                this.recover_price = Math.ceil(this.real_price * 0.25);
+            }
             this.onInit();
         }
     }
 
+    public initWeapon() {}
+    public mountWeapon(initOptions: WeaponInitOptions = { mountNode: null }) {}
+
     protected onInit() {}
-
-    protected onUpgradeQuality() {}
-
-    public upgradeQuality() {
-        // this.quality++;
-        // this.onUpgradeQuality();
-        // this.weaponCtx.setQuality(this.quality);
-    }
 
     public getGroupTxt(): string {
         let txt = "";
-        // switch (this.group) {
-        //     case ItemInfo.Group.NORMAL: {
-        //         txt = "道具";
-        //     } break;
-        //     case ItemInfo.Group.LIMIT: {
-        //         txt = "限制的";
-        //     } break;
-        //     case ItemInfo.Group.SPECIAL: {
-        //         txt = "唯一的";
-        //     } break;
-        // }
+        switch (this.props.group) {
+            case ItemInfo.Group.NORMAL: {
+                txt = "道具";
+            } break;
+            case ItemInfo.Group.LIMIT: {
+                txt = "限制的";
+            } break;
+            case ItemInfo.Group.SPECIAL: {
+                txt = "唯一的";
+            } break;
+        }
         return txt;
     }
 
@@ -163,6 +167,9 @@ export default class ItemBasic {
     // buff富文本
     public getBuffTxt() {
         let buffTxt = "";
+        if (!this.props.buff_list || !this.props.buff_list.length) {
+            return buffTxt;
+        }
         this.props.buff_list.forEach((buff, i) => {
             buffTxt += CHRManager.instance.propCtx.getBuffTxt(buff);
             if (i !== this.props.buff_list.length - 1) {

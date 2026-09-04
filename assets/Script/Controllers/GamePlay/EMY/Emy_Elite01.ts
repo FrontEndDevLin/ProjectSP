@@ -1,7 +1,7 @@
 import { _decorator } from 'cc';
 import { EmyBasic1 } from './EmyBasic1';
 import { EmyElite } from './EmyElite';
-import EmyEffect_Elite01 from '../Effect/Emy/EmyEffect_Elite01';
+import { EmyEffect_Elite01 } from '../Effect/Emy/EmyEffect_Elite01';
 const { ccclass, property } = _decorator;
 
 @ccclass('Emy_Elite01')
@@ -13,7 +13,7 @@ export class Emy_Elite01 extends EmyElite {
     protected weapon1: string = "Weapon_Emy_Elite01";
     protected weapon2: string = "Weapon_Emy_TripleFlyBullet";
 
-    protected effectName: string = "Emy_Effect_Elite01";
+    protected effectName: string = "EmyEffect_Elite01";
     protected effect: EmyEffect_Elite01;
 
     protected showHpBar: boolean = true;

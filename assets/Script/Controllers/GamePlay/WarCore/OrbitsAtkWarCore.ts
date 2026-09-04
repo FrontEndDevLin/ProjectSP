@@ -7,11 +7,11 @@ import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber, getRandomNumber, getVectorByAngle } from '../../../Common/utils';
 import ProcessManager from '../../../CManager/ProcessManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
-import ItemWarCore from '../Items/ItemWarCore';
+import ItemWarCore from '../Items/Items/ItemWarCore';
 import OBT from '../../../OBT';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 import OBT_UIManager from '../../../Manager/OBT_UIManager';
-import ItemOrbitsAtkWarCore from '../Items/ItemOrbitsAtkWarCore';
+import ItemOrbitsAtkWarCore from '../Items/Items/ItemOrbitsAtkWarCore';
 const { ccclass, property } = _decorator;
 
 /**

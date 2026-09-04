@@ -87,9 +87,19 @@ export default class BulletManager extends OBT_UIManager {
         // this._initBulletCldMap();
     }
 
+    /**
+     * 预加载子弹, 加载所有在I_Bullet中的子弹
+     */
     public preloadNode() {
         const preloadConfig: GameConfigInfo.PreloadConfig = ProcessManager.instance.waveRole.preload;
-        this.preloadBullet(preloadConfig.bullet);
+
+        let bulletConfig: GameConfigInfo.BulletPreloadConfig[] = [];
+        for (let code in this.iBulletData) {
+            // count后续可根据当前波次调整
+            bulletConfig.push({ code, count: 50 });
+        }
+        this.preloadBullet(bulletConfig);
+
         this.particleCtrl.preloadParticle(preloadConfig.bullet_particle);
     }
 
@@ -109,14 +119,14 @@ export default class BulletManager extends OBT_UIManager {
             this._nodePoolMap[bulletId].clear();
         }
         this._nodePoolMap = {};
-        configList.forEach(({ bulletId, count }) => {
-            const bulletAttr: BulletInfo.IBulletAttr = this.iBulletData[bulletId];
-            if (!this._nodePoolMap[bulletId]) {
-                this._nodePoolMap[bulletId] = new NodePool();
+        configList.forEach(({ code, count }) => {
+            const bulletAttr: BulletInfo.IBulletAttr = this.iBulletData[code];
+            if (!this._nodePoolMap[code]) {
+                this._nodePoolMap[code] = new NodePool();
             }
             for (let i = 0; i < count; i++) {
                 const bulletNode: Node = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
-                this._nodePoolMap[bulletId].put(bulletNode);
+                this._nodePoolMap[code].put(bulletNode);
             }
         });
     }
@@ -164,11 +174,21 @@ export default class BulletManager extends OBT_UIManager {
     }
 
     public createIBullet({ weaponRealTimeProps, position, vector, rootNode }: CreateIBulletParams): Node {
+        weaponRealTimeProps = copyObject(weaponRealTimeProps);
+        if (weaponRealTimeProps.penetrate) {
+            weaponRealTimeProps.penetrate_cnt = 0;
+        }
+
         const bulletAttr: BulletInfo.IBulletAttr = this.iBulletData[weaponRealTimeProps.bullet];
         const nodePool = this._nodePoolMap[weaponRealTimeProps.bullet];
         let bulletNode: Node = nodePool ? nodePool.get() : null;
         if (!bulletNode) {
             bulletNode = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
+        }
+
+        if (!bulletNode) {
+            console.error(`创建子弹${weaponRealTimeProps.bullet}失败`);
+            return null;
         }
 
         const scriptComp: BulletBasic = bulletNode.getComponent(BulletBasic);

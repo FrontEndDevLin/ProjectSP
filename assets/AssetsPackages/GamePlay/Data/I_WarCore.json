@@ -5,7 +5,11 @@
         "desc2": "这里面可以定义首角色属性加成的属性",
         "split": "分裂",
         "pub_war_core": "允许选择的核心",
-        "upgrade_pool": "核心升级包池"
+        "upgrade_pool": "核心升级包池",
+        "upgrade_pack_def": {
+            "desc": "核心升级包定义",
+            "global": "道具全局分组, 2->核心道具, 3->核心升级包道具"
+        }
     },
     "war_core_def": {
         "BaseWarCore": {
@@ -36,7 +40,7 @@
                 }
             ],
             "weapon": "Weapon_Chr_Scatter",
-            "upgrade_pool": ["Item_UPack_Mirror"]
+            "upgrade_pool": ["Mirror", "Fission", "Penetrate", "Readyfor", "Overload"]
         },
         "a": {
             "id": "ScatterAtkWarCore",
@@ -61,5 +65,70 @@
             "upgrade_pool": ["Item_FightWithBothHands", "Item_CrossCloud", "Item_FastScatter"]
         }
     },
-    "pub_war_core": ["ScatterWarCore"]
+    "pub_war_core": ["ScatterWarCore"],
+    "upgrade_pack_def": {
+        "Mirror": {
+            "code": "Mirror",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "镜像",
+            "intro": "有o概率朝相反方向发射飞弹",
+            "type": 2,
+            "ico": "doublebow",
+            "buff_list": [
+                {
+                    "prop": "range_dmg",
+                    "value": -5
+                }
+            ]
+        },
+        "Fission": {
+            "code": "Fission",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "裂变",
+            "intro": "散射攻击击败敌人时, 会生成o发飞弹",
+            "type": 2,
+            "ico": "scatter",
+            "weapon": "Weapon_Chr_Fission"
+        },
+        "Penetrate": {
+            "code": "Penetrate",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "贯穿",
+            "intro": "散射攻击将获得o层穿透",
+            "type": 2,
+            "ico": "scatter",
+            "buff_list": [
+                {
+                    "prop": "pen_dmg",
+                    "value": 15
+                }
+            ]
+        },
+        "Readyfor": {
+            "code": "Readyfor",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "蓄势",
+            "intro": "每击败o个敌人, 永久提升b%暴击, 上限为i%, 当达到上限时, 获得t分裂",
+            "type": 2,
+            "ico": "scatter"
+        },
+        "Overload": {
+            "code": "Overload",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "超载",
+            "intro": "在o次攻击过后, 接下来的b次攻击附带i%攻击速度和t%暴击几率",
+            "type": 2,
+            "ico": "scatter"
+        }
+    }
 }

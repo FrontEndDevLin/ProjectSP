@@ -7,7 +7,7 @@ import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber, getVectorByAngle } from '../../../Common/utils';
 import ProcessManager from '../../../CManager/ProcessManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
-import ItemWarCore from '../Items/ItemWarCore';
+import ItemWarCore from '../Items/Items/ItemWarCore';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 const { ccclass, property } = _decorator;
 

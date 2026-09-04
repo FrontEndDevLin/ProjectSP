@@ -1,12 +1,24 @@
-import { SpriteComponent, Node, Animation, Color } from "cc";
+import { _decorator, SpriteComponent, Node, Animation, Color } from "cc";
 import { EmyBasic1 } from "../../EMY/EmyBasic1";
 import { FLASH_TIME } from "../../../../Common/Namespace";
+import OBT_Component from "db://assets/Script/OBT_Component";
+const { ccclass, property } = _decorator;
 
 /**
  * 敌人动效
+ * yunocy
  */
 
-export default class EmyEffect {
+interface AnimationEvent {
+    context?: any;
+    fn: Function;
+}
+interface AnimationEvnetMap {
+    [eventName: string]: AnimationEvent[];
+}
+
+@ccclass('EmyEffect')
+export class EmyEffect extends OBT_Component {
     protected ref: EmyBasic1;
     protected isInit: boolean = false;
 
@@ -15,14 +27,15 @@ export default class EmyEffect {
     protected FLASH_COLOR: Color = new Color(0, 255, 255);
     protected NORMAL_COLOR: Color = new Color(255, 255, 255);
 
-    protected bodyPath: string = "Body";
-    protected bodyAnimation: Animation;
+    public bodyAnimation: Animation;
 
-    protected spriteNodePaths: string[] = [`${this.bodyPath}/PIC`];
+    protected spriteNodePaths: string[] = ["PIC"];
     // spNodes节点下的图形组件spComps和动画组件aniComps, 三者一起初始化
     protected spriteNodes: Node[] = [];
     protected spriteComps: SpriteComponent[] = [];
     protected animationComps: Animation[] = [];
+
+    protected animationEventMap: AnimationEvnetMap = {};
 
     // 效果
     public init(emyRef: EmyBasic1) {
@@ -35,9 +48,9 @@ export default class EmyEffect {
         if (this.isInit) {
             return;
         }
-        this.bodyAnimation = this.ref.view(this.bodyPath).getComponent(Animation);
+        this.bodyAnimation = this.node.getComponent(Animation);
         this.spriteNodePaths.forEach((path: string, i: number) => {
-            let spNode: Node = this.ref.view(path);
+            let spNode: Node = this.view(path);
             this.spriteNodes.push(spNode);
             this.spriteComps[i] = spNode.getComponent(SpriteComponent);
             this.animationComps[i] = spNode.getComponent(Animation);
@@ -77,12 +90,42 @@ export default class EmyEffect {
         })
     }
 
+    public playBodyAnimation(animName: string) {
+        this.bodyAnimation.play(animName);
+    }
+
+    public animationEventFn(eventName: string) {
+        this.runAnimationEvent(eventName);
+    }
     public playDieEffect() {
         this.stopBodyAnimation();
-        this.bodyAnimation.play("Emy_die01");
+        this.playBodyAnimation("Emy_die01");
     }
     public stopBodyAnimation() {
         this.bodyAnimation.stop();
+    }
+
+    // 注册动画事件
+    public registerAnimationEvent(eventName: string, fn: Function, context?: any) {
+        if (!this.animationEventMap[eventName]) {
+            this.animationEventMap[eventName] = [];
+        }
+        for (let aniEvent of this.animationEventMap[eventName]) {
+            if (aniEvent.fn === fn) {
+                console.log('动画事件已注册');
+                return;
+            }
+        }
+        this.animationEventMap[eventName].push({ context, fn });
+    }
+
+    // 动画事件触发回调
+    protected runAnimationEvent(eventName: string) {
+        if (this.animationEventMap[eventName]) {
+            this.animationEventMap[eventName].forEach((event: AnimationEvent) => {
+                event.fn.call(event.context);
+            })
+        }
     }
 
     public runBehavior(dt: number) {

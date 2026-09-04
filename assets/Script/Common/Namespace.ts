@@ -168,7 +168,7 @@ export namespace GameConfigInfo {
     }
 
     export interface BulletPreloadConfig {
-        bulletId: string,
+        code: string,
         count: number
     }
 
@@ -180,7 +180,6 @@ export namespace GameConfigInfo {
         chest1: number,
         emy: EmyPreloadConfig[],
         emy_particle: number,
-        bullet: BulletPreloadConfig[],
         bullet_particle: number,
         dmg_txt: number
     }
@@ -263,7 +262,8 @@ export namespace WarCoreInfo {
 
     export interface I_WarCoreDBData {
         war_core_def: I_WarCoreMap,
-        pub_war_core: string[]
+        pub_war_core: string[],
+        upgrade_pack_def: ItemInfo.ItemMap
     }
 }
 
@@ -534,7 +534,9 @@ export namespace WeaponInfo {
         cd: number[],
         crit_rate: number[],
         crit_dmg_rate: number,
-        boost: BoostConfig
+        boost: BoostConfig,
+        penetrate?: number, // 贯穿数
+        penetrate_damage?: number // 贯穿伤害
     }
     // 武器实时数据, 受面板加成, cd、crit_rate等属性为数字, 由quality决定
     export interface WeaponRealTimeProps {
@@ -549,7 +551,10 @@ export namespace WeaponInfo {
         cd: number,
         crit_rate: number,
         crit_dmg_rate: number,
-        boost: BoostRealTimeConfig
+        boost: BoostRealTimeConfig,
+        penetrate?: number, // 贯穿数
+        penetrate_cnt?: number, // 贯穿次数
+        penetrate_damage?: number // 贯穿伤害
     }
 }
 
@@ -640,7 +645,9 @@ export namespace EMYInfo {
     export enum ATTACK_STAGE {
         NONE = 1,   // 无
         BEFORE_ATTACK, // 前摇
-        ATTKING // 攻击中
+        ENERGY_CHARGE,  // 凝滞、蓄力
+        ATTKING, // 攻击中
+        AFTER_ATTACK // 后摇
     }
 }
 

@@ -126,7 +126,7 @@
             "prop": "pen_dmg",
             "txt": "%穿透伤害",
             "val": 0,
-            "basic_val": 1,
+            "basic_val": 50,
             "forward_val": true,
             "percent": true,
             "intro": "介绍文本"

@@ -8,9 +8,9 @@ import WarCoreManager from '../../../CManager/WarCoreManager';
 import DamageManager from '../../../CManager/DamageManager';
 import BulletManager from '../../../CManager/BulletManager';
 import { getFloatNumber } from '../../../Common/utils';
-import ItemWarCore from '../Items/ItemWarCore';
+import ItemWarCore from '../Items/Items/ItemWarCore';
 import ItemsManager from '../../../CManager/ItemsManager';
-import Item_WarCore from '../Items/Item_WarCore';
+import Item_WarCore from '../Items/WarCore/Item_WarCore';
 const { ccclass, property } = _decorator;
 
 @ccclass('CoreCard')
@@ -36,7 +36,7 @@ export class CoreCard extends OBT_Component {
 
         // return console.log(warCore)
 
-        // console.log('预览核心, 当前核心品质:' + warCore.props.quality);
+        console.log('预览核心, 当前核心品质:' + warCore.props.quality);
         let quality = warCore.props.quality || ITEM_QUALITY.LV1;
         let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
         let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);

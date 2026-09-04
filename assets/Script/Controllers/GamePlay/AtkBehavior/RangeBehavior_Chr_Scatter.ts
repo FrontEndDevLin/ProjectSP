@@ -2,7 +2,7 @@ import { _decorator, Vec3 } from 'cc';
 import { RangeBehaviorBase_Chr } from './RangeBehaviorBase_Chr';
 import { EMYInfo } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
-import { getVectorByAngle } from '../../../Common/utils';
+import { getRandomNumber, getVectorByAngle } from '../../../Common/utils';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 import BulletManager from '../../../CManager/BulletManager';
 import WeaponBasic from '../Weapons/WeaponBasic';
@@ -23,8 +23,6 @@ export class RangeBehavior_Chr_Scatter extends RangeBehaviorBase_Chr {
         if (!target) {
             return;
         }
-
-        console.log('TODO: 散射攻击');
 
         // 通知BulletManager发射子弹，带上当前坐标，向量
         const chrLoc: Vec3 = CHRManager.instance.getCHRLoc();
@@ -48,25 +46,25 @@ export class RangeBehavior_Chr_Scatter extends RangeBehaviorBase_Chr {
         }
 
         // 左右开弓概率攻击
-        // let mirrorAttackRate: number = WarCoreManager.instance.warCore.getProp("mirrorAttackRate");
-        // if (mirrorAttackRate && mirrorAttackRate > 0) {
-        //     let mirrorAttack: boolean = false;
-        //     if (mirrorAttackRate >= 100) {
-        //         mirrorAttack = true;
-        //     } else {
-        //         let randomNum: number = getRandomNumber(1, 100);
-        //         if (randomNum <= mirrorAttackRate) {
-        //             mirrorAttack = true;
-        //         }
-        //     }
-        //     if (mirrorAttack) {
-        //         let mirrorAngleList = []
-        //         angleList.forEach((angle: number) => {
-        //             mirrorAngleList.push(angle + 180)
-        //         })
-        //         angleList = angleList.concat(mirrorAngleList);
-        //     }
-        // }
+        let mirrorAttackRate: number = this.weaponRef.itemRef.mirrorAttackRate;
+        if (mirrorAttackRate && mirrorAttackRate > 0) {
+            let mirrorAttack: boolean = false;
+            if (mirrorAttackRate >= 1) {
+                mirrorAttack = true;
+            } else {
+                let randomNum: number = getRandomNumber(1, 100) / 100;
+                if (randomNum <= mirrorAttackRate) {
+                    mirrorAttack = true;
+                }
+            }
+            if (mirrorAttack) {
+                let mirrorAngleList = []
+                angleList.forEach((angle: number) => {
+                    mirrorAngleList.push(angle + 180)
+                })
+                angleList = angleList.concat(mirrorAngleList);
+            }
+        }
 
         // 同一批次的子弹, groupId一致
         // let groupId: number = this.bulletGroupId;

@@ -15,6 +15,9 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('BehaviorBase_Chr')
 export class BehaviorBase_Chr extends BehaviorBase {
+    // 是否为主动攻击型
+    protected isActiveType: boolean = true;
+
     // 是否一直处于攻击状态, 这个状态下不考虑cd
     protected isAlwaysAttack: boolean = false;
 
@@ -122,6 +125,9 @@ export class BehaviorBase_Chr extends BehaviorBase {
     }
 
     public runBehavior(deltaTime: number) {
+        if (!this.isActiveType) {
+            return;
+        }
         if (this.isAlwaysAttack) {
             this.execAttack(deltaTime);
         } else {

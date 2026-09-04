@@ -25,7 +25,9 @@ export class EmyElite extends EmyBasic1 {
             this.hpBarNode.setPosition(0, emyNodeHeight / 2 + 30);
             this.hpBarNode.setParent(this.node);
         }
-        this.hpBarNode.active = true;
+        if (this.showHpBar) {
+            this.hpBarNode.active = true;
+        }
     }
 
     protected updateHpBar() {
@@ -37,7 +39,9 @@ export class EmyElite extends EmyBasic1 {
     }
 
     protected onDie(): void {
-        this.hpBarNode.active = false;
+        if (this.showHpBar) {
+            this.hpBarNode.active = false;
+        }
     }
     protected onRunAway(): void {
         this.hpBarNode.active = false;

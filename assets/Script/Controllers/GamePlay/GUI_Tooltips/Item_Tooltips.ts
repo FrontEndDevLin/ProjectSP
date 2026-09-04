@@ -1,6 +1,6 @@
 import { _decorator } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import ItemWarCore from '../Items/ItemWarCore';
+import ItemWarCore from '../Items/Items/ItemWarCore';
 import { CoreCard } from '../GUI_CoreSelect/CoreCard';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import { ItemCard } from '../GUI_Prepare/ItemCard';

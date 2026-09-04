@@ -13,10 +13,11 @@ import GUI_GamePlayManager from '../../CManager/GUI_GamePlayManager';
 import WarCoreManager from '../../CManager/WarCoreManager';
 import { GUI_PropWrap } from './GUI_PropWrap';
 import ItemBase from './Items/ItemBase';
-import ItemWarCore from './Items/ItemWarCore';
+import ItemWarCore from './Items/Items/ItemWarCore';
 import GUI_PopupManager from '../../CManager/GUI_PopupManager';
 import GUI_TooltipsManager from '../../CManager/GUI_TooltipsManager';
-import Item_WarCore from './Items/Item_WarCore';
+import Item_WarCore from './Items/WarCore/Item_WarCore';
+import ItemBasic from './Items/ItemBasic';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUI_Prepare')
@@ -67,7 +68,7 @@ export class GUI_Prepare extends OBT_Component {
         cardSlotList.forEach((node: Node) => {
             node.removeAllChildren();
         });
-        const storeItemList: ItemBase[] = ItemsManager.instance.storeItemList;
+        const storeItemList: ItemBasic[] = ItemsManager.instance.storeItemList;
         storeItemList.forEach((item, i) => {
             const storeItemCard: Node = OBT.instance.uiManager.loadPrefab({ prefabPath: "GUI_Prepare/StoreItem" });
             storeItemCard.OBT_param1 = item;
@@ -99,7 +100,7 @@ export class GUI_Prepare extends OBT_Component {
         ItemsManager.instance.refreshStoreList();
     }
 
-    private _mountItemRectNode(backpackItem: ItemBase, index?: number) {
+    private _mountItemRectNode(backpackItem: ItemBasic, index?: number) {
         if (!this._backpackWrapNode) {
             this._backpackWrapNode = this.view("PrepareWrap/InfoWrap/ItemsWrap/ScrollView/view/content");
             GUI_GamePlayManager.instance.setBackpackWrapNode(this._backpackWrapNode);
@@ -116,17 +117,17 @@ export class GUI_Prepare extends OBT_Component {
         OBT.instance.uiManager.mountNode({ node: itemRect, parentNode: this._backpackWrapNode });
     }
     private _loadItemList() {
-        let backpack: ItemBase[] = ItemsManager.instance.getBackpack();
-        backpack.forEach((backpackItem: ItemBase, i: number) => {
+        let backpack: ItemBasic[] = ItemsManager.instance.getBackpack();
+        backpack.forEach((backpackItem: ItemBasic, i: number) => {
             this._mountItemRectNode(backpackItem, i);
         })
     }
-    private _updateItemList({ hasItemInBackpack, backpackItem }: { hasItemInBackpack: Boolean, backpackItem: ItemBase }) {
+    private _updateItemList({ hasItemInBackpack, backpackItem }: { hasItemInBackpack: Boolean, backpackItem: ItemBasic }) {
         if (hasItemInBackpack) {
             // 背包已有该道具，更新数量
             for (let node of this._backpackWrapNode.children) {
                 let nodeBackpackItem: ItemInfo.BackpackItem = node.OBT_param1;
-                if (nodeBackpackItem.id === backpackItem.id) {
+                if (nodeBackpackItem.id === backpackItem.props.code) {
                     node.OBT_param2.update();
                     break;
                 }
@@ -166,10 +167,10 @@ export class GUI_Prepare extends OBT_Component {
             let packId: string = WarCoreManager.instance.upgradeSlot[i];
             let assets: SpriteFrame;
             if (packId) {
-                let packInfo: ItemBase = WarCoreManager.instance.getUpgradePackInfo(packId);
-                let icon = packInfo.ico;
+                let packInfo: ItemBasic = WarCoreManager.instance.getUpgradePackInfo(packId);
+                let icon = packInfo.props.ico;
                 assets = OBT.instance.resourceManager.getSpriteFrameAssets(`Item/${icon}`);
-                let quality: ITEM_QUALITY = packInfo.quality || ITEM_QUALITY.LV1;
+                let quality: ITEM_QUALITY = packInfo.props.quality || ITEM_QUALITY.LV1;
                 let uiConfg: ItemInfo.CardUIConfig = ItemsManager.instance.itemCardUIConfigMap[quality];
                 let borderAssets: SpriteFrame = OBT.instance.resourceManager.getSpriteFrameAssets(`Border/${uiConfg.border}`);
                 slotNode.children[0].getComponent(Sprite).color = uiConfg.background;

@@ -9,8 +9,20 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('Bullet_Normal')
 export class Bullet_Normal extends BulletBasic {
-    onHit() {
-        this.die();
+    public onHit() {
+        // 判断是第几次穿透
+        if (this.realTimeProps.penetrate) {
+            if (!this.realTimeProps.penetrate_cnt) {
+                this.realTimeProps.damage = this.realTimeProps.penetrate_damage;
+            }
+            if (this.realTimeProps.penetrate_cnt >= this.realTimeProps.penetrate) {
+                this.die();
+            } else {
+                this.realTimeProps.penetrate_cnt++;
+            }
+        } else {
+            this.die();
+        }
     }
 
     protected runBehavior(dt: number) {

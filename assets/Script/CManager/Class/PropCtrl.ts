@@ -93,6 +93,9 @@ export default class PropCtrl extends BaseCtrl {
         let val: number = Math.round(prop.real_val) || 0;
         if (basicVal === 0) {
             if (prop.percent) {
+                // if (prop.prop === "pen_dmg") {
+                //     return getFloatNumber(val / 100, 4);
+                // }
                 // 存在百分比类型的属性，但基础值为0(灵活)
                 return val;
             } else {
@@ -100,6 +103,9 @@ export default class PropCtrl extends BaseCtrl {
             }
         } else {
             if (prop.percent) {
+                if (prop.prop === "pen_dmg") {
+                    return getFloatNumber((basicVal + val) / 100, 4);
+                }
                 return getFloatNumber(basicVal + basicVal * val / 100, 4);
             } else {
                 return basicVal + val;

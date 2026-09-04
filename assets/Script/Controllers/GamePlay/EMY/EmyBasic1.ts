@@ -14,9 +14,9 @@ import WeaponBasic from '../Weapons/WeaponBasic';
 import WeaponManager from '../../../CManager/WeaponManager';
 import MoveBasic from '../MoveBehavior/MoveBasic';
 import { MoveBehavior_def } from '../MoveBehavior/MoveBehavior_def';
-import EmyEffect from '../Effect/Emy/EmyEffect';
-import { EmyEffect_def } from '../Effect/EmyEffect_def';
+import { EmyEffect } from '../Effect/Emy/EmyEffect';
 import WeaponEmy from '../Weapons/WeaponEmy';
+import Weapon_Emy_Body from '../Weapons/Weapon_Emy_Body';
 const { ccclass, property } = _decorator;
 
 /**
@@ -41,7 +41,7 @@ export class EmyBasic1 extends OBT_Component {
     public isFaceToTarget: boolean = false;
 
     // 与角色的距离
-    protected dis: number;
+    public dis: number;
     public vector: Vec3;
     protected cd: number = 0;
 
@@ -66,12 +66,16 @@ export class EmyBasic1 extends OBT_Component {
     protected weapon1Ctx: WeaponEmy;
     protected weapon2Ctx: WeaponEmy;
     protected weapon3Ctx: WeaponEmy;
+    protected bodyWeaponCtx: Weapon_Emy_Body;
 
     protected bodyNode: Node;
 
-    protected effectName: string = "Emy_Effect";
+    protected effectName: string = "EmyEffect";
     // 根据配置加载不同的效果
     protected effect: EmyEffect;
+
+    protected hasSpecialAttack: boolean = false;
+    public canSpecialAttack: boolean = false;
 
     start() {
     }
@@ -87,9 +91,20 @@ export class EmyBasic1 extends OBT_Component {
         this.bodyNode.setScale(v3(1, 1));
     }
     protected initEffect() {
-        this.effect = new EmyEffect_def[this.effectName]();
-        this.effect.init(this);
+        let effect: EmyEffect = <EmyEffect>this.bodyNode.addComponent(this.effectName);
+        effect.init(this);
+        this.effect = effect;
+
+        this.registerAnimationEvent("die", this._remove, this);
     }
+
+    public registerAnimationEvent(eventName: string, fn: Function, context?: any) {
+        this.effect.registerAnimationEvent(eventName, fn, context);
+    }
+    public playBodyAnimation(animName: string) {
+        this.effect.playBodyAnimation(animName);
+    }
+
     // 其他初始化操作, 子组件需要可使用
     protected onInit() {}
 
@@ -101,6 +116,11 @@ export class EmyBasic1 extends OBT_Component {
             runAway: this.runAway.bind(this)
         }
         this.props = copyObject(props);
+
+        if (this.props.attack_range) {
+            this.hasSpecialAttack = true;
+        }
+
         // console.log(`生成敌人${props.id}, 血量${props.c_hp}, 伤害${props.c_dmg}, 特殊伤害${props.c_spec_dmg}`)
         this.maxHp = props.c_hp;
 
@@ -108,8 +128,8 @@ export class EmyBasic1 extends OBT_Component {
         if (!this.isInit) {
             this.bodyCollider = this.node.getComponent(BoxCollider2D);
             this.initWeapons();
-            this.initMoveBehaviors();
             this.initEffect();
+            this.initMoveBehaviors();
             this.isInit = true;
         }
         // if (!this.bodyWeaponCtx) {
@@ -213,7 +233,7 @@ export class EmyBasic1 extends OBT_Component {
         })
     }
 
-    protected setCurrentMoveBehavior(behaviorName: string) {
+    public setCurrentMoveBehavior(behaviorName: string, isCanMove: boolean = true) {
         if (!behaviorName) {
             return;
         }
@@ -224,6 +244,7 @@ export class EmyBasic1 extends OBT_Component {
             }
             if (behavior.name == behaviorName) {
                 this.currentMoveBehavior = behavior;
+                this.currentMoveBehavior.isCanMove = isCanMove;
                 break;
             }
         }
@@ -257,8 +278,13 @@ export class EmyBasic1 extends OBT_Component {
             if (!behavior) {
                 continue;
             }
-            this[`moveBehavior${i + 1}Ctx`] = new MoveBehavior_def[behavior](this);
+            let behaviorCtx: MoveBasic = new MoveBehavior_def[behavior](this);
+            behaviorCtx.onInit();
+            this[`moveBehavior${i + 1}Ctx`] = behaviorCtx;
         }
+    }
+    public setBodyWeapon(weapon: Weapon_Emy_Body) {
+        this.bodyWeaponCtx = weapon;
     }
 
     public die() {
@@ -290,11 +316,11 @@ export class EmyBasic1 extends OBT_Component {
     }
 
     protected move(dt: number) {
+        this._updateEnemyInfo();
         if (!this.currentMoveBehavior) {
             return;
         }
         this.currentMoveBehavior.runBehavior(dt);
-        this._updateEnemyInfo();
     }
     public stopMove() {
         if (!this.currentMoveBehavior) {
@@ -309,13 +335,21 @@ export class EmyBasic1 extends OBT_Component {
         this.currentMoveBehavior.isCanMove = true;
     }
 
-    // 阵亡动画播放完成
-    public dieAnimationPlayoff() {
-        this._remove();
-    }
     private _remove() {
         this.effect.stopBodyAnimation();
         EMYManager.instance.removeEmyNode(this.node);
+    }
+
+    public setProps() {
+        
+    }
+
+    protected checkSpecialAttack() {
+        if (this.dis <= this.props.attack_range) {
+            this.canSpecialAttack = true;
+        } else {
+            this.canSpecialAttack = false;
+        }
     }
 
     update(deltaTime: number) {
@@ -335,7 +369,12 @@ export class EmyBasic1 extends OBT_Component {
             this.weapon3Ctx.runBehavior(deltaTime);
         }
         this.move(deltaTime);
-        this.effect.runBehavior(deltaTime);
+        if (this.effect) {
+            this.effect.runBehavior(deltaTime);
+        }
+        if (this.hasSpecialAttack) {
+            this.checkSpecialAttack();
+        }
     }
 }
 

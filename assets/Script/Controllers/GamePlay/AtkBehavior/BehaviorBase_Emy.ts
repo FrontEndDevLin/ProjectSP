@@ -15,9 +15,29 @@ const { ccclass, property } = _decorator;
 @ccclass('BehaviorBase_Emy')
 export class BehaviorBase_Emy extends BehaviorBase {
     protected weaponRef: WeaponEmy;
+    // 是否在攻击范围内
+    protected inAttackRange: boolean = false;
 
     start() {
         console.log('挂载攻击行为组件 BehaviorBase_Emy');
+    }
+
+    public onInit(): void {
+        
+    }
+
+    public isInAttackRange(): boolean {
+        let isInRange = false;
+        if (this.weaponRef.curInf.range) {
+            if (this.weaponRef.enemyRef.dis <= this.weaponRef.curInf.range) {
+                isInRange = true;
+            } else {
+                isInRange = false;
+            }
+        } else {
+            isInRange = true;
+        }
+        return isInRange;
     }
 
     public runBehavior(deltaTime: number) {
@@ -25,7 +45,7 @@ export class BehaviorBase_Emy extends BehaviorBase {
             return;
         }
 
-        if (this.calcCd(deltaTime)) {
+        if (this.calcCd(deltaTime) && this.isInAttackRange()) {
             this.isAttacking = true;
             this.execAttack(deltaTime);
         }

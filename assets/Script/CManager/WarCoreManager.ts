@@ -15,9 +15,9 @@ import ItemBase from '../Controllers/GamePlay/Items/ItemBase';
 import WeaponBase from '../Controllers/GamePlay/Weapons/WeaponBase';
 import { Weapon_def } from '../Controllers/GamePlay/Weapons/Weapon_def';
 import WeaponManager from './WeaponManager';
-import ItemWarCore from '../Controllers/GamePlay/Items/ItemWarCore';
+import ItemWarCore from '../Controllers/GamePlay/Items/Items/ItemWarCore';
 import ItemSpecial from '../Controllers/GamePlay/Items/ItemSpecial';
-import Item_WarCore from '../Controllers/GamePlay/Items/Item_WarCore';
+import Item_WarCore from '../Controllers/GamePlay/Items/WarCore/Item_WarCore';
 import WeaponBasic from '../Controllers/GamePlay/Weapons/WeaponBasic';
 import ItemBasic from '../Controllers/GamePlay/Items/ItemBasic';
 const { ccclass, property } = _decorator;
@@ -49,11 +49,11 @@ export default class WarCoreManager extends OBT_UIManager {
     private _hasUpgrade: boolean = false;
     // private _hasUpgrade: boolean = true;
 
-    protected expList: number[] = [50, 50, 50];
+    protected expList: number[] = [3, 50, 50];
 
     // 升级槽
     public upgradeSlot: string[] = [];
-    public upgradeBackpack: ItemBase[] = [];
+    public upgradeBackpack: ItemBasic[] = [];
     public upgradeSlotMap: Common.SimpleObj = {};
     // 当前预览升级核心包
     protected currentPreviewPackId: string = "";
@@ -88,7 +88,7 @@ export default class WarCoreManager extends OBT_UIManager {
             this.iWarCore[eventName](params);
         }
 
-        this.upgradeBackpack.forEach((upgradeItem: ItemBase) => {
+        this.upgradeBackpack.forEach((upgradeItem: ItemBasic) => {
             if (upgradeItem[eventName] && typeof upgradeItem[eventName] === "function") {
                 upgradeItem[eventName](params);
             }
@@ -100,6 +100,9 @@ export default class WarCoreManager extends OBT_UIManager {
      * 实际就是更新当前武器的面板
      */
     protected updateRealAtkWarCore() {
+        if (!this.warCoreWeapon) {
+            return;
+        }
         this.warCoreWeapon.updatePanel();
     }
 
@@ -127,6 +130,24 @@ export default class WarCoreManager extends OBT_UIManager {
             this.showPrefab({ prefabPath: `WarCore/${this.warCore.id}`, parentNode: this.warCoreRootNode, scriptName: this.warCore.id });
         }
     }
+    
+    public getUpgradePackItemByCode(code: string) {
+        return this.iWarCoreData.upgrade_pack_def[code];
+    }
+
+    public getUpgradePackCtxByCode(code: string): ItemBasic {
+        let item: ItemInfo.I_Item = this.getUpgradePackItemByCode(code);
+        let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Basic" : 'Item_UPack' + code;
+        let constructorFn: any = Item_def[scriptName];
+        if (!constructorFn) {
+            console.log(`未找到升级包类 ${scriptName}`);
+            return null;
+        }
+        let itemCtx: ItemBasic = new constructorFn();
+        itemCtx.init(item);
+        itemCtx.initWeapon();
+        return itemCtx;
+    }
 
     private _setWarCore(warCoreCode: string) {
         const warCoreData: WarCoreInfo.I_WarCoreAttr = this.iWarCoreData.war_core_def[warCoreCode];
@@ -139,7 +160,6 @@ export default class WarCoreManager extends OBT_UIManager {
                 this.warCoreWeapon = this.iWarCore.weaponCtx;
                 this.updateRealAtkWarCore();
             }
-            // this.warCore.use();
 
             // OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
             // this.showPrefab({ prefabPath: `WarCore/${warCoreData.code}`, parentNode: this.warCoreRootNode, scriptName: warCoreData.code });
@@ -171,7 +191,6 @@ export default class WarCoreManager extends OBT_UIManager {
     protected unmountAtkWarCore() {
         this.iWarCore.weaponCtx.node.destroy();
         this.iWarCore = null;
-        console.log(this.warCoreRootNode)
     }
 
     // 预选进攻核心列表
@@ -221,7 +240,8 @@ export default class WarCoreManager extends OBT_UIManager {
             console.error(`未找到核心道具类 ${warScriptName}`);
             return null;
         }
-        let itemCtx: Item_WarCore = new constructorFn(warCoreData);
+        let itemCtx: Item_WarCore = new constructorFn();
+        itemCtx.init(warCoreData);
         itemCtx.initWeapon();
         return itemCtx;
     }
@@ -234,7 +254,8 @@ export default class WarCoreManager extends OBT_UIManager {
     // 预选核心升级包列表
     public getPreCheckUpgradePackList(): ItemBasic[] {
         console.log('TODO: 预选核心升级包列表');
-        let upgradePool: string[] = this.iWarCore.upgrade_pool;
+        let upgradePool: string[] = this.iWarCore.props.upgrade_pool || [];
+
         const MAX: number = 3;
         let list: ItemBasic[] = [];
         let randomIdxList: number[] = [];
@@ -246,13 +267,11 @@ export default class WarCoreManager extends OBT_UIManager {
             randomIdxList = getRandomNumbers(0, upgradePool.length - 1, MAX);
         }
 
-        console.log(randomIdxList);
-        return []
-        // randomIdxList.forEach((idx: number) => {
-        //     list.push(ItemsManager.instance.getItemCtxById(upgradePool[idx]));
-        // });
+        randomIdxList.forEach((idx: number) => {
+            list.push(this.getUpgradePackCtxByCode(upgradePool[idx]));
+        });
 
-        // return list;
+        return list;
     }
 
     private _initWarCoreLevel(lev?: number, expCur?: number) {
@@ -319,16 +338,16 @@ export default class WarCoreManager extends OBT_UIManager {
     // 挂载升级包
     public mountUpgradePack(packId: string) {
         console.log('TODO: 挂载升级包');
-        return;
         if (this.upgradeSlot.length >= 3) {
             return;
         }
         // const upgradePack: WarCoreInfo.WarCoreUpgradePack = this.getUpgradePackInfo(packId);
         // TODO: do sth...
-        const upgradePack: ItemBase = ItemsManager.instance.getItemCtxById(packId);
+        const upgradePack: ItemBasic = this.getUpgradePackCtxByCode(packId);
         if (upgradePack) {
             this.upgradeSlot.push(packId);
             upgradePack.use();
+            upgradePack.mountWeapon({ mountNode: this.warCoreRootNode })
             this.upgradeBackpack.push(upgradePack);
             if (this.upgradeSlotMap[packId]) {
                 this.upgradeSlotMap[packId]++;
@@ -342,8 +361,8 @@ export default class WarCoreManager extends OBT_UIManager {
              * 升级核心后核心品质升级
              * 同时需要修正核心数值
              */
-            this.warCore.upgradeQuality();
-            this.warCore.weaponCtx.updatePanel();
+            this.iWarCore.upgradeQuality();
+            // this.iWarCore.weaponCtx.updatePanel();
         }
 
         this.finishLevelUp();
@@ -356,8 +375,8 @@ export default class WarCoreManager extends OBT_UIManager {
         return this.upgradeSlotMap[packId];
     }
 
-    public getUpgradePackInfo(packId: string): ItemBase {
-        return ItemsManager.instance.getItemCtxById(packId);
+    public getUpgradePackInfo(packId: string): ItemBasic {
+        return this.getUpgradePackCtxByCode(packId);
     }
 
     // TODO: 未用
@@ -372,7 +391,7 @@ export default class WarCoreManager extends OBT_UIManager {
     public previewUpgradePack(packId) {
         this.currentPreviewPackId = packId;
     }
-    public getPreviewUpgradePackInfo(): ItemBase {
+    public getPreviewUpgradePackInfo(): ItemBasic {
         if (!this.currentPreviewPackId) {
             return;
         }

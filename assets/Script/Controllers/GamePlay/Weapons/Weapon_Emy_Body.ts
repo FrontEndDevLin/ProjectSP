@@ -3,6 +3,7 @@
  */
 
 import { BoostConfig, BulletInfo, COLOR, Common, ITEM_QUALITY, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
+import { copyObject } from "../../../Common/utils";
 import { MeleeBehavior_Emy_Body } from "../AtkBehavior/MeleeBehavior_Emy_Body";
 import WeaponEmy from "./WeaponEmy";
 
@@ -13,17 +14,22 @@ import WeaponEmy from "./WeaponEmy";
  */
 
 export default class Weapon_Emy_Body extends WeaponEmy {
-    // 武器品质
-    public quality: ITEM_QUALITY;
-
     protected behavior: string = "MeleeBehavior_Emy_Body";
     // 行为组件
     public behaviorCtx: MeleeBehavior_Emy_Body;
 
     public onWeaponInit(): void {
-        this.behaviorCtx.setColliderEnabled(true);
+        this.enemyRef.setBodyWeapon(this);
+        this.enableBodyCollider();
     }
     public onWeaponRemove(): void {
+        this.disableBodyCollider();
+    }
+
+    public enableBodyCollider() {
+        this.behaviorCtx.setColliderEnabled(true);
+    }
+    public disableBodyCollider() {
         this.behaviorCtx.setColliderEnabled(false);
     }
 }

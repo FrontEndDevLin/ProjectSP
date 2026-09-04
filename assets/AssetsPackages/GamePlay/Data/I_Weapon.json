@@ -34,6 +34,46 @@
             "damage": [2],
             "cd": [1]
         },
+        "Weapon_Emy_Marauder": {
+            "code": "Weapon_Emy_Marauder",
+            "camp": 2,
+            "type": 1,
+            "intro": "敌人身体碰撞攻击",
+            "bullet": "Emy_Body003",
+            "quality": 1,
+            "damage": [2],
+            "cd": [1]
+        },
+        "Weapon_Emy_Witch": {
+            "code": "Weapon_Emy_Witch",
+            "camp": 2,
+            "type": 1,
+            "intro": "敌人身体碰撞攻击",
+            "bullet": "Emy_Body004",
+            "quality": 1,
+            "damage": [2],
+            "cd": [1]
+        },
+        "Weapon_Emy_Werewolf": {
+            "code": "Weapon_Emy_Werewolf",
+            "camp": 2,
+            "type": 1,
+            "intro": "狼人身体碰撞攻击",
+            "bullet": "Emy_Body005",
+            "quality": 1,
+            "damage": [2],
+            "cd": [1]
+        },
+        "Weapon_Emy_Mummy": {
+            "code": "Weapon_Emy_Mummy",
+            "camp": 2,
+            "type": 1,
+            "intro": "狼人身体碰撞攻击",
+            "bullet": "Emy_Body006",
+            "quality": 1,
+            "damage": [2],
+            "cd": [1]
+        },
         "Weapon_Emy_Elite01": {
             "code": "Weapon_Emy_Elite01",
             "camp": 2,
@@ -53,6 +93,27 @@
             "quality": 1,
             "damage": [2],
             "cd": [2]
+        },
+        "Weapon_Emy_DashAtk": {
+            "code": "Weapon_Emy_DashAtk",
+            "camp": 2,
+            "type": 1,
+            "range": 250,
+            "intro": "敌人冲刺武器",
+            "quality": 1,
+            "damage": [4],
+            "cd": [2]
+        },
+        "Weapon_Emy_RangeFlyBullet": {
+            "code": "Weapon_Emy_RangeFlyBullet",
+            "camp": 2,
+            "type": 1,
+            "range": 320,
+            "intro": "敌人远程飞弹武器",
+            "bullet": "Emy_Bullet020",
+            "quality": 1,
+            "damage": [2],
+            "cd": [4]
         },
         "Weapon_Chr_BaseFlyBullet": {
             "code": "Weapon_Chr_BaseFlyBullet",
@@ -84,6 +145,21 @@
             "crit_dmg_rate": 1.5,
             "boost": {
                 "range_dmg": [0.4, 0.44, 0.5, 0.58]
+            }
+        },
+        "Weapon_Chr_Fission": {
+            "code": "Weapon_Chr_Fission",
+            "camp": 1,
+            "type": 2,
+            "intro": "裂变攻击",
+            "bullet": "CHR_Bullet001",
+            "quality": 1,
+            "damage": [1],
+            "range": 200,
+            "cd": [0],
+            "crit_rate": [0],
+            "boost": {
+                "range_dmg": [0.5]
             }
         }
     }

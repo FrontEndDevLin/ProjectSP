@@ -149,8 +149,7 @@ export default class ItemsManager extends OBT_UIManager {
     }
 
     private _getLockStoreItem(): ItemBasic[] {
-        // return this.storeItemList.filter(item => item.lock === true);
-        return []
+        return this.storeItemList.filter(item => item.lock === true);
     }
     private _loadStoreList(n: number = STORE_ITEM_COUNT): Boolean {
         // 筛除已锁定的道具(已锁定的道具，不要出现在开箱的物品列表里，避免唯一道具出现多个的情况)
@@ -170,11 +169,14 @@ export default class ItemsManager extends OBT_UIManager {
             if (randomItem) {
                 ignoreList.push(randomItem.code);
                 let storeItem: ItemInfo.I_Item = copyObject(randomItem);
-                let scriptName: string = storeItem.type === ItemInfo.Type.NORMAL ? "Item_Base" : storeItem.code;
+                let scriptName: string = storeItem.type === ItemInfo.Type.NORMAL ? "Item_Basic" : storeItem.code;
                 if (Item_def[scriptName]) {
-                    let itemCtx = new Item_def[scriptName](storeItem)
+                    let itemCtx = new Item_def[scriptName]()
+                    itemCtx.init(storeItem);
                     items.push(itemCtx);
                 }
+            } else {
+                console.log("刷新商店时，未找到符合要求的道具");
             }
         }
         this.storeItemList = items;
@@ -344,13 +346,15 @@ export default class ItemsManager extends OBT_UIManager {
 
     public getItemCtxById(id): ItemBasic {
         let item: ItemInfo.I_Item = this.getItemById(id);
-        let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Base" : item.code;
-        return new Item_def[scriptName](item);
+        let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Basic" : item.code;
+        let itemCtx: ItemBasic = new Item_def[scriptName]();
+        itemCtx.init(item);
+        return itemCtx;
     }
 
     // 购买道具
-    public buyItem(id: string): boolean {
-        let storeItem: ItemBasic = this.storeItemList.find((item: ItemBasic) => item.props.code === id);
+    public buyItem(code: string): boolean {
+        let storeItem: ItemBasic = this.storeItemList.find((item: ItemBasic) => item.props.code === code);
         if (!storeItem) {
             return false;
         }
@@ -362,7 +366,7 @@ export default class ItemsManager extends OBT_UIManager {
             return false;
         }
 
-        this.obtainItem(id);
+        this.obtainItem(code);
         // 扣除元件
         CHRManager.instance.currencyCtrl.addCurrency(-price);
         return true;
@@ -372,7 +376,7 @@ export default class ItemsManager extends OBT_UIManager {
     public toggleLockStoreItem(id: string) {
         let item: ItemBasic = this.storeItemList.find(item => item.props.code === id);
         if (item) {
-            // item.lock = !item.lock;
+            item.lock = !item.lock;
         }
     }
 
