@@ -21,10 +21,14 @@ export const getVectorByArc = function (arc: number) {
   return v3(Math.cos(arc), Math.sin(arc));
 }
 
+export const getArcByVector = function (vector: Vec3) {
+  return Math.atan2(vector.y, vector.x);
+}
+
 export const getAngleByVector = function (vec: Vec3) {
   // 弧度 = 角度 * pi / 180
   // 角度 = 弧度 * 180 
-  let arc: number = Math.atan2(vec.y, vec.x);
+  let arc: number = getArcByVector(vec);
   return getFloatNumber(arc * 180 / Math.PI, 2);
 }
 

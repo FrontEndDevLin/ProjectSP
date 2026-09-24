@@ -4,6 +4,7 @@ import ItemsManager from './ItemsManager';
 import WarCoreManager from './WarCoreManager';
 import { GamePlayEventOptions } from '../Common/Namespace';
 import MapManager from './MapManager';
+import { BehaviorBase } from '../Controllers/GamePlay/AtkBehavior/BehaviorBase';
 const { ccclass, property } = _decorator;
 
 /**
@@ -43,14 +44,47 @@ export default class RealTimeEventManager extends OBT_UIManager {
     }
 
     // 核心攻击触发
-    public onWarCoreAttack() {
-        ItemsManager.instance.onRealTimeEvent('onWarCoreAttack');
-        WarCoreManager.instance.onRealTimeEvent('onWarCoreAttack');
+    public onWarCoreAttack(behaviorRef?: BehaviorBase) {
+        ItemsManager.instance.onRealTimeEvent('onWarCoreAttack', behaviorRef);
+        WarCoreManager.instance.onRealTimeEvent('onWarCoreAttack', behaviorRef);
+    }
+
+    // "爆拳"核心攻击触发
+    public onRhombusPunchBeforeAttack(RhombusPunchBeforeAttackParams: GamePlayEventOptions.RhombusPunchBeforeAttackParams) {
+        ItemsManager.instance.onRealTimeEvent('onRhombusPunchBeforeAttack', RhombusPunchBeforeAttackParams);
+        WarCoreManager.instance.onRealTimeEvent('onRhombusPunchBeforeAttack', RhombusPunchBeforeAttackParams);
+    }
+    public onRhombusPunchAttack(rhombusPunchAttackParams: GamePlayEventOptions.RhombusPunchAttackParams) {
+        ItemsManager.instance.onRealTimeEvent('onRhombusPunchAttack', rhombusPunchAttackParams);
+        WarCoreManager.instance.onRealTimeEvent('onRhombusPunchAttack', rhombusPunchAttackParams);
     }
 
     // 敌人死亡触发
     public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {
         WarCoreManager.instance.onRealTimeEvent('onEnemyDie', dieParams);
+        ItemsManager.instance.onRealTimeEvent('onEnemyDie', dieParams);
+    }
+
+    // 敌人进入角色警戒范围
+    public onAlertRangeEnemyEnter(alertEmyCount: number) {
+        WarCoreManager.instance.onRealTimeEvent('onAlertRangeEnemyEnter', alertEmyCount);
+        ItemsManager.instance.onRealTimeEvent('onAlertRangeEnemyEnter', alertEmyCount);
+    }
+    // 敌人离开角色警戒范围
+    public onAlertRangeEnemyLeave(alertEmyCount: number) {
+        WarCoreManager.instance.onRealTimeEvent('onAlertRangeEnemyLeave', alertEmyCount);
+        ItemsManager.instance.onRealTimeEvent('onAlertRangeEnemyLeave', alertEmyCount);
+    }
+
+    // 角色进入站立状态
+    public onStandingStatusEnter() {
+        ItemsManager.instance.onRealTimeEvent('onStandingStatusEnter');
+        WarCoreManager.instance.onRealTimeEvent('onStandingStatusEnter');
+    }
+    // 角色离开站立状态
+    public onStandingStatusLeave() {
+        ItemsManager.instance.onRealTimeEvent('onStandingStatusLeave');
+        WarCoreManager.instance.onRealTimeEvent('onStandingStatusLeave');
     }
 
     // 暴击触发

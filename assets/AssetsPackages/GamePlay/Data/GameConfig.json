@@ -185,8 +185,8 @@
             "desc": "普通1+普通2",
             "wave_type": 1,
             "max_emy": 80,
-            "duration": 25,
-            "duration_": 4,
+            "duration_": 25,
+            "duration": 4,
             "preload": {
                 "alert": 20,
                 "exp": 20,
@@ -237,6 +237,18 @@
                     "start_delay": 12,
                     "spawn_duration": 20
                 }
+            ],
+            "spawn_roles_": [
+                {
+                    "enemy_type": "Emy_Goblin2",
+                    "spawn_total": 70,
+                    "spawn_once_time": 1,
+                    "spawn_interval": 40,
+                    "spawn_pattern": "random",
+                    "batch_mode": "normal",
+                    "start_delay": 1,
+                    "spawn_duration": 50
+                }
             ]
         },
         {
@@ -244,7 +256,8 @@
             "desc": "普通1+冲锋1",
             "wave_type": 1,
             "max_emy": 80,
-            "duration": 25,
+            "duration_": 25,
+            "duration": 250,
             "preload": {
                 "alert": 20,
                 "exp": 20,
@@ -257,6 +270,20 @@
                 "dmg_txt": 5
             },
             "spawn_roles": [
+                {
+                    "enemy_type": "Emy_Pacifist",
+                    "spawn_total": 1,
+                    "spawn_mode": "random",
+                    "spawn_point": [0, 100],
+                    "spawn_rate": 1,
+                    "spawn_once_time": 1,
+                    "spawn_interval": 30,
+                    "spawn_pattern": "fixed",
+                    "start_delay": 1,
+                    "spawn_duration": 30
+                }
+            ],
+            "spawn_roles_": [
                 {
                     "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
@@ -1301,7 +1328,7 @@
                 "bullet_particle": 40,
                 "dmg_txt": 10
             },
-            "spawn_roles": [
+            "spawn_roles_": [
                 {
                     "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,
@@ -1340,6 +1367,16 @@
                     "start_delay": 6,
                     "spawn_duration": 55
                 },
+                {
+                    "enemy_type": "Emy_Elite02",
+                    "spawn_total": 1,
+                    "spawn_mode": "normal",
+                    "spawn_pattern": "fixed",
+                    "spawn_point": [0, 200],
+                    "start_delay": 2
+                }
+            ],
+            "spawn_roles": [
                 {
                     "enemy_type": "Emy_Elite02",
                     "spawn_total": 1,

@@ -9,6 +9,7 @@ import { getSaveCtrl } from '../../../CManager/Class/SaveCtrl';
 import DamageManager from '../../../CManager/DamageManager';
 import { getRandomNumber } from '../../../Common/utils';
 import { HitInfo } from '../../../CManager/CombatManager';
+import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHR')
@@ -17,6 +18,10 @@ export class CHR extends OBT_Component {
     private _vector: Vec3 = null;
     private _pickRangeCollider: CircleCollider2D = null;
     private _collider: BoxCollider2D = null;
+    protected alertCollider: CircleCollider2D = null;
+    protected alertEmyCount: number = 0;
+    private standing: boolean = false;
+    private standTime: number = 0;
 
     private _baseSpd: number = 0;
 
@@ -27,8 +32,7 @@ export class CHR extends OBT_Component {
         OBT.instance.eventCenter.on(GamePlayEvent.COMPASS.TOUCH_END, this._compassTouchEnd, this);
         OBT.instance.eventCenter.on(GamePlayEvent.COMPASS.TOUCH_MOVE, this._compassTouchMove, this);
 
-        this._pickRangeCollider = this.node.getComponent(CircleCollider2D);
-        this._initPickRangeCollider();
+        this._initRangeCollider();
 
         this._collider = this.node.getComponent(BoxCollider2D);
         this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
@@ -49,11 +53,23 @@ export class CHR extends OBT_Component {
     private _compassTouchMove(vector: Vec3) {
         this._vector = vector;
     }
-    private _initPickRangeCollider() {
-        let pickRange: number = CHRManager.instance.propCtx.getPropRealValue("pick_range");
-        this._pickRangeCollider.radius = pickRange;
-        this._pickRangeCollider.on(Contact2DType.BEGIN_CONTACT, this._onPickDomainBeginContact, this);
+    private _initRangeCollider() {
+        let colliders: CircleCollider2D[] = this.node.getComponents(CircleCollider2D);
+        for (let collider of colliders) {
+            if (collider.tag === GameCollider.TAG.DROP_ITEM_PICKER) {
+                this._pickRangeCollider = collider;
+                let pickRange: number = CHRManager.instance.propCtx.getPropRealValue("pick_range");
+                this._pickRangeCollider.radius = pickRange;
+                this._pickRangeCollider.on(Contact2DType.BEGIN_CONTACT, this._onPickDomainBeginContact, this);
+            }
+            if (collider.tag === GameCollider.TAG.CHR_RANGE_ALERT) {
+                this.alertCollider = collider;
+                this.alertCollider.on(Contact2DType.BEGIN_CONTACT, this._onAlertDomainBeginContact, this);
+                this.alertCollider.on(Contact2DType.END_CONTACT, this._onAlertDomainEndContact, this);
+            }
+        }
     }
+
     private _onPickDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
         if (!ProcessManager.instance.isOnPlaying()) {
             return;
@@ -69,6 +85,28 @@ export class CHR extends OBT_Component {
             }
         }
         // if (selfCollider.tag === GameCollider.TAG.)
+    }
+    private _onAlertDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
+        if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+            this.alertEmyCount++;
+            RealTimeEventManager.instance.onAlertRangeEnemyEnter(this.alertEmyCount);
+            return;
+        }
+    }
+    private _onAlertDomainEndContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
+        if (!ProcessManager.instance.isOnPlaying()) {
+            return;
+        }
+        if (otherCollider.group === GameCollider.GROUP.ENEMY) {
+            if (this.alertEmyCount > 0) {
+                this.alertEmyCount--;
+                RealTimeEventManager.instance.onAlertRangeEnemyLeave(this.alertEmyCount);
+            }
+            return;
+        }
     }
 
     public onHit(damageInfo: HitInfo) {
@@ -106,9 +144,12 @@ export class CHR extends OBT_Component {
     // 角色受击处理/吸收战利品
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GameCollider.GROUP.ENEMY || otherCollider.group === GameCollider.GROUP.EMY_BULLET) {
-            return;
-            if (otherCollider.tag === GameCollider.TAG.PEACE) {
-                return;
+            // return;
+            // if (otherCollider.tag === GameCollider.TAG.PEACE) {
+            //     return;
+            // }
+            if (selfCollider.tag === GameCollider.TAG.CHR_RANGE_ALERT) {
+                console.log('敌人进入范围')
             }
         }
         if (otherCollider.group === GameCollider.GROUP.DROP_ITEM) {
@@ -170,6 +211,19 @@ export class CHR extends OBT_Component {
         }
         if (this._moving) {
             this._move(deltaTime);
+            if (this.standing) {
+                this.standing = false;
+                this.standTime = 0;
+                RealTimeEventManager.instance.onStandingStatusLeave();
+            }
+        } else {
+            this.standTime += deltaTime;
+            if (this.standTime > 1) {
+                if (!this.standing) {
+                    RealTimeEventManager.instance.onStandingStatusEnter();
+                    this.standing = true;
+                }
+            }
         }
         CHRManager.instance.setCHRLoc(this.node.position);
     }

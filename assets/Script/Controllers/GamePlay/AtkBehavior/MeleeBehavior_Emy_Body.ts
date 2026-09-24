@@ -46,7 +46,7 @@ export class MeleeBehavior_Emy_Body extends BehaviorBase_Emy {
         }
     }
 
-    protected execAttack(deltaTime: number): void {
+    public execAttack(deltaTime: number): void {
         this.bulletNodeCtx.execAttack();
         this.finishAttack();
     }

@@ -42,30 +42,43 @@
             "weapon": "Weapon_Chr_Scatter",
             "upgrade_pool": ["Mirror", "Fission", "Penetrate", "Readyfor", "Overload"]
         },
-        "a": {
-            "id": "ScatterAtkWarCore",
-            "label": "散射",
+        "RhombusPunchWarCore": {
+            "code": "RhombusPunchWarCore",
+            "name": "菱拳核心",
             "ico": "scatter",
             "ico_gaming": "...",
             "quality": 1,
             "global": 2,
-            "group": 1,
-            "intro": "<~range_dmg,val_1~><br/>波次结束后<%val_2%><&spd&>",
+            "intro": "生成2个拳头进行攻击, 对同一个敌人的攻击会额外增加50%伤害",
             "type": 2,
-            "val_1": 0.5,
-            "val_2": 1,
             "buff_list": [
                 {
-                    "prop": "avd",
-                    "value": 5
+                    "prop": "range",
+                    "value": -50
+                },
+                {
+                    "prop": "atk_spd",
+                    "value": 20
                 }
             ],
-            "weapon": "Weapon_ScatterAtkWarCore",
-            "upgrade_pool_": ["Item_FightWithBothHands", "Item_Blossom", "Item_CrossCloud", "Item_GatheringStorm"],
-            "upgrade_pool": ["Item_FightWithBothHands", "Item_CrossCloud", "Item_FastScatter"]
+            "weapon": "Weapon_Chr_RhombusPunch",
+            "weapon_cnt": 2,
+            "upgrade_pool": ["BreakPunch", "Overload", "FastShadow", "Besieged", "MentalAura"]
+        },
+        "SwordMasterWarCore": {
+            "code": "SwordMasterWarCore",
+            "name": "御剑核心",
+            "ico": "scatter",
+            "ico_gaming": "...",
+            "quality": 1,
+            "global": 2,
+            "intro": "御剑进行攻击",
+            "type": 2,
+            "weapon": "Weapon_Chr_SwordMaster",
+            "upgrade_pool": []
         }
     },
-    "pub_war_core": ["ScatterWarCore"],
+    "pub_war_core": ["ScatterWarCore", "RhombusPunchWarCore", "SwordMasterWarCore"],
     "upgrade_pack_def": {
         "Mirror": {
             "code": "Mirror",
@@ -129,6 +142,69 @@
             "intro": "在o次攻击过后, 接下来的b次攻击附带i%攻击速度和t%暴击几率",
             "type": 2,
             "ico": "scatter"
+        },
+        "BreakPunch": {
+            "code": "BreakPunch",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "爆拳",
+            "intro": "在3次攻击过后, 下一次攻击会对前方锥形区域的敌人造成伤害",
+            "type": 2,
+            "ico": "scatter",
+            "weapon": "Weapon_Chr_BreakPunch"
+        },
+        "FastShadow": {
+            "code": "FastShadow",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "残影",
+            "intro": "当攻击速度超过o%, 棱拳攻击时左右会出现残影, 对残影击中的敌人造成伤害",
+            "type": 2,
+            "ico": "scatter",
+            "buff_list": [
+                {
+                    "prop": "atk_spd",
+                    "value": 20
+                }
+            ],
+            "weapon": "Weapon_Chr_FastShadow"
+        },
+        "Besieged": {
+            "code": "Besieged",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "困兽",
+            "intro": "在被包围时增益属性翻倍",
+            "type": 2,
+            "ico": "scatter",
+            "buff_list": [
+                {
+                    "prop": "melee_dmg",
+                    "value": 15
+                },
+                {
+                    "prop": "atk_spd",
+                    "value": 25
+                },
+                {
+                    "prop": "spd",
+                    "value": -10
+                }
+            ]
+        },
+        "MentalAura": {
+            "code": "MentalAura",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "气场",
+            "intro": "当站立不动时, 散发气场减缓周围敌人移动速度",
+            "type": 2,
+            "ico": "scatter",
+            "weapon": "Weapon_Chr_MentalAura"
         }
     }
 }

@@ -18,6 +18,8 @@ export class BehaviorBase extends OBT_Component {
 
     protected isAttacking: boolean = false;
 
+    protected cd: number;
+
     start() {
         console.log('挂载攻击行为组件 BehaviorBase');
     }
@@ -27,21 +29,27 @@ export class BehaviorBase extends OBT_Component {
 
     public setWeaponRef(weaponRef: WeaponBasic) {
         this.weaponRef = weaponRef;
+        this.cd = this.weaponRef.curInf.cd;
     }
 
+    public updateDomain() {}
+
     protected calcCd(dt: number): boolean {
-        if (this.weaponRef.cd <= 0) {
+        if (this.cd <= 0) {
             return true;
         } else {
-            this.weaponRef.cd -= dt;
+            this.cd -= dt;
             return false;
         }
     }
-    protected execAttack(deltaTime: number, target?: EMYInfo.RealTimeInfo) {}
+    public execAttack(deltaTime: number, target?: EMYInfo.RealTimeInfo) {}
     protected finishAttack() {
-        this.weaponRef.finishAttack();
+        // this.weaponRef.finishAttack();
+        this.cd = this.weaponRef.curInf.cd;
         this.isAttacking = false;
     }
+
+    public createEffect() {}
 
     public onInit() {}
 

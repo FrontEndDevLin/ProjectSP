@@ -1,4 +1,4 @@
-import { BoxCollider2D, Vec3 } from "cc";
+import { BoxCollider2D, Collider2D, Vec3 } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
 import { GameCollider } from "../Common/Namespace";
 import { BulletBasic } from "../Controllers/GamePlay/Bullet/BulletBasic";
@@ -12,7 +12,11 @@ export interface HitInfo {
     damage: number,
     isCritical?: boolean,
     vector?: Vec3,
-    bullet: string
+    repel?: number,
+    bullet: string,
+    enemyId?: string,
+    slowdown?: number,
+    slowdownTime?: number
     // TODO: 还有击退属性, 击退时, 判断方向为武器位置到目标位置的向量
 }
 
@@ -31,7 +35,7 @@ export default class CombatManager extends OBT_UIManager {
     /**
      * 参数，子弹碰撞体，目标碰撞体
      */
-    public onBulletHit(bulletCollider: BoxCollider2D, targetCollider: BoxCollider2D) {
+    public onBulletHit(bulletCollider: Collider2D, targetCollider: Collider2D) {
         switch (bulletCollider.group) {
             case GameCollider.GROUP.CHR_BULLET: {
                 // 子弹击中敌人
@@ -49,13 +53,14 @@ export default class CombatManager extends OBT_UIManager {
         }
     }
 
-    protected onEnemyHit(bulletCollider: BoxCollider2D, enemyCollider: BoxCollider2D) {
+    protected onEnemyHit(bulletCollider: Collider2D, enemyCollider: Collider2D) {
         let bullet: BulletBasic = bulletCollider.node.getComponent(BulletBasic);
         // 伤害等在这里计算好
         if (!bullet) {
             return console.error("弹体脚本不存在");
         }
         let enemy = enemyCollider.node.getComponent(EmyBasic1);
+        
         if (!enemy) {
             return;
         }
@@ -78,14 +83,18 @@ export default class CombatManager extends OBT_UIManager {
         let damageInfo: HitInfo = {
             bullet: bullet.realTimeProps.bullet,
             damage: realDamage,
+            slowdown: bullet.realTimeProps.slowdown,
+            slowdownTime: bullet.realTimeProps.slowdown_time,
             isCritical,
-            vector: bullet.vector
+            repel: bullet.realTimeProps.repel || 0,
+            vector: bullet.vector,
+            enemyId: enemy.id
         };
 
         enemy.onHit(damageInfo);
         bullet.onHit(damageInfo);
     }
-    protected onCHRHit(bulletCollider: BoxCollider2D, chrCollider: BoxCollider2D) {
+    protected onCHRHit(bulletCollider: Collider2D, chrCollider: Collider2D) {
         // 角色被击中
         let bullet: BulletBasic = bulletCollider.node.getComponent(BulletBasic);
         // 伤害等在这里计算好

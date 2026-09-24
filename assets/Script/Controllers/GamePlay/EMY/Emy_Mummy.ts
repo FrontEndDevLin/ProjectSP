@@ -26,6 +26,7 @@ export class Emy_Mummy extends EmyElite {
 
     protected changePhase(): void {
         this.effect.playBodyAnimation("Emy_Mummy_changeParse");
+        this.setBuff("dmg_reduce_rate", 0.5);
     }
 
     protected onDie(): void {

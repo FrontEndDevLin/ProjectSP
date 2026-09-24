@@ -4,9 +4,9 @@
  * 处理武器数据，包括武器类型、伤害值、攻击范围、攻击间隔等、武器类型（普通、远程）等。
  */
 
-import { SpriteFrame, Node, Component } from "cc";
+import { SpriteFrame, Node, Component, v3, Vec3 } from "cc";
 import CHRManager from "../../../CManager/CHRManager";
-import { BoostConfig, BoostRealTimeConfig, BulletInfo, Camp, COLOR, Common, ITEM_QUALITY, WarCoreInfo, WeaponInfo } from "../../../Common/Namespace";
+import { BoostConfig, BoostRealTimeConfig, BulletInfo, Camp, COLOR, Common, GamePlayEvent, ITEM_QUALITY, WarCoreInfo, WEAPON_TYPE, WeaponInfo } from "../../../Common/Namespace";
 import { copyObject, getDangerRichTxt, getFloatNumber, getSuccessRichTxt } from "../../../Common/utils";
 import OBT from "../../../OBT";
 import BulletManager from "../../../CManager/BulletManager";
@@ -36,6 +36,9 @@ export default class WeaponBasic {
     protected prefabName: string = "Default";
     // 行为组件
     public behaviorCtx: BehaviorBase;
+    // 子行为组件(赝品武器), 当一个武器下有多个武器时(例如棱拳武器有2个拳头), 除了第一个武器其他的存入behaviorCtxs中, 他们共享一个WeaponCtx(this)
+    public behaviorCtxs: BehaviorBase[] = [];
+    protected weaponVec: Vec3[] = [];
 
     public node: Node;
 
@@ -45,10 +48,15 @@ export default class WeaponBasic {
     // public mountNode: any;
 
     protected showCdTxt: boolean = true;
+    protected showDamageTxt: boolean = true;
 
     constructor(weaponData: WeaponInfo.IWeapon) {
         this.orgInf = weaponData;
         this.initCurInf();
+
+        if (this.orgInf.camp === Camp.ALLY) {
+            OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updatePanel, this);
+        }
     }
 
     protected onUpgradeQuality() {}
@@ -107,12 +115,7 @@ export default class WeaponBasic {
         this.itemRef = itemRef;
     }
 
-    public finishAttack(): boolean {
-        this.cd = this.curInf.cd;
-        return true;
-    }
-
-    // TODO: 目前只适合于角色的武器，敌人的武器未处理。当武器camp属性=1时是友方
+    // 角色的武器
     public getRealDamage() {
         let quality: ITEM_QUALITY = this.quality;
         let baseDamage: number = this.orgInf.damage[quality - 1];
@@ -158,15 +161,26 @@ export default class WeaponBasic {
         }
         // let isCurrentWarCoreBullet: boolean = true;
         let quality: ITEM_QUALITY = this.quality || 1;
-        let crit: number = CHRManager.instance.propCtx.getPropRealValue("ctl") / 100 + this.orgInf.crit_rate[quality - 1];
+        let crit: number;
+        if (this.orgInf.crit_rate) {
+            crit = CHRManager.instance.propCtx.getPropRealValue("ctl") / 100 + this.orgInf.crit_rate[quality - 1];
+        }
         let cd: number = getFloatNumber(this.orgInf.cd[quality - 1] / CHRManager.instance.propCtx.getPropRealValue("atk_spd"), 3);
-        let range: number = CHRManager.instance.propCtx.getPropRealValue("range") + this.orgInf.range;
-
+        let boostRange: number = CHRManager.instance.propCtx.getPropRealValue("range");
+        // 近战武器范围收益减半, 在攻击范围变大100时, 以10%比例增加冷却时间
+        if (this.curInf.type === WEAPON_TYPE.MELEE) {
+            boostRange = Math.round(boostRange / 2);
+            cd += getFloatNumber(boostRange * 0.001 * cd, 3);
+        }
+        let range: number = boostRange + this.orgInf.range;
+        if (this.orgInf.min_range) {
+            range = Math.max(range, this.orgInf.min_range);
+        }
         this.curInf.crit_rate = crit;
         this.curInf.cd = cd;
         this.curInf.range = range;
 
-        if (this.curInf.penetrate) {
+        if (this.curInf.penetrate && this.curInf.penetrate !== 100) {
             let penetrate_damage = Math.round(this.curInf.damage * CHRManager.instance.propCtx.getPropRealValue("pen_dmg"));
             if (penetrate_damage <= 1) {
                 penetrate_damage = 1;
@@ -178,8 +192,15 @@ export default class WeaponBasic {
         }
 
         // this.base_dmg = bulletRealTimeAttr.base_dmg;
-        this.curInf.damage = this.getRealDamage();
-
+        if (this.orgInf.damage) {
+            this.curInf.damage = this.getRealDamage();
+        }
+        if (this.behaviorCtx) {
+            this.behaviorCtx.updateDomain();
+        }
+        for (let ctx of this.behaviorCtxs) {
+            ctx.updateDomain();
+        }
         // this.correctPanel();
     }
 
@@ -191,16 +212,40 @@ export default class WeaponBasic {
         }
         // 挂载对应武器的预制体, 和对应的行为脚本
         // 加载后拿到攻击行为脚本组件, 指向到 this.behavior
-        const nodeAndCtx: NodeAndCxtComponent = WeaponManager.instance.loadPrefabAndScript({ prefabPath: `Weapon/${this.prefabName}`, scriptName: this.behavior });
-        this.behaviorCtx = nodeAndCtx.ctx as BehaviorBase;
-        if (!this.behaviorCtx) {
-            console.log(`武器行为组件未定义, 行为: `, nodeAndCtx);
-            return;
+        let weaponCnt: number = 1;
+        if (this.itemRef && this.itemRef.props.weapon_cnt) {
+            weaponCnt = this.itemRef.props.weapon_cnt;
         }
-        this.behaviorCtx.setWeaponRef(this);
-        this.behaviorCtx.onInit();
-        this.node = nodeAndCtx.node;
-        WeaponManager.instance.mountNode({ parentNode: mountNode, node: nodeAndCtx.node });
+        for (let i = 0; i < weaponCnt; i++) {
+            const nodeAndCtx: NodeAndCxtComponent = WeaponManager.instance.loadPrefabAndScript({ prefabPath: `Weapon/${this.prefabName}`, scriptName: this.behavior });
+            let behaviorCtx = nodeAndCtx.ctx as BehaviorBase;
+            if (!behaviorCtx) {
+                console.log(`武器行为组件未定义, 行为: `, nodeAndCtx);
+                return;
+            }
+            if (i === 0) {
+                this.behaviorCtx = behaviorCtx;
+            } else {
+                this.behaviorCtxs.push(behaviorCtx);
+            }
+            nodeAndCtx.node.setPosition(this.weaponVec[i] || v3(0, 0, 0));
+            behaviorCtx.setWeaponRef(this);
+            behaviorCtx.onInit();
+            WeaponManager.instance.mountNode({ parentNode: mountNode, node: nodeAndCtx.node });
+        }
+    }
+
+    public removeBehaviorModule() {
+        if (this.behaviorCtx) {
+            this.behaviorCtx.node.removeFromParent();
+            this.behaviorCtx = null;
+        }
+        if (this.behaviorCtxs && this.behaviorCtxs.length) {
+            this.behaviorCtxs.forEach(ctx => {
+                ctx.node.removeFromParent();
+            });
+            this.behaviorCtxs = [];
+        }
     }
 
     public getIntroRichTxt(): string {
@@ -217,15 +262,17 @@ export default class WeaponBasic {
     }
 
     public getPanelRichTxt(): string {
-        let richTxtList: string[] = [
-            this.getDmgRichTxt()
-        ];
+        let richTxtList: string[] = [];
+        let dmgRichTxt: string = this.getDmgRichTxt();
         let ctlRichTxt: string = this.getCritRichTxt();
         let penRichTxt: string = this.getPenetrateRichTxt();
         let repelRichTxt: string = this.getRepelRichTxt();
         let cdRichTxt: string = this.getCdRichTxt();
         let rangeRichTxt: string = this.getRangeRichTxt();
         let splitDmgRateRichTxt: string = this.getSplitDmgRateRichTxt();
+        if (dmgRichTxt) {
+            richTxtList.push(dmgRichTxt);
+        }
         if (ctlRichTxt) {
             richTxtList.push(ctlRichTxt);
         }
@@ -252,6 +299,9 @@ export default class WeaponBasic {
 
     // 获取伤害属性富文本
     protected getDmgRichTxt(): string {
+        if (!this.showDamageTxt) {
+            return "";
+        }
         // , split
         const { damage, boost } = this.curInf;
         let quality: ITEM_QUALITY = this.quality || 1;
@@ -274,7 +324,7 @@ export default class WeaponBasic {
     protected getPenetrateRichTxt(): string {
         const { penetrate } = this.curInf;
         let pen_dmg: number = CHRManager.instance.propCtx.getPropRealValue("pen_dmg");
-        if (penetrate && penetrate > 0 && pen_dmg && pen_dmg > 0) {
+        if (penetrate && penetrate > 0 && penetrate !== 100 && pen_dmg && pen_dmg > 0) {
             // TODO: pen_dmg结合角色属性计算
             return `贯穿: ${ getSuccessRichTxt(penetrate) }|${ pen_dmg * 100 }%伤害`;
         }
@@ -364,5 +414,8 @@ export default class WeaponBasic {
         if (this.behaviorCtx) {
             this.behaviorCtx.runBehavior(deltaTime);
         }
+        this.behaviorCtxs.forEach(ctx => {
+            ctx.runBehavior(deltaTime);
+        });
     }
 }

@@ -1,6 +1,7 @@
 {
     "desc": "存储当前存档数据",
-    "wave": 20,
+    "difficulty": "Easy",
+    "wave": 4,
     "status": 1,
     "unlock_war_core_": false,
     "unlock_war_core": true,
@@ -25,8 +26,8 @@
     },
     "chr_slot": {
         "level": 1,
-        "atk_core": "ScatterWarCore",
         "atk_core_": "BaseWarCore",
+        "atk_core": "RhombusPunchWarCore",
         "core_level": 0,
         "core_exp": 0
     }

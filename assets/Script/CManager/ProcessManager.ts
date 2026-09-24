@@ -16,6 +16,7 @@ import RealTimeEventManager from './RealTimeEventManager';
 import DamageManager from './DamageManager';
 import GUI_PopupManager from './GUI_PopupManager';
 import GUI_TooltipsManager from './GUI_TooltipsManager';
+import DifficultyManager from './DifficultyManager';
 const { ccclass, property } = _decorator;
 
 const CORE_SELECT_TIME: number = 5555;
@@ -140,6 +141,7 @@ export default class ProcessManager extends OBT_UIManager {
     // 最开始
     public startGame(isNewGame: boolean): void {
         this.initGlobal(isNewGame);
+        DifficultyManager.instance.initDifficultyLevel(this.saveCtrl.save.difficulty);
         this._loadWave();
     }
     private _nextWave() {

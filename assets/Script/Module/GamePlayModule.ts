@@ -18,6 +18,7 @@ import RateConfigManager from "../CManager/RateConfigManager";
 import GUI_PopupManager from "../CManager/GUI_PopupManager";
 import GUI_TooltipsManager from "../CManager/GUI_TooltipsManager";
 import CombatManager from "../CManager/CombatManager";
+import DifficultyManager from "../CManager/DifficultyManager";
 
 export class GamePlayModule extends OBT_Module {
     public bundleName: string = "GamePlay";
@@ -31,6 +32,7 @@ export class GamePlayModule extends OBT_Module {
     public mountManagers() {
         this.addCustomManager(RealTimeEventManager);
         this.addCustomManager(DBManager);
+        this.addCustomManager(DifficultyManager);
         this.addCustomManager(MapManager);
         this.addCustomManager(EMYManager);
         this.addCustomManager(DropItemManager);

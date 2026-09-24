@@ -21,7 +21,11 @@ export interface CreateIBulletParams {
     weaponRealTimeProps: WeaponInfo.WeaponRealTimeProps,
     position: Vec3,
     vector: Vec3,
-    rootNode?: Node
+    onNodeCreated?: (node: Node) => void,
+    rootNode?: Node,
+    isSleep?: boolean,
+    // 覆盖原bulletAttr
+    resetAttr?: Common.SimpleObj
 }
 
 /**
@@ -173,17 +177,17 @@ export default class BulletManager extends OBT_UIManager {
         }
     }
 
-    public createIBullet({ weaponRealTimeProps, position, vector, rootNode }: CreateIBulletParams): Node {
+    public createIBullet({ weaponRealTimeProps, position, vector, rootNode, onNodeCreated, resetAttr }: CreateIBulletParams): Node {
         weaponRealTimeProps = copyObject(weaponRealTimeProps);
         if (weaponRealTimeProps.penetrate) {
             weaponRealTimeProps.penetrate_cnt = 0;
         }
 
-        const bulletAttr: BulletInfo.IBulletAttr = this.iBulletData[weaponRealTimeProps.bullet];
+        const oriBulletAttr: BulletInfo.IBulletAttr = this.iBulletData[weaponRealTimeProps.bullet];
         const nodePool = this._nodePoolMap[weaponRealTimeProps.bullet];
         let bulletNode: Node = nodePool ? nodePool.get() : null;
         if (!bulletNode) {
-            bulletNode = this.loadPrefab({ prefabPath: `Bullet/${bulletAttr.prefab}`, scriptName: bulletAttr.script });
+            bulletNode = this.loadPrefab({ prefabPath: `Bullet/${oriBulletAttr.prefab}`, scriptName: oriBulletAttr.script });
         }
 
         if (!bulletNode) {
@@ -191,8 +195,18 @@ export default class BulletManager extends OBT_UIManager {
             return null;
         }
 
+        if (onNodeCreated) {
+            onNodeCreated(bulletNode);
+        }
+
+        if (resetAttr) {
+            for (let key in resetAttr) {
+                oriBulletAttr[key] = resetAttr[key];
+            }
+        }
+
         const scriptComp: BulletBasic = bulletNode.getComponent(BulletBasic);
-        scriptComp.init({ bulletAttr, weaponRealTimeProps, position, vector });
+        scriptComp.init({ bulletAttr: oriBulletAttr, weaponRealTimeProps, position, vector });
 
         this.mountNode({ node: bulletNode, parentNode: rootNode || this.bulletRootNode });
 

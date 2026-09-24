@@ -30,10 +30,9 @@ const { ccclass, property } = _decorator;
 export class Emy_Marauder extends EmyBasic1 {
     public isFaceToTarget: boolean = true;
     // 跟随
-    protected moveBehavior1: string = "Follow";
+    protected moveBehavior1: string = "FollowAndDash";
 
     protected weapon1: string = "Weapon_Emy_Marauder";
-    protected weapon2: string = "Weapon_Emy_DashAtk";
     protected weapon1Ctx: Weapon_Emy_Body;
 
     // public playSpinAnimation() {

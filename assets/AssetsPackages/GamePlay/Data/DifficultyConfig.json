@@ -1,0 +1,77 @@
+{
+    "desc": {
+        "desc": "难度配置",
+        "config": "敌人难度配置"
+    },
+    "difficulty_def": {
+        "Easy": {
+            "level": 1,
+            "name": "简单",
+            "code": "Easy"
+        },
+        "Normal": {
+            "level": 2,
+            "name": "普通",
+            "code": "Normal"
+        },
+        "Hard": {
+            "level": 3,
+            "name": "困难",
+            "code": "Hard"
+        },
+        "VeryHard": {
+            "level": 4,
+            "name": "噩梦",
+            "code": "VeryHard"
+        },
+        "Impossible": {
+            "level": 5,
+            "name": "地狱",
+            "code": "Impossible"
+        }
+    },
+    "difficulty_config": {
+        "Easy": {
+            "level": 1,
+            "name": "简单",
+            "code": "Easy",
+            "emy_growth": {
+                "Emy_Pacifist": {
+                    "hp_growth": 0.12
+                },
+                "Emy_Goblin": {
+                    "hp_growth": 0.34,
+                    "dmg_growth": 0.28
+                },
+                "Emy_Goblin2": {
+                    "hp_growth": 0.3,
+                    "dmg_growth": 0.28
+                },
+                "Emy_Elite01": {
+                    "hp_growth": 0.3,
+                    "dmg_growth": 0.38
+                },
+                "Emy_Marauder": {
+                    "hp_growth": 0.4,
+                    "dmg_growth": 0.16
+                },
+                "Emy_Witch": {
+                    "hp_growth": 0.32,
+                    "dmg_growth": 0.1
+                },
+                "Emy_Werewolf": {
+                    "hp_growth": 0.34,
+                    "dmg_growth": 0.2
+                },
+                "Emy_Mummy": {
+                    "hp_growth": 0.36,
+                    "dmg_growth": 0.2
+                },
+                "Emy_Elite02": {
+                    "hp_growth": 0.3,
+                    "dmg_growth": 0.15
+                }
+            }
+        }
+    }
+}

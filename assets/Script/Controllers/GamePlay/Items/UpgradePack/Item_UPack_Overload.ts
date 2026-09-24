@@ -18,6 +18,8 @@ export default class Item_UPack_Overload extends ItemSpec {
     public val_3: number = 80;
     public val_4: number = 30;
 
+    private buffId: string = "";
+
     public getIntro(): string {
         let intro: string = this.props.intro;
         intro = intro.replace("o", this.val_1 + "");
@@ -52,15 +54,11 @@ export default class Item_UPack_Overload extends ItemSpec {
             { prop: "atk_spd", value: this.val_3 },
             { prop: "ctl", value: this.val_4 }
         ];
-        CHRManager.instance.upgradePropByBuff(buffList);
+        this.buffId = CHRManager.instance.propCtx.upgradePropByTempBuff(buffList, -1);
     }
 
     private resetProps() {
-        let buffList: CHRInfo.Buff[] = [
-            { prop: "atk_spd", value: -this.val_3 },
-            { prop: "ctl", value: -this.val_4 }
-        ];
-        CHRManager.instance.upgradePropByBuff(buffList);
+        CHRManager.instance.propCtx.removeTempBuff(this.buffId);
     }
 
     public onUse() {

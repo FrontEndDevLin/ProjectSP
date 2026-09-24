@@ -1,7 +1,7 @@
 {
     "desc": {
         "intro": "伤害体配置, 在这个文件中定义伤害体的伤害、脚本、预制体等属性",
-        "type": "1->普通伤害体 2->子弹伤害体",
+        "type": "1->普通伤害体 2->子弹伤害体 3->无伤害体",
         "speed": "type=2有效, 伤害体飞行速度",
         "max_dis": "type=2有效, 伤害体最大飞行距离"
     },
@@ -41,15 +41,15 @@
         "type": 1,
         "script": "Bullet_Emy_Body"
     },
-    "Emy_Body007": {
-        "code": "Emy_Body007",
-        "prefab": "Emy_Body007",
-        "type": 1,
-        "script": "Bullet_Emy_Body"
-    },
     "Emy_Body020": {
         "code": "Emy_Body020",
         "prefab": "Emy_Body020",
+        "type": 1,
+        "script": "Bullet_Emy_Body"
+    },
+    "Emy_Body021": {
+        "code": "Emy_Body021",
+        "prefab": "Emy_Body021",
         "type": 1,
         "script": "Bullet_Emy_Body"
     },
@@ -61,17 +61,62 @@
         "speed": 200,
         "max_dis": 500
     },
+    "Emy_Bullet021": {
+        "code": "Emy_Bullet021",
+        "prefab": "Emy_Bullet021",
+        "type": 2,
+        "script": "Bullet_Normal",
+        "speed": 500,
+        "max_dis": 800
+    },
     "CHR_Bullet001": {
         "code": "CHR_Bullet001",
         "prefab": "CHR_Bullet001",
         "type": 2,
         "script": "Bullet_Normal",
-        "speed": 480,
+        "speed": 960,
         "max_dis": 200
     },
     "CHR_Bullet003": {
         "code": "CHR_Bullet003",
         "prefab": "CHR_Bullet003",
+        "type": 2,
+        "script": "Bullet_Normal",
+        "speed": 300,
+        "max_dis": 120
+    },
+    "CHR_Bullet_RhombusPunch": {
+        "code": "CHR_Bullet_RhombusPunch",
+        "prefab": "CHR_Bullet_RhombusPunch",
+        "type": 2,
+        "script": "Bullet_RhombusPunch",
+        "speed": 300,
+        "max_dis": 120
+    },
+    "CHR_Bullet_BreakPunch": {
+        "code": "CHR_Bullet_BreakPunch",
+        "prefab": "CHR_Bullet_BreakPunch",
+        "type": 2,
+        "script": "Bullet_AreaOfEffect",
+        "effect_frame": 2
+    },
+    "CHR_Bullet_FastShadow": {
+        "code": "CHR_Bullet_FastShadow",
+        "prefab": "CHR_Bullet_FastShadow",
+        "type": 2,
+        "script": "Bullet_Normal",
+        "max_dis": 200
+    },
+    "CHR_Bullet_MentalAura": {
+        "code": "CHR_Bullet_MentalAura",
+        "prefab": "CHR_Bullet_MentalAura",
+        "type": 3,
+        "script": "Bullet_MentalAura",
+        "effect_frame": 2
+    },
+    "CHR_Bullet_SwordMaster": {
+        "code": "CHR_Bullet_SwordMaster",
+        "prefab": "CHR_Bullet_SwordMaster",
         "type": 2,
         "script": "Bullet_Normal",
         "speed": 300,

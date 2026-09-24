@@ -37,13 +37,13 @@ export default class MapManager extends OBT_UIManager {
         }
 
         tween(this._mapNode)
-            .to(0.1, { position: v3(2, 2, 0) }, {
+            .to(0.04, { position: v3(2, 2, 0) }, {
                 easing: "backIn",      
                 onStart: (target?: object) => {
                     this.shaking = true;
                 }
             })
-            .to(0.2, { position: v3(0, 0, 0) }, {
+            .to(0.04, { position: v3(0, 0, 0) }, {
                 easing: "backIn",
                 onComplete: (target?: object) => {
                     this.shaking = false;

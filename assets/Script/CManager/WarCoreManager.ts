@@ -20,6 +20,7 @@ import ItemSpecial from '../Controllers/GamePlay/Items/ItemSpecial';
 import Item_WarCore from '../Controllers/GamePlay/Items/WarCore/Item_WarCore';
 import WeaponBasic from '../Controllers/GamePlay/Weapons/WeaponBasic';
 import ItemBasic from '../Controllers/GamePlay/Items/ItemBasic';
+import ItemSpec from '../Controllers/GamePlay/Items/ItemSpec';
 const { ccclass, property } = _decorator;
 
 export default class WarCoreManager extends OBT_UIManager {
@@ -73,7 +74,7 @@ export default class WarCoreManager extends OBT_UIManager {
         this.warCoreData = DBManager.instance.getDBData("WarCore");
         this.iWarCoreData = DBManager.instance.getDBData("I_WarCore");
 
-        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
+        // OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_TROPHY, this.onPickupTrophy, this);
     }
@@ -95,41 +96,30 @@ export default class WarCoreManager extends OBT_UIManager {
         })
     }
 
-    /**
-     * 结合角色当前属性, 更新当前核心的面板属性
-     * 实际就是更新当前武器的面板
-     */
-    protected updateRealAtkWarCore() {
-        if (!this.warCoreWeapon) {
-            return;
-        }
-        this.warCoreWeapon.updatePanel();
-    }
-
     public setWarCoreRootNode(node: Node) {
         this.warCoreRootNode = node;
     }
 
-    private _setAtkWarCore(atkWarCoreId: string) {
-        const warCoreData: WarCoreInfo.WarCore = this.warCoreData.atk_war_core_def[atkWarCoreId];
-        if (warCoreData) {
-            this.warCore = this.getWarCoreCtxById(warCoreData.id);
-            if (this.warCore.weapon) {
-                // this.warCoreWeapon = WeaponManager.instance.getWeaponCtxById(warCore.weapon);
-                // this.atkWarCore.weaponCtx = this.warCoreWeapon;
-                // console.log(this.warCoreWeapon)
-                // this.warCoreWeapon = this.warCore.weaponCtx;
-                this.updateRealAtkWarCore();
-            }
-            this.warCore.use();
-            // this.warCoreItem = ItemsManager.instance.getItemCtxById(warCore.item);
-            // this.warCoreItem.use();
-            // this.atkWarCore.itemCtx = this.warCoreItem;
+    // private _setAtkWarCore(atkWarCoreId: string) {
+    //     const warCoreData: WarCoreInfo.WarCore = this.warCoreData.atk_war_core_def[atkWarCoreId];
+    //     if (warCoreData) {
+    //         this.warCore = this.getWarCoreCtxById(warCoreData.id);
+    //         if (this.warCore.weapon) {
+    //             // this.warCoreWeapon = WeaponManager.instance.getWeaponCtxById(warCore.weapon);
+    //             // this.atkWarCore.weaponCtx = this.warCoreWeapon;
+    //             // console.log(this.warCoreWeapon)
+    //             // this.warCoreWeapon = this.warCore.weaponCtx;
+    //             // this.updateRealAtkWarCore();
+    //         }
+    //         this.warCore.use();
+    //         // this.warCoreItem = ItemsManager.instance.getItemCtxById(warCore.item);
+    //         // this.warCoreItem.use();
+    //         // this.atkWarCore.itemCtx = this.warCoreItem;
 
-            OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
-            this.showPrefab({ prefabPath: `WarCore/${this.warCore.id}`, parentNode: this.warCoreRootNode, scriptName: this.warCore.id });
-        }
-    }
+    //         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
+    //         this.showPrefab({ prefabPath: `WarCore/${this.warCore.id}`, parentNode: this.warCoreRootNode, scriptName: this.warCore.id });
+    //     }
+    // }
     
     public getUpgradePackItemByCode(code: string) {
         return this.iWarCoreData.upgrade_pack_def[code];
@@ -158,7 +148,8 @@ export default class WarCoreManager extends OBT_UIManager {
 
             if (this.iWarCore.weaponCtx) {
                 this.warCoreWeapon = this.iWarCore.weaponCtx;
-                this.updateRealAtkWarCore();
+                // this.updateRealAtkWarCore();
+                this.iWarCore.weaponCtx.updatePanel();
             }
 
             // OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ATK_CORE_CHANGE);
@@ -399,7 +390,7 @@ export default class WarCoreManager extends OBT_UIManager {
     }
 
     protected onDestroy(): void {
-        OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
+        // OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updateRealAtkWarCore, this);
     }
 
     update(deltaTime: number) {
@@ -409,6 +400,11 @@ export default class WarCoreManager extends OBT_UIManager {
         if (this.iWarCore && this.iWarCore.weaponCtx) {
             this.iWarCore.weaponCtx.runBehavior(deltaTime);
         }
+        this.upgradeBackpack.forEach((upgradePack) => {
+            if (upgradePack instanceof ItemSpec && upgradePack.weaponCtx) {
+                upgradePack.weaponCtx.runBehavior(deltaTime);
+            }
+        })
     }
 }
 

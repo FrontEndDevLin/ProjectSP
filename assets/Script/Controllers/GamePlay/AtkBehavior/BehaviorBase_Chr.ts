@@ -1,4 +1,4 @@
-import { _decorator, BoxCollider2D, CircleCollider2D, Contact2DType } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Contact2DType, v3, Vec3, Node } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import WeaponBasic from '../Weapons/WeaponBasic';
 import { EMYInfo, GameCollider } from '../../../Common/Namespace';
@@ -8,6 +8,8 @@ import { EmyBasic } from '../EMY/EmyBasic';
 import { MeleeBehavior_Emy_Body } from './MeleeBehavior_Emy_Body';
 import { Bullet_Emy_Body } from '../Bullet/Bullet_Emy_Body';
 import { EmyBasic1 } from '../EMY/EmyBasic1';
+import CHRManager from '../../../CManager/CHRManager';
+import { transportWorldPosition } from '../../../Common/utils';
 const { ccclass, property } = _decorator;
 
 /**
@@ -34,6 +36,8 @@ export class BehaviorBase_Chr extends BehaviorBase {
     // 攻击范围内的队列，当该队列中有敌人时，优先从中选择，性能会有提升
     protected dangerEnemyList: string[] = [];
 
+    protected bodyNode: Node;
+
     start() {
         console.log('挂载攻击行为组件 BehaviorBase_Chr');
         if (this.hasDomainCollider) {
@@ -59,12 +63,16 @@ export class BehaviorBase_Chr extends BehaviorBase {
             collider.on(Contact2DType.END_CONTACT, this.onCHRDomainEndContact, this);
         }
         // let { range, alert } = this.weaponPanel;
+        this.updateDomain();
+    }
+
+    public updateDomain() {
         let range: number = this.weaponRef.curInf.range;
         if (this.attackDomainCollider) {
             this.attackDomainCollider.radius = range;
         }
         if (this.alertDomainCollider) {
-            this.alertDomainCollider.radius = range + 50;
+            this.alertDomainCollider.radius = range + 100;
         }
     }
 
@@ -124,6 +132,26 @@ export class BehaviorBase_Chr extends BehaviorBase {
         return { isCanBeAttacked: false, realTimeEnemyInfo: null };
     }
 
+    // 旋转武器(改变贴图朝向)
+    protected rotateWeapon(target: EMYInfo.RealTimeInfo) {
+        // 武器指向离得最近的目标
+        let curLoc: Vec3 = transportWorldPosition(this.node.worldPosition);
+        // 将武器坐标转为地图坐标
+        // let currentVec: Vec3 = v3(curLoc.x + this.node.position.x, curLoc.y + this.node.position.y);
+        let currentVec: Vec3 = v3(curLoc.x, curLoc.y);
+        let vecX = target.x - currentVec.x;
+        let vecY = target.y - currentVec.y;
+
+        let angle = Number((Math.atan(vecY / vecX) * 57.32).toFixed(2));
+        let scaleX = 1;
+        if (vecX < 0) {
+            scaleX = -1;
+        }
+
+        this.bodyNode.angle = angle;
+        this.bodyNode.setScale(v3(scaleX, 1));
+    }
+
     public runBehavior(deltaTime: number) {
         if (!this.isActiveType) {
             return;
@@ -136,11 +164,14 @@ export class BehaviorBase_Chr extends BehaviorBase {
             }
             if (this.calcCd(deltaTime)) {
                 let target: EMYInfo.ChooseTargetRes = this.chooseTarget();
-                if (target.isCanBeAttacked && target.realTimeEnemyInfo) {
-                    this.isAttacking = true;
-                    this.execAttack(deltaTime, target.realTimeEnemyInfo);
-                } else {
-                    // console.log('无可攻击目标');
+                if (target.realTimeEnemyInfo) {
+                    if (!this.isAttacking && this.bodyNode) {
+                        this.rotateWeapon(target.realTimeEnemyInfo);
+                    }
+                    if (target.isCanBeAttacked) {
+                        this.isAttacking = true;
+                        this.execAttack(deltaTime, target.realTimeEnemyInfo);
+                    }
                 }
             }
         }

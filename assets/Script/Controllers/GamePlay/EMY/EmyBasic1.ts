@@ -1,10 +1,10 @@
 import { _decorator, BoxCollider2D, Node, v3, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
-import { Common, DamageInfo, EMYInfo, GameCollider, GamePlayEventOptions } from '../../../Common/Namespace';
+import { Common, DamageInfo, EMYInfo, GameCollider, GamePlayEventOptions, REPEL_TIME } from '../../../Common/Namespace';
 import EMYManager from '../../../CManager/EMYManager';
 import CHRManager from '../../../CManager/CHRManager';
 import ProcessManager from '../../../CManager/ProcessManager';
-import { copyObject, getRandomNumber, getVectorByAngle } from '../../../Common/utils';
+import { copyObject, getFloatNumber, getRandomNumber, getVectorByAngle } from '../../../Common/utils';
 import DropItemManager from '../../../CManager/DropItemManager';
 import DamageManager from '../../../CManager/DamageManager';
 import RealTimeEventManager from '../../../CManager/RealTimeEventManager';
@@ -45,9 +45,6 @@ export class EmyBasic1 extends OBT_Component {
     public vector: Vec3;
     protected cd: number = 0;
 
-    // 减伤率
-    protected dmgReduceRate: number = 0;
-
     protected isInit: boolean = false;
     protected bodyCollider: BoxCollider2D;
 
@@ -76,6 +73,8 @@ export class EmyBasic1 extends OBT_Component {
 
     protected hasSpecialAttack: boolean = false;
     public canSpecialAttack: boolean = false;
+
+    protected buff: EMYInfo.EMYBuff = {};
 
     start() {
     }
@@ -123,6 +122,7 @@ export class EmyBasic1 extends OBT_Component {
 
         // console.log(`生成敌人${props.id}, 血量${props.c_hp}, 伤害${props.c_dmg}, 特殊伤害${props.c_spec_dmg}`)
         this.maxHp = props.c_hp;
+        this.buff = {};
 
         // 加载身体碰撞
         if (!this.isInit) {
@@ -145,16 +145,43 @@ export class EmyBasic1 extends OBT_Component {
     }
 
     public onHit(damageInfo: HitInfo) {
+        if (damageInfo.slowdown) {
+            // console.log('TODO: 敌人减速', damageInfo.slowdown);
+            // console.log('TODO: 敌人减速时间', damageInfo.slowdownTime);
+            this.setBuff("spd", -damageInfo.slowdown, damageInfo.slowdownTime);
+        }
+
         let dmg = damageInfo.damage;
         if (damageInfo.isCritical) {
             // console.log('触发暴击，伤害为' + dmg);
             RealTimeEventManager.instance.onCtiticalAttack();
         }
-        if (dmg <= 0) {
+        if (!dmg || dmg <= 0) {
             return;
         }
 
+        let dmgReduceRate: number = this.getBuffValue("dmg_reduce_rate");
+        if (dmgReduceRate && dmgReduceRate > 0 && dmgReduceRate < 1) {
+            dmg = Math.round(dmg * (1 - dmgReduceRate));
+            console.log('触发减伤，伤害为' + dmg);
+        }
+
         this.props.c_hp -= dmg;
+
+        // TODO: 计算击退距离
+        let repel: number = damageInfo.repel || 0;
+        let weight: number = this.props.weight || 0;
+        repel = repel - weight;
+        if (repel > 0) {
+            // console.log('击退敌人: ' + repel + '距离');
+            // 角色->敌人向量
+            // 角色->自身向量
+            let characterLoc: Vec3 = CHRManager.instance.getCHRLoc();
+            let vector = v3(this.node.position.x - characterLoc.x, this.node.position.y - characterLoc.y).normalize();
+            // TODO: vector结合线速度做偏移
+            this.vector = vector;
+            this.currentMoveBehavior.doRepel(repel);
+        }
 
         this.onHpReduce();
 
@@ -263,8 +290,9 @@ export class EmyBasic1 extends OBT_Component {
         let ctxList: WeaponEmy[] = [this.weapon1Ctx, this.weapon2Ctx, this.weapon3Ctx];
         ctxList.forEach(ctx => {
             if (ctx) {
-                ctx.mountBehaviorModule(this.view("Weapons"));
                 ctx.setEnemyRef(this);
+                ctx.updatePanel();
+                ctx.mountBehaviorModule(this.view("Weapons"));
             }
         })
     }
@@ -291,9 +319,13 @@ export class EmyBasic1 extends OBT_Component {
         this.alive = false;
         this.setColliderEnabled(false);
         this.runWeaponRemoveEvent();
+        this.removeBuff();
         this.onDie();
         EMYManager.instance.removeEnemy(this.id);
         this.effect.playDieEffect();
+        if (this.currentMoveBehavior) {
+            this.currentMoveBehavior.onDie();
+        }
         // 掉落物品并爆出粒子效果
         try {
             DropItemManager.instance.dropItem(this.props.code, this.node.position);
@@ -306,9 +338,13 @@ export class EmyBasic1 extends OBT_Component {
         this.alive = false;
         this.setColliderEnabled(false);
         this.runWeaponRemoveEvent();
+        this.removeBuff();
         this.onRunAway();
         EMYManager.instance.removeEnemy(this.id);
         this.effect.playDieEffect();
+        if (this.currentMoveBehavior) {
+            this.currentMoveBehavior.onDie();
+        }
         // 如果是核心精英, 掉落核心
         if (this.props.timeout_drop_trophy) {
             DropItemManager.instance.dropTrophyItem(this.props.code, this.node.position);
@@ -352,6 +388,50 @@ export class EmyBasic1 extends OBT_Component {
         }
     }
 
+    public getBuffValue(buffKey: string) {
+        return this.buff[buffKey]?.value || 0;
+    }
+    public setBuff(buffKey: string, buffValue: number, expireTime: number) {
+        let oldValue = this.buff[buffKey]?.value;
+        if (oldValue) {
+            // 大的可覆盖
+            if (buffValue > oldValue) {
+                this.buff[buffKey] = {
+                    value: buffValue,
+                    expireTime
+                };
+            } else {
+                return;
+            }
+        } else {
+            this.buff[buffKey] = {
+                value: buffValue,
+                expireTime
+            };
+        }
+    }
+    public removeBuff(buffKey?: string) {
+        if (!buffKey) {
+            this.buff = {};
+            return;
+        }
+        if (this.buff[buffKey]) {
+            delete this.buff[buffKey];
+        }
+    }
+    protected checkBuff(dt: number) {
+        for (let buffKey in this.buff) {
+            let buff = this.buff[buffKey];
+            if (buff.expireTime === -1) {
+                continue;
+            }
+            buff.expireTime -= dt;
+            if (buff.expireTime <= 0) {
+                this.removeBuff(buffKey);
+            }
+        }
+    }
+
     update(deltaTime: number) {
         if (!ProcessManager.instance.isOnPlaying()) {
             return;
@@ -369,6 +449,7 @@ export class EmyBasic1 extends OBT_Component {
             this.weapon3Ctx.runBehavior(deltaTime);
         }
         this.move(deltaTime);
+        this.checkBuff(deltaTime);
         if (this.effect) {
             this.effect.runBehavior(deltaTime);
         }

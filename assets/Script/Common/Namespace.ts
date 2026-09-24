@@ -1,6 +1,7 @@
 import { Color, Size, Vec3, view, Node } from "cc"
 import ItemBase from "../Controllers/GamePlay/Items/ItemBase"
 import WeaponBase from "../Controllers/GamePlay/Weapons/WeaponBase"
+import { BehaviorBase } from "../Controllers/GamePlay/AtkBehavior/BehaviorBase"
 
 export enum GAME_NODE {
     FIGHTING, // 进行中
@@ -122,9 +123,22 @@ export namespace GamePlayEventOptions {
         dmg: number,
         id: string
     }
+
+    export interface RhombusPunchBeforeAttackParams {
+        speed: number,
+        distance: number,
+        loc: Vec3,
+        vector: Vec3
+    }
+    export interface RhombusPunchAttackParams {
+        behaviorRef: BehaviorBase,
+        loc: Vec3,
+        vector: Vec3
+    }
 }
 
 export interface SaveDoc {
+    difficulty: string,
     wave: number,
     status: number,
     unlock_war_core: boolean,
@@ -209,6 +223,28 @@ export namespace GameConfigInfo {
     }
 }
 
+export namespace DifficultyInfo {
+    export interface EmyGrowth {
+        hp_growth: number,
+        dmg_growth: number
+    }
+    export interface EmyGrowthMap {
+        [emyCode: string]: EmyGrowth
+    }
+    export interface Difficulty {
+        level: number,
+        name: string,
+        code: string,
+        emy_growth: EmyGrowthMap
+    }
+    export interface DifficultyMap {
+        [difficultyCode: string]: Difficulty
+    }
+    export interface DifficultyDBData {
+        difficulty_config: DifficultyMap
+    }
+}
+
 export namespace WarCoreInfo {
     export interface WarCore extends ItemInfo.Item {
         ico_gaming: string,
@@ -271,6 +307,12 @@ export namespace CHRInfo {
     export interface Buff {
         prop: string,
         value?: number
+    }
+    export interface BuffMap {
+        [buffId: string]: {
+            buffList: Buff[],
+            expireTime: number
+        }
     }
 
     export interface Prop {
@@ -431,6 +473,7 @@ export namespace ItemInfo {
         price?: number,
         buff_list?: CHRInfo.Buff[],
         weapon?: string,
+        weapon_cnt?: number,
         // 是否开放, 为false时, 不会出现在商店。默认为true
         unlock?: boolean
     }
@@ -531,12 +574,16 @@ export namespace WeaponInfo {
         quality: ITEM_QUALITY,
         damage: number[],
         range: number,
+        min_range?: number,
         cd: number[],
         crit_rate: number[],
         crit_dmg_rate: number,
         boost: BoostConfig,
-        penetrate?: number, // 贯穿数
-        penetrate_damage?: number // 贯穿伤害
+        penetrate?: number, // 贯穿数, 如果为100, 则无限次穿透
+        penetrate_damage?: number, // 贯穿伤害
+        repel?: number, // 击退力
+        slowdown?: number, // 对敌人的减速值
+        slowdown_time?: number // 减速时间
     }
     // 武器实时数据, 受面板加成, cd、crit_rate等属性为数字, 由quality决定
     export interface WeaponRealTimeProps {
@@ -548,13 +595,17 @@ export namespace WeaponInfo {
         quality: ITEM_QUALITY,
         damage: number,
         range: number,
+        min_range?: number,
         cd: number,
         crit_rate: number,
         crit_dmg_rate: number,
         boost: BoostRealTimeConfig,
         penetrate?: number, // 贯穿数
         penetrate_cnt?: number, // 贯穿次数
-        penetrate_damage?: number // 贯穿伤害
+        penetrate_damage?: number, // 贯穿伤害
+        repel?: number, // 击退力
+        slowdown?: number, // 对敌人的减速值
+        slowdown_time?: number // 减速时间
     }
 }
 
@@ -587,18 +638,18 @@ export namespace EMYInfo {
         spd: number,
         // 基础生命值、伤害、特殊伤害
         hp: number,
-        dmg?: number,
-        spec_dmg?: number,
+        // dmg?: number,
+        // spec_dmg?: number,
         timeout_drop_trophy?: boolean,
         // 生命每波增长百分比
-        hp_growth: number,
+        // hp_growth: number,
         // 生命每波增长百分比
-        dmg_growth?: number,
-        spec_dmg_growth?: number,
+        // dmg_growth?: number,
+        // spec_dmg_growth?: number,
         // 实际生命值、伤害、特殊伤害
         c_hp: number,
-        c_dmg?: number,
-        c_spec_dmg?: number,
+        // c_dmg?: number,
+        // c_spec_dmg?: number,
         // 质量, 与武器击退属性相抵
         weight?: number
     }
@@ -608,6 +659,12 @@ export namespace EMYInfo {
     export interface EMYDBData {
         // EMY_def: EMYNormalData
         [EMYId: string]: EMYProps
+    }
+    export interface EMYBuff {
+        [buffKey: string]: {
+            value: number,
+            expireTime: number
+        }
     }
 
     export interface RealTimeInfo {
@@ -697,7 +754,9 @@ export namespace BulletInfo {
         // 穿透数
         penetrate?: number,
         // 穿透伤害(0-1), 不超过1
-        penetrate_dmg?: number
+        penetrate_dmg?: number,
+        // 效果持续帧数
+        effect_frame?: number
     }
 
     export interface BulletAttr {

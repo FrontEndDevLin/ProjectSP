@@ -1,6 +1,7 @@
 import { _decorator, v3 } from 'cc';
 import { getDistance } from '../../../Common/utils';
 import { BulletBasic } from './BulletBasic';
+import ProcessManager from '../../../CManager/ProcessManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -12,6 +13,9 @@ export class Bullet_Normal extends BulletBasic {
     public onHit() {
         // 判断是第几次穿透
         if (this.realTimeProps.penetrate) {
+            if (this.realTimeProps.penetrate === 100) {
+                return;
+            }
             if (!this.realTimeProps.penetrate_cnt) {
                 this.realTimeProps.damage = this.realTimeProps.penetrate_damage;
             }
@@ -26,6 +30,9 @@ export class Bullet_Normal extends BulletBasic {
     }
 
     protected runBehavior(dt: number) {
+        if (!this.vector) {
+            return;
+        }
         let ax = dt * this.attr.speed * this.vector.x;
         let ay = dt * this.attr.speed * this.vector.y;
         let { x, y } = this.node.position;

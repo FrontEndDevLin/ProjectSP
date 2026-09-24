@@ -11,7 +11,9 @@
         "blt_cld": "子弹碰撞体id",
         "blt_speed": "子弹飞行速度",
         "damage": "基础伤害",
-        "boost": "受到的属性加成, 值为百分比"
+        "boost": "受到的属性加成, 值为百分比",
+        "slowdown": "对敌人的减速值",
+        "slowdown_time": "减速时间"
     },
     "weapon_def": {
         "Weapon_Emy_Goblin": {
@@ -84,10 +86,20 @@
             "damage": [2],
             "cd": [1]
         },
+        "Weapon_Emy_Elite02": {
+            "code": "Weapon_Emy_Elite02",
+            "camp": 2,
+            "type": 1,
+            "intro": "敌人身体碰撞攻击",
+            "bullet": "Emy_Body021",
+            "quality": 1,
+            "damage": [2],
+            "cd": [1]
+        },
         "Weapon_Emy_TripleFlyBullet": {
             "code": "Weapon_Emy_TripleFlyBullet",
             "camp": 2,
-            "type": 1,
+            "type": 2,
             "intro": "敌人三飞弹武器",
             "bullet": "Emy_Bullet020",
             "quality": 1,
@@ -107,10 +119,21 @@
         "Weapon_Emy_RangeFlyBullet": {
             "code": "Weapon_Emy_RangeFlyBullet",
             "camp": 2,
-            "type": 1,
+            "type": 2,
             "range": 320,
             "intro": "敌人远程飞弹武器",
             "bullet": "Emy_Bullet020",
+            "quality": 1,
+            "damage": [2],
+            "cd": [4]
+        },
+        "Weapon_Emy_SurroundBullet": {
+            "code": "Weapon_Emy_SurroundBullet",
+            "camp": 2,
+            "type": 1,
+            "intro": "敌人环绕飞弹武器",
+            "bullet": "Emy_Bullet021",
+            "penetrate": 100,
             "quality": 1,
             "damage": [2],
             "cd": [4]
@@ -147,6 +170,25 @@
                 "range_dmg": [0.4, 0.44, 0.5, 0.58]
             }
         },
+        "Weapon_Chr_RhombusPunch": {
+            "code": "Weapon_Chr_RhombusPunch",
+            "camp": 1,
+            "type": 1,
+            "intro": "棱拳攻击",
+            "bullet": "CHR_Bullet_RhombusPunch",
+            "penetrate": 100,
+            "repel": 40,
+            "quality": 1,
+            "damage": [4, 6, 8, 12],
+            "range": 150,
+            "min_range": 25,
+            "cd": [1.2, 1.1, 1, 0.85],
+            "crit_rate": [0.01, 0.02, 0.04, 0.08],
+            "crit_dmg_rate": 1.5,
+            "boost": {
+                "melee_dmg": [0.6, 0.6, 0.6, 0.7]
+            }
+        },
         "Weapon_Chr_Fission": {
             "code": "Weapon_Chr_Fission",
             "camp": 1,
@@ -158,8 +200,69 @@
             "range": 200,
             "cd": [0],
             "crit_rate": [0],
+            "crit_dmg_rate": 1.5,
             "boost": {
                 "range_dmg": [0.5]
+            }
+        },
+        "Weapon_Chr_BreakPunch": {
+            "code": "Weapon_Chr_BreakPunch",
+            "camp": 1,
+            "type": 1,
+            "intro": "爆拳攻击",
+            "bullet": "CHR_Bullet_BreakPunch",
+            "quality": 1,
+            "damage": [6],
+            "cd": [0],
+            "crit_rate": [1],
+            "crit_dmg_rate": 1.5,
+            "boost": {
+                "melee_dmg": [0.4]
+            }
+        },
+        "Weapon_Chr_FastShadow": {
+            "code": "Weapon_Chr_FastShadow",
+            "camp": 1,
+            "type": 1,
+            "intro": "残影攻击",
+            "bullet": "CHR_Bullet_FastShadow",
+            "quality": 1,
+            "damage": [2],
+            "cd": [0],
+            "crit_rate": [0.01],
+            "crit_dmg_rate": 1.5,
+            "penetrate": 100,
+            "boost": {
+                "melee_dmg": [0.3]
+            }
+        },
+        "Weapon_Chr_MentalAura": {
+            "code": "Weapon_Chr_MentalAura",
+            "camp": 1,
+            "type": 1,
+            "intro": "气场",
+            "bullet": "CHR_Bullet_MentalAura",
+            "quality": 1,
+            "range": 200,
+            "cd": [3],
+            "slowdown": 60,
+            "slowdown_time": 2
+        },
+        "Weapon_Chr_SwordMaster": {
+            "code": "Weapon_Chr_SwordMaster",
+            "camp": 1,
+            "type": 1,
+            "intro": "御剑攻击",
+            "bullet": "CHR_Bullet_SwordMaster",
+            "quality": 1,
+            "damage": [4, 6, 8, 12],
+            "range": 150,
+            "min_range": 25,
+            "cd": [1.2, 1.1, 1, 0.85],
+            "crit_rate": [0.01, 0.02, 0.04, 0.08],
+            "crit_dmg_rate": 1.5,
+            "boost": {
+                "melee_dmg": [0.6, 0.6, 0.6, 0.7]
             }
         }
     }

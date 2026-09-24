@@ -9,6 +9,7 @@ import { copyObject } from "../../../Common/utils";
 import WeaponBasic from "../Weapons/WeaponBasic";
 import WeaponBase from "../Weapons/WeaponBase";
 import ItemBasic from "./ItemBasic";
+import { BehaviorBase } from "../AtkBehavior/BehaviorBase";
 
 export default class ItemSpec extends ItemBasic {
     // public weaponCtx: WeaponBase;
@@ -42,7 +43,16 @@ export default class ItemSpec extends ItemBasic {
         }
     }
 
-    public onWarCoreAttack() {};
+    public onRhombusPunchBeforeAttack(rhombusPunchBeforeAttackParams: GamePlayEventOptions.RhombusPunchBeforeAttackParams) {};
+    public onRhombusPunchAttack(rhombusPunchAttackParams: GamePlayEventOptions.RhombusPunchAttackParams) {};
+
+    public onWarCoreAttack(behaviorRef?: BehaviorBase) {};
+
+    public onAlertRangeEnemyEnter(alertEmyCount: number) {};
+    public onAlertRangeEnemyLeave(alertEmyCount: number) {};
+
+    public onStandingStatusEnter() {};
+    public onStandingStatusLeave() {};
 
     public onPassWave() {};
 

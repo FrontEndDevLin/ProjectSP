@@ -1,6 +1,6 @@
 import { Node, UITransform } from "cc";
 import { CHRInfo, COLOR, GamePlayEvent } from "../../Common/Namespace";
-import { getFloatNumber, getRandomNumbers, transportWorldPosition } from "../../Common/utils";
+import { copyObject, getFloatNumber, getRandomNumbers, transportWorldPosition } from "../../Common/utils";
 import OBT from "../../OBT";
 import CHRManager from "../CHRManager";
 import DBManager from "../DBManager";
@@ -43,6 +43,9 @@ export default class PropCtrl extends BaseCtrl {
     private _nextRefreshCost: number = 0;
     // 可升级的属性(随机)
     public preUpgradeList: CHRInfo.upgradeProp[] = [];
+
+    protected tempBuffMap: CHRInfo.BuffMap = {};
+    protected buffId: number = 1;
 
     constructor() {
         super();
@@ -306,5 +309,61 @@ export default class PropCtrl extends BaseCtrl {
         let def: number = this.getPropRealValue("def");
         def = def <= 0 ? 0 : def;
         return 1 - 1 / (def / 15 + 1);
+    }
+
+    /**
+     * 给角色临时buff，临时buff在effectTime时间内生效
+     * 当effectTime=-1时, 在当前波次全局生效
+     */
+    public upgradePropByTempBuff(buffList: CHRInfo.Buff[], effectTime: number): string {
+        if (!buffList || !buffList.length) {
+            return "";
+        }
+
+        let buff: CHRInfo.Buff[] = copyObject(buffList);
+        this.tempBuffMap[this.buffId] = {
+            buffList: buff,
+            expireTime: effectTime
+        };
+        this.buffId++;
+
+        this.upgradePropByBuff(buff);
+
+        return this.buffId + "";
+    }
+
+    public removeTempBuff(buffId: string) {
+        if (!this.tempBuffMap[buffId]) {
+            return false;
+        }
+        let buff = this.tempBuffMap[buffId];
+        let buffList = [];
+        for (let item of buff.buffList) {
+            buffList.push({
+                [item.prop]: -item.value
+            });
+        }
+        this.upgradePropByBuff(buffList);
+        delete this.tempBuffMap[buffId];
+    }
+
+    public removeAllTempBuff() {
+        for (let buffId in this.tempBuffMap) {
+            this.removeTempBuff(buffId);
+        }
+    }
+
+    public update(dt: number) {
+        for (let buffId in this.tempBuffMap) {
+            let buff = this.tempBuffMap[buffId];
+            if (buff.expireTime === -1) {
+                continue;
+            }
+            if (buff.expireTime > 0) {
+                buff.expireTime -= dt;
+            } else {
+                this.removeTempBuff(buffId);
+            }
+        }
     }
 }

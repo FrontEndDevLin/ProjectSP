@@ -1,10 +1,11 @@
-import { _decorator, BoxCollider2D, Component, Contact2DType, Game, Node, Sprite, v3, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, Collider2D, Component, Contact2DType, Game, Node, Sprite, v3, Vec3 } from 'cc';
 // import { BulletAttr, BulletInitParams } from '../../Interface';
 import OBT_Component from '../../../OBT_Component';
 import { BulletInfo, GameCollider, WeaponInfo } from '../../../Common/Namespace';
 import { getDistance } from '../../../Common/utils';
 import BulletManager, { CreateIBulletParams } from '../../../CManager/BulletManager';
 import CombatManager, { HitInfo } from '../../../CManager/CombatManager';
+import ProcessManager from '../../../CManager/ProcessManager';
 const { ccclass, property } = _decorator;
 
 export interface InitIBulletPrams extends CreateIBulletParams {
@@ -20,13 +21,13 @@ export class BulletBasic extends OBT_Component {
     protected isInit: boolean = false;
     protected isAlive: boolean = false;
 
-    protected collider: BoxCollider2D;
+    protected collider: Collider2D;
 
     protected attr: BulletInfo.IBulletAttr = null;
     public realTimeProps: WeaponInfo.WeaponRealTimeProps = null;
     public vector: Vec3 = null;
 
-    protected isSleep: boolean;
+    protected isSleep: boolean = false;
 
     // 起点位置（相对）
     protected startRlt: Vec3 = null;
@@ -35,7 +36,7 @@ export class BulletBasic extends OBT_Component {
     }
 
     public init({ bulletAttr, weaponRealTimeProps, position, vector }: InitIBulletPrams) {
-        this.collider = this.node.getComponent(BoxCollider2D);
+        this.collider = this.node.getComponent(Collider2D);
         this.collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
         this.collider.on(Contact2DType.END_CONTACT, this._onEndContact, this);
 
@@ -53,7 +54,7 @@ export class BulletBasic extends OBT_Component {
                 scaleX = -1;
             }
             let sfNode: Node = this.node.getChildByName("SF");
-            sfNode.angle = angle;
+            this.node.angle = angle;
             sfNode.setScale(v3(scaleX, 1));
         }
         // 子弹运动
@@ -62,8 +63,11 @@ export class BulletBasic extends OBT_Component {
         // 初始位置
         let { x, y } = this.node.position;
         this.startRlt = new Vec3(x, y);
-        // this.isSleep = isSleep;
+
+        this.onInit();
     }
+
+    protected onInit() {}
 
     public onHit(damageInfo?: HitInfo) {}
 
@@ -150,6 +154,9 @@ export class BulletBasic extends OBT_Component {
     //     }
     //     this.isSleep = false;
     // }
+    public setSleep(isSleep: boolean) {
+        this.isSleep = isSleep;
+    }
 
     protected runBehavior(dt: number) {}
 
@@ -158,6 +165,9 @@ export class BulletBasic extends OBT_Component {
         //     return;
         // }
         if (!this.isAlive) {
+            return;
+        }
+        if (this.isSleep) {
             return;
         }
         this.runBehavior(dt);

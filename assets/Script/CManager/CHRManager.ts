@@ -37,6 +37,7 @@ export default class CHRManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.FIGHT_PASS, () => {
             let levelUpCnt: number = this._levelCtrl.getLevelUpCnt();
             console.log(`波次通过, 获得${levelUpCnt}次升级次数`);
+            this.propCtx.removeAllTempBuff();
         })
 
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._pickUpExp, this);
@@ -148,5 +149,11 @@ export default class CHRManager extends OBT_UIManager {
         console.log('销毁角色管理ing')
         OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._pickUpExp, this);
         CHRManager.instance = null;
+    }
+
+    protected update(dt: number): void {
+        if (this.propCtx && ProcessManager.instance.isOnPlaying()) {
+            this.propCtx.update(dt);
+        }
     }
 }

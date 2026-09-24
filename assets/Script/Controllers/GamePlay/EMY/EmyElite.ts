@@ -53,6 +53,10 @@ export class EmyElite extends EmyBasic1 {
         this.changePhase();
     }
 
+    public getPhase(): number {
+        return this.phase;
+    }
+
     // 子类实现
     protected changePhase() {}
 
