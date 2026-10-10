@@ -1,5 +1,5 @@
 import { Node, UITransform } from "cc";
-import { CHRInfo, COLOR, GamePlayEvent } from "../../Common/Namespace";
+import { CHRInfo, COLOR, Common, GamePlayEvent } from "../../Common/Namespace";
 import { copyObject, getFloatNumber, getRandomNumbers, transportWorldPosition } from "../../Common/utils";
 import OBT from "../../OBT";
 import CHRManager from "../CHRManager";
@@ -46,6 +46,8 @@ export default class PropCtrl extends BaseCtrl {
 
     protected tempBuffMap: CHRInfo.BuffMap = {};
     protected buffId: number = 1;
+
+    private _hpRecTime: number = 0;
 
     constructor() {
         super();
@@ -311,6 +313,24 @@ export default class PropCtrl extends BaseCtrl {
         return 1 - 1 / (def / 15 + 1);
     }
 
+    // 获取当前生命再生回复1点生命值的时间
+    // 生命再生的第一点属性值将增加0.20HP/s回复速度. 其余属性点将增加0.089HP/s回复速度
+    public getHpRecInfo(): Common.SimpleObj {
+        let hp_rec: number = this.getPropRealValue("hp_rec");
+        if (hp_rec <= 0) {
+            return {
+                speed: 0,
+                time: 0
+            };
+        }
+
+        let val: number = getFloatNumber(0.20 + (hp_rec - 1) * 0.089, 3);
+        return {
+            speed: getFloatNumber(val, 2),
+            time: getFloatNumber(1 / val, 2)
+        };
+    }
+
     /**
      * 给角色临时buff，临时buff在effectTime时间内生效
      * 当effectTime=-1时, 在当前波次全局生效
@@ -363,6 +383,15 @@ export default class PropCtrl extends BaseCtrl {
                 buff.expireTime -= dt;
             } else {
                 this.removeTempBuff(buffId);
+            }
+        }
+
+        let hpRecInfo: Common.SimpleObj = this.getHpRecInfo();
+        if (hpRecInfo.time) {
+            this._hpRecTime += dt;
+            if (this._hpRecTime >= hpRecInfo.time) {
+                this.addHP(1);
+                this._hpRecTime = 0;
             }
         }
     }

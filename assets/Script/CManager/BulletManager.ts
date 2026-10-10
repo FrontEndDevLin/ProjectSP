@@ -69,6 +69,9 @@ export default class BulletManager extends OBT_UIManager {
 
     private _nodePoolMap: BulletPoolMap = {};
 
+    protected minDamageMap: Common.SimpleObj = {};
+    protected boostSpeedMap: Common.SimpleObj = {};
+
     // 子弹粒子特效管理
     public particleCtrl: BulletParticleCtrl;
 
@@ -183,7 +186,7 @@ export default class BulletManager extends OBT_UIManager {
             weaponRealTimeProps.penetrate_cnt = 0;
         }
 
-        const oriBulletAttr: BulletInfo.IBulletAttr = this.iBulletData[weaponRealTimeProps.bullet];
+        const oriBulletAttr: BulletInfo.IBulletAttr = copyObject(this.iBulletData[weaponRealTimeProps.bullet]);
         const nodePool = this._nodePoolMap[weaponRealTimeProps.bullet];
         let bulletNode: Node = nodePool ? nodePool.get() : null;
         if (!bulletNode) {
@@ -203,6 +206,11 @@ export default class BulletManager extends OBT_UIManager {
             for (let key in resetAttr) {
                 oriBulletAttr[key] = resetAttr[key];
             }
+        }
+
+        let boostSpeed: number = this.getBoostSpeed(weaponRealTimeProps.bullet);
+        if (boostSpeed) {
+            oriBulletAttr.boost_speed = boostSpeed;
         }
 
         const scriptComp: BulletBasic = bulletNode.getComponent(BulletBasic);
@@ -277,6 +285,19 @@ export default class BulletManager extends OBT_UIManager {
         this.mountNode({ node: bulletNode, parentNode: rootNode || this.bulletRootNode });
 
         return bulletNode;
+    }
+
+    public setMinDamage(bulletId: string, minDamage: number) {
+        this.minDamageMap[bulletId] = minDamage;
+    }
+    public getMinDamage(bulletId: string): number {
+        return this.minDamageMap[bulletId] || 1;
+    }
+    public setBoostSpeed(bulletId: string, boostSpeed: number) {
+        this.boostSpeedMap[bulletId] = boostSpeed;
+    }
+    public getBoostSpeed(bulletId: string): number {
+        return this.boostSpeedMap[bulletId] || 0;
     }
 
     update(deltaTime: number) {

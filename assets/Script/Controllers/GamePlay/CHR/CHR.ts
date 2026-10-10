@@ -1,7 +1,7 @@
 import { _decorator, BoxCollider2D, CircleCollider2D, Contact2DType, Vec3 } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import OBT from '../../../OBT';
-import { DamageInfo, GameCollider, GamePlayEvent, PIXEL_UNIT, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
+import { DamageInfo, GameCollider, GamePlayEvent, PIXEL_UNIT, SaveDoc, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../Common/Namespace';
 import CHRManager from '../../../CManager/CHRManager';
 import WarCoreManager from '../../../CManager/WarCoreManager';
 import ProcessManager from '../../../CManager/ProcessManager';
@@ -39,8 +39,7 @@ export class CHR extends OBT_Component {
 
         this._baseSpd = CHRManager.instance.propCtx.getPropRealValue("spd");
 
-        WarCoreManager.instance.setWarCoreRootNode(this.node);
-        WarCoreManager.instance.initAtkWarCore(getSaveCtrl().save.chr_slot.atk_core);
+        // WarCoreManager.instance.setWarCoreRootNode(this.node);
     }
 
     private _compassTouchStart() {

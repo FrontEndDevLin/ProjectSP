@@ -72,6 +72,10 @@ export class CoreUpgradeCard extends OBT_Component {
             this.view("Container/Content/Attr").getComponent(RichText).string = panelRichTxt;
         }
 
+        if (item instanceof ItemSpec) {
+            item.weaponCtx?.destory();
+        }
+
         // this.view("Content/Intro").getComponent(RichText).string = introRichTxt;
 
         // let buffList: CHRInfo.Buff[] = props.buff_list;
@@ -150,6 +154,7 @@ export class CoreUpgradeCard extends OBT_Component {
         if (ProcessManager.instance.gameNode === GAME_NODE.CORE_UPGRADE) {
             WarCoreManager.instance.mountUpgradePack(this._item.props.code);
             this.hideNodeByPath();
+            this._item = null;
         }
     }
 

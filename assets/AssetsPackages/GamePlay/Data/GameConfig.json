@@ -269,7 +269,7 @@
                 "bullet_particle": 20,
                 "dmg_txt": 5
             },
-            "spawn_roles": [
+            "spawn_roles_": [
                 {
                     "enemy_type": "Emy_Pacifist",
                     "spawn_total": 1,
@@ -283,7 +283,7 @@
                     "spawn_duration": 30
                 }
             ],
-            "spawn_roles_": [
+            "spawn_roles": [
                 {
                     "enemy_type": "Emy_Pacifist",
                     "spawn_total": 4,

@@ -7,6 +7,8 @@ import { getRandomNumber } from "../Common/utils";
 import { Bullet_Emy_Body } from "../Controllers/GamePlay/Bullet/Bullet_Emy_Body";
 import { EmyBasic1 } from "../Controllers/GamePlay/EMY/EmyBasic1";
 import { CHR } from "../Controllers/GamePlay/CHR/CHR";
+import BulletManager from "./BulletManager";
+import CHRManager from "./CHRManager";
 
 export interface HitInfo {
     damage: number,
@@ -79,6 +81,12 @@ export default class CombatManager extends OBT_UIManager {
             }
         }
 
+        // 实际伤害不能低于保底伤害
+        let minDamage: number = BulletManager.instance.getMinDamage(bullet.realTimeProps.bullet);
+        if (realDamage < minDamage) {
+            realDamage = minDamage;
+        }
+
         // 计算伤害
         let damageInfo: HitInfo = {
             bullet: bullet.realTimeProps.bullet,
@@ -93,6 +101,7 @@ export default class CombatManager extends OBT_UIManager {
 
         enemy.onHit(damageInfo);
         bullet.onHit(damageInfo);
+        CHRManager.instance.onHitEnemy(damageInfo);
     }
     protected onCHRHit(bulletCollider: Collider2D, chrCollider: Collider2D) {
         // 角色被击中

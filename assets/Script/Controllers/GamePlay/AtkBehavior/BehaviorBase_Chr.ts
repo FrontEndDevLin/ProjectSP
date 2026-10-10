@@ -67,6 +67,9 @@ export class BehaviorBase_Chr extends BehaviorBase {
     }
 
     public updateDomain() {
+        if (!this.weaponRef) {
+            return;
+        }
         let range: number = this.weaponRef.curInf.range;
         if (this.attackDomainCollider) {
             this.attackDomainCollider.radius = range;

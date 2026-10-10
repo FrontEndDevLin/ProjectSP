@@ -17,6 +17,8 @@ import DamageManager from './DamageManager';
 import GUI_PopupManager from './GUI_PopupManager';
 import GUI_TooltipsManager from './GUI_TooltipsManager';
 import DifficultyManager from './DifficultyManager';
+import WeaponManager from './WeaponManager';
+import WarCoreManager from './WarCoreManager';
 const { ccclass, property } = _decorator;
 
 const CORE_SELECT_TIME: number = 5555;
@@ -71,7 +73,7 @@ export default class ProcessManager extends OBT_UIManager {
     start() {
         /**
          * ProcessManager
-         * 初始化initGlobal：-> 将不会改变的节点、数据初始化(GUI、角色属性、地图)，只调用一次
+         * 初始化initRootNode：-> 将不会改变的节点、数据初始化(GUI、角色属性、地图)，只调用一次
          * 波次初始化initWave: -> 每一波都会改变的数据(刷怪Role、波次时间、预载节点)，每一波开始前调用
          */
     }
@@ -100,14 +102,17 @@ export default class ProcessManager extends OBT_UIManager {
         OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.DROP_ITEM_RECOVER_FINISH, this._finishDropItemRecovery, this);
     }
 
-    protected initGlobal(isNewGame: boolean) {
+    protected initRootNode() {
         // 这里将各个管理的根节点挂载，避免层级问题
         this._initMapAndGUI();
         this._initOtherRootNode();
+    }
+    protected initSaveDoc(isNewGame: boolean) {
         this._initSave(isNewGame);
         CHRManager.instance.init(this.saveCtrl.save);
-
-        MapManager.instance.showMap();
+        WarCoreManager.instance.init(this.saveCtrl.save);
+        ItemsManager.instance.init(this.saveCtrl.save);
+        this.saveCtrl.isOldDoc = false;
     }
 
     private _initMapAndGUI() {
@@ -117,7 +122,8 @@ export default class ProcessManager extends OBT_UIManager {
         GUI_GamePlayManager.instance.initPrepareGUI();
         GUI_PopupManager.instance.initRootNode();
         GUI_TooltipsManager.instance.initRootNode();
-        CHRManager.instance.showCHR();
+        CHRManager.instance.loadCHR();
+        WarCoreManager.instance.setWarCoreRootNode(CHRManager.instance.chrNode);
     }
     private _initSave(isNewGame: boolean) {
         if (isNewGame) {
@@ -127,10 +133,20 @@ export default class ProcessManager extends OBT_UIManager {
             this.saveCtrl.initSave();
         } else {
             // 需要做读取存档时，判断storage里有没有存档，有则读取存档；没有则读取InitSave.json
-            let hasSaveDoc: boolean = false;
+            let hasSaveDoc: boolean = true;
+            if (hasSaveDoc) {
+                // 临时用InitSave.json中的存档, 后续要从storage中读取
+                this.saveCtrl.initSave();
+            }
+        }
+        if (this.saveCtrl.save.wave > 1) {
+            this.saveCtrl.isOldDoc = true;
+            const currentWave: number = this.saveCtrl.save.wave - 1;
+            this.waveRole = this.gameConfig.waves[currentWave - 1];
         }
     }
     private _initOtherRootNode() {
+        WeaponManager.instance.initRootNode();
         EMYManager.instance.initRootNode();
         BulletManager.instance.initRootNode();
         DropItemManager.instance.initRootNode();
@@ -140,9 +156,24 @@ export default class ProcessManager extends OBT_UIManager {
 
     // 最开始
     public startGame(isNewGame: boolean): void {
-        this.initGlobal(isNewGame);
+        this.initRootNode();
+        this.initSaveDoc(isNewGame);
         DifficultyManager.instance.initDifficultyLevel(this.saveCtrl.save.difficulty);
-        this._loadWave();
+
+        MapManager.instance.showMap();
+        CHRManager.instance.showCHR();
+
+        // 当有旧存档时并且波次大于1时, 进入当前波次的准备界面而不是直接进入战斗
+        // 存档还需存储当前波次商店的道具
+        if (this.saveCtrl.save.wave > 1) {
+            console.log('有旧存档, 进入当前波次的准备界面');
+            this.gameNode = GAME_NODE.PREPARE;
+            this.scheduleOnce(() => {
+                this._nextStep();
+            }, 0.5)
+        } else {
+            this._loadWave();
+        }
     }
     private _nextWave() {
         this.saveCtrl.save.wave++;
@@ -230,6 +261,7 @@ export default class ProcessManager extends OBT_UIManager {
             this._nextStep();
         }, 0.5)
     }
+    // TODO: 在读档时会强制调用这个方法，需要优化
     private _finishCoreUpgrade() {
         this.gameNode = GAME_NODE.PASS_FIGHT;
         this.scheduleOnce(() => {
@@ -370,6 +402,7 @@ export default class ProcessManager extends OBT_UIManager {
                         }
                     }
                 }
+                RealTimeEventManager.instance.onUpdate(dt);
             } break;
             case GAME_NODE.CORE_SELECT: {
                 if (this._coreSelectDuration <= 0) {

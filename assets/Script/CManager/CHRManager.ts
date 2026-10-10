@@ -7,6 +7,8 @@ import OBT from "../OBT";
 import PropCtrl from "./Class/PropCtrl";
 import { CurrencyCtrl } from "./Class/CurrencyCtrl";
 import ProcessManager from "./ProcessManager";
+import { HitInfo } from "./CombatManager";
+import { getRandomNumber } from "../Common/utils";
 export default class CHRManager extends OBT_UIManager {
     static instance: CHRManager;
 
@@ -19,7 +21,7 @@ export default class CHRManager extends OBT_UIManager {
     public propCtx: PropCtrl;
     public currencyCtrl: CurrencyCtrl;
 
-    private _CHRNode: Node;
+    public chrNode: Node;
 
     protected onLoad(): void {
         if (!CHRManager.instance) {
@@ -57,6 +59,7 @@ export default class CHRManager extends OBT_UIManager {
     private _initLevel(level: number) {
         this._levelCtrl = new LevelCtrl();
         this._levelCtrl.initLevel(level);
+        this._levelCtrl.on("onLevelUp", this._onLevelUp, this);
     }
 
     private _initProps(props: CHRInfo.PropValMap) {
@@ -81,11 +84,20 @@ export default class CHRManager extends OBT_UIManager {
         this.propCtx.addHP(health);
     }
 
+    private _onLevelUp(level: number) {
+        console.log('升级触发事件');
+        this.propCtx.upgradePropByBuff([{ prop: "hp", value: 1 }]);
+        this.propCtx.addHP(1);
+    }
+
     public resetCHRPosition() {
-        this._CHRNode.setPosition(v3(0, 0, 0));
+        this.chrNode.setPosition(v3(0, 0, 0));
+    }
+    public loadCHR() {
+        this.chrNode = this.loadPrefab({ prefabPath: "CHR/CHR01", scriptName: "CHR" });
     }
     public showCHR() {
-        this._CHRNode = this.showPrefab({ prefabPath: "CHR/CHR01", scriptName: "CHR", parentNode: ProcessManager.instance.unitRootNode });
+        this.mountNode({ node: this.chrNode, parentNode: ProcessManager.instance.unitRootNode });
     }
     public initCompass() {
         this._compassNode = this.showPrefab({ prefabPath: "Compass", parentNode: ProcessManager.instance.uiRootNode });
@@ -145,6 +157,22 @@ export default class CHRManager extends OBT_UIManager {
         return this._levelCtrl.getUpgradeQuality(level);
     }
 
+    public onHitEnemy(damageInfo: HitInfo) {
+        if (damageInfo.damage > 0) {
+            let hpStealVal: number = this.propCtx.getPropRealValue("hp_steal");
+            if (hpStealVal > 0) {
+                if (hpStealVal >= 100) {
+                    this.propCtx.addHP(1);
+                } else {
+                    let randomNum: number = getRandomNumber(1, 100);
+                    if (randomNum <= hpStealVal) {
+                        this.propCtx.addHP(1);
+                    }
+                }
+            }
+        }
+    }
+
     protected onDestroy(): void {
         console.log('销毁角色管理ing')
         OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PICK_UP_EXP, this._pickUpExp, this);
@@ -155,5 +183,7 @@ export default class CHRManager extends OBT_UIManager {
         if (this.propCtx && ProcessManager.instance.isOnPlaying()) {
             this.propCtx.update(dt);
         }
+
+        // let hpRecInfo: Common.SimpleObj = this.propCtx.getHpRecInfo();
     }
 }

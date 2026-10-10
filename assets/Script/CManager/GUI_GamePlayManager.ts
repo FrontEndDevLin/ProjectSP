@@ -24,6 +24,7 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
 
     public initGamePlayGUI() {
         this._GUIGamePlayNode = this.showPrefab({ prefabPath: "GUI_GamePlay", parentNode: ProcessManager.instance.uiRootNode });
+        // this._GUIGamePlayNode = this.loadPrefab({ prefabPath: "GUI_GamePlay" });
     }
     public initPrepareGUI() {
         this._GUIPrepareNode = this.showPrefab({ prefabPath: "GUI_Prepare", parentNode: ProcessManager.instance.uiRootNode });
@@ -31,6 +32,7 @@ export default class GUI_GamePlayManager extends OBT_UIManager {
 
     public showGamePlayGUI() {
         this.showNode(this._GUIGamePlayNode);
+        // this.mountNode({ node: this._GUIGamePlayNode, parentNode: ProcessManager.instance.uiRootNode });
     }
     public hideGamePlayGUI() {
         this._GUIGamePlayNode.getComponent(GUI_GamePlay).resetGamePlayView();

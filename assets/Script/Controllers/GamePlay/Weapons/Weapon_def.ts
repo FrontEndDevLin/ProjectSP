@@ -14,6 +14,9 @@ import WeaponChrBreakPunch from "./Weapon_Chr_BreakPunch";
 import WeaponChrFastShadow from "./Weapon_Chr_FastShadow";
 import WeaponChrMentalAura from "./Weapon_Chr_MentalAura";
 import WeaponChrSwordMaster from "./Weapon_Chr_SwordMaster";
+import WeaponChrDrone from "./Weapon_Chr_Drone";
+import WeaponChrFreeDrone from "./Weapon_Chr_FreeDrone";
+import WeaponChrFreeDroneUnit from "./Weapon_Chr_FreeDroneUnit";
 
 export namespace Weapon_def {
     export const Weapon_Base = WeaponBase;
@@ -43,4 +46,7 @@ export namespace IWeapon_def {
     export const Weapon_Chr_FastShadow = WeaponChrFastShadow;
     export const Weapon_Chr_MentalAura = WeaponChrMentalAura;
     export const Weapon_Chr_SwordMaster = WeaponChrSwordMaster;
+    export const Weapon_Chr_Drone = WeaponChrDrone;
+    export const Weapon_Chr_FreeDrone = WeaponChrFreeDrone;
+    export const Weapon_Chr_FreeDroneUnit = WeaponChrFreeDroneUnit;
 }

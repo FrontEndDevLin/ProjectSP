@@ -7,6 +7,7 @@ import { Weapon_def, IWeapon_def } from '../Controllers/GamePlay/Weapons/Weapon_
 import BulletManager from './BulletManager';
 import { copyObject } from '../Common/utils';
 import WeaponBasic from '../Controllers/GamePlay/Weapons/WeaponBasic';
+import ProcessManager from './ProcessManager';
 const { ccclass, property } = _decorator;
 
 export default class WeaponManager extends OBT_UIManager {
@@ -14,6 +15,8 @@ export default class WeaponManager extends OBT_UIManager {
 
     public weaponData: WeaponInfo.WeaponDBData;
     public iWeaponData: WeaponInfo.IWeaponDBData;
+
+    public weaponRootNode: Node = null;
 
     protected onLoad(): void {
         if (!WeaponManager.instance) {
@@ -25,6 +28,10 @@ export default class WeaponManager extends OBT_UIManager {
 
         this.weaponData = DBManager.instance.getDBData("Weapon");
         this.iWeaponData = DBManager.instance.getDBData("I_Weapon");
+    }
+
+    public initRootNode() {
+        this.weaponRootNode = this.mountEmptyNode({ nodeName: "WeaponBox", parentNode: ProcessManager.instance.unitRootNode });
     }
 
     public getWeaponDataById(weaponId: string): WeaponInfo.Weapon {

@@ -1,8 +1,8 @@
 import { _decorator } from 'cc';
 import OBT_Component from '../../../OBT_Component';
 import WarCoreManager from '../../../CManager/WarCoreManager';
-import ItemBase from '../Items/ItemBase';
 import { CoreUpgradeCard } from '../GUI_CoreSelect/CoreUpgradeCard';
+import ItemBasic from '../Items/ItemBasic';
 const { ccclass, property } = _decorator;
 
 @ccclass('UpgradePack_Tooltips')
@@ -20,7 +20,7 @@ export class UpgradePack_Tooltips extends OBT_Component {
     }
 
     public updateView() {
-        const packInfo: ItemBase = WarCoreManager.instance.getPreviewUpgradePackInfo();
+        const packInfo: ItemBasic = WarCoreManager.instance.getPreviewUpgradePackInfo();
         if (packInfo) {
             this.view("CoreUpgradeCard").getComponent(CoreUpgradeCard).updateView(packInfo);
         }

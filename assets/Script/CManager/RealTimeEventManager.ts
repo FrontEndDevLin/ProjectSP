@@ -92,4 +92,10 @@ export default class RealTimeEventManager extends OBT_UIManager {
         // MapManager.instance.onRealTimeEvent("onCtiticalAttack");
         MapManager.instance.shakeMap();
     }
+
+    // 更新触发
+    public onUpdate(dt: number) {
+        ItemsManager.instance.onRealTimeEvent('onUpdate', dt);
+        WarCoreManager.instance.onRealTimeEvent('onUpdate', dt);
+    }
 }

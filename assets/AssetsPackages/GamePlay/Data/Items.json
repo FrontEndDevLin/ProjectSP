@@ -463,28 +463,38 @@
                 }
             ]
         },
-        "Item_YijingRing": {
-            "code": "Item_YijingRing",
+        "Item_Noraml_YijingRing": {
+            "code": "Item_Noraml_YijingRing",
             "global": 1,
             "quality": 3,
             "name": "义警戒指",
-            "intro": "波次结束后<%val_1%><&dmg&>",
+            "intro": "波次结束后+o%伤害",
             "ico": "Star",
             "price": 62,
             "type": 2,
-            "group": 1,
-            "val_1": 3
+            "group": 1
         },
-        "Item6": {
-            "code": "Item6",
+        "Item_Noraml_MirrorFullPower": {
+            "code": "Item_Noraml_MirrorFullPower",
             "global": 1,
             "quality": 4,
             "name": "镜像-全功率",
             "intro": "触发镜像攻击的概率提升至100%",
             "ico": "Star",
             "price": 120,
-            "type_": 2,
-            "type": 1,
+            "type": 2,
+            "group": 3,
+            "unlock": false
+        },
+        "Item30": {
+            "code": "Item30",
+            "global": 1,
+            "quality": 3,
+            "name": "火力保障Plus",
+            "intro": "所有无人机造成的最低伤害+o",
+            "ico": "Star",
+            "price": 81,
+            "type": 2,
             "group": 3,
             "unlock": false
         }

@@ -43,7 +43,7 @@ export class GUI_Prepare extends OBT_Component {
 
         this.view("OperBtns/RefreshBtn").on(Node.EventType.TOUCH_END, this._refreshStore, this);
 
-        this._loadItemList();
+        OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.BACKPACK_INIT, this._loadItemList, this);
 
         this.view("OperBtns/NextWave").on(Node.EventType.TOUCH_END, this._nextWave, this);
 

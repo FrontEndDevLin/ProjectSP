@@ -10,6 +10,7 @@ import DBManager from "../DBManager";
  */
 export default class SaveCtrl extends BaseCtrl {
     static instance: SaveCtrl = null;
+    public isOldDoc: boolean = false;
 
     // 存储数据，所有数据都在此管理，角色属性管理只是该对象的一个引用
     public save: SaveDoc;

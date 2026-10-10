@@ -16,6 +16,10 @@ import OBT_UIManager, { NodeAndCxtComponent } from "../../../Manager/OBT_UIManag
 import { BehaviorBase } from "../AtkBehavior/BehaviorBase";
 import ItemBasic from "../Items/ItemBasic";
 
+export interface WeaponVecMap {
+    [key: string]: Vec3[];
+}
+
 export default class WeaponBasic {
     // 武器品质
     public quality: ITEM_QUALITY = ITEM_QUALITY.LV1;
@@ -38,14 +42,14 @@ export default class WeaponBasic {
     public behaviorCtx: BehaviorBase;
     // 子行为组件(赝品武器), 当一个武器下有多个武器时(例如棱拳武器有2个拳头), 除了第一个武器其他的存入behaviorCtxs中, 他们共享一个WeaponCtx(this)
     public behaviorCtxs: BehaviorBase[] = [];
-    protected weaponVec: Vec3[] = [];
+    protected weaponVecMap: WeaponVecMap = {};
 
     public node: Node;
 
     // 道具引用(指向创建当前武器的道具, 当武器是敌人携带时, 为空)
     public itemRef: ItemBasic;
     // // 武器挂载节点
-    // public mountNode: any;
+    public mountNode: Node;
 
     protected showCdTxt: boolean = true;
     protected showDamageTxt: boolean = true;
@@ -53,13 +57,15 @@ export default class WeaponBasic {
     constructor(weaponData: WeaponInfo.IWeapon) {
         this.orgInf = weaponData;
         this.initCurInf();
+    }
 
+    protected onUpgradeQuality() {}
+
+    public initEvent() {
         if (this.orgInf.camp === Camp.ALLY) {
             OBT.instance.eventCenter.on(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updatePanel, this);
         }
     }
-
-    protected onUpgradeQuality() {}
 
     public upgradeQuality() {
         this.quality++;
@@ -204,18 +210,25 @@ export default class WeaponBasic {
         // this.correctPanel();
     }
 
+    public destory() {
+        OBT.instance.eventCenter.off(GamePlayEvent.GAME_PALY.PROP_UPDATE, this.updatePanel, this);
+    }
+
     // 挂载攻击行为模块, 模块里实现挂载预制体, 警告检测, 攻击检测等
     public mountBehaviorModule(mountNode: Node) {
         if (!this.prefabName || !this.behavior) {
             console.log(`武器预设体或行为未定义, 预设体: ${this.prefabName}, 行为: ${this.behavior}`);
             return;
         }
+
+        mountNode = this.orgInf.global ? WeaponManager.instance.weaponRootNode : mountNode;
         // 挂载对应武器的预制体, 和对应的行为脚本
         // 加载后拿到攻击行为脚本组件, 指向到 this.behavior
         let weaponCnt: number = 1;
         if (this.itemRef && this.itemRef.props.weapon_cnt) {
             weaponCnt = this.itemRef.props.weapon_cnt;
         }
+        let weaponVec: Vec3[] = this.weaponVecMap[weaponCnt] || [];
         for (let i = 0; i < weaponCnt; i++) {
             const nodeAndCtx: NodeAndCxtComponent = WeaponManager.instance.loadPrefabAndScript({ prefabPath: `Weapon/${this.prefabName}`, scriptName: this.behavior });
             let behaviorCtx = nodeAndCtx.ctx as BehaviorBase;
@@ -225,13 +238,45 @@ export default class WeaponBasic {
             }
             if (i === 0) {
                 this.behaviorCtx = behaviorCtx;
+                this.mountNode = mountNode;
+                this.node = nodeAndCtx.node;
             } else {
                 this.behaviorCtxs.push(behaviorCtx);
             }
-            nodeAndCtx.node.setPosition(this.weaponVec[i] || v3(0, 0, 0));
+            nodeAndCtx.node.setPosition(weaponVec[i] || v3(0, 0, 0));
             behaviorCtx.setWeaponRef(this);
             behaviorCtx.onInit();
             WeaponManager.instance.mountNode({ parentNode: mountNode, node: nodeAndCtx.node });
+        }
+    }
+
+    // 武器数量改变时需要调用
+    public updateBehaviorModule() {
+        let weaponCnt: number = 1;
+        if (this.itemRef && this.itemRef.props.weapon_cnt) {
+            weaponCnt = this.itemRef.props.weapon_cnt;
+        }
+        let weaponVec: Vec3[] = this.weaponVecMap[weaponCnt] || [];
+        for (let i = 0; i < weaponCnt; i++) {
+            if (i === 0) {
+                this.behaviorCtx.node.setPosition(weaponVec[i] || v3(0, 0, 0));
+            } else {
+                if (this.behaviorCtxs[i]) {
+                    this.behaviorCtxs[i].node.setPosition(weaponVec[i] || v3(0, 0, 0));
+                } else {
+                    const nodeAndCtx: NodeAndCxtComponent = WeaponManager.instance.loadPrefabAndScript({ prefabPath: `Weapon/${this.prefabName}`, scriptName: this.behavior });
+                    let behaviorCtx = nodeAndCtx.ctx as BehaviorBase;
+                    if (!behaviorCtx) {
+                        console.log(`武器行为组件未定义, 行为: `, nodeAndCtx);
+                        return;
+                    }
+                    this.behaviorCtxs.push(behaviorCtx);
+                    nodeAndCtx.node.setPosition(weaponVec[i] || v3(0, 0, 0));
+                    behaviorCtx.setWeaponRef(this);
+                    behaviorCtx.onInit();
+                    WeaponManager.instance.mountNode({ parentNode: this.mountNode, node: nodeAndCtx.node });
+                }
+            }
         }
     }
 

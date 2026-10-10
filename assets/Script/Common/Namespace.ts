@@ -70,6 +70,7 @@ export namespace GamePlayEvent {
         PREPARE_DEAD_TIME,
         PREPARE_TIMEOUT,
         PREPARE_FINISH,
+        BACKPACK_INIT,
         ITEM_CHANGE,
         PICK_UP_EXP,
         PICK_UP_TROPHY,
@@ -144,7 +145,8 @@ export interface SaveDoc {
     unlock_war_core: boolean,
     // 和CHRProp.Prop一样
     chr_prop: CHRInfo.PropValMap,
-    chr_slot: CHRInfo.CHRSlot
+    chr_slot: CHRInfo.CHRSlot,
+    backpack: string[]
 }
 
 export namespace GameConfigInfo {
@@ -362,6 +364,7 @@ export namespace CHRInfo {
 
     export interface CHRSlot {
         atk_core: string,
+        upgrade_slot: string[],
         level: number,
         core_level: number,
         core_exp: number
@@ -583,7 +586,8 @@ export namespace WeaponInfo {
         penetrate_damage?: number, // 贯穿伤害
         repel?: number, // 击退力
         slowdown?: number, // 对敌人的减速值
-        slowdown_time?: number // 减速时间
+        slowdown_time?: number, // 减速时间
+        global?: boolean // 是否全局武器, 如果是, 会挂载到根节点而非角色节点
     }
     // 武器实时数据, 受面板加成, cd、crit_rate等属性为数字, 由quality决定
     export interface WeaponRealTimeProps {
@@ -605,7 +609,8 @@ export namespace WeaponInfo {
         penetrate_damage?: number, // 贯穿伤害
         repel?: number, // 击退力
         slowdown?: number, // 对敌人的减速值
-        slowdown_time?: number // 减速时间
+        slowdown_time?: number, // 减速时间
+        global?: boolean // 是否全局武器, 如果是, 会挂载到根节点而非角色节点
     }
 }
 
@@ -749,6 +754,7 @@ export namespace BulletInfo {
         type: number,
         script: string,
         speed: number,
+        boost_speed?: number,
         // 最大飞行距离
         max_dis?: number,
         // 穿透数

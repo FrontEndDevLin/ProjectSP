@@ -55,10 +55,5 @@ export default class Item_UPack_Besieged extends ItemSpec {
     // }
 
     public onUse() {
-        // let warCore = <Item_WarCore_ScatterWarCore>WarCoreManager.instance.iWarCore;
-        // warCore.addMirrorAttackRate(this.val_1);
-
-        // // 激活"左右开弓-全功率"道具
-        // ItemsManager.instance.activeItems(["Item6"]);
     }
 }

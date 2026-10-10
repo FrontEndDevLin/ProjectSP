@@ -26,7 +26,7 @@
         },
         "ScatterWarCore": {
             "code": "ScatterWarCore",
-            "name": "散射核心",
+            "name": "散射",
             "ico": "scatter",
             "ico_gaming": "...",
             "quality": 1,
@@ -44,7 +44,7 @@
         },
         "RhombusPunchWarCore": {
             "code": "RhombusPunchWarCore",
-            "name": "菱拳核心",
+            "name": "菱拳",
             "ico": "scatter",
             "ico_gaming": "...",
             "quality": 1,
@@ -67,7 +67,7 @@
         },
         "SwordMasterWarCore": {
             "code": "SwordMasterWarCore",
-            "name": "御剑核心",
+            "name": "御剑",
             "ico": "scatter",
             "ico_gaming": "...",
             "quality": 1,
@@ -76,9 +76,22 @@
             "type": 2,
             "weapon": "Weapon_Chr_SwordMaster",
             "upgrade_pool": []
+        },
+        "DroneWarCore": {
+            "code": "DroneWarCore",
+            "name": "无人机",
+            "ico": "scatter",
+            "ico_gaming": "...",
+            "quality": 1,
+            "global": 2,
+            "intro": "生成无人机进行快速攻击",
+            "type": 2,
+            "weapon": "Weapon_Chr_Drone",
+            "weapon_cnt": 1,
+            "upgrade_pool": ["MoreDrone", "FreeDrone", "PowerInsurance", "Penetrate"]
         }
     },
-    "pub_war_core": ["ScatterWarCore", "RhombusPunchWarCore", "SwordMasterWarCore"],
+    "pub_war_core": ["ScatterWarCore", "RhombusPunchWarCore", "DroneWarCore"],
     "upgrade_pack_def": {
         "Mirror": {
             "code": "Mirror",
@@ -113,7 +126,7 @@
             "group": 1,
             "quality": 2,
             "name": "贯穿",
-            "intro": "散射攻击将获得o层穿透",
+            "intro": "核心的攻击获得o层穿透",
             "type": 2,
             "ico": "scatter",
             "buff_list": [
@@ -205,6 +218,37 @@
             "type": 2,
             "ico": "scatter",
             "weapon": "Weapon_Chr_MentalAura"
+        },
+        "MoreDrone": {
+            "code": "MoreDrone",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "增援",
+            "intro": "增加o无人机, 大幅提升无人机的子弹速度",
+            "type": 2,
+            "ico": "scatter"
+        },
+        "FreeDrone": {
+            "code": "FreeDrone",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "自由无人机",
+            "intro": "每os, 朝随机位置发射1无人机, 自动攻击附近的敌人, 持续bs",
+            "type": 2,
+            "ico": "scatter",
+            "weapon": "Weapon_Chr_FreeDrone"
+        },
+        "PowerInsurance": {
+            "code": "PowerInsurance",
+            "global": 3,
+            "group": 1,
+            "quality": 2,
+            "name": "火力保障",
+            "intro": "增加o无人机, 所有无人机造成的最低伤害为b",
+            "type": 2,
+            "ico": "scatter"
         }
     }
 }

@@ -47,7 +47,7 @@ export default class ItemBasic {
         }
     }
 
-    public initWeapon() {}
+    public initWeapon(isRealTimeProp: boolean = true) {}
     public mountWeapon(initOptions: WeaponInitOptions = { mountNode: null }) {}
 
     protected onInit() {}
@@ -192,8 +192,8 @@ export default class ItemBasic {
             }
         }
         this.count++;
-        // 将道具中的buff应用上
-        if (this.props.buff_list && this.props.buff_list.length) {
+        // 将道具中的buff应用上, 如果是读取存档, 则不能应用buff
+        if (this.props.buff_list && this.props.buff_list.length && !ProcessManager.instance.saveCtrl.isOldDoc) {
             CHRManager.instance.upgradePropByBuff(this.props.buff_list);
         }
 

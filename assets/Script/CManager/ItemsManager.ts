@@ -1,6 +1,6 @@
 import { find, Node } from "cc";
 import OBT_UIManager from "../Manager/OBT_UIManager";
-import { CHRInfo, GamePlayEvent, ITEM_QUALITY, ItemCardUIConfigMap, ItemInfo } from "../Common/Namespace";
+import { CHRInfo, GamePlayEvent, ITEM_QUALITY, ItemCardUIConfigMap, ItemInfo, SaveDoc } from "../Common/Namespace";
 import DBManager from "./DBManager";
 import { copyObject, getRandomNumber } from "../Common/utils";
 import ProcessManager from "./ProcessManager";
@@ -319,9 +319,18 @@ export default class ItemsManager extends OBT_UIManager {
         this._setNextRefreshCost();
     }
 
+    // 存档加载
+    public init(save: SaveDoc) {
+        let backpack = save.backpack;
+        for (let code of backpack) {
+            this.obtainItem(code, false);
+        }
+        OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.BACKPACK_INIT);
+    }
+
     // 获得道具
-    public obtainItem(id: string) {
-        let hasItemInBackpack:  boolean = false;
+    public obtainItem(id: string, notify: boolean = true) {
+        let hasItemInBackpack: boolean = false;
         let backpackItem: ItemBasic;
         for (let bItem of this.backpack) {
             if (bItem.props.code === id) {
@@ -339,14 +348,14 @@ export default class ItemsManager extends OBT_UIManager {
         }
 
         let res: boolean = backpackItem.use();
-        if (res && backpackItem.props.global === ItemInfo.Global.ITEM) {
+        if (res && backpackItem.props.global === ItemInfo.Global.ITEM && notify) {
             OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.ITEM_CHANGE, { hasItemInBackpack, backpackItem });
         }
     }
 
     public getItemCtxById(id): ItemBasic {
         let item: ItemInfo.I_Item = this.getItemById(id);
-        let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Basic" : item.code;
+        let scriptName: string = item.type === ItemInfo.Type.NORMAL ? "Item_Basic" : "Item_Normal" + item.code;
         let itemCtx: ItemBasic = new Item_def[scriptName]();
         itemCtx.init(item);
         return itemCtx;

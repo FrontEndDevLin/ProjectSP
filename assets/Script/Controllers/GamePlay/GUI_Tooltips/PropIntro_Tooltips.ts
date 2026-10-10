@@ -1,5 +1,5 @@
 import { _decorator, Component, Label, Node, RichText, Sprite, SpriteFrame } from 'cc';
-import { CHRInfo } from '../../../Common/Namespace';
+import { CHRInfo, Common } from '../../../Common/Namespace';
 import OBT_Component from '../../../OBT_Component';
 import CHRManager from '../../../CManager/CHRManager';
 import { getSuccessRichTxt } from '../../../Common/utils';
@@ -26,7 +26,19 @@ export class PropIntro_Tooltips extends OBT_Component {
         switch (item.prop) {
             case "def": {
                 let defPercent: number = Math.round(CHRManager.instance.propCtx.getDefReduceRate() * 100);
-                intro += `${getSuccessRichTxt(defPercent)}%`;
+                // intro += `${getSuccessRichTxt(defPercent)}%`;
+                intro += defPercent + "%";
+            } break;
+            case "hp_rec": {
+                let hpRecInfo: Common.SimpleObj = CHRManager.instance.propCtx.getHpRecInfo();
+                if (hpRecInfo.time) {
+                    intro = intro.replace("o", hpRecInfo.time + "").replace("b", hpRecInfo.speed + "");
+                } else {
+                    intro = '你目前无法自动恢复生命值';
+                }
+            } break;
+            case "hp_steal": {
+                intro = intro.replace("o", item.val + "");
             } break;
         }
 
@@ -37,5 +49,3 @@ export class PropIntro_Tooltips extends OBT_Component {
         
     }
 }
-
-

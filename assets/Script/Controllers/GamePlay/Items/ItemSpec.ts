@@ -17,7 +17,7 @@ export default class ItemSpec extends ItemBasic {
 
     protected onUse() {}
 
-    public initWeapon() {
+    public initWeapon(isRealTimeProp: boolean = true) {
         if (!this.props.weapon) {
             return;
         }
@@ -26,7 +26,11 @@ export default class ItemSpec extends ItemBasic {
             console.error('ItemSpec initWeapon weaponCtx is null');
             return;
         }
+        if (isRealTimeProp) {
+            weaponCtx.initEvent();
+        }
         weaponCtx.setItemRef(this);
+        weaponCtx.updatePanel();
         this.weaponCtx = weaponCtx;
         if (this.props.quality) {
             // this.weaponCtx.setQuality(this.props.quality);
@@ -41,6 +45,10 @@ export default class ItemSpec extends ItemBasic {
             this.weaponCtx.mountBehaviorModule(initOptions.mountNode);
             console.log('已挂载武器', this.weaponCtx);
         }
+    }
+
+    public addWeaponCnt(cnt: number) {
+        this.props.weapon_cnt += cnt;
     }
 
     public onRhombusPunchBeforeAttack(rhombusPunchBeforeAttackParams: GamePlayEventOptions.RhombusPunchBeforeAttackParams) {};
@@ -58,7 +66,9 @@ export default class ItemSpec extends ItemBasic {
 
     public onEnemyDie(dieParams: GamePlayEventOptions.EnemyDieParams) {};
 
-    public onEnterWave() {}
+    public onEnterWave() {};
 
-    public onExitWave() {}
+    public onExitWave() {};
+
+    public onUpdate(dt: number) {};
 }

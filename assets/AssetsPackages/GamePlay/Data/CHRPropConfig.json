@@ -13,6 +13,26 @@
             "intro": "角色生命值",
             "ico": "hp"
         },
+        "hp_rec": {
+            "prop": "hp_rec",
+            "txt": "生命再生",
+            "val": 0,
+            "basic_val": 0,
+            "forward_val": true,
+            "percent": false,
+            "intro": "每o秒, 恢复1生命值 ( b生命值/秒 )",
+            "ico": "hp"
+        },
+        "hp_steal": {
+            "prop": "hp_steal",
+            "txt": "%生命窃取",
+            "val": 0,
+            "basic_val": 0,
+            "forward_val": true,
+            "percent": true,
+            "intro": "你的攻击有o%的几率为你恢复1生命值",
+            "ico": "hp"
+        },
         "dmg": {
             "prop": "dmg",
             "txt": "%伤害",
@@ -159,12 +179,14 @@
         }
     },
     "prop_group": {
-        "major": ["hp", "dmg", "range_dmg", "melee_dmg", "range", "atk_spd", "ctl", "def", "spd", "avd", "luck"],
+        "major": ["hp", "hp_rec", "hp_steal", "dmg", "range_dmg", "melee_dmg", "range", "atk_spd", "ctl", "def", "spd", "avd", "luck"],
         "sub": ["exp_eff", "pen_dmg", "pick_range", "item_price"],
         "unvisiable": ["trophy_to_chest"]
     },
     "quality_config": {
         "hp": [2, 3, 4, 5],
+        "hp_rec": [1, 2, 3, 4],
+        "hp_steal": [1, 2, 3, 4],
         "dmg": [3, 6, 9, 12],
         "range_dmg": [1, 2, 3, 4],
         "melee_dmg": [2, 3, 4, 5],

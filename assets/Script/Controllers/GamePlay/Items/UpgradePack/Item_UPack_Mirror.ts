@@ -19,6 +19,6 @@ export default class Item_UPack_Mirror extends ItemSpec {
         warCore.addMirrorAttackRate(this.val_1);
 
         // 激活"左右开弓-全功率"道具
-        ItemsManager.instance.activeItems(["Item6"]);
+        ItemsManager.instance.activeItems(["Item_MirrorFullPower"]);
     }
 }

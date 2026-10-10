@@ -33,8 +33,8 @@ export class Bullet_Normal extends BulletBasic {
         if (!this.vector) {
             return;
         }
-        let ax = dt * this.attr.speed * this.vector.x;
-        let ay = dt * this.attr.speed * this.vector.y;
+        let ax = dt * (this.attr.speed + (this.attr.boost_speed || 0)) * this.vector.x;
+        let ay = dt * (this.attr.speed + (this.attr.boost_speed || 0)) * this.vector.y;
         let { x, y } = this.node.position;
         let newLoc = v3(x + ax, y + ay);
         // 如果两点之间距离超过_maxDisPx，销毁

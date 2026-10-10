@@ -39,6 +39,7 @@ export default class LevelCtrl extends BaseCtrl {
         let overflowExp: number = this.expCurrent - this.expTotal;
         this.expCurrent = 0;
         this.expTotal = this._calcExpTotal();
+        this.runEventFn("onLevelUp", this.level);
         this.addExp(overflowExp);
         OBT.instance.eventCenter.emit(GamePlayEvent.GAME_PALY.LEVEL_UP, this.level);
     }

@@ -121,5 +121,13 @@
         "script": "Bullet_Normal",
         "speed": 300,
         "max_dis": 120
+    },
+    "CHR_Bullet_Drone": {
+        "code": "CHR_Bullet_Drone",
+        "prefab": "CHR_Bullet_Drone",
+        "type": 2,
+        "script": "Bullet_Normal",
+        "speed": 240,
+        "max_dis": 200
     }
 }

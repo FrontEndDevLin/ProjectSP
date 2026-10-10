@@ -13,7 +13,8 @@
         "damage": "基础伤害",
         "boost": "受到的属性加成, 值为百分比",
         "slowdown": "对敌人的减速值",
-        "slowdown_time": "减速时间"
+        "slowdown_time": "减速时间",
+        "global": "是否全局武器, 如果是, 会挂载到根节点而非角色节点"
     },
     "weapon_def": {
         "Weapon_Emy_Goblin": {
@@ -263,6 +264,59 @@
             "crit_dmg_rate": 1.5,
             "boost": {
                 "melee_dmg": [0.6, 0.6, 0.6, 0.7]
+            }
+        },
+        "Weapon_Chr_Drone": {
+            "code": "Weapon_Chr_Drone",
+            "camp": 1,
+            "type": 2,
+            "intro": "无人机攻击",
+            "bullet": "CHR_Bullet_Drone",
+            "quality": 1,
+            "damage": [1, 1, 2, 3],
+            "range": 150,
+            "min_range": 25,
+            "cd": [0.2, 0.2, 0.2, 0.18],
+            "crit_rate": [0, 0, 0, 0],
+            "crit_dmg_rate": 1.5,
+            "boost": {
+                "range_dmg": [0.2, 0.2, 0.2, 0.2]
+            }
+        },
+        "Weapon_Chr_FreeDrone": {
+            "code": "Weapon_Chr_FreeDrone",
+            "camp": 1,
+            "type": 2,
+            "global": 0,
+            "intro": "自由无人机攻击",
+            "bullet": "CHR_Bullet_Drone",
+            "quality": 1,
+            "damage": [1, 1, 2, 3],
+            "range": 150,
+            "min_range": 25,
+            "cd": [0.2, 0.2, 0.2, 0.18],
+            "crit_rate": [0, 0, 0, 0],
+            "crit_dmg_rate": 1.5,
+            "boost": {
+                "range_dmg": [0.2, 0.2, 0.2, 0.2]
+            }
+        },
+        "Weapon_Chr_FreeDroneUnit": {
+            "code": "Weapon_Chr_FreeDroneUnit",
+            "camp": 1,
+            "type": 2,
+            "global": 1,
+            "intro": "自由无人机攻击, 保持和Weapon_Chr_FreeDrone的属性一致",
+            "bullet": "CHR_Bullet_Drone",
+            "quality": 1,
+            "damage": [1, 1, 2, 3],
+            "range": 150,
+            "min_range": 25,
+            "cd": [0.2, 0.2, 0.2, 0.18],
+            "crit_rate": [0, 0, 0, 0],
+            "crit_dmg_rate": 1.5,
+            "boost": {
+                "range_dmg": [0.2, 0.2, 0.2, 0.2]
             }
         }
     }

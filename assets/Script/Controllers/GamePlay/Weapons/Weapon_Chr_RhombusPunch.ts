@@ -1,7 +1,7 @@
 /**
  * 棱拳武器
  */
-import WeaponBasic from "./WeaponBasic";
+import WeaponBasic, { WeaponVecMap } from "./WeaponBasic";
 import Item_WarCore_RhombusPunch from "../Items/WarCore/Item_WarCore_RhombusPunchWarCore";
 import { v3, Vec3 } from "cc";
 
@@ -11,7 +11,10 @@ export default class Weapon_Chr_RhombusPunch extends WeaponBasic {
     protected behavior: string = "MeleeBehavior_Chr_RhombusPunch";
     protected prefabName: string = "RhombusPunch";
 
-    protected weaponVec: Vec3[] = [v3(-20, 0, 0), v3(20, 0, 0)];
+    protected weaponVecMap: WeaponVecMap = {
+        "1": [v3(0, 0, 0)],
+        "2": [v3(-20, 0, 0), v3(20, 0, 0)]
+    };
 
     // public updatePanel() {
     //     if (!this.orgInf) {
